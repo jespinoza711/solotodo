@@ -1,0 +1,50 @@
+{% extends "cotizador/base_browse.html" %}
+
+{% block title %}SoloNotebooks - {{ processor_line_family }}{% endblock %}
+
+{% block mainContent %}
+
+<h1>Procesadores {{ processor_line_family }}</h1>
+
+<div class="processor_image_container">
+{{ processor_line_family.picture.thumbnail_tag }}
+</div>
+
+{{ processor_line_family.text|safe }}
+
+<table class="processor_table">
+    <tr>
+        <th>Modelo</th>
+        <th>Núcleos</th>
+        <th>Frecuencia</th>
+        <th>FSB</th>
+        <th>Mult.</th>
+        <th>Cache L2</th>
+        <th>TDP</th>
+        <th>Socket</th>
+        <th>Volt. Min.</th>
+        <th>Volt. Max.</th>
+        <th>SMP</th>
+        <th>Turbo Mode</th>
+    </tr>
+    {% for processor_line in processor_line_family.processorline_set.all %}
+        {% for processor in processor_line.processor_set.all %}
+            <tr>
+                <td>{{ processor.name }}</td>
+                <td>{{ processor.core_number }}</td>
+                <td>{{ processor.frequency }}</td>
+                <td>{{ processor.fsb }}</td>
+                <td>{{ processor.multiplier }}</td>
+                <td>{{ processor.cache }}</td>
+                <td>{{ processor.tdp }} W</td>
+                <td>{{ processor.socket }}</td>
+                <td>{{ processor.min_voltage }} mV</td>
+                <td>{{ processor.max_voltage }} mV</td>
+                <td>{% if processor.has_smp %} Sí {% else %} No {% endif %}</td>
+                <td>{% if processor.has_turbo_mode %} Sí {% else %} No {% endif %}</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+</table>
+
+{% endblock %}

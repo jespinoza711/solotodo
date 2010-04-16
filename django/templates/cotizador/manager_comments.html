@@ -1,0 +1,34 @@
+{% extends "cotizador/base_manager.html" %}
+
+{% block title %}SoloNotebooks - Manager{% endblock %}
+
+{% block mainContent %}
+
+<h2>Comentarios sin validar</h2>
+
+{% for comment in due_comments %}
+    <br />
+    <strong>IP: </strong> {{ comment.ip_address }}
+    <br />
+    <strong>Fecha: </strong> {{ comment.date }}
+    <br />
+    <strong>Nickname: </strong> {{ comment.nickname }}
+    <br />
+    <strong>Notebook: </strong> <a href="/notebooks/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <br />
+    <strong>Comentario: </strong>
+    <br />
+    {{ comment.comments }}
+    <br />
+    <form method="POST" action="/manager/delete/{{ comment.id }}">
+        <input type="submit" value="Eliminar comentario" />
+    </form>
+    <hr />
+
+{% endfor %}
+
+<form method="POST" action="/manager/validate_all">
+    <input type="submit" value="Validar todos los mensajes" />
+</form>
+
+{% endblock %}

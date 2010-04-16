@@ -1,0 +1,20 @@
+{% extends "cotizador/base_manager.html" %}
+
+{% block title %}SoloNotebooks - Manager{% endblock %}
+
+{% block mainContent %}
+
+<h2>Últimos eventos</h2>
+
+{% for one_last_log in last_logs %}
+    <strong>{{ one_last_log.date }}</strong>
+    <br />
+    <ul>
+        {% for log_entry in one_last_log.logentrymessage_set.all %}
+            <li>{{ log_entry|safe }}</li>
+        {% endfor %}
+    </ul>
+    <br />
+{% endfor %}
+
+{% endblock %}

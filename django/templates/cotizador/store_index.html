@@ -1,0 +1,17 @@
+{% extends "cotizador/base_browse.html" %}
+
+{% block title %}SoloNotebooks - Tiendas{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block mainContent %}
+
+<h1>Tiendas indexadas</h1>
+
+{% for store in stores %}
+    <a href="{{ store.id }}">{{ store }}</a>
+    <br />
+{% endfor %}
+
+{% endblock %}

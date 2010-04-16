@@ -1,0 +1,16 @@
+{% extends "cotizador/base_browse.html" %}
+
+{% block title %}SoloNotebooks - Todos los notebooks{% endblock %}
+
+{% block mainContent %}
+
+<h1>Lista de todos los notebooks</h1>
+
+{% for notebook in result_notebooks %}
+
+<a href="/notebooks/{{notebook.id}}">{{ notebook }} </a>
+<br />
+
+{% endfor %}
+
+{% endblock %}
