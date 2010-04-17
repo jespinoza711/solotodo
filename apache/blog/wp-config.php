@@ -19,7 +19,7 @@
 define('DB_NAME', 'solonotebooks_wp');
 
 /** MySQL database username */
-define('DB_USER', 'solonotebook_id');
+define('DB_USER', 'solonotebooks_id');
 
 /** MySQL database password */
 define('DB_PASSWORD', 'solonotebooks_pass');
