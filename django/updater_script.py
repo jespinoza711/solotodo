@@ -73,12 +73,6 @@ def main():
         print('Error al obtener los notebooks de PCFactory')
         logMessage('Error al obtener los notebooks de PCFactory')
     try:
-        p = SuministrosWeb()
-        analyzeStore(p)
-    except:
-        print('Error al obtener los notebooks de Suministros Web')
-        logMessage('Error al obtener los notebooks de Suministros Web')
-    try:
         p = Sym()
         analyzeStore(p)
     except:

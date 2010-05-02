@@ -36,12 +36,13 @@ def store_index(request):
 def browse(request):
     search_form = SearchForm(request.GET)
     
+    
     if 'advanced_controls' in search_form.data and search_form.data['advanced_controls'] and int(search_form.data['advanced_controls']):
         advanced_controls = True
     else:
         advanced_controls = False
         
-    result_notebooks = Notebook.objects.select_related().filter(is_available=True)
+    result_notebooks = Notebook.objects.all().filter(is_available=True)
     
     if 'notebook_brand' in search_form.data and search_form.data['notebook_brand']:
         result_notebooks = result_notebooks.filter(line__brand__id=search_form.data['notebook_brand'])
@@ -105,7 +106,7 @@ def browse(request):
         
     if 'video_card' in search_form.data and search_form.data['video_card'] and advanced_controls:
         result_notebooks = result_notebooks.filter(video_card__id = search_form.data['video_card']).distinct()
-        
+    
     if 'page_number' in search_form.data:
         page_number = int(search_form.data['page_number'])
     else:
@@ -123,7 +124,7 @@ def browse(request):
         right_page = pages[len(pages) - 1]
     except:
         right_page = 0
-        
+       
     return render_to_response('cotizador/index.html', {
         'form': search_form,
         'remove_filter_links': search_form.generateRemoveFilterLinks(),
@@ -160,7 +161,7 @@ def store_notebook_redirect(request, store_notebook_id):
         
 def notebook_details(request, notebook_id):
     notebook = get_object_or_404(Notebook, pk = notebook_id)
-    notebook = Notebook.objects.select_related().get(pk = notebook_id)
+    notebook = Notebook.objects.all().get(pk = notebook_id)
     search_form = SearchForm(request.GET)
     
     if request.method == 'POST': 

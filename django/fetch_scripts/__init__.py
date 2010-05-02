@@ -12,7 +12,6 @@ from fetch_scripts.tec_mark import TecMark
 from fetch_scripts.tecno_cl import TecnoCl
 from fetch_scripts.full_notebook import FullNotebook
 from fetch_scripts.notebook_center import NotebookCenter
-from fetch_scripts.suministros_web import SuministrosWeb
 from fetch_scripts.clie import Clie
 from fetch_scripts.la_polar import LaPolar
 
@@ -30,6 +29,5 @@ __all__ = [ 'ProductData',
             'TecnoCl',
             'FullNotebook',
             'NotebookCenter',
-            'SuministrosWeb',
             'Clie',
             'LaPolar']

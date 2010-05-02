@@ -45,7 +45,7 @@ class TecnoCl:
                 name_1 = rawComponents[1].contents[0]
                 name_2 = rawComponents[2].contents[0][2::].strip()
                 productNames.append(name_1 + ' ' + name_2)
-                
+            
             productPrices = []
             rawProductPrices = baseSoup.findAll("span", { "class" : "vtrtit" })            
             for rawProductPrice in rawProductPrices:
@@ -57,7 +57,7 @@ class TecnoCl:
                     
             for i in range(len(productNames)):
                 productData = ProductData()
-                productData.custom_name = productNames[i]
+                productData.custom_name = productNames[i].encode('ascii','ignore').strip()
                 productData.url = productLinks[i]
                 productData.price = productPrices[i]
                 print productData
