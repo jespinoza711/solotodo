@@ -98,6 +98,9 @@ def browse(request):
     if 'screen_resolution' in search_form.data and search_form.data['screen_resolution'] and advanced_controls:
         result_notebooks = result_notebooks.filter(screen__resolution__id = search_form.data['screen_resolution'])
         
+    if 'screen_touch' in search_form.data and search_form.data['screen_touch'] and advanced_controls:
+        result_notebooks = result_notebooks.filter(screen__is_touchscreen = search_form.data['screen_touch'])    
+        
     if 'video_card_brand' in search_form.data and search_form.data['video_card_brand'] and advanced_controls:
         result_notebooks = result_notebooks.filter(video_card__line__brand__id = search_form.data['video_card_brand']).distinct()
         

@@ -60,6 +60,9 @@
 </div>
 <div class="notebook_details_specs">
     <h1>{{ notebook }}</h1>
+    {% if admin_user %}
+        <small><a href="/admin/cotizador/notebook/{{ notebook.id }}">Editar</a></small>
+    {% endif %}
     <h2>Especificaciones esenciales</h2>
     <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}">{{ notebook.processor.prettyPrint }}</a>
     <br />

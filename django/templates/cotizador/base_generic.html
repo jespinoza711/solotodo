@@ -68,11 +68,11 @@
         {{ form.processor_line_family }}
     </div>
     <div class="hidden_filter_item">
-        <label for="id_processor_line">Línea esp.</label>
+        <label for="id_processor_line">Familia</label>
         {{ form.processor_line }}
     </div>
     <div class="hidden_filter_item">
-        <label for="id_processor_family">Familia</label>
+        <label for="id_processor_family">Arquitectura</label>
         {{ form.processor_family }}
     </div>
     <div class="hidden_filter_item">
@@ -94,7 +94,7 @@
         <strong>RAM</strong>
     </div>
     <div class="filter_item">
-        <label for="id_ram_quantity">Cant. Min</label>
+        <label for="id_ram_quantity">Cant. min.</label>
         {{ form.ram_quantity }}
     </div>
     <div class="hidden_filter_item">
@@ -102,7 +102,7 @@
         {{ form.ram_type }}
     </div>
     <div class="hidden_filter_item">
-        <label for="id_ram_frequency">Frec. Min.</label>
+        <label for="id_ram_frequency">Frec. min.</label>
         {{ form.ram_frequency }}
     </div>
     
@@ -111,7 +111,7 @@
         <strong>Disco Duro</strong>
     </div>
     <div class="filter_item">
-        <label for="id_storage_capacity">Cant. Min.</label>
+        <label for="id_storage_capacity">Cant. min.</label>
         {{ form.storage_capacity }}
     </div>
     <div class="hidden_filter_item">
@@ -128,14 +128,17 @@
         {{ form.screen_size_family }}
     </div>
     <div class="hidden_filter_item">
-        <label for="id_screen_size">Tamaño esp.</label>
+        <label for="id_screen_size">Tam. esp.</label>
         {{ form.screen_size }}
     </div>
     <div class="hidden_filter_item">
-        <label for="id_screen_resolution">Resol.</label>
+        <label for="id_screen_resolution">Resolución</label>
         {{ form.screen_resolution }}
     </div>
-    
+    <div class="hidden_filter_item">
+        <label for="id_screen_touch">Táctil</label>
+        {{ form.screen_touch }}
+    </div>
     <!-- Filtros de tarjeta de video -->    
     <div class="sub_title_container">
         <strong>Tarjeta de video</strong>

@@ -20,23 +20,23 @@ class PCFactory:
 
     # Method that extracts the data of a specific product given its page
     def retrieveProductData(self, productUrl):
-	    br = mechanize.Browser()
-	    data = br.open(productUrl).get_data()
-	    soup = BeautifulSoup(data)
+        br = mechanize.Browser()
+        data = br.open(productUrl).get_data()
+        soup = BeautifulSoup(data)
 
-	    productData = ProductData()
+        productData = ProductData()
 
-	    titleSpan = soup.find("span", { "class" : "style22" })
-	    title = str(titleSpan.string).strip()
+        titleSpan = soup.find("span", { "class" : "style22" })
+        title = str(titleSpan.string).strip()
 
-	    priceCell = soup.findAll("td", { "class" : "productoiva" })
-	    price = int(str(priceCell[1].string).replace('.', ''))
+        priceCell = soup.findAll("td", { "class" : "productoiva" })
+        price = int(str(priceCell[1].string).replace('.', ''))
 
-	    productData.custom_name = title
-	    productData.price = price
-	    productData.url = productUrl
+        productData.custom_name = title
+        productData.price = price
+        productData.url = productUrl
 
-	    return productData
+        return productData
 
 
     # Main method
@@ -88,7 +88,11 @@ class PCFactory:
 
             # Retrieve the data for each of the products and add it to the array
             for productLink in productLinks:
-                prod = self.retrieveProductData(productLink)
+                try:
+                    prod = self.retrieveProductData(productLink)
+                except:
+                    print 'Error ' + productLink
+                    continue
                 print prod
                 productsData.append(prod)
 

@@ -11,4 +11,4 @@ class ProcessorLine(models.Model):
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Processor line'
-        ordering = ['name']
+        ordering = ['family', 'name']

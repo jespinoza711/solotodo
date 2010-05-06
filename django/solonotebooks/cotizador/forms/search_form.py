@@ -36,6 +36,7 @@ class SearchForm(forms.Form):
                                         empty_label="Cualquiera")
     screen_resolution = forms.ModelChoiceField(ScreenResolution.objects.all(),
                                         empty_label="Cualquiera")
+    screen_touch = forms.ChoiceField(choices=(('', 'Cualquiera'), ('0', 'No'), ('1', 'Sí')))
     operating_system = forms.ModelChoiceField(OperatingSystemFamily.objects.all(),
                                         empty_label="Cualquiera")
     video_card_brand = forms.ModelChoiceField(VideoCardBrand.objects.all(),
@@ -111,6 +112,8 @@ class SearchForm(forms.Form):
             value = 'Tipo tarjeta de video: ' + unicode(VideoCardType.objects.get(pk = pk_value))
         if key == 'video_card':
             value = 'Tarjeta de video: ' + unicode(VideoCard.objects.get(pk = pk_value))
+        if key == 'screen_touch':
+            value = 'Pantalla tactil: ' + ['No', 'Si'][int(pk_value)]
         return value        
         
     def generateLinkExcluding(self, skip_key):
