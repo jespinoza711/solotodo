@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'solonotebooks_db'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'solonotebooks_id'             # Not used with sqlite3.
-DATABASE_PASSWORD = '3REchefu'         # Not used with sqlite3.
+DATABASE_PASSWORD = 'solonotebooks_pwd'         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 

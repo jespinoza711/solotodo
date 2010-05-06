@@ -1,3 +1,5 @@
 apache/media/pics/**/*
+apache/robots.txt
+apache/sitemap.xml
 *~
 *.pyc

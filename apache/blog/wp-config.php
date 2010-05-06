@@ -22,7 +22,7 @@ define('DB_NAME', 'solonotebooks_wp');
 define('DB_USER', 'solonotebooks_id');
 
 /** MySQL database password */
-define('DB_PASSWORD', '3REchefu');
+define('DB_PASSWORD', 'solonotebooks_pwd');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');
