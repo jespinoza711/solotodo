@@ -206,7 +206,8 @@ def notebook_details(request, notebook_id):
         'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('date'),
         'posted_comment': posted_comment,
         'admin_user': admin_user,
-        'price_changes': price_changes
+        'price_changes': price_changes,
+        'similar_notebooks': notebook.findSimilarNotebooks(),
         })
         
 def login_page(request):

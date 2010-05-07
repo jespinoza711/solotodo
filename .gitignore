@@ -1,5 +1,7 @@
 apache/media/pics/**/*
 apache/robots.txt
 apache/sitemap.xml
+apache/blog/wp-config.php
+django/solonotebooks/settings.py
 *~
 *.pyc

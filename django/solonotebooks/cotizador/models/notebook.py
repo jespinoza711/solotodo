@@ -1,4 +1,6 @@
+import operator
 from django.db import models
+from django.db.models import Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 from solonotebooks.cotizador.models import Processor, OpticalDrive, NotebookLine, Lan
 from solonotebooks.cotizador.models import OperatingSystem, VideoCard, VideoPort, Screen
@@ -109,6 +111,44 @@ class Notebook(models.Model):
             for video_port in self.video_port.all():
                 videoPorts.append(unicode(video_port))
             return ' | '.join(videoPorts)
+
+            
+    def findSimilarNotebooks(self):
+        threshold = 4
+        ntbks = Notebook.objects.filter(is_available=True).filter(~Q(id = self.id))
+        
+        max_card_type = self.video_card.all().aggregate(Max('card_type'))['card_type__max']
+        ntbks_gpu = ntbks.filter(video_card__card_type__id = max_card_type).distinct()
+                
+        ntbks_cpu = ntbks.filter(processor__line__family__id = self.processor.line.family.id)
+
+        ntbks_lcd = ntbks.filter(screen__size__family__id = self.screen.size.family.id)
+        
+        ntbks_brand = ntbks.filter(line__brand__id = self.line.brand.id)        
+                
+        result_notebooks = [[ntbk, 0] for ntbk in ntbks]
+        
+        for result_notebook in result_notebooks:
+            if result_notebook[0] in ntbks_gpu:
+                result_notebook[1] += max_card_type * max_card_type
+            if result_notebook[0] in ntbks_cpu:
+                result_notebook[1] += 1
+            if result_notebook[0] in ntbks_lcd:
+                result_notebook[1] += 1
+            if result_notebook[0] in ntbks_brand:
+                result_notebook[1] += 1
+            if result_notebook[0].screen.is_touchscreen and self.screen.is_touchscreen:
+                result_notebook[1] += 5
+            result_notebook[1] -= abs(self.min_price - result_notebook[0].min_price) / 100000
+            result_notebook[1] = -result_notebook[1]
+        
+        sorted_result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1))
+        if len(sorted_result_notebooks) > threshold:
+            sorted_result_notebooks = sorted_result_notebooks[0:threshold]
+        
+        ntbks = [result_notebook[0] for result_notebook in sorted_result_notebooks]
+
+        return ntbks
     
     class Meta:
         app_label = 'cotizador'

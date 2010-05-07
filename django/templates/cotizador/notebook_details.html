@@ -51,10 +51,29 @@
             {% endfor %}
         </table>
     </div>
-    <div class="price_changes">
+    <!--<div class="price_changes">
         <h2>Variaciones de precio a la fecha</h2>
         {% for price_change in price_changes %}
             {{ price_change.prettyRepr }} <br />
+        {% endfor %}
+    </div>-->
+    <div class="similar_notebooks">
+        <h2>Notebooks similares</h2>
+        {% for ntbk in similar_notebooks %}
+        <div class="notebook_container">
+            <div class="notebook_thumb_image">
+                <a href="../{{ ntbk.id }}">{{ ntbk.picture.thumbnail_tag }}</a>
+            </div>
+            <a href="../{{ ntbk.id }}">
+                {{ ntbk }}
+            </a>
+            <p>
+                {{ ntbk.processor }} <br />
+                {{ ntbk.screen.prettyDisplay }}<br />
+                
+                <strong>{{ ntbk.prettyMinPrice }}</strong>
+            </p>
+        </div>
         {% endfor %}
     </div>
 </div>

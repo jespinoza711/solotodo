@@ -359,6 +359,8 @@ label {
 
 .notebook_details_sidebar {
     float: right;
+    width: 300px;
+    margin-left: 10px;
 }
 
 .SC2 h1 {
@@ -435,7 +437,7 @@ label {
 }
 
 #comment_form textarea {
-    width: 370px;
+    width: 300px;
 }
 
 .always_hidden_filter_item {
@@ -654,4 +656,8 @@ margin-right: 5px;
 .current_filters a {
     text-decoration: none;
     color: #4c4c4c;
+}
+
+.similar_notebooks {
+    margin-top: 30px;
 }

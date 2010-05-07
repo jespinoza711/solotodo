@@ -28,6 +28,8 @@ urlpatterns = patterns('',
     (r'^manager/delete/(?P<comment_id>\d+)$', 'solonotebooks.cotizador.views.delete_comment'),
     (r'^manager/hide_notebook/(?P<store_has_notebook_id>\d+)$', 'solonotebooks.cotizador.views.hide_notebook'),
     (r'^manager/validate_all$', 'solonotebooks.cotizador.views.validate_all'),
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': '/home/vkhemlan/SoloNotebooks/apache/media'}),
     (r'^admin/', include(admin.site.urls)),
 
 )
