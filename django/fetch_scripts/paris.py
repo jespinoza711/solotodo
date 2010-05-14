@@ -20,7 +20,7 @@ class Paris:
         # Array containing the data for each product
         productsData = []
         
-        urls = [    'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_4346225_18877035_si_2__18877035,4346225_'
+        urls = ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51049202_18877035_si_2__18877035,50999203,51049192,51049202_'
                     ]
                             
         for url in urls:

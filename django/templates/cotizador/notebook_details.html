@@ -64,15 +64,16 @@
             <div class="notebook_thumb_image">
                 <a href="../{{ ntbk.id }}">{{ ntbk.picture.thumbnail_tag }}</a>
             </div>
-            <a href="../{{ ntbk.id }}">
-                {{ ntbk }}
-            </a>
-            <p>
-                {{ ntbk.processor }} <br />
-                {{ ntbk.screen.prettyDisplay }}<br />
-                
-                <strong>{{ ntbk.prettyMinPrice }}</strong>
-            </p>
+	    <div class="similar_notebook_stats">
+	            <a href="../{{ ntbk.id }}">
+        	        {{ ntbk }}
+	            </a>
+        	    <p>
+                	{{ ntbk.processor }} <br />
+	                {{ ntbk.screen.prettyDisplay }}<br />
+        	        <strong>{{ ntbk.prettyMinPrice }}</strong>
+	            </p>
+	    </div>
         </div>
         {% endfor %}
     </div>

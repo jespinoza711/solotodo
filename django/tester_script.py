@@ -6,7 +6,7 @@ from fetch_scripts import *
 from common_fetch_methods import *
 
 def main():
-    p = PCFactory()
+    p = Paris()
     analyzeStore(p)
     
     updateAvailabilityAndPrice()    
