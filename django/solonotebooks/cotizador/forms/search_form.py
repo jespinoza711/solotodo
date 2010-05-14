@@ -8,6 +8,7 @@ class SearchForm(forms.Form):
                                         empty_label="Cualquiera")
     notebook_line = forms.ModelChoiceField(NotebookLine.objects.all(),
                                         empty_label="Cualquiera")
+    weight = forms.ChoiceField(choices=(('', 'Cualquiera'), ('0', '< 1 kg'), ('1', '1 - 2 kg'), ('2', '2 - 3 kg'), ('3', '3 - 4 kg'), ('4', '4+ kg')))
     processor_brand = forms.ModelChoiceField(ProcessorBrand.objects.all(),
                                         empty_label="Cualquiera")
     processor_line = forms.ModelChoiceField(ProcessorLine.objects.all(),
@@ -114,6 +115,14 @@ class SearchForm(forms.Form):
             value = 'Tarjeta de video: ' + unicode(VideoCard.objects.get(pk = pk_value))
         if key == 'screen_touch':
             value = 'Pantalla tactil: ' + ['No', 'Si'][int(pk_value)]
+        if key == 'weight':
+            val = int(pk_value)
+            if val == 0:
+                value = 'Peso menor a 1 kg.'
+            elif val == 4:
+                value = 'Peso mayor a 4 kg.'
+            else:
+                value = 'Peso entre ' + str(val) + ' y ' + str(val + 1) + ' kg.'
         return value        
         
     def generateLinkExcluding(self, skip_key):

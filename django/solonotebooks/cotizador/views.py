@@ -47,6 +47,11 @@ def browse(request):
     if 'notebook_brand' in search_form.data and search_form.data['notebook_brand']:
         result_notebooks = result_notebooks.filter(line__brand__id=search_form.data['notebook_brand'])
         
+    if 'weight' in search_form.data and search_form.data['weight'] and advanced_controls:
+        req_weight = int(search_form.data['weight'])
+        result_notebooks = result_notebooks.filter(weight__gte = req_weight * 1000)
+        result_notebooks = result_notebooks.filter(weight__lte = (req_weight + 1) * 1000)        
+        
     if 'processor_brand' in search_form.data and search_form.data['processor_brand']:
         result_notebooks = result_notebooks.filter(processor__line__family__brand__id=search_form.data['processor_brand'])
         
