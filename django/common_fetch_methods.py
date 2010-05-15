@@ -24,8 +24,11 @@ def logReviveNotebook(shn):
 def logLostNotebook(shn):
     logMessage('Modelo perdido: ' + str(shn) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
     
-def logChangeNotebookPrice(shn, oldPrice, newPrice):
+def logChangeModelPrice(shn, oldPrice, newPrice):
     logMessage('Modelo cambia de precio: ' + str(shn) + ' de ' + str(oldPrice) + ' a ' + str(newPrice) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
+    
+def logChangeNotebookPrice(ntbk, oldPrice, newPrice):
+    logMessage('Notebook cambia de precio: ' + str(ntbk) + ' de ' + str(oldPrice) + ' a ' + str(newPrice) + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
 def saveNotebooks(ntbks, s):
     for ntbk in ntbks:
@@ -99,7 +102,7 @@ def updateAvailabilityAndPrice():
                         print 'Hubieron cambios de precio, registrando'
                         shn.latest_price = last_log.price
                         shn.save()
-                        logChangeNotebookPrice(shn, yesterday_log.price, last_log.price)
+                        logChangeModelPrice(shn, yesterday_log.price, last_log.price)
                     else:
                         print 'No hay cambios'
                 except IndexError:
@@ -114,6 +117,7 @@ def updateAvailabilityAndPrice():
             print 'El notebook tiene registros de disponibilidad'
             
             if new_price != notebook.min_price:
+                logChangeNotebookPrice(notebook, notebook.min_price, new_price)
                 npc = NotebookPriceChange()
                 npc.notebook = notebook
                 npc.price = new_price
