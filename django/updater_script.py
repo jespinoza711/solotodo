@@ -90,7 +90,13 @@ def main():
     except:
         print('Error al obtener los notebooks de Wei')
         logMessage('Error al obtener los notebooks de Wei')
-        
+    try:
+        p = Sistemax()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Sistemax')
+        logMessage('Error al obtener los notebooks de Sistemax')
+                
     updateAvailabilityAndPrice()
                 
 if __name__ == '__main__':
