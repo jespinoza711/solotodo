@@ -23,6 +23,22 @@ class Processor(models.Model):
     def __unicode__(self):
         return unicode(self.line) + ' ' + self.name
         
+    def rawText(self):
+        result = self.name
+        result += ' ' + self.line.rawText()
+        result += ' ' + self.frequency.rawText()
+        result += ' ' + self.family.rawText()
+        if self.core_number == 1:
+            result += ' single un core nucleo'
+        elif self.core_number == 2:
+            result += ' dual dos cores nucleos'
+        elif self.core_number == 3:
+            result += 'tri tres cores nucleos'
+        elif self.core_number == 4:
+            result += ' quad cuatro cores nucleos'
+        
+        return result
+        
     def prettyPrint(self):
         return unicode(self.line) + ' ' + self.name + ' (' + unicode(self.frequency) + ')'
     

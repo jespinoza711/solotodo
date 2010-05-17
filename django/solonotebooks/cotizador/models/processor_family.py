@@ -7,6 +7,9 @@ class ProcessorFamily(models.Model):
     
     def __unicode__(self):
         return self.name + ' (' + unicode(self.nm) + ')'
+        
+    def rawText(self):
+        return self.name + ' ' + unicode(self.nm) + ' nm'
     
     class Meta:
         app_label = 'cotizador'

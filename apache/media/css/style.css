@@ -665,3 +665,8 @@ margin-right: 5px;
 .similar_notebook_stats {
     font-size: 10px;
 }
+
+.search_result_score {
+    color: green;
+    font-size: 10px;
+}

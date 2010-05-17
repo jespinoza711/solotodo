@@ -7,6 +7,9 @@ class ScreenSize(models.Model):
     
     def __unicode__(self):
         return unicode(self.size) + '"'
+        
+    def rawText(self):
+        return unicode(self.size) + ' ' + self.family.rawText()
     
     class Meta:
         app_label = 'cotizador'

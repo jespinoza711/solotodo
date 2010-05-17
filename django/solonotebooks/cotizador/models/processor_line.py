@@ -7,6 +7,9 @@ class ProcessorLine(models.Model):
     
     def __unicode__(self):
         return self.family.brand.name + ' ' + self.name
+        
+    def rawText(self):
+        return self.family.rawText() + ' ' + self.name
     
     class Meta:
         app_label = 'cotizador'

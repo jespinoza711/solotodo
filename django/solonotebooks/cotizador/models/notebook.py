@@ -60,7 +60,38 @@ class Notebook(models.Model):
         },                                          
         upload_to = 'notebook_pics',
         generate_on_save = True,)
-    
+        
+    def rawText(self):
+        result = ''
+        if (self.is_ram_dual_channel):
+            result += ' ram dual channel'
+        if (self.has_bluetooth):
+            result += ' bluetooth'
+        if (self.has_esata):
+            result += ' esata'
+        if (self.has_firewire):
+            result += ' firewire 1394'
+        if (self.has_fingerprint_reader):
+            result += ' fingerprint reader huella digital'
+        result += ' bateria ' + str(self.battery_cells) + ' celdas '
+        result += ' ' + self.line.rawText()
+        result += ' ' + self.name
+        result += ' ' + self.processor.rawText()
+        result += ' ' + self.lan.rawText()
+        result += ' ' + self.screen.rawText()
+        result += ' ' + self.operating_system.rawText()
+        result += ' ' + self.ram_type.rawText()
+        result += ' ' + self.ram_frequency.rawText()
+        result += ' ' + self.ram_quantity.rawText()
+        result += ' ' + self.chipset.rawText()
+        for video_card in self.video_card.all():
+            result += ' ' + video_card.rawText()
+        for video_port in self.video_port.all():
+            result += ' ' + video_port.rawText()
+        for storage_drive in self.storage_drive.all():
+            result += ' ' + storage_drive.rawText()            
+        return result
+        
     def __unicode__(self):
         return unicode(self.line) + ' ' + self.name
         

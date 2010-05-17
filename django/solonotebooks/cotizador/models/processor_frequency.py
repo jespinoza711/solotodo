@@ -5,6 +5,9 @@ class ProcessorFrequency(models.Model):
     
     def __unicode__(self):
         return unicode(self.value) + ' MHz'
+        
+    def rawText(self):
+        return unicode(self.value) + ' MHz'
     
     class Meta:
         app_label = 'cotizador'

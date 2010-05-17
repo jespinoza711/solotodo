@@ -12,6 +12,12 @@ class OperatingSystem(models.Model):
         if self.is_64_bit:
             result += ' (64 bits)'
         return result
+        
+    def rawText(self):
+        result = self.family.rawText() + ' ' + self.name
+        if self.is_64_bit:
+            result += ' 64 bits'
+        return result
     
     class Meta:
         app_label = 'cotizador'

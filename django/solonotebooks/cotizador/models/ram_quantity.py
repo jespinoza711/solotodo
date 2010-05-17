@@ -5,6 +5,9 @@ class RamQuantity(models.Model):
     
     def __unicode__(self):
         return unicode(self.value) + ' GB'
+        
+    def rawText(self):
+        return unicode(self.value) + ' GB'
     
     class Meta:
         app_label = 'cotizador'

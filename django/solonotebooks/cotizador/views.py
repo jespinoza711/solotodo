@@ -1,3 +1,4 @@
+import operator
 from django.db.models import Min
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404, HttpResponseRedirect
@@ -5,11 +6,13 @@ from django import forms
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from solonotebooks.cotizador.models import *
+from utils import stringCompare
 import sys
 import cairo
 import datetime
 from math import ceil
 from forms.search_form import SearchForm
+from difflib import SequenceMatcher
                     
 class NotebookCommentForm(forms.Form):
     comments = forms.CharField(widget = forms.Textarea)
@@ -30,7 +33,49 @@ def store_index(request):
     return render_to_response('cotizador/store_index.html', {
         'form': search_form,
         'stores': stores,
-    })    
+    })  
+    
+def search(request):
+    search_form = SearchForm(request.GET)
+    query = request.GET['search_keywords']
+    
+    available_notebooks = Notebook.objects.all().filter(is_available=True).order_by('?')
+    
+    result_notebooks = [[ntbk, stringCompare(ntbk.rawText(), query)] for ntbk in available_notebooks]
+    result_notebooks = filter(lambda(x): x[1] > 10, result_notebooks) 
+    result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1), reverse = True)
+    
+    if 'page_number' in request.GET:
+        page_number = int(request.GET['page_number'])
+    else:
+        page_number = 1
+        
+    page_count = ceil(len(result_notebooks) / 10.0);
+    result_notebooks = result_notebooks[(page_number - 1) * 10 : page_number * 10]
+    pages = filter(lambda(x): x > 0 and x <= page_count, range(page_number - 3, page_number + 3))
+    try:
+        left_page = pages[0]
+    except:
+        left_page = 0
+        
+    try:
+        right_page = pages[len(pages) - 1]
+    except:
+        right_page = 0
+    
+    
+    return render_to_response('cotizador/search.html', {
+        'query': query,
+        'form': search_form,
+        'ntbk_results': result_notebooks,
+        'page_number': page_number,
+        'prev_page': page_number - 1,
+        'post_page': page_number + 1,
+        'page_count': int(page_count),
+        'page_range': pages,
+        'left_page': left_page,
+        'right_page': right_page,        
+    })
     
     
 def browse(request):

@@ -5,6 +5,9 @@ class ScreenSizeFamily(models.Model):
     
     def __unicode__(self):
         return unicode(self.base_size) + ' - ' + unicode(self.base_size + 0.9) + '"'
+        
+    def rawText(self):
+        return unicode(self.base_size)
     
     class Meta:
         app_label = 'cotizador'

@@ -7,7 +7,10 @@ class OperatingSystemFamily(models.Model):
     
     def __unicode__(self):
         return unicode(self.brand) + ' ' + self.name
-    
+
+    def rawText(self):
+        return self.brand.rawText() + ' ' + self.name    
+        
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Operating system family'

@@ -14,6 +14,12 @@ class StorageDrive(models.Model):
         if (self.drive_type.name == 'HDD'):
             result += ' (' + unicode(self.rpm) + ')'
         return result
+        
+    def rawText(self):
+        result = unicode(self.drive_type) + ' ' + unicode(self.capacity)
+        if (self.drive_type.name == 'HDD'):
+            result += ' ' + unicode(self.rpm)
+        return result        
     
     class Meta:
         app_label = 'cotizador'

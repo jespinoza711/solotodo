@@ -11,6 +11,14 @@ class ProcessorLineFamily(models.Model):
         thumbnail = { 'size': (300, 300), },             
         upload_to = 'processor_line',
         generate_on_save = True,)
+        
+    def rawText(self):
+        result = self.brand.rawText()
+        if self.id == 1:
+            result += ' netbook'
+        if self.id in [2, 11]:
+            result += ' subnetbook ultraportatil'
+        return result
     
     def __unicode__(self):
         return self.brand.name + ' ' + self.name
