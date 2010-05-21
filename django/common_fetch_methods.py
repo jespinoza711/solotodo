@@ -15,14 +15,22 @@ def logMessage(message):
     log_message.message = message
     log_message.save()
 
-def logNewNotebook(shn):
+def logNewModel(shn):
     logMessage('Nuevo modelo: ' + str(shn) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
     
-def logReviveNotebook(shn):
+def logReviveModel(shn):
     logMessage('Modelo restaurado: ' + str(shn)  + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
+
+
+def logReviveNotebook(ntbk):
+    logMessage('Notebook restaurado: ' + str(ntbk)  + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
-def logLostNotebook(shn):
+def logLostModel(shn):
     logMessage('Modelo perdido: ' + str(shn) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
+
+
+def logLostNotebook(ntbk):
+    logMessage('Notebook perdido: ' + str(ntbk) + '(<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
 def logChangeModelPrice(shn, oldPrice, newPrice):
     logMessage('Modelo cambia de precio: ' + str(shn) + ' de ' + str(oldPrice) + ' a ' + str(newPrice) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
@@ -47,12 +55,12 @@ def saveNotebooks(ntbks, s):
             current_shn.visitorCount = 0
             current_shn.latest_price = ntbk.price
             current_shn.save()
-            logNewNotebook(current_shn)
+            logNewModel(current_shn)
         
         print 'Viendo si esta registrado como desaparecido'
         if not current_shn.is_available:
             print 'Estaba desaparecido, registrando resucitacion'
-            logReviveNotebook(current_shn)
+            logReviveModel(current_shn)
             current_shn.is_available = True
             
         print 'Guardando estado del notebook en tienda'
@@ -92,7 +100,7 @@ def updateAvailabilityAndPrice():
             if not last_log.date == (date.today()):
                 print 'Ultimo registro no es de hoy, dejando entrada no disponible'
                 shn.is_available = False
-                logLostNotebook(shn)
+                logLostModel(shn)
                 shn.save()
             else:
                 print 'Ultimo registro es de hoy, viendo si hay cambios'
@@ -125,9 +133,16 @@ def updateAvailabilityAndPrice():
                 npc.save()
                 notebook.min_price = new_price
             
+            if not notebook.is_available:
+                logReviveNotebook(notebook)
+
             notebook.is_available = True
         else:
             print 'El notebook no tiene registros de disponibilidad'
+
+            if notebook.is_available:
+                 logLostNotebook(notebook)
+
             notebook.is_available = False
         
         notebook.save()

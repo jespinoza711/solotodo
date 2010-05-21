@@ -210,7 +210,7 @@ select { font-family: 'Verdana', 'sans-serif'; color: #282b31; font-size: 11px;}
 .Search  input { border: none; color: #330033; font-size: 11px;}
 .Search  input.search { width: 24px; height: 23px; background: url(./images/SearchButton.gif) no-repeat;}
 .Search  input.keyword { background: none; border: none; padding: 5px 0px 5px 8px; width: 200px; border: none; } /**/ * html #buttonsearch { margin: -24px 0px 0px 203px; } /* */ 
-#buttonsearch { padding: 0px; margin: -23px 0px 0px 203px; top: 0px; background: none; }
+#buttonsearch { padding: 0px; margin: -25px 0px 0px 203px; top: 0px; background: none; }
 
 
 /* Flickr RSS - PlugIn ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */

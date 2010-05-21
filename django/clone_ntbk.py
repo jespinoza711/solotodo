@@ -11,6 +11,18 @@ def main():
     clone_ntbk.id = None
     clone_ntbk.name += ' (clone)'
     clone_ntbk.save()
+
+    for video_card in ntbk.video_card.all():
+        clone_ntbk.video_card.add(video_card)
+
+    for video_port in ntbk.video_port.all():
+	clone_ntbk.video_port.add(video_port)
+
+    for storage_drive in ntbk.storage_drive.all():
+        clone_ntbk.storage_drive.add(storage_drive)
+
+    clone_ntbk.save()
+
     print clone_ntbk.id
 
 if __name__ == '__main__':

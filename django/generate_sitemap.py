@@ -8,7 +8,7 @@ def main():
     xml = minidom.Document()
     
     rootElem = xml.createElement('urlset');
-    rootElem.setAttribute('xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd')
+    rootElem.setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9')
     
     specificSites = ['http://www.solonotebooks.net/', 'http://www.solonotebooks.net/blog']
     
