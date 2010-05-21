@@ -670,3 +670,16 @@ margin-right: 5px;
     color: green;
     font-size: 10px;
 }
+
+.price_range_input {
+    border: 0; 
+    color: #ffffff; 
+    font-weight: bold;
+    background-color: transparent;
+    width: 70px;
+}
+
+#price_slider {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

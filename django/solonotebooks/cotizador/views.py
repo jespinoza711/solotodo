@@ -1,11 +1,12 @@
 import operator
-from django.db.models import Min
+from django.db.models import Min, Max
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404, HttpResponseRedirect
 from django import forms
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from solonotebooks.cotizador.models import *
+from solonotebooks.cotizador.models import utils
 from utils import stringCompare
 import sys
 import cairo
@@ -80,7 +81,6 @@ def search(request):
     
 def browse(request):
     search_form = SearchForm(request.GET)
-    
     
     if 'advanced_controls' in search_form.data and search_form.data['advanced_controls'] and int(search_form.data['advanced_controls']):
         advanced_controls = True
@@ -159,6 +159,19 @@ def browse(request):
         
     if 'video_card' in search_form.data and search_form.data['video_card'] and advanced_controls:
         result_notebooks = result_notebooks.filter(video_card__id = search_form.data['video_card']).distinct()
+        
+    min_price = utils.roundToFloor10000(Notebook.objects.aggregate(Min('min_price'))['min_price__min'])
+    max_price = utils.roundToCeil10000(Notebook.objects.aggregate(Max('min_price'))['min_price__max'])
+        
+    if 'min_price' in search_form.data and search_form.data['min_price']  and advanced_controls:
+        result_notebooks = result_notebooks.filter(min_price__gte = int(search_form.data['min_price']))
+    else:
+        search_form.min_price = min_price
+
+    if 'max_price' in search_form.data and search_form.data['max_price']  and advanced_controls:
+        result_notebooks = result_notebooks.filter(min_price__lte = int(search_form.data['max_price']))
+    else:
+        search_form.max_price = max_price
     
     if 'page_number' in search_form.data:
         page_number = int(search_form.data['page_number'])
@@ -189,6 +202,8 @@ def browse(request):
         'page_range': pages,
         'left_page': left_page,
         'right_page': right_page,
+        'min_price': min_price,
+        'max_price': max_price,
     })
     
 def all_notebooks(request):

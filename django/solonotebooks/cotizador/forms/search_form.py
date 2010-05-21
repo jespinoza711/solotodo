@@ -1,14 +1,16 @@
 #-*- coding: UTF-8 -*-
 
 from django import forms
+from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
+from solonotebooks.cotizador.models import utils
 
 class SearchForm(forms.Form):
     notebook_brand = forms.ModelChoiceField(NotebookBrand.objects.all(),
                                         empty_label="Cualquiera")
     notebook_line = forms.ModelChoiceField(NotebookLine.objects.all(),
                                         empty_label="Cualquiera")
-    weight = forms.ChoiceField(choices=(('', 'Cualquiera'), ('0', '< 1 kg'), ('1', '1 - 2 kg'), ('2', '2 - 3 kg'), ('3', '3 - 4 kg'), ('4', '4+ kg')))
+    weight = forms.ChoiceField(choices=(('', 'Cualquiera'), ('0', '< 1 kg'), ('1', '1 - 2 kg'), ('2', '2 - 3 kg'), ('3', '3 - 4 kg'), ('4', '> 4 kg')))
     processor_brand = forms.ModelChoiceField(ProcessorBrand.objects.all(),
                                         empty_label="Cualquiera")
     processor_line = forms.ModelChoiceField(ProcessorLine.objects.all(),
@@ -49,7 +51,16 @@ class SearchForm(forms.Form):
     video_card = forms.ModelChoiceField(VideoCard.objects.all(),
                                         empty_label="Cualquiera")
     advanced_controls = forms.IntegerField()
+    min_price = forms.IntegerField(widget = forms.TextInput(attrs = {'class': 'price_range_input', 'disabled':'disabled'}))
+    max_price = forms.IntegerField(widget = forms.TextInput(attrs = {'class': 'price_range_input', 'disabled':'disabled'}))
+        
     page_number = forms.IntegerField()
+    
+    attribute_requiring_advanced_controls = ['notebook_line',
+        'weight', 'min_price', 'max_price', 'processor_line', 'processor',
+        'processor_family', 'ram_type', 'ram_frequency', 'storage_type',
+        'screen_size', 'screen_resolution', 'screen_touch', 'video_card_brand',
+        'video_card_line', 'video_card', 'chipset']
     
     def generateBasePageLink(self):
         url = '?'
@@ -65,6 +76,17 @@ class SearchForm(forms.Form):
         for key in self.data.keys():
             if key == 'page_number' or key == 'advanced_controls':
                 continue
+                
+            if not (self.data['advanced_controls'] and int(self.data['advanced_controls'])) and key in self.attribute_requiring_advanced_controls:
+                continue
+                
+            min_price = Notebook.objects.aggregate(Min('min_price'))['min_price__min']
+            max_price = Notebook.objects.aggregate(Max('min_price'))['min_price__max']
+            if key == 'min_price' and int(self.data[key]) == utils.roundToFloor10000(min_price):
+                continue
+            if key == 'max_price' and int(self.data[key]) == utils.roundToCeil10000(max_price):
+                continue
+    
             if self.data[key]:
                 filters[self.getKeyDataValue(key, self.data[key])] = self.generateLinkExcluding(key)
         return filters
@@ -123,6 +145,10 @@ class SearchForm(forms.Form):
                 value = 'Peso mayor a 4 kg.'
             else:
                 value = 'Peso entre ' + str(val) + ' y ' + str(val + 1) + ' kg.'
+        if key == 'min_price':
+            value = 'Precio minimo: ' + utils.prettyPrice(int(pk_value))
+        if key == 'max_price':
+            value = 'Precio maximo: ' + utils.prettyPrice(int(pk_value))
         return value        
         
     def generateLinkExcluding(self, skip_key):
@@ -130,5 +156,5 @@ class SearchForm(forms.Form):
         for key in self.data.keys():
             if not self.data[key] or key == skip_key:
                 continue
-            url += key + '=' + self.data[key] + '&'
+            url += key + '=' + str(self.data[key]) + '&'
         return url
