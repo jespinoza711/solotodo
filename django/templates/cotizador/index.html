@@ -2,6 +2,10 @@
 
 {% block title %}SoloNotebooks - Catálogo de notebooks{% endblock %}
 
+{% block header %}
+<script type="text/javascript" src="/media/js/browse_script.js"></script>
+{% endblock %}
+
 {% block mainContent %}
 
 {% if remove_filter_links %}
@@ -20,19 +24,36 @@
 
 <h2>No se han encontrado equipos con esas características</h2>
 
-{% endifequal %}
+{% else %}
+
+<div id="ordering_div">
+    <input type="hidden" id="current_url" value="{{ current_url }}" />
+    <input type="hidden" id="current_ordering_direction" value="{{ ordering_direction }}" />
+    <h3>Ordenar por:</h3>
+    {{ form.ordering }}
+    &nbsp;
+    {% ifequal ordering_direction 0 %}
+        <b>De menor a mayor</b>
+        &nbsp;
+        <a href="{{ordering_direction_url}}ordering_direction=1">De mayor a menor</a>
+    {% else %}
+        <a href="{{ordering_direction_url}}ordering_direction=0">De menor a mayor</a>
+        &nbsp;
+        <b>De mayor a menor</b>
+    {% endifequal %}
+</div>
 
 {% for notebook in result_notebooks %}
 
     <div class="notebook_container">
-        <div class="notebook_thumb_image"><a href="notebooks/{{ notebook.id }}">{{ notebook.picture.thumbnail_tag }}</a></div>
+        <div class="notebook_thumb_image"><a href="notebooks/{{ notebook.id }}{{ current_url }}">{{ notebook.picture.thumbnail_tag }}</a></div>
         <div class="notebook_thumb_price">
-<a href="notebooks/{{ notebook.id }}">
+<a href="notebooks/{{ notebook.id }}{{ current_url }}">
     {{ notebook.prettyMinPrice }}
     </a>
     
         </div>
-        <h2><a href="notebooks/{{ notebook.id }}">{{ notebook }}</a></h2>
+        <h2><a href="notebooks/{{ notebook.id }}{{ current_url }}">{{ notebook }}</a></h2>
         <strong>Procesador:</strong> {{ notebook.processor.prettyPrint }}
         <br />
         <strong>RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})
@@ -76,5 +97,7 @@
 {% endifnotequal %}
 </div>
 {% endifnotequal %}
+
+{% endifequal %}
 
 {% endblock %}

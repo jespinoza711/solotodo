@@ -8,6 +8,7 @@ class VideoCard(models.Model):
     card_type = models.ForeignKey(VideoCardType)
     line = models.ForeignKey(VideoCardLine)
     memory = models.ForeignKey(VideoCardMemory)
+    speed_score = models.IntegerField()
     
     def __unicode__(self):
         return unicode(self.line) + ' ' + self.name

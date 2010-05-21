@@ -18,6 +18,7 @@ class Processor(models.Model):
     cache = models.ForeignKey(ProcessorCache)
     socket = models.ForeignKey(ProcessorSocket)
     family = models.ForeignKey(ProcessorFamily)
+    speed_score = models.IntegerField()
     
     
     def __unicode__(self):

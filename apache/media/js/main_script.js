@@ -28,15 +28,12 @@ $(function() {
         $('.filter_item select').val('');        
     });
     
-    $(".processor_table tr:nth-child(odd)").addClass("odd-row");
-    
-    
     var abs_min_price = parseInt($('#abs_min_price').val())
     var abs_max_price = parseInt($('#abs_max_price').val())
     
     var min_price
     if ($('#id_min_price').val()) {
-        min_price = parseInt($('#id_min_price').val())
+        min_price = parseInt($('#id_min_price').val().replace(/\./g, ''))
     } else {
         min_price = abs_min_price
         $('#id_min_price').val(min_price)
@@ -44,11 +41,11 @@ $(function() {
         
     var max_price
     if ($('#id_max_price').val()) {
-        max_price = parseInt($('#id_max_price').val())
+        max_price = parseInt($('#id_max_price').val().replace(/\./g, ''))
     } else {
         max_price = abs_max_price
         $('#id_max_price').val(max_price)
-    }
+    } 
         
     $('#price_slider').slider({
 		range: true,

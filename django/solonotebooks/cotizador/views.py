@@ -21,7 +21,7 @@ class NotebookCommentForm(forms.Form):
     
 def store_data(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
-    search_form = SearchForm(request.GET)
+    search_form = initialize_search_form(request.GET)
         
     return render_to_response('cotizador/store_details.html', {
         'form': search_form,
@@ -30,14 +30,14 @@ def store_data(request, store_id):
     
 def store_index(request):
     stores = Store.objects.all()
-    search_form = SearchForm(request.GET)
+    search_form = initialize_search_form(request.GET)
     return render_to_response('cotizador/store_index.html', {
         'form': search_form,
         'stores': stores,
     })  
     
 def search(request):
-    search_form = SearchForm(request.GET)
+    search_form = initialize_search_form(request.GET)
     query = request.GET['search_keywords']
     
     available_notebooks = Notebook.objects.all().filter(is_available=True).order_by('?')
@@ -80,7 +80,7 @@ def search(request):
     
     
 def browse(request):
-    search_form = SearchForm(request.GET)
+    search_form = initialize_search_form(request.GET)
     
     if 'advanced_controls' in search_form.data and search_form.data['advanced_controls'] and int(search_form.data['advanced_controls']):
         advanced_controls = True
@@ -160,18 +160,11 @@ def browse(request):
     if 'video_card' in search_form.data and search_form.data['video_card'] and advanced_controls:
         result_notebooks = result_notebooks.filter(video_card__id = search_form.data['video_card']).distinct()
         
-    min_price = utils.roundToFloor10000(Notebook.objects.aggregate(Min('min_price'))['min_price__min'])
-    max_price = utils.roundToCeil10000(Notebook.objects.aggregate(Max('min_price'))['min_price__max'])
-        
     if 'min_price' in search_form.data and search_form.data['min_price']  and advanced_controls:
         result_notebooks = result_notebooks.filter(min_price__gte = int(search_form.data['min_price']))
-    else:
-        search_form.min_price = min_price
 
     if 'max_price' in search_form.data and search_form.data['max_price']  and advanced_controls:
         result_notebooks = result_notebooks.filter(min_price__lte = int(search_form.data['max_price']))
-    else:
-        search_form.max_price = max_price
     
     if 'page_number' in search_form.data:
         page_number = int(search_form.data['page_number'])
@@ -179,7 +172,43 @@ def browse(request):
         page_number = 1
         
     page_count = ceil(result_notebooks.count() / 10.0);
-    result_notebooks = result_notebooks.order_by('min_price')[(page_number - 1) * 10 : page_number * 10]
+    
+    if 'ordering' in search_form.data:
+        ordering = int(search_form.data['ordering'])
+    else:
+        ordering = 1
+        
+    ordering_direction = None
+    if 'ordering_direction' in search_form.data and search_form.data['ordering_direction']:
+        ordering_direction = ['', '-'][int(search_form.data['ordering_direction'])]
+        
+    if ordering == 1:
+        if ordering_direction == None:
+            ordering_direction = ''
+        result_notebooks = result_notebooks.order_by(ordering_direction + 'min_price')
+    elif ordering == 2:
+        if ordering_direction == None:
+            ordering_direction = '-'    
+        result_notebooks = result_notebooks.order_by(ordering_direction + 'processor__speed_score')
+    elif ordering == 3:
+        if ordering_direction == None:
+            ordering_direction = '-'    
+        result_notebooks = result_notebooks.annotate(max_video_card_score=Max('video_card__speed_score')).order_by(ordering_direction + 'max_video_card_score')
+    elif ordering == 4:
+        if ordering_direction == None:
+            ordering_direction = '-'    
+        result_notebooks = result_notebooks.order_by(ordering_direction + 'ram_quantity__value')
+    elif ordering == 5:
+        if ordering_direction == None:
+            ordering_direction = '-'    
+        result_notebooks = result_notebooks.annotate(max_hard_drive_capacity=Max('storage_drive__capacity__value')).order_by(ordering_direction + 'max_hard_drive_capacity')        
+    elif ordering == 6:
+        if ordering_direction == None:
+            ordering_direction = ''    
+        result_notebooks = result_notebooks.order_by(ordering_direction + 'weight')
+        
+    result_notebooks = result_notebooks[(page_number - 1) * 10 : page_number * 10]
+    
     pages = filter(lambda(x): x > 0 and x <= page_count, range(page_number - 3, page_number + 3))
     try:
         left_page = pages[0]
@@ -202,13 +231,14 @@ def browse(request):
         'page_range': pages,
         'left_page': left_page,
         'right_page': right_page,
-        'min_price': min_price,
-        'max_price': max_price,
+        'current_url': search_form.generateUrlWithoutOrdering(),
+        'ordering_direction_url': search_form.generateUrlWithoutOrderingDirection(),
+        'ordering_direction': {'': 0, '-': 1}[ordering_direction]
     })
     
 def all_notebooks(request):
     notebooks = Notebook.objects.all()
-    search_form = SearchForm(request.GET)
+    search_form = initialize_search_form(request.GET)
         
     return render_to_response('cotizador/all_notebooks.html', {
         'form': search_form,
@@ -230,7 +260,7 @@ def store_notebook_redirect(request, store_notebook_id):
 def notebook_details(request, notebook_id):
     notebook = get_object_or_404(Notebook, pk = notebook_id)
     notebook = Notebook.objects.all().get(pk = notebook_id)
-    search_form = SearchForm(request.GET)
+    search_form = initialize_search_form(request.GET)
     
     if request.method == 'POST': 
         commentForm = NotebookCommentForm(request.POST)
@@ -287,8 +317,9 @@ def login_page(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/manager/news/')
     else:
+        search_form = initialize_search_form(request.GET)
         return render_to_response('cotizador/login.html', {
-                'form': SearchForm(),
+                'form': search_form,
             })
     
 @login_required    
@@ -347,3 +378,13 @@ def processor_line_family_details(request, processor_line_family_id):
                 'form': search_form,
                 'processor_line_family': processor_line_family
             })
+            
+def initialize_search_form(data):
+    search_form = SearchForm(data)
+    
+    min_price = utils.roundToFloor10000(Notebook.objects.aggregate(Min('min_price'))['min_price__min'])
+    max_price = utils.roundToCeil10000(Notebook.objects.aggregate(Max('min_price'))['min_price__max'])
+    search_form.abs_min_price = min_price
+    search_form.abs_max_price = max_price
+    
+    return search_form

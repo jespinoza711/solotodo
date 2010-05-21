@@ -11,6 +11,9 @@ class SearchForm(forms.Form):
     notebook_line = forms.ModelChoiceField(NotebookLine.objects.all(),
                                         empty_label="Cualquiera")
     weight = forms.ChoiceField(choices=(('', 'Cualquiera'), ('0', '< 1 kg'), ('1', '1 - 2 kg'), ('2', '2 - 3 kg'), ('3', '3 - 4 kg'), ('4', '> 4 kg')))
+    ordering = forms.ChoiceField(choices=(('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
+    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso')))
+    ordering_direction = forms.IntegerField(widget=forms.HiddenInput())
     processor_brand = forms.ModelChoiceField(ProcessorBrand.objects.all(),
                                         empty_label="Cualquiera")
     processor_line = forms.ModelChoiceField(ProcessorLine.objects.all(),
@@ -61,23 +64,32 @@ class SearchForm(forms.Form):
         'processor_family', 'ram_type', 'ram_frequency', 'storage_type',
         'screen_size', 'screen_resolution', 'screen_touch', 'video_card_brand',
         'video_card_line', 'video_card', 'chipset']
-    
-    def generateBasePageLink(self):
+        
+    def generateCurrentUrlWithSkip(self, skip_keys):
         url = '?'
         for key in self.data.keys():
-            if key == 'page_number':
+            if key in skip_keys:
                 continue
             url += key + '=' + self.data[key] + '&'
-        url += 'page_number='
         return url
+        
+    def generateUrlWithoutOrdering(self):
+        return self.generateCurrentUrlWithSkip(['page_number', 'ordering', 'ordering_direction'])
+        
+    def generateUrlWithoutOrderingDirection(self):
+        return self.generateCurrentUrlWithSkip(['page_number', 'ordering_direction'])        
+    
+    def generateBasePageLink(self):
+        return self.generateCurrentUrlWithSkip(['page_number']) + 'page_number='
         
     def generateRemoveFilterLinks(self):
         filters = {}
         for key in self.data.keys():
-            if key == 'page_number' or key == 'advanced_controls':
+            skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction']
+            if key in skip_keys:
                 continue
                 
-            if not (self.data['advanced_controls'] and int(self.data['advanced_controls'])) and key in self.attribute_requiring_advanced_controls:
+            if not ('advanced_controls' in self.data and self.data['advanced_controls'] and int(self.data['advanced_controls'])) and key in self.attribute_requiring_advanced_controls:
                 continue
                 
             min_price = Notebook.objects.aggregate(Min('min_price'))['min_price__min']

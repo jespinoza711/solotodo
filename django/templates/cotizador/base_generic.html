@@ -10,7 +10,7 @@
     <link type="text/css" href="/media/css/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
     <link rel="shortcut icon" href="/media/icons/favicon.ico" type="image/x-icon" />
     <script type="text/javascript" src="/media/js/jquery/jquery-1.4.2.js"></script>
-    <script type="text/javascript" src="/media/js/jquery/jquery-ui-1.8.1.custom.min.js"></script>    
+    <script type="text/javascript" src="/media/js/jquery/jquery-ui-1.8.1.custom.min.js"></script>
     <script type="text/javascript" src="/media/js/main_script.js"></script>
     <meta name="google-site-verification" content="_LS4YqLaSpHUPBM7dg2oRWgl0lvlF3ZZrU3UT2tA2C0" />    
     {% block header %}
@@ -71,8 +71,8 @@
     </div>
     
     <div class="hidden_filter_item">
-        <input id="abs_min_price" type="hidden" value="{{ min_price}}" />
-        <input id="abs_max_price" type="hidden" value="{{ max_price}}" />
+        <input id="abs_min_price" type="hidden" value="{{ form.abs_min_price }}" />
+        <input id="abs_max_price" type="hidden" value="{{ form.abs_max_price }}" />
         <label>Precio</label>
         {{ form.min_price }} - {{ form.max_price }}
         <br />
@@ -198,6 +198,10 @@
     <div class="always_hidden_filter_item">
         {{ form.advanced_controls }}
     </div>
+    <div class="always_hidden_filter_item">    
+        {{ form.ordering }}
+    </div>
+    {{ form.ordering_direction }}
     
     <hr />
     <!-- Botón de envío -->
