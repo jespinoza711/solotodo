@@ -31,6 +31,7 @@
             {% for picture in notebook.notebookpicture_set.all %}
                 <li>{{ picture.picture.extra_thumbnails_tag.large }}</li>
             {% endfor %}
+            <li><img src="/media/pics/charts/{{ notebook.id }}.png"/></li>
         </ul>
     </div>
     <div class="price_table_container">
@@ -84,7 +85,7 @@
         <small><a href="/admin/cotizador/notebook/{{ notebook.id }}">Editar</a></small>
     {% endif %}
     <h2>Especificaciones esenciales</h2>
-    <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}">{{ notebook.processor.prettyPrint }}</a>
+    <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.prettyPrint }}</a>
     <br />
     <strong>Chipset: </strong> {{ notebook.chipset }}
     <br/>
@@ -105,7 +106,7 @@
     <br />
     <strong>Tarjeta de video: </strong>
     {% ifequal notebook.video_card.all.count 1 %}
-        {{ notebook.video_card.all.0 }}
+        <a href="/video_card_line/{{notebook.video_card.all.0.line.id}}/?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
     {% else %}
         <ul>
             {% for video_card in notebook.video_card.all %}

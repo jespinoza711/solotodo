@@ -1,6 +1,9 @@
-from solonotebooks.cotizador.models import *
-from django.db.models import Min
+import cairo
+import pycha.line
+from copy import deepcopy
 from datetime import date, datetime
+from django.db.models import Min, Max
+from solonotebooks.cotizador.models import *
 
 # Method to write a raw string as a log message
 def logMessage(message):
@@ -100,6 +103,63 @@ def analyzeStore(p):
     ntbks = p.getNotebooks()
     saveNotebooks(ntbks, s)
     
+# Method to generate the price change chart of a notebook and save it    
+def generateChart(ntbk):
+    npcs = NotebookPriceChange.objects.filter(notebook = ntbk).order_by('date')
+    min_price = npcs.aggregate(Min('price'))['price__min']
+    max_price = npcs.aggregate(Max('price'))['price__max'] 
+    indexed_npcs = [[i, npcs[i]] for i in range(len(npcs))]
+    
+    last_npc = indexed_npcs[len(indexed_npcs) - 1][1]
+    new_npc = deepcopy(last_npc)
+    new_npc.date = date.today()
+    indexed_npcs += [[len(indexed_npcs), new_npc]]
+
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 300, 300)
+    lines = [[inpc[0], inpc[1].price] for inpc in indexed_npcs]
+        
+    dataSet = (
+        ('lines', [(k, v) for k, v in lines]),
+        )
+
+    options = {
+        'axis': {
+            'x': {
+                'ticks': [dict(v=inpc[0], label=str(inpc[1].date.day) + '/' + str(inpc[1].date.month)) for inpc in indexed_npcs],
+            },
+            'y': {
+                'tickCount': 4,
+                'range': (min_price / 1.3, max_price * 1.2)
+            }
+        },
+        'background': {
+            'color': '#eeeeff',
+            'lineColor': '#444444',
+            'baseColor': '#FFFFFF',
+        },
+        'colorScheme': {
+            'name': 'gradient',
+            'args': {
+                'initialColor': 'blue',
+            },
+        },
+        'legend': {
+            'hide': True,
+        },
+        'padding': {
+            'left': 60,
+            'bottom': 20,
+            'right': 10,
+        },
+        'title': 'Cambios de precio a la fecha'
+    }
+    chart = pycha.line.LineChart(surface, options)
+
+    chart.addDataset(dataSet)
+    chart.render()
+
+    surface.write_to_png('../apache/media/pics/charts/' + str(ntbk.id) + '.png')    
+    
 ''' Management method that keeps everything coherent (e.g. updating the price of
 the notebooks to the minimum among the stores that carry it, etc)'''
 def updateAvailabilityAndPrice():
@@ -161,3 +221,4 @@ def updateAvailabilityAndPrice():
             notebook.is_available = False
         
         notebook.save()
+        generateChart(notebook)

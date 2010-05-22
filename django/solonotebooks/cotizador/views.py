@@ -413,10 +413,34 @@ def validate_all(request):
 # View in charge of showing the processors of a particular line, nothing fancy            
 def processor_line_family_details(request, processor_line_family_id):
     processor_line_family = get_object_or_404(ProcessorLineFamily, pk = processor_line_family_id)
-    search_form = SearchForm(request.GET)
+    ntbks = Notebook.objects.filter(processor__line__family = processor_line_family).order_by('?')[0:5]
+    processor_id = 0
+    if 'processor' in request.GET:
+        processor_id = int(request.GET['processor'])
+    search_form = initialize_search_form(request.GET)
+    processors = Processor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
     return render_to_response('cotizador/processor_line_family_details.html', {
                 'form': search_form,
-                'processor_line_family': processor_line_family
+                'processor_line_family': processor_line_family,
+                'processors': processors,
+                'ntbks': ntbks,
+                'processor_id': processor_id,
+            })
+            
+def video_card_line_details(request, video_card_line_id):
+    video_card_line = get_object_or_404(VideoCardLine, pk = video_card_line_id)
+    ntbks = Notebook.objects.filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
+    video_card_id = 0
+    if 'video_card' in request.GET:
+        video_card_id = int(request.GET['video_card'])
+    search_form = initialize_search_form(request.GET)
+    video_cards = VideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
+    return render_to_response('cotizador/video_card_line_details.html', {
+                'form': search_form,
+                'video_card_line': video_card_line,
+                'video_cards': video_cards,
+                'ntbks': ntbks,
+                'video_card_id': video_card_id,
             })
             
 # Helper method to set the search_form for almost all of the views            

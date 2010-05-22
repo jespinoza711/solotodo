@@ -4,56 +4,44 @@
     <script type="text/javascript" src="/media/js/processor_script.js"></script>
 {% endblock %}
 
-{% block title %}SoloNotebooks - {{ processor_line_family }}{% endblock %}
+{% block title %}SoloNotebooks - {{ video_card_line }}{% endblock %}
 
 {% block mainContent %}
 
-<h1>Procesadores {{ processor_line_family }}</h1>
+<h1>Tarjetas de video {{ video_card_line }}</h1>
 
 <div class="processor_details_container">
-    <div class="processor_image_container">
-        {{ processor_line_family.picture.thumbnail_tag }}
-    </div>
-
-    {{ processor_line_family.text|safe }}
-
 </div>
-
-<h2 class="subheader">Modelos</h2>
 
 <table class="processor_table">
     <tr>
         <th>Modelo</th>
-        <th>Núcleos</th>
-        <th>Frecuencia</th>
-        <th>Velocidad <sup>*</sup></th>        
-        <th>FSB</th>
-        <th>Cache</th>
-        <th>Consumo</th>
-        <th>Modo Turbo</th>
+        <th>Tipo</th>
+        <th>Velocidad <sup>*</sup></th>
+        <th>Memoria</th>
+        <th>Frec. Core</th>
+        <th>Frec. Mem</th>
     </tr>
-    {% for processor in processors %}
-        {% ifequal processor_id processor.id %}
+    {% for video_card in video_cards %}
+        {% ifequal video_card_id video_card.id %}
             <tr class="selected_processor">
         {% else %}
             <tr>
         {% endifequal %}
-            <td><a href="/?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
-            <td>{{ processor.core_number }}</td>
-            <td>{{ processor.frequency }}</td>
-            <td>{{ processor.speed_score }}</td>                
-            <td>{{ processor.fsb }}</td>
-            <td>{{ processor.cache }}</td>
-            <td>{{ processor.tdp }} W</td>
-            <td>{% if processor.has_turbo_mode %} Sí {% else %} No {% endif %}</td>
+            <td><a href="/?video_card={{video_card.id}}&advanced_controls=1">{{ video_card }}</a></td>
+            <td>{{ video_card.card_type }}</td>
+            <td>{{ video_card.speed_score }}</td>
+            <td>{{ video_card.memory }}</td>                
+            <td>{{ video_card.gpu_frequency }} MHz</td>
+            <td>{{ video_card.memory_frequency }} MHz</td>
         </tr>
     {% endfor %}
 </table>
 <span class="processor_table_notice">
-<sup>*</sup> Este valor es un puntaje promedio en pruebas, y sirve para comparar dos procesadores distintos, inclusive de distintas marcas
+<sup>*</sup> Este valor sirve para comparar dos tarjetas gráficas distintas, aún si son de marcas diferentes
 </span>
 
-<h2 class="subheader">Equipos con estos procesadores</h2>
+<h2 class="subheader">Equipos con estas tarjetas gráficas</h2>
 
 {% for notebook in ntbks %}
 

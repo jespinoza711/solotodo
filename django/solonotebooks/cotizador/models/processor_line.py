@@ -10,6 +10,9 @@ class ProcessorLine(models.Model):
         
     def rawText(self):
         return self.family.rawText() + ' ' + self.name
+        
+    def tablePrint(self):
+        return self.name        
     
     class Meta:
         app_label = 'cotizador'

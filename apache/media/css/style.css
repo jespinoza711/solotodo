@@ -497,7 +497,7 @@ label {
 
 .processor_table td {
     text-align: center;
-    padding: 3px;
+    padding: 5px;
 }
 
 .processor_image_container {
@@ -643,6 +643,14 @@ width: 100%;
 background-color: #bce1ff;
 }
 
+.processor_table a {
+    color: #005B8E;
+}
+
+.selected_processor {
+    font-weight: bold;
+}
+
 .left_float {
 float: left;
 margin-right: 5px;
@@ -686,4 +694,19 @@ margin-right: 5px;
 
 #ordering_div {
     margin-top: 10px;
+}
+
+h2.subheader {
+    clear: left;
+    font-size: 16px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+div.processor_details_container {
+    height: inherit;
+}
+
+span.processor_table_notice {
+    font-size: 10px;
 }

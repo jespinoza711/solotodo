@@ -42,6 +42,9 @@ class Processor(models.Model):
         
     def prettyPrint(self):
         return unicode(self.line) + ' ' + self.name + ' (' + unicode(self.frequency) + ')'
+        
+    def tablePrint(self):
+        return self.line.tablePrint() + ' ' + self.name
     
     class Meta:
         app_label = 'cotizador'
