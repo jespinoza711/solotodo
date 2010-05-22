@@ -382,8 +382,8 @@ def processor_line_family_details(request, processor_line_family_id):
 def initialize_search_form(data):
     search_form = SearchForm(data)
     
-    min_price = utils.roundToFloor10000(Notebook.objects.aggregate(Min('min_price'))['min_price__min'])
-    max_price = utils.roundToCeil10000(Notebook.objects.aggregate(Max('min_price'))['min_price__max'])
+    min_price = utils.roundToFloor10000(Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min'])
+    max_price = utils.roundToCeil10000(Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max'])
     search_form.abs_min_price = min_price
     search_form.abs_max_price = max_price
     
