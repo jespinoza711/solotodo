@@ -92,8 +92,8 @@ class SearchForm(forms.Form):
             if not ('advanced_controls' in self.data and self.data['advanced_controls'] and int(self.data['advanced_controls'])) and key in self.attribute_requiring_advanced_controls:
                 continue
                 
-            min_price = Notebook.objects.aggregate(Min('min_price'))['min_price__min']
-            max_price = Notebook.objects.aggregate(Max('min_price'))['min_price__max']
+            min_price = Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min']
+            max_price = Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max']
             if key == 'min_price' and int(self.data[key]) == utils.roundToFloor10000(min_price):
                 continue
             if key == 'max_price' and int(self.data[key]) == utils.roundToCeil10000(max_price):
