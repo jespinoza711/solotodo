@@ -2,6 +2,7 @@ from solonotebooks.cotizador.models import *
 from django.db.models import Min
 from datetime import date, datetime
 
+# Method to write a raw string as a log message
 def logMessage(message):
     try:
         today_log = LogEntry.objects.get(date = date.today())
@@ -15,29 +16,38 @@ def logMessage(message):
     log_message.message = message
     log_message.save()
 
+# Method to log the finding of a new model at a store
 def logNewModel(shn):
     logMessage('Nuevo modelo: ' + str(shn) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
-    
+
+# Method to log the finding of a model that already existed ago, but was deleted    
 def logReviveModel(shn):
     logMessage('Modelo restaurado: ' + str(shn)  + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
 
-
+# Method to log that a notebook in the DB is once again available
 def logReviveNotebook(ntbk):
     logMessage('Notebook restaurado: ' + str(ntbk)  + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
+# Method to log that a store has pull a model from its website
 def logLostModel(shn):
     logMessage('Modelo perdido: ' + str(shn) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
 
-
+# Method to log that a notebook in the DB is no longer available
 def logLostNotebook(ntbk):
     logMessage('Notebook perdido: ' + str(ntbk) + '(<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
+# Method to log that a store has changed the price on one of its models
 def logChangeModelPrice(shn, oldPrice, newPrice):
     logMessage('Modelo cambia de precio: ' + str(shn) + ' de ' + str(oldPrice) + ' a ' + str(newPrice) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
     
+# Method to log that a notebook in the DB has changed its minimum price among
+# the stores that carry it with availability
 def logChangeNotebookPrice(ntbk, oldPrice, newPrice):
     logMessage('Notebook cambia de precio: ' + str(ntbk) + ' de ' + str(oldPrice) + ' a ' + str(newPrice) + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
+'''Method that takes a list of ProductData objects adn the store they came from,
+checks whether they already exists, if they do, it checks for price differences,
+if not, it is added.  Everything is logged '''
 def saveNotebooks(ntbks, s):
     for ntbk in ntbks:
         print 'Guardando ' + str(ntbk)
@@ -66,6 +76,7 @@ def saveNotebooks(ntbks, s):
         print 'Guardando estado del notebook en tienda'
         current_shn.save()
 
+        # We keep track of prices for every day, and we need to avoid clashes
         print 'Viendo si ya se solicito un catastro para hoy'
         today_history = StoreNotebookHistory.objects.filter(date = date.today()).filter(registry = current_shn)
         if len(today_history) == 0:
@@ -76,7 +87,9 @@ def saveNotebooks(ntbks, s):
             snh.registry = current_shn
             snh.save()
             
+# Method that uses a store fetch grabs its models and compares the data to DB
 def analyzeStore(p):
+    # The Store entry in the DB might not exist, so we check for that first
     try:
         s = Store.objects.get(name = p.name)
     except Store.DoesNotExist:
@@ -87,6 +100,8 @@ def analyzeStore(p):
     ntbks = p.getNotebooks()
     saveNotebooks(ntbks, s)
     
+''' Management method that keeps everything coherent (e.g. updating the price of
+the notebooks to the minimum among the stores that carry it, etc)'''
 def updateAvailabilityAndPrice():
     print 'Actualizando status de disponibilidad de las tiendas'
     shns = StoreHasNotebook.objects.all()

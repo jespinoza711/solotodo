@@ -9,36 +9,6 @@ from fetch_scripts import ProductData
 class FullNotebook:
     name = 'FullNotebook'
 
-    # Method that extracts the <a> tags to products given the URL of the catalog page
-    def extractLinks(self, pageUrl):
-	    br = mechanize.Browser()
-	    data = br.open(pageUrl).get_data()
-	    soup = BeautifulSoup(data)
-	    links = soup.findAll("a", { "class" : "linkProducto" })
-
-	    return links
-
-    # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
-	    br = mechanize.Browser()
-	    data = br.open(productUrl).get_data()
-	    soup = BeautifulSoup(data)
-
-	    productData = ProductData()
-
-	    titleSpan = soup.find("span", { "class" : "style22" })
-	    title = str(titleSpan.string).strip()
-
-	    priceCell = soup.findAll("td", { "class" : "productoiva" })
-	    price = int(str(priceCell[1].string).replace('.', ''))
-
-	    productData.custom_name = title
-	    productData.price = price
-	    productData.url = productUrl
-
-	    return productData
-
-
     # Main method
     def getNotebooks(self):
         print 'Getting FullNotebook notebooks'

@@ -5,6 +5,10 @@ from datetime import datetime
 from fetch_scripts import *
 from common_fetch_methods import *
 
+'''Main and all-powerful updater script, probably the backbone of the whole
+site, it grabs every single model of the stores with fetchers and inserts
+them into the database, logging price changes, new models and disappearing
+models'''
 def main():
     try:
         p = NotebookCenter()

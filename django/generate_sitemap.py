@@ -4,6 +4,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 from xml.dom import minidom
 from solonotebooks.cotizador.models import *
 
+# Script that generates the sitemap of the catalog, so far only of the notebooks
 def main():
     xml = minidom.Document()
     

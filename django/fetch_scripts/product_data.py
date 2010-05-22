@@ -1,5 +1,5 @@
+# Basic description for keeping track of each model at each store over time
 class ProductData:
-    
     def __init__(self):
         self.custom_name = ''
         self.price = 0

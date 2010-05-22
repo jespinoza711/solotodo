@@ -9,6 +9,7 @@ from fetch_scripts import ProductData
 class ENotebook:
     name = 'E-Notebook'
     
+    # Method that extracts the product details from a given page
     def extractProducts(self, pageUrl):
         br = mechanize.Browser()
         data = br.open(pageUrl).get_data()
@@ -34,7 +35,7 @@ class ENotebook:
             products.append(productData)    
         return products
 
-    # Method that extracts the <a> tags to products given the URL of the catalog page
+    # Method that extracts the products from a given catalog page
     def extractLinks(self, pageUrl):
         br = mechanize.Browser()
         data = br.open(pageUrl).get_data()
@@ -81,7 +82,7 @@ class ENotebook:
         # Array containing the links to the specific products
         productLinks = []
 
-        # For each of the pages, retrieve the fixed links to the products and add them to the array
+        # For each of the pages, retrieve the data of the products
         for pageLink in pageLinks:
             products = self.extractLinks(pageLink)
             for product in products:

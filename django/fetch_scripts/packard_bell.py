@@ -9,27 +9,6 @@ from fetch_scripts import ProductData
 class PackardBell:
     name = 'Packard Bell'
 
-    # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
-	    br = mechanize.Browser()
-	    data = br.open(productUrl).get_data()
-	    soup = BeautifulSoup(data)
-
-	    productData = ProductData()
-
-	    titleSpan = soup.find("h1")
-	    title = str(titleSpan.string).strip()
-
-	    priceCell = soup.find("div", { "id" : "product-info" }).find("ul").findAll("li")[1].contents[1]
-	    price = int(str(priceCell.replace('.', '').replace('$', '')))
-
-	    productData.custom_name = title
-	    productData.price = price
-	    productData.url = productUrl
-
-	    return productData
-
-
     # Main method
     def getNotebooks(self):
         print 'Getting Packard Bell notebooks'

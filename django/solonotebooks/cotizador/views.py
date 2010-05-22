@@ -14,11 +14,13 @@ import datetime
 from math import ceil
 from forms.search_form import SearchForm
 from difflib import SequenceMatcher
-                    
+                   
+# Class that represents the form in which the users can leave comments for a notebook                    
 class NotebookCommentForm(forms.Form):
     comments = forms.CharField(widget = forms.Textarea)
     nickname = forms.CharField(max_length = 255)
     
+# View for showing a particular store with the notebooks it offers    
 def store_data(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
     search_form = initialize_search_form(request.GET)
@@ -28,6 +30,7 @@ def store_data(request, store_id):
         'store': store,
     })
     
+# View for showing all of the stores currently in the DB    
 def store_index(request):
     stores = Store.objects.all()
     search_form = initialize_search_form(request.GET)
@@ -36,16 +39,25 @@ def store_index(request):
         'stores': stores,
     })  
     
+# View for handling the search of notebooks using keywords    
 def search(request):
     search_form = initialize_search_form(request.GET)
+    
+    # The keywords
     query = request.GET['search_keywords']
     
+    # We grab all the candidates (those currently available)
     available_notebooks = Notebook.objects.all().filter(is_available=True).order_by('?')
     
+    # For each one, we assign a score base on how many of the keywords match a 
+    # programatically generated, huge single line description of the notebook
     result_notebooks = [[ntbk, stringCompare(ntbk.rawText(), query)] for ntbk in available_notebooks]
+    # If the hit is too low (< 10%) they are eliminated
     result_notebooks = filter(lambda(x): x[1] > 10, result_notebooks) 
+    # Finally we sort them from highest to lowest hit rate
     result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1), reverse = True)
     
+    # Boilerplate code for setting up the links to each page of the results
     if 'page_number' in request.GET:
         page_number = int(request.GET['page_number'])
     else:
@@ -78,17 +90,20 @@ def search(request):
         'right_page': right_page,        
     })
     
-    
+# View that handles the main search / browse windows, applying filters and ordering    
 def browse(request):
     search_form = initialize_search_form(request.GET)
     
+    # Check if the advanced controls are enabled
     if 'advanced_controls' in search_form.data and search_form.data['advanced_controls'] and int(search_form.data['advanced_controls']):
         advanced_controls = True
     else:
         advanced_controls = False
         
+    # Grab all the candidates (those currently available)
     result_notebooks = Notebook.objects.all().filter(is_available=True)
     
+    # And apply each active filter...
     if 'notebook_brand' in search_form.data and search_form.data['notebook_brand']:
         result_notebooks = result_notebooks.filter(line__brand__id=search_form.data['notebook_brand'])
         
@@ -166,22 +181,20 @@ def browse(request):
     if 'max_price' in search_form.data and search_form.data['max_price']  and advanced_controls:
         result_notebooks = result_notebooks.filter(min_price__lte = int(search_form.data['max_price']))
     
-    if 'page_number' in search_form.data:
-        page_number = int(search_form.data['page_number'])
-    else:
-        page_number = 1
-        
-    page_count = ceil(result_notebooks.count() / 10.0);
     
+    # Check the ordering key, if the is none, use 'Price' by default    
     if 'ordering' in search_form.data:
         ordering = int(search_form.data['ordering'])
     else:
         ordering = 1
         
+    # Check the ordering orientation, if it is not set, each criteria uses 
+    # sensible defaults (asc fro price, desc for cpu performance, etc)
     ordering_direction = None
     if 'ordering_direction' in search_form.data and search_form.data['ordering_direction']:
         ordering_direction = ['', '-'][int(search_form.data['ordering_direction'])]
-        
+    
+    # Apply the corresponding ordering based on the key
     if ordering == 1:
         if ordering_direction == None:
             ordering_direction = ''
@@ -193,6 +206,7 @@ def browse(request):
     elif ordering == 3:
         if ordering_direction == None:
             ordering_direction = '-'    
+        # Note: A notebook may have more than one video card, grab the fastest
         result_notebooks = result_notebooks.annotate(max_video_card_score=Max('video_card__speed_score')).order_by(ordering_direction + 'max_video_card_score')
     elif ordering == 4:
         if ordering_direction == None:
@@ -201,13 +215,20 @@ def browse(request):
     elif ordering == 5:
         if ordering_direction == None:
             ordering_direction = '-'    
+        # Note: A notebook may have more than one SD, grab the biggest
         result_notebooks = result_notebooks.annotate(max_hard_drive_capacity=Max('storage_drive__capacity__value')).order_by(ordering_direction + 'max_hard_drive_capacity')        
     elif ordering == 6:
         if ordering_direction == None:
             ordering_direction = ''    
         result_notebooks = result_notebooks.order_by(ordering_direction + 'weight')
         
-    result_notebooks = result_notebooks[(page_number - 1) * 10 : page_number * 10]
+    # Boilerplate code for page navigation numbering
+    if 'page_number' in search_form.data:
+        page_number = int(search_form.data['page_number'])
+    else:
+        page_number = 1
+        
+    page_count = ceil(result_notebooks.count() / 10.0);        
     
     pages = filter(lambda(x): x > 0 and x <= page_count, range(page_number - 3, page_number + 3))
     try:
@@ -219,6 +240,8 @@ def browse(request):
         right_page = pages[len(pages) - 1]
     except:
         right_page = 0
+        
+    result_notebooks = result_notebooks[(page_number - 1) * 10 : page_number * 10]        
        
     return render_to_response('cotizador/index.html', {
         'form': search_form,
@@ -236,6 +259,7 @@ def browse(request):
         'ordering_direction': {'': 0, '-': 1}[ordering_direction]
     })
     
+# View for displaying every single notebook in the DB
 def all_notebooks(request):
     notebooks = Notebook.objects.all()
     search_form = initialize_search_form(request.GET)
@@ -245,7 +269,9 @@ def all_notebooks(request):
         'result_notebooks': notebooks
     })
     
-    
+# View that gets called when a user clicks an external link to a store
+# we log this for statistical purposes and... maybe build a business model
+# someday...
 def store_notebook_redirect(request, store_notebook_id):
     store_notebook = get_object_or_404(StoreHasNotebook, pk = store_notebook_id)
     store_notebook.visitorCount += 1
@@ -257,11 +283,13 @@ def store_notebook_redirect(request, store_notebook_id):
     external_visit.save()
     return HttpResponseRedirect(store_notebook.url)
         
+# View in charge of showing the details of a notebook and handle commment submissions        
 def notebook_details(request, notebook_id):
     notebook = get_object_or_404(Notebook, pk = notebook_id)
     notebook = Notebook.objects.all().get(pk = notebook_id)
     search_form = initialize_search_form(request.GET)
     
+    # If this is a comment submission, validate and save
     if request.method == 'POST': 
         commentForm = NotebookCommentForm(request.POST)
         if commentForm.is_valid():
@@ -278,20 +306,24 @@ def notebook_details(request, notebook_id):
     else:
         commentForm = NotebookCommentForm()
         
+    # Check if this is the redirect response generated after submitting a comment
+    # If it is, show a message that the comment needs to be validated and hide
+    # the form (to prevent users from posting again feeling that it didn't work)
     posted_comment = False
-    
-    if request.user.is_authenticated():
-        admin_user = True
-    else:
-        admin_user = False
     
     if 'posted_comment' in request.session and request.session['posted_comment'] == True:
         posted_comment = True
         request.session['posted_comment'] = False
     
     
+    # Find the stores with this notebook available
     stores_with_notebook_available = notebook.storehasnotebook_set.all().filter(is_available=True)
-    price_changes = notebook.notebookpricechange_set.all().order_by('date')
+    
+    # If the user is admin, there are some link to allow the editing of the ntbk
+    if request.user.is_authenticated():
+        admin_user = True
+    else:
+        admin_user = False
     
     return render_to_response('cotizador/notebook_details.html', {
         'notebook': notebook,
@@ -301,10 +333,10 @@ def notebook_details(request, notebook_id):
         'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('date'),
         'posted_comment': posted_comment,
         'admin_user': admin_user,
-        'price_changes': price_changes,
         'similar_notebooks': notebook.findSimilarNotebooks(),
         })
         
+# Page to login to the manager, everything is boilerplate
 def login_page(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -324,6 +356,7 @@ def login_page(request):
     
 @login_required    
 def news(request):
+    # Shows the logs for the last week
     last_logs = LogEntry.objects.filter(date__gte = datetime.date.today() - datetime.timedelta(days = 7)).order_by('-date').all()
     return render_to_response('cotizador/manager_news.html', {
             'form': SearchForm(),
@@ -332,6 +365,7 @@ def news(request):
         
 @login_required    
 def comments(request):
+    # Shows the comments pending for aproval
     due_comments = NotebookComment.objects.filter(validated = False)
     return render_to_response('cotizador/manager_comments.html', {
             'form': SearchForm(),
@@ -340,6 +374,7 @@ def comments(request):
         
 @login_required    
 def new_notebooks(request):
+    # Shows the models that don't have an associated notebook in the DB (i.e.: pending)
     new_notebooks = StoreHasNotebook.objects.filter(is_available = True).filter(is_hidden = False).filter(notebook = None)
     return render_to_response('cotizador/manager_new_notebooks.html', {
             'form': SearchForm(),
@@ -348,6 +383,8 @@ def new_notebooks(request):
         
 @login_required
 def hide_notebook(request, store_has_notebook_id):
+    # Makes a model invisible to the "pending" page if it is stupid (e.g. iPad)
+    # or doesn't apply (combos of notebooks + printers, notebook sleeves, etc)
     shn = get_object_or_404(StoreHasNotebook, pk = store_has_notebook_id)
     shn.is_hidden = True
     shn.save()
@@ -355,11 +392,13 @@ def hide_notebook(request, store_has_notebook_id):
 
 @login_required            
 def delete_comment(request, comment_id):
+    # Deletes a comment
     comment = get_object_or_404(NotebookComment, pk = comment_id)
     comment.delete()
     return HttpResponseRedirect(request.META['HTTP_REFERER']);
             
 def validate_all(request):
+    # Validates all comments pending approval
     if request.user.is_authenticated():
         comments = NotebookComment.objects.filter(validated = False)
         for comment in comments:
@@ -371,6 +410,7 @@ def validate_all(request):
                 'form': SearchForm(),
             })
             
+# View in charge of showing the processors of a particular line, nothing fancy            
 def processor_line_family_details(request, processor_line_family_id):
     processor_line_family = get_object_or_404(ProcessorLineFamily, pk = processor_line_family_id)
     search_form = SearchForm(request.GET)
@@ -379,12 +419,11 @@ def processor_line_family_details(request, processor_line_family_id):
                 'processor_line_family': processor_line_family
             })
             
+# Helper method to set the search_form for almost all of the views            
 def initialize_search_form(data):
     search_form = SearchForm(data)
     
-    min_price = utils.roundToFloor10000(Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min'])
-    max_price = utils.roundToCeil10000(Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max'])
-    search_form.abs_min_price = min_price
-    search_form.abs_max_price = max_price
+    search_form.abs_min_price = utils.roundToFloor10000(Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min'])
+    search_form.abs_max_price = utils.roundToCeil10000(Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max'])
     
     return search_form
