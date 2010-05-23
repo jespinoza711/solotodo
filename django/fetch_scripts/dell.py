@@ -26,14 +26,17 @@ class Dell:
             url = linkTag['href']
             if url[0] == '/':
                 url = urlBase + url
-            
-            productData.url = url
-            productData.custom_name = productName + ' ' + url
-            
-            priceDiv = dataDivs[numNtbks + i]
-            priceTag = priceDiv.find('span', {'class': 'pricing_retail_nodiscount_price'})
-            productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
-            productsData.append(productData)
+                
+            if 'configure' in url or 'upsell' in url:            
+                productData.url = url
+                productData.custom_name = productName + ' ' + url
+                
+                priceDiv = dataDivs[numNtbks + i]
+                priceTag = priceDiv.find('span', {'class': 'pricing_retail_nodiscount_price'})
+                productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
+                productsData.append(productData)
+            else:
+                productsData += self.retrieveHomeProductsData(url, productName, urlBase)
 
         return productsData      
         
@@ -71,7 +74,6 @@ class Dell:
         return productsData         
         
     def retrieveAlienwareProductData(self, productUrl, productName):
-        print productUrl
         r = mechanize.urlopen(productUrl)
         soup = BeautifulSoup(r.read())
 
