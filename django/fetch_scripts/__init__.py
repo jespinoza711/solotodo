@@ -15,6 +15,7 @@ from fetch_scripts.notebook_center import NotebookCenter
 from fetch_scripts.clie import Clie
 from fetch_scripts.la_polar import LaPolar
 from fetch_scripts.sistemax import Sistemax
+from fetch_scripts.dell import Dell
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -32,4 +33,5 @@ __all__ = [ 'ProductData',
             'NotebookCenter',
             'Clie',
             'LaPolar',
-            'Sistemax']
+            'Sistemax',
+            'Dell']

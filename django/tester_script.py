@@ -7,10 +7,10 @@ from common_fetch_methods import *
 
 # Script to test the fetch script for a store
 def main():
-    p = Sistemax()
+    p = Dell()
     analyzeStore(p)
     
-    updateAvailabilityAndPrice()    
+    #updateAvailabilityAndPrice()    
                 
 if __name__ == '__main__':
     print datetime.now()

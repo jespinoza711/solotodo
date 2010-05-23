@@ -100,7 +100,12 @@ def main():
     except:
         print('Error al obtener los notebooks de Sistemax')
         logMessage('Error al obtener los notebooks de Sistemax')
-                
+    try:
+        p = Dell()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Dell')
+        logMessage('Error al obtener los notebooks de Dell')
     updateAvailabilityAndPrice()
                 
 if __name__ == '__main__':
