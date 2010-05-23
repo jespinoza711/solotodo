@@ -10,7 +10,7 @@ def main():
     p = Dell()
     analyzeStore(p)
     
-    #updateAvailabilityAndPrice()    
+    updateAvailabilityAndPrice()    
                 
 if __name__ == '__main__':
     print datetime.now()

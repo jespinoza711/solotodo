@@ -11,9 +11,8 @@ class Dell:
 
     # Method that extracts the data of a specific product given its page
     def retrieveHomeProductsData(self, productUrl, productName, urlBase):
-        br = mechanize.Browser()
-        data = br.open(productUrl).get_data()
-        soup = BeautifulSoup(data)
+        r = mechanize.urlopen(productUrl)
+        soup = BeautifulSoup(r.read())
 
         productsData = []
         
@@ -39,9 +38,8 @@ class Dell:
         return productsData      
         
     def retrieveVostroProductsData(self, productUrl, productName, urlBase):
-        br = mechanize.Browser()
-        data = br.open(productUrl).get_data()
-        soup = BeautifulSoup(data)
+        r = mechanize.urlopen(productUrl)
+        soup = BeautifulSoup(r.read())
 
         productsData = []
         
@@ -63,8 +61,8 @@ class Dell:
             productData.url = url
             productData.custom_name = productName + ' ' + url
             
-            data = br.open(url).get_data()
-            soup = BeautifulSoup(data)
+            r = mechanize.urlopen(url)
+            baseSoup = BeautifulSoup(r.read())
             priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})         
 
             productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
@@ -73,13 +71,14 @@ class Dell:
         return productsData         
         
     def retrieveAlienwareProductData(self, productUrl, productName):
-        br = mechanize.Browser()
-        data = br.open(productUrl).get_data()
-        soup = BeautifulSoup(data)
+        print productUrl
+        r = mechanize.urlopen(productUrl)
+        soup = BeautifulSoup(r.read())
 
         cotizadorLink = soup.findAll("a", { "class" : "lnk" })[2]['href']
-        data = br.open(cotizadorLink).get_data()
-        soup = BeautifulSoup(data)
+        
+        r = mechanize.urlopen(cotizadorLink)
+        soup = BeautifulSoup(r.read())
 
         productData = ProductData()
         productData.url = productUrl
@@ -92,12 +91,17 @@ class Dell:
     # Main method
     def getNotebooks(self):
         print 'Getting Dell notebooks'
+        
+        cookies = mechanize.CookieJar()
+        opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
+        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
+                 ("From", "responsible.person@example.com")]
+        mechanize.install_opener(opener)
+        
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www1.la.dell.com'
         urlBuscarProductos = '/cl/es/'
         
-        # Browser initialization
-        browser = mechanize.Browser()
         
         # Array containing the data for each product
         productsData = []
@@ -108,10 +112,9 @@ class Dell:
                             
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
-
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
+            
+            r = mechanize.urlopen(urlWebpage)
+            baseSoup = BeautifulSoup(r.read())
 
             # Obtain the links to the other pages of the catalog (Inspiron 11z, Inspiron 14...)
             modelNavigator = baseSoup.findAll("table", { "width" : "728" })
@@ -149,10 +152,8 @@ class Dell:
                             
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
-
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
+            r = mechanize.urlopen(urlWebpage)
+            baseSoup = BeautifulSoup(r.read())
 
             # Obtain the links to the other pages of the catalog (Inspiron 11z, Inspiron 14...)
             modelNavigator = baseSoup.findAll("table", { "width" : "688" })
@@ -160,8 +161,8 @@ class Dell:
             categoryLinks = modelNavigator.findAll('a', {'class': 'lnk'})
             vostroLink = urlBase + categoryLinks[0]['href']
             
-            data = browser.open(vostroLink).get_data()
-            soup = BeautifulSoup(data)
+            r = mechanize.urlopen(vostroLink)
+            soup = BeautifulSoup(r.read())
             
             vostroCells = soup.findAll('div', {'class': 'para'})
             
@@ -172,8 +173,8 @@ class Dell:
             
             latitudeLink = urlBase + categoryLinks[1]['href']
         
-            data = browser.open(latitudeLink).get_data()
-            soup = BeautifulSoup(data)
+            r = mechanize.urlopen(latitudeLink)
+            soup = BeautifulSoup(r.read())
             
             latitudeCells = soup.findAll('div', {'class': 'para'})
             
@@ -186,8 +187,8 @@ class Dell:
 
             precisionLink = urlBase + categoryLinks[2]['href']
         
-            data = browser.open(precisionLink).get_data()
-            soup = BeautifulSoup(data)
+            r = mechanize.urlopen(precisionLink)
+            soup = BeautifulSoup(r.read())
             
             precisionCells = soup.findAll('div', {'class': 'para'})[1:]
             numNtbks = len(precisionCells) / 3
