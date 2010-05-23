@@ -65,7 +65,7 @@ class Dell:
             productData.custom_name = productName + ' ' + url
             
             r = mechanize.urlopen(url)
-            baseSoup = BeautifulSoup(r.read())
+            soup = BeautifulSoup(r.read())
             priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})         
 
             productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))

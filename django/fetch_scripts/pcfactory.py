@@ -32,7 +32,7 @@ class PCFactory:
         priceCell = soup.findAll("td", { "class" : "productoiva" })
         price = int(str(priceCell[1].string).replace('.', ''))
 
-        productData.custom_name = title
+        productData.custom_name = productUrl
         productData.price = price
         productData.url = productUrl
 
