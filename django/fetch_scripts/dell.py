@@ -171,7 +171,7 @@ class Dell:
             for vostroCell in vostroCells:
                 vostroName = vostroCell.find('b').string
                 vostroLink = urlBase + vostroCell.parent.find('a')['href']
-                #productsData += self.retrieveVostroProductsData(vostroLink, vostroName, urlBase)
+                productsData += self.retrieveVostroProductsData(vostroLink, vostroName, urlBase)
             
             latitudeLink = urlBase + categoryLinks[1]['href']
         
