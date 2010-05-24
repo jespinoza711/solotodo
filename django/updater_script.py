@@ -112,6 +112,12 @@ def main():
     except:
         print('Error al obtener los notebooks de Webco')
         logMessage('Error al obtener los notebooks de Webco')
+    try:
+        p = Ripley()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Ripley')
+        logMessage('Error al obtener los notebooks de Ripley')        
     updateAvailabilityAndPrice()
                 
 if __name__ == '__main__':

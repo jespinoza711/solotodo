@@ -17,6 +17,7 @@ from fetch_scripts.la_polar import LaPolar
 from fetch_scripts.sistemax import Sistemax
 from fetch_scripts.dell import Dell
 from fetch_scripts.webco import Webco
+from fetch_scripts.ripley import Ripley
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -36,4 +37,5 @@ __all__ = [ 'ProductData',
             'LaPolar',
             'Sistemax',
             'Dell',
-            'Webco']
+            'Webco',
+            'Ripley']
