@@ -1,5 +1,5 @@
 import operator
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404, HttpResponseRedirect
 from django import forms
@@ -24,10 +24,12 @@ class NotebookCommentForm(forms.Form):
 def store_data(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
     search_form = initialize_search_form(request.GET)
+    shns = StoreHasNotebook.objects.filter(store = store).filter(~Q(notebook = None)).order_by('latest_price')
         
     return render_to_response('cotizador/store_details.html', {
         'form': search_form,
         'store': store,
+        'shns': shns,
     })
     
 # View for showing all of the stores currently in the DB    

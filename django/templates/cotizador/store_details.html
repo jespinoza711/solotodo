@@ -11,8 +11,7 @@
 
 <h2>Equipos indexados</h2>
 
-{% for shn in store.storehasnotebook_set.all %}
-    {% ifnotequal shn.notebook None %}
+{% for shn in shns %}
         <div class="notebook_container">
         <div class="notebook_thumb_image"><a href="/notebooks/{{ shn.notebook.id }}">{{ shn.notebook.picture.thumbnail_tag }}</a></div>
         <div class="notebook_thumb_price">
@@ -31,7 +30,6 @@
         <strong>Pantalla: </strong> 
         {{ shn.notebook.screen.prettyDisplay }}
     </div>
-    {% endifnotequal %}
 {% endfor %}
 
 {% endblock %}
