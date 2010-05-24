@@ -3,7 +3,7 @@
 {% block title %}SoloNotebooks - {{ notebook }}{% endblock %}
 
 {% block header %}
-    <link href="/media/css/galleria.css" rel="stylesheet" type="text/css" media="screen"> 
+    <link href="/media/css/galleria.css" rel="stylesheet" type="text/css" media="screen" /> 
     <script type="text/javascript" src="/media/js/galleria/jquery.galleria.js"></script>
     <script type="text/javascript"> 
         $(function() { 
@@ -31,7 +31,7 @@
             {% for picture in notebook.notebookpicture_set.all %}
                 <li>{{ picture.picture.extra_thumbnails_tag.large }}</li>
             {% endfor %}
-            <li><img src="/media/pics/charts/{{ notebook.id }}.png"/></li>
+            <li><img src="/media/pics/charts/{{ notebook.id }}.png" alt="Grafico cambios de precio"/></li>
         </ul>
     </div>
     <div class="price_table_container">
@@ -177,15 +177,17 @@
     <strong>Gracias por tus comentarios, dentro de unos minutos será publicado</strong>
     {% else %}
         ¿Preguntas, comentarios o sugerencias de este notebook? Deja tu mensaje!
-        <form action="" id="comment_form" method="POST">
-            <span class="comment_form_label">Nombre:</span>
-            {{ comment_form.nickname }}
-            <br />
-            <span class="comment_form_label">Comentarios:</span>
-            <br />
-            {{ comment_form.comments }}
-            <br />
-            <input type="submit" value="Enviar" />
+        <form action="" id="comment_form" method="post">
+            <div>
+                <span class="comment_form_label">Nombre:</span>
+                {{ comment_form.nickname }}
+                <br />
+                <span class="comment_form_label">Comentarios:</span>
+                <br />
+                {{ comment_form.comments }}
+                <br />
+                <input type="submit" value="Enviar" />
+            </div>
         </form>
     {% endif %}
     </div>
