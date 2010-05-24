@@ -16,6 +16,7 @@ from fetch_scripts.clie import Clie
 from fetch_scripts.la_polar import LaPolar
 from fetch_scripts.sistemax import Sistemax
 from fetch_scripts.dell import Dell
+from fetch_scripts.webco import Webco
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -34,4 +35,5 @@ __all__ = [ 'ProductData',
             'Clie',
             'LaPolar',
             'Sistemax',
-            'Dell']
+            'Dell',
+            'Webco']

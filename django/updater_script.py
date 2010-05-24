@@ -106,6 +106,12 @@ def main():
     except:
         print('Error al obtener los notebooks de Dell')
         logMessage('Error al obtener los notebooks de Dell')
+    try:
+        p = Webco()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Webco')
+        logMessage('Error al obtener los notebooks de Webco')
     updateAvailabilityAndPrice()
                 
 if __name__ == '__main__':
