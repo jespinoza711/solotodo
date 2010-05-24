@@ -9,8 +9,8 @@
 <?php if (have_posts()) : ?>
 <?php while (have_posts()) : the_post(); ?>
 <h1><?php the_title(); ?></a></h1>
-<?php the_content("<p>__('Read the rest of this page &raquo;')</p>"); ?>
-<?php edit_post_link(__('Edit'), '<p>', '</p>'); ?>
+<?php the_content("<p>__('Leer el resto de esta nota &raquo;')</p>"); ?>
+<?php edit_post_link(__('Editar'), '<p>', '</p>'); ?>
 <?php endwhile; endif; ?>
 </div> 
 <!-- End SC -->

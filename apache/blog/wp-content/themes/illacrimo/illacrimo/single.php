@@ -13,7 +13,7 @@
 <div class="Post" id="post-<?php the_ID(); ?>">
 <div class="PostHead">
 <h1><?php the_title(); ?></h1>
-<small class="PostAuthor">Author: <?php the_author() ?> <?php edit_post_link('Edit'); ?></small>
+<small class="PostAuthor">Autor: <?php the_author() ?> <?php edit_post_link('Edit'); ?></small>
 <p class="PostDate">
 <small class="day"><?php the_time('j') ?></small>
 <small class="month"><?php the_time('M') ?></small>
@@ -22,20 +22,13 @@
 </div>
 
 <div class="PostContent">
- <?php the_content("<p>Read the rest of this entry &raquo;</p>"); ?>
+ <?php the_content("<p>Leer el resto de la nota &raquo;</p>"); ?>
 </div>
 <div class="PostDet">
- <li class="PostCateg">Filed under: <?php the_category(', ') ?></li>
+ <li class="PostCateg">Guardado en: <?php the_category(', ') ?></li>
 </div>
 </div>
 <br clear="all" />
-
-<ul class="Note">
-<li class="NoteTrackBack"><?php comments_rss_link(__('<abbr title="Really Simple Syndication">RSS</abbr> feed for comments on this post')); ?></li>
-<?php if ( pings_open() ) : ?>
-<li class="NoteRss"><a href="<?php trackback_url() ?>" rel="trackback"><?php _e('TrackBack <abbr title="Uniform Resource Identifier">URI</abbr>'); ?></a></li>
-</ul>
-<?php endif; ?>
 
 
 <?php comments_template(); ?>

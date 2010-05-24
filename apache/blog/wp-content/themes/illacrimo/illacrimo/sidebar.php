@@ -10,8 +10,8 @@
 
 <div class="Syn"><div class="SynTop"></div>
  <ul>
-  <li><a href="<?php bloginfo('rss2_url'); ?>">Entries</a> (RSS)</li>
-  <li><a href="<?php bloginfo('comments_rss2_url'); ?>">Comments</a> (RSS)</li>
+  <li><a href="<?php bloginfo('rss2_url'); ?>">Entradas</a> (RSS)</li>
+  <li><a href="<?php bloginfo('comments_rss2_url'); ?>">Comentarios</a> (RSS)</li>
  </ul>
 </div>
 
@@ -29,7 +29,7 @@
 <?php if ( function_exists('dynamic_sidebar') && dynamic_sidebar('Sidebar_left') ) : else : ?>
 
 <div class="widget widget_categories">
-<h2>Categories</h2>
+<h2>Categorías</h2>
  <ul>
   <?php wp_list_cats(); ?>
  </ul>
@@ -38,7 +38,7 @@
 <!-- Start Recent Comments -->
 <?php if (function_exists('mdv_recent_comments')) { ?>
 <div class="widget widget_recent_entries">
-<h2>Recent Comments</h2>
+<h2>Comentarios</h2>
  <ul>
   <?php mdv_recent_comments('10'); ?>
  </ul>

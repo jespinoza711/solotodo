@@ -20,11 +20,11 @@
 </div>
   
 <div class="PostContent">
-<?php the_content('Read the rest of this entry &raquo;'); ?>
+<?php the_content('Leer el resto de esta nota &raquo;'); ?>
 </div>
 <div class="PostDet">
- <li class="PostCom"><?php comments_popup_link('0 Comments', '1 Comment', '% Comments'); ?></li>
- <li class="PostCateg">Filed under: <?php the_category(', ') ?></li>
+ <li class="PostCom"><?php comments_popup_link('Sin comentarios', 'Un comentario', '% comentarios'); ?></li>
+ <li class="PostCateg">Guardado en: <?php the_category(', ') ?></li>
 </div>
 </div>
 
@@ -35,7 +35,7 @@
 <div class="Nav"><?php if(function_exists('wp_pagenavi')) { wp_pagenavi(); } ?></div>
 
 <?php else : ?>
-<h2><?php _e('Not Found'); ?></h2>
+<h2><?php _e('No encontrado'); ?></h2>
 <p><?php _e('Sorry, no posts matched your criteria.'); ?></p>
 <?php endif; ?>
 </div> 

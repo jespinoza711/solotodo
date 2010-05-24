@@ -12,7 +12,7 @@ if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it 
 
 <!-- You can start editing here. -->
 <?php if ($comments) : ?>
-<h3 id="comments"><?php comments_number('No Response', 'One Response', '% Responses' );?> for "<?php the_title(); ?>"</h3> 
+<h3 id="comments"><?php comments_number('No hay comentarios', 'Un comentario', '% comentarios' );?></h3> 
 <ol>
 
 <?php foreach ($comments as $comment) : ?>
@@ -29,7 +29,7 @@ if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it 
  <span class="ListContent">
   <p><?php comment_text() ?></p> 
  </span>
- <?php if ($comment->comment_approved == '0') : ?>Your comment is awaiting moderation.
+ <?php if ($comment->comment_approved == '0') : ?>Su comentario está esperando ser aprobado
 </li>
 <?php endif; ?> 
 <?php endforeach; /* end for each comment */ ?>
@@ -39,7 +39,7 @@ if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it 
 <!-- If comments are open, but there are no comments. -->
 <?php else : // comments are closed ?>
 <!-- If comments are closed. -->
-<p class="nocomments">Comments are closed.</p>
+<p class="nocomments">No se permiten más comentarios</p>
 <?php endif; ?>
 <?php endif; ?>
 <?php if ('open' == $post->comment_status) : ?><br />
@@ -50,7 +50,7 @@ if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it 
 
 
 <!-- Start Comments Form-->
-<h3 id="respond" style="color:#000; letter-spacing: -1px;">Leave a reply</h3> 
+<h3 id="respond" style="color:#000; letter-spacing: -1px;">Deja un comentario</h3> 
 <div class="Form"><div class="FormTop"></div>
 <?php if ( get_option('comment_registration') && !$user_ID ) : ?>
 <p>You must be <a href="<?php echo get_option('siteurl'); ?>/wp-login.php?redirect_to=<?php the_permalink(); ?>">logged in</a> to post a comment.</p>
@@ -63,7 +63,7 @@ if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it 
 
 <p>
 <label for="author">
-<small>Name <?php if ($req) _e('(<strong>*</strong>)'); ?></small>
+<small>Nombre <?php if ($req) _e('(<strong>*</strong>)'); ?></small>
 <input type="text" name="author" id="author" value="<?php echo $comment_author; ?>" tabindex="1" class="TextField" style="width: 375px;" />
 </label>
 </p>
@@ -77,13 +77,14 @@ if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it 
 		
 <p>
 <label for="url">
-<small><abbr title="Uniform Resource Identifier">URI</abbr></small>
+<small>Página web</small>
 <input type="text" name="url" id="url" value="<?php echo $comment_author_url; ?>" tabindex="3" class="TextField" style="width: 375px;" />
 </label>
 </p>
 
 <?php endif; ?>
 <br clear="all" />
+<label for="comment"><small>Comentarios</small></label>
 <p><textarea name="comment" id="comment" rows="10" tabindex="4" class="TextArea" style="width: 375px;"></textarea></p>
 
 <p><input name="SubmitComment" type="image" class="SubmitComment" onmouseover="javascript:changeSty('SubmitCommentIE');" onmouseout="javascript:changeSty('SubmitComment');"  title="Post Your Comment" src="<?php bloginfo('template_url'); ?>/images/ButtonTransparent.png" alt="Post Your Comment" />
