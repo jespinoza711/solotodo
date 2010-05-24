@@ -67,6 +67,12 @@ class SearchForm(forms.Form):
         'screen_size', 'screen_resolution', 'screen_touch', 'video_card_brand',
         'video_card_line', 'video_card', 'chipset']
         
+        
+    def getOrderingOptions(self):
+        return (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
+    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'))
+    
+    
     '''Generate the GET request (?var1=val1&var2=val2...) of the current query, 
     allowing to skip some of the keys if necessary (for example, when creating
     the link to the next and previous page, we need to delete the current 

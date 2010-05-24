@@ -3,7 +3,7 @@
 <head profile="http://gmpg.org/xfn/11">
     <title>{% block title %}SoloNotebooks{% endblock %}</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" content="no-cache" />
     <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
@@ -22,7 +22,7 @@
 <!-- start header -->
 
     <div class="Header">
-        <a href="/"><div class="LS"></div></a>
+        <div class="LS"></div>
     </div>
 
     <div class="Menu">
@@ -41,7 +41,9 @@
             <div class="SRL">
             <div class="Search">
 <form action="/search" method="get">
-<input type="text" name="search_keywords" class="keyword" />
+<div>
+    <input type="text" name="search_keywords" class="keyword" />
+</div>
 <div id="buttonsearch"><input name="submit" type="image" class="search" title="Search" src="http://www.solonotebooks.net/blog/wp-content/themes/illacrimo/illacrimo/images/ButtonTransparent.png" alt="Search" />
 
 </div>
@@ -52,7 +54,7 @@
                 {% block sideBar %}
                 <h2 id="search_header">Buscador de notebooks</h2>
 
-<form id="search_form" action="/" method="GET">
+<form id="search_form" action="/" method="get">
     <!-- Filtros generales -->
     <div class="sub_title_container">
         <strong>Datos generales</strong>
@@ -193,16 +195,18 @@
         {{ form.operating_system }}
     </div>
     
-    <input type="hidden" value="1" name="page_number"/>
-    
+    <div>
+        <input type="hidden" value="1" name="page_number"/>
+    </div>
     <div class="always_hidden_filter_item">
         {{ form.advanced_controls }}
     </div>
     <div class="always_hidden_filter_item">    
         {{ form.ordering }}
     </div>
-    {{ form.ordering_direction }}
-    
+    <div>
+        {{ form.ordering_direction }}
+    </div>
     <hr />
     <!-- Botón de envío -->
     <div id="submit_container">

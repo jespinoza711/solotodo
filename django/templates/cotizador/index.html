@@ -30,7 +30,11 @@
     <input type="hidden" id="current_url" value="{{ current_url }}" />
     <input type="hidden" id="current_ordering_direction" value="{{ ordering_direction }}" />
     <h3>Ordenar por:</h3>
-    {{ form.ordering }}
+    <select id="ordering_options">
+        {% for ordering_criteria in form.getOrderingOptions %}
+            <option value="{{ ordering_criteria.0}}">{{ ordering_criteria.1 }}</option>
+        {% endfor %}
+    </select>
     &nbsp;
     {% ifequal ordering_direction 0 %}
         <b>De menor a mayor</b>

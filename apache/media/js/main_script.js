@@ -105,6 +105,18 @@ $(function() {
         $('.filter_item select').val('');        
         $('#price_slider').slider('values', [abs_min_price, abs_max_price])
     });
+    
+    $('.LS').hover(
+    function() {
+        $(this).addClass('header_hover');
+    }, function() {
+        $(this).removeClass('header_hover');
+    });
+    
+    $('.LS').click(function() {
+        window.location.replace('/')
+    });
+
 })
 
 /* Function that takes care of keeping everything up to date when the slider

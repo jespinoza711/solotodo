@@ -710,3 +710,8 @@ div.processor_details_container {
 span.processor_table_notice {
     font-size: 10px;
 }
+
+.header_hover {
+    cursor: pointer;
+    cursor: hand;
+}
