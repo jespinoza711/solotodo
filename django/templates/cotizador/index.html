@@ -31,7 +31,6 @@
     <input type="hidden" id="current_ordering_direction" value="{{ ordering_direction }}" />
     <h3>Ordenar por:</h3>
     <select id="ordering_options">
-        {{ form.ordering.data }}
         {% for ordering_criteria in form.getOrderingOptions %}
             {% ifequal form.ordering.data ordering_criteria.0 %}
                 <option value="{{ ordering_criteria.0 }}" selected="selected">{{ ordering_criteria.1 }}</option>            
