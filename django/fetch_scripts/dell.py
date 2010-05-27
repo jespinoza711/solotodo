@@ -29,11 +29,12 @@ class Dell:
                 
             if 'configure' in url or 'upsell' in url:            
                 productData.url = url
-                productData.custom_name = productName + ' ' + url
+                productData.custom_name = productName
                 
                 priceDiv = dataDivs[numNtbks + i]
                 priceTag = priceDiv.find('span', {'class': 'pricing_retail_nodiscount_price'})
                 productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
+                productData.comparison_field = productData.url
                 productsData.append(productData)
             else:
                 productsData += self.retrieveHomeProductsData(url, productName, urlBase)
@@ -63,6 +64,7 @@ class Dell:
             
             productData.url = url
             productData.custom_name = productName + ' ' + url
+            productData.comparison_field = productData.url	    
             
             r = mechanize.urlopen(url)
             soup = BeautifulSoup(r.read())
@@ -85,6 +87,7 @@ class Dell:
         productData = ProductData()
         productData.url = productUrl
         productData.custom_name = productName
+        productData.comparison_field = productData.url	    
 
         priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})
         productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
@@ -185,6 +188,7 @@ class Dell:
                 productData.custom_name = latitudeCell.find('b').string
                 productData.url = urlBase + latitudeCell.parent.find('a')['href']
                 productData.price = int(latitudeCell.parent.find('span', {'class': 'pricing_retail_nodiscount_price'}).string.replace('CLP$', '').replace('.', ''))
+                productData.comparison_field = productData.url	    
                 productsData.append(productData)
 
             precisionLink = urlBase + categoryLinks[2]['href']
@@ -203,7 +207,8 @@ class Dell:
                 productData.custom_name = precisionCells[i].find('b').string
                 productData.url = urlBase + linkCells[2*i]['href']
                 productData.price = int(priceCells[i].string.replace('CLP$', '').replace('.', ''))
-                productsData.append(productData)                
+                productData.comparison_field = productData.url
+                productsData.append(productData)  
                 
         for productData in productsData:
             print productData

@@ -55,6 +55,7 @@ class LaPolar:
                     productData.custom_name = name
                     productData.url = link
                     productData.price = price
+                    productData.comparison_field = productData.url
                     print productData
                     productsData.append(productData)
             page = page + 1

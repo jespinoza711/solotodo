@@ -60,6 +60,7 @@ class TecnoCl:
                 productData.custom_name = productNames[i].encode('ascii','ignore').strip()
                 productData.url = productLinks[i]
                 productData.price = productPrices[i]
+                productData.comparison_field = productData.url
                 print productData
                 productsData.append(productData)
 

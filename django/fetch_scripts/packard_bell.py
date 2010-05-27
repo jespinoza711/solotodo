@@ -36,12 +36,14 @@ class PackardBell:
             # Obtain the links to the other pages of the catalog (2, 3, ...)
             nameDivTags = baseSoup.findAll('div', { 'class' : 'nombre_prod' })
             priceDivTags = baseSoup.findAll('div', { 'class' : 'precio_prod' })
+            imgTags = baseSoup.findAll('div', { 'class' : 'img_prod' })            
             
             for i in range(len(nameDivTags)):
                 productData = ProductData()
-                productData.url = urlWebpage
+                productData.url = imgTags[i]['onclick'].replace('javascript:location.href=\'', '').replace('\'', '')
                 productData.custom_name = nameDivTags[i].string
                 productData.price = int(priceDivTags[i].contents[0].replace('.', ''))
+                productData.comparison_field = productData.url
                 print productData
                 productsData.append(productData)
                 

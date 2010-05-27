@@ -56,13 +56,14 @@ def saveNotebooks(ntbks, s):
         print 'Guardando ' + str(ntbk)
         print 'Buscando si tiene un registro existente'
         try:
-            current_shn = StoreHasNotebook.objects.filter(store = s).get(custom_name = ntbk.custom_name)
+            current_shn = StoreHasNotebook.objects.filter(store = s).get(comparison_field = ntbk.comparison_field)
             print 'Si tiene registro existente, usandolo'
         except StoreHasNotebook.DoesNotExist:
             print 'No tiene registro existente, creandolo'
             current_shn = StoreHasNotebook()
             current_shn.url = ntbk.url
             current_shn.custom_name = ntbk.custom_name
+            current_shn.comparison_field = ntbk.comparison_field
             current_shn.store = s
             current_shn.is_available = True
             current_shn.visitorCount = 0

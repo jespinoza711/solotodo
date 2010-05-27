@@ -32,6 +32,13 @@ class Ripley:
             # Obtain the links to the other pages of the catalog (2, 3, ...)
             productParagraphs = baseSoup.findAll("p", { "onmouseover" : "" })
             productPrices = baseSoup.findAll("span", { "class" : "normalHOME" })
+            
+            productLinks = []
+            for productPrice in productPrices:
+                notebookCell = productPrice.parent.parent.parent.parent
+                link = notebookCell.find('a')['href']
+                productLinks.append('http://www.ripley.cl/webapp/wcs/stores/servlet/' + link)
+            
             productPrices = [int(price.string.replace('.', '').replace('$', '')) for price in productPrices]
             
             productNames = [p.contents[0].strip() + ' ' + p.contents[2].replace('&nbsp;', '').strip() for p in productParagraphs]
@@ -42,7 +49,8 @@ class Ripley:
                 productData = ProductData()
                 productData.custom_name = productNames[i]
                 productData.price = productPrices[i]
-                productData.url = urlWebpage
+                productData.url = productLinks[i]
+                productData.comparison_field = productData.url
                 print productData
                 productsData.append(productData)
             j += 1

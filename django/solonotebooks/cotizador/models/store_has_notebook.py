@@ -3,12 +3,13 @@ from django.db import models
 from solonotebooks.cotizador.models import Notebook, Store
 
 class StoreHasNotebook(models.Model):
-    url = models.URLField()
+    url = models.TextField()
     custom_name = models.CharField(max_length = 255)
     is_available = models.BooleanField()
     is_hidden = models.BooleanField()
     visitorCount = models.IntegerField()
     latest_price = models.IntegerField()
+    comparison_field = models.TextField()    
     
     notebook = models.ForeignKey(Notebook, null = True, blank = True)
     store = models.ForeignKey(Store)

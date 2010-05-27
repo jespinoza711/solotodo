@@ -47,20 +47,26 @@ class Paris:
                 if divPrecioNormalConts2:
                     contents = divPrecioNormalConts2.contents[1].string.replace('&nbsp;', '').replace('Normal:', '').replace('Oferta:', '').replace('Normal:', '').replace('&#36;', '').replace('.', '').replace('$', '').strip()
                     precio = int(contents)
+                    url1 = divPrecioNormalConts2['href']
                 else:
-                    divPrecio1 = mosaicDiv.find("div", { "class" : "prcIntBll2" }).find("a").contents
-                    contentsi = divPrecio1[1].string
+                    
+                    divPrecio1 = mosaicDiv.find("div", { "class" : "prcIntBll2" }).find("a")
+                    contentsi = divPrecio1.contents[1].string
                     contentsi = contentsi.replace('$', '').replace('&nbsp;', '').replace('Oferta:', '').replace('Normal:', '').replace('&#36;', '').replace('.', '').strip()
                     precio = int(contentsi)
+                    url1 = divPrecio1['href']
                     
                 productData.price = precio
                 
                 divDesc = mosaicDiv.find("div", { "class" : "descP2" })
                 name1 = divDesc.find("a").string
+                linkId = int(divDesc.find('a')['id'].replace('prod', '')) + 1
+                link = 'http://www.paris.cl/webapp/wcs/stores/servlet/productLP_10001_40000000577_-5_51049202_18877035_' + str(linkId) + '_18877035,50999203,51049192,51049202__listProd'
                 
                 productData.custom_name = name1.encode('ascii','ignore').strip()
 
-                productData.url = url
+                productData.url = link
+                productData.comparison_field = productData.url
                 
                 print productData
                 

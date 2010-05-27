@@ -23,6 +23,7 @@ class ENotebook:
             link = cells[i].find("a")
             productData.url = link['href']
             productData.custom_name = link.string
+            productData.comparison_field = productData.url
             priceCell = prices[i]
             specContainer = priceCell.find("span", { "class" : "productSpecialPrice" })
             if (not specContainer):

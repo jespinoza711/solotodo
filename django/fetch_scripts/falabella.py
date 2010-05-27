@@ -69,8 +69,9 @@ class Falabella:
                 
                 productData.custom_name = name_1 + ' ' + name_2
 
-                url = url.encode('ascii','ignore').strip()
-                productData.url = url[:200]
+                url = 'http://www.falabella.com' + mosaicDiv.find('a')['href']
+                productData.url = url
+                productData.comparison_field = url
                 
                 print productData
                 

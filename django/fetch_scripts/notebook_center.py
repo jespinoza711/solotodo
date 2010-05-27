@@ -86,6 +86,7 @@ class NotebookCenter:
                 productData.custom_name = names[i].encode('ascii','ignore').strip()
                 productData.price = prices[i]
                 productData.url = urls[i]
+                productData.comparison_field = productData.url
                 print productData
                 productsData.append(productData)
 

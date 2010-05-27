@@ -36,6 +36,7 @@ class Bip:
 	    productData.custom_name = title.encode('ascii','ignore').strip()
 	    productData.price = price
 	    productData.url = productUrl
+	    productData.comparison_field = productData.url	    
 	    
 	    print productData
 

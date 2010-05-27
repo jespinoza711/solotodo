@@ -8,7 +8,6 @@ from fetch_scripts.paris import Paris
 from fetch_scripts.bym import Bym
 from fetch_scripts.sym import Sym
 from fetch_scripts.packard_bell import PackardBell
-from fetch_scripts.tec_mark import TecMark
 from fetch_scripts.tecno_cl import TecnoCl
 from fetch_scripts.full_notebook import FullNotebook
 from fetch_scripts.notebook_center import NotebookCenter
@@ -29,7 +28,6 @@ __all__ = [ 'ProductData',
             'Bym',
             'Sym',
             'PackardBell',
-            'TecMark',
             'TecnoCl',
             'FullNotebook',
             'NotebookCenter',

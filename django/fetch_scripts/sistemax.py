@@ -43,6 +43,7 @@ class Sistemax:
             productData.custom_name = names[i]
             productData.price = prices[i]
             productData.url = urls[i]
+            productData.comparison_field = productData.url
             print productData
             productsData.append(productData)
             

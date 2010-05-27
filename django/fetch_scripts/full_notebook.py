@@ -62,6 +62,7 @@ class FullNotebook:
                     productData.custom_name = names[j].encode('ascii','ignore').strip()
                     productData.price = prices[j]
                     productData.url = urls[j]
+                    productData.comparison_field = productData.url
                     print productData
                     productsData.append(productData)
 

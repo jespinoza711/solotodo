@@ -23,6 +23,7 @@ class Wei:
 	    productData.custom_name = title
 	    productData.price = price
 	    productData.url = productUrl
+	    productData.comparison_field = productData.url
 	    
 	    print productData
 

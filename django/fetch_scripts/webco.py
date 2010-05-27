@@ -41,6 +41,7 @@ class Webco:
                 productData.url = urlBase + productImage.parent['href']
                 productData.custom_name = productImage.parent.parent.parent.parent.find('strong').string.encode('ascii','ignore').strip()
                 productData.price = int(productImage.parent.parent.parent.parent.find("td", { "class" : "precio" }).find('a').string.replace('$', '').replace('-', '').replace('.', '').strip())
+                productData.comparison_field = productData.url
                 print productData
                 productsData.append(productData)
         return productsData

@@ -57,13 +57,16 @@ class Clie:
                 
                 names = []
                 prices = []
+                onclicks = []
                 
                 if len(productNameCells) == 0:
                     break;
                     
                 for productNameCell in productNameCells:
                     name = productNameCell.find("a").string.strip()
+                    onclick = productNameCell.find('a')['onclick'].split('\'')[1]
                     names.append(name)
+                    onclicks.append(onclick)
                     
                 productPriceCells = baseSoup.findAll("td", { "background" : "images/ficha/bg_precio_normal_d.gif" })
                 
@@ -76,8 +79,8 @@ class Clie:
                     productData = ProductData()
                     productData.custom_name = names[i].encode('ascii','ignore').strip()
                     productData.price = prices[i]
-                    productData.url = urlWebpage
-                    
+                    productData.url = urlBase + onclicks[i]
+                    productData.comparison_field = productData.url
                     print productData
                     productsData.append(productData)
                     
