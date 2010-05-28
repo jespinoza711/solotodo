@@ -124,6 +124,13 @@ def main():
     except:
         print('Error al obtener los notebooks de Racle')
         logMessage('Error al obtener los notebooks de Racle')        
+    try:
+        p = Magens()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Magens')
+        logMessage('Error al obtener los notebooks de Magens')
+                
     updateAvailabilityAndPrice()
                 
 if __name__ == '__main__':

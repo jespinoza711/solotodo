@@ -7,4 +7,4 @@ class ProductData:
         self.comparison_field = ''
         
     def __str__(self):
-        return self.custom_name + '\n' + str(self.price) + '\n' + self.url + '\n' + self.comparison_field
+        return self.custom_name + '\n' + str(self.price) + '\n' + self.url + '\n' + self.comparison_field + '\n'
