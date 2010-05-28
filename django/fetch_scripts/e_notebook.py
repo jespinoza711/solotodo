@@ -21,7 +21,7 @@ class ENotebook:
         for i in range(len(cells)):
             productData = ProductData()
             link = cells[i].find("a")
-            productData.url = link['href']
+            productData.url = link['href'].split('?osCsid')[0]
             productData.custom_name = link.string
             productData.comparison_field = productData.url
             priceCell = prices[i]
