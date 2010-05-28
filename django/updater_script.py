@@ -118,6 +118,12 @@ def main():
     except:
         print('Error al obtener los notebooks de Ripley')
         logMessage('Error al obtener los notebooks de Ripley')        
+    try:
+        p = Racle()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Racle')
+        logMessage('Error al obtener los notebooks de Racle')        
     updateAvailabilityAndPrice()
                 
 if __name__ == '__main__':
