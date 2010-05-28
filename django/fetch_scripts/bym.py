@@ -25,7 +25,7 @@ class Bym:
 
 	    productData.custom_name = title
 	    productData.price = price
-	    productData.url = productUrl
+	    productData.url = productUrl.split('&osCsid')[0]
 	    productData.comparison_field = productData.url	    	    
 	    
 	    print productData
