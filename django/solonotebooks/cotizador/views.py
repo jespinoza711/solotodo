@@ -319,7 +319,7 @@ def notebook_details(request, notebook_id):
     
     
     # Find the stores with this notebook available
-    stores_with_notebook_available = notebook.storehasnotebook_set.all().filter(is_available=True).filter(is_hidden = False)
+    stores_with_notebook_available = notebook.storehasnotebook_set.all().filter(is_available=True).filter(is_hidden = False).order_by('latest_price')
     
     # If the user is admin, there are some link to allow the editing of the ntbk
     if request.user.is_authenticated():
