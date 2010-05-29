@@ -33,6 +33,7 @@ class Notebook(models.Model):
     webcam_mp = models.DecimalField(max_digits = 3, decimal_places = 1)
     
     other = models.TextField()
+    long_description = models.TextField()
     
     line = models.ForeignKey(NotebookLine)
     processor = models.ForeignKey(Processor)

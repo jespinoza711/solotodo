@@ -195,6 +195,7 @@ def updateAvailabilityAndPrice():
     print 'Actualizando precios minimos'
     for notebook in Notebook.objects.all():
         print notebook
+        
         new_price = notebook.storehasnotebook_set.all().filter(is_available = True).aggregate(Min('latest_price'))['latest_price__min']
         
         if new_price:
@@ -220,6 +221,16 @@ def updateAvailabilityAndPrice():
                  logLostNotebook(notebook)
 
             notebook.is_available = False
+            
+        npcs = NotebookPriceChange.objects.filter(notebook = notebook)
+        if len(npcs) == 0:
+            npc = NotebookPriceChange()
+            npc.notebook = notebook
+            npc.price = notebook.min_price
+            npc.date = date.today()
+            npc.save()  
+            
+        notebook.long_description = notebook.rawText()
         
         notebook.save()
         generateChart(notebook)

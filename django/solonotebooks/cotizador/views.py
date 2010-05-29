@@ -53,7 +53,7 @@ def search(request):
     
     # For each one, we assign a score base on how many of the keywords match a 
     # programatically generated, huge single line description of the notebook
-    result_notebooks = [[ntbk, stringCompare(ntbk.rawText(), query)] for ntbk in available_notebooks]
+    result_notebooks = [[ntbk, stringCompare(ntbk.long_description, query)] for ntbk in available_notebooks]
     # If the hit is too low (< 10%) they are eliminated
     result_notebooks = filter(lambda(x): x[1] > 10, result_notebooks) 
     # Finally we sort them from highest to lowest hit rate
