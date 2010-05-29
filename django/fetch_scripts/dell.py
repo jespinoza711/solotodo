@@ -122,15 +122,15 @@ class Dell:
             baseSoup = BeautifulSoup(r.read())
 
             # Obtain the links to the other pages of the catalog (Inspiron 11z, Inspiron 14...)
-            modelNavigator = baseSoup.findAll("table", { "width" : "728" })
-            modelNavigator = modelNavigator[len(modelNavigator) - 1]
-            modelNavigator = modelNavigator.findAll('tr')[2]
-            homeModelsCells = modelNavigator.findAll('td')[:-2]
+            modelNavigator = baseSoup.findAll("td", { "style" : "width:300px;" })
+            modelNavigator = modelNavigator[len(modelNavigator) / 2:]            
+            homeNavigators = modelNavigator[:-2]
             
             modelUrls = []
-            modelNames = []
-            for modelCell in homeModelsCells:
-                modelLinks = modelCell.findAll('a')
+            modelNames = []            
+            
+            for homeNavigator in homeNavigators:
+                modelLinks = homeNavigator.findAll('a')
                 for modelLink in modelLinks:
                     modelUrls.append(urlBase + modelLink['href'])
                     modelNames.append(modelLink.string)
@@ -139,14 +139,12 @@ class Dell:
             for i in range(len(modelUrls)):
                 productsData += self.retrieveHomeProductsData(modelUrls[i], modelNames[i], urlBase)
                 
-            alienwareModelsCells = modelNavigator.findAll('td')[-2]
+            alienwareModelLinks = modelNavigator[-2].findAll('a')
             modelUrls = []
             modelNames = []
-            for modelCell in alienwareModelsCells:
-                modelLinks = modelCell.findAll('a')
-                for modelLink in modelLinks:
-                    modelUrls.append(urlBase + modelLink['href'])
-                    modelNames.append(modelLink.string)
+            for alienwareModelLink in alienwareModelLinks:
+                modelUrls.append(urlBase + alienwareModelLink['href'])
+                modelNames.append(alienwareModelLink.string)
 
             for i in range(len(modelUrls)):
                 productsData.append(self.retrieveAlienwareProductData(modelUrls[i], modelNames[i]))
@@ -200,13 +198,18 @@ class Dell:
             numNtbks = len(precisionCells) / 3
             linkCells = soup.find('table', { 'width': '688' })
             linkCells = linkCells.findAll('a')
-            priceCells = soup.findAll('span', { 'class': 'pricing_retail_nodiscount_price' })
+            priceCells = soup.findAll('table', { 'width': '688' })
+            priceCells = priceCells[len(priceCells) - 1]
+            priceCells = priceCells.findAll('td', {'class': 'gridCell'})
             
             for i in range(numNtbks):
                 productData = ProductData()
                 productData.custom_name = precisionCells[i].find('b').string
                 productData.url = urlBase + linkCells[2*i]['href']
-                productData.price = int(priceCells[i].string.replace('CLP$', '').replace('.', ''))
+                priceSpan = priceCells[i].find('span', {'class': 'pricing_retail_nodiscount_price'})
+                if not priceSpan:
+                    continue
+                productData.price = int(priceSpan.string.replace('CLP$', '').replace('.', ''))
                 productData.comparison_field = productData.url
                 productsData.append(productData)  
                 
