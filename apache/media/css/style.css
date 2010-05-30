@@ -323,6 +323,7 @@ label {
 
 #toggle_hidden_link {
     font-weight: bold;
+    font-size: 14px;
 }
 
 #submit_container {
@@ -714,4 +715,10 @@ span.processor_table_notice {
 .header_hover {
     cursor: pointer;
     cursor: hand;
+}
+
+#price_suggestion_box {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: bold;
 }

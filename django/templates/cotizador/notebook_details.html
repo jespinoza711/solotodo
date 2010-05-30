@@ -52,12 +52,9 @@
             {% endfor %}
         </table>
     </div>
-    <!--<div class="price_changes">
-        <h2>Variaciones de precio a la fecha</h2>
-        {% for price_change in price_changes %}
-            {{ price_change.prettyRepr }} <br />
-        {% endfor %}
-    </div>-->
+    <div id="price_suggestion_box">
+        <a href="/?advanced_controls=1&max_price={{ max_suggested_price }}&ordering=2"> ¿Qué es lo mejor que hay por este precio? </a>
+    </div>
     <div class="similar_notebooks">
         <h2>Notebooks similares</h2>
         {% for ntbk in similar_notebooks %}
@@ -87,8 +84,6 @@
     <h2>Especificaciones esenciales</h2>
     <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.prettyPrint }}</a>
     <br />
-    <strong>Chipset: </strong> {{ notebook.chipset }}
-    <br/>
     <strong>Pantalla: </strong> {{ notebook.screen.prettyDisplay }}
     <br />
     <strong>Memoria RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})
@@ -118,6 +113,8 @@
     <h2>Especificaciones secundarias</h2>
     <strong>Batería: </strong> {% if notebook.prettyBattery %} {{ notebook.prettyBattery }} {% else %} No hay información disponible {% endif %}
     <br />
+    <strong>Chipset: </strong> {{ notebook.chipset }}
+    <br/>    
     <strong>Peso: </strong> {% if notebook.weight %} {{ notebook.weight }} g. {% else %} No hay información disponible {% endif %}
     <br />
     <strong>Dimensiones: </strong> {% if notebook.prettyDimensions %} {{ notebook.prettyDimensions }} {% else %} No hay información disponible{% endif %}

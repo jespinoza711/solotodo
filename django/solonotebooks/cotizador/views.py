@@ -326,6 +326,8 @@ def notebook_details(request, notebook_id):
         admin_user = True
     else:
         admin_user = False
+        
+    max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
     
     return render_to_response('cotizador/notebook_details.html', {
         'notebook': notebook,
@@ -336,6 +338,7 @@ def notebook_details(request, notebook_id):
         'posted_comment': posted_comment,
         'admin_user': admin_user,
         'similar_notebooks': notebook.findSimilarNotebooks(),
+        'max_suggested_price': max_suggested_price
         })
         
 # Page to login to the manager, everything is boilerplate
