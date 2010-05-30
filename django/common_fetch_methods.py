@@ -196,7 +196,7 @@ def updateAvailabilityAndPrice():
     for notebook in Notebook.objects.all():
         print notebook
         
-        new_price = notebook.storehasnotebook_set.all().filter(is_available = True).aggregate(Min('latest_price'))['latest_price__min']
+        new_price = notebook.storehasnotebook_set.all().filter(is_available = True).filter(is_hidden = False).aggregate(Min('latest_price'))['latest_price__min']
         
         if new_price:
             print 'El notebook tiene registros de disponibilidad'
