@@ -9,10 +9,10 @@ def roundToCeil10000(value):
     if value == None:
         return 0
     num = ceil(value / 10000)
-    return num * 10000
+    return int(num * 10000)
     
 def roundToFloor10000(value):
     if value == None:
         return 0
     num = floor(value / 10000)
-    return num * 10000
+    return int(num * 10000)

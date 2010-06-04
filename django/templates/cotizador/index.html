@@ -43,9 +43,9 @@
     {% ifequal ordering_direction 0 %}
         <b>De menor a mayor</b>
         &nbsp;
-        <a href="{{ordering_direction_url}}1">De mayor a menor</a>
+        <a href="{{ordering_direction_url}}2">De mayor a menor</a>
     {% else %}
-        <a href="{{ordering_direction_url}}0">De menor a mayor</a>
+        <a href="{{ordering_direction_url}}1">De menor a mayor</a>
         &nbsp;
         <b>De mayor a menor</b>
     {% endifequal %}
@@ -54,14 +54,14 @@
 {% for notebook in result_notebooks %}
 
     <div class="notebook_container">
-        <div class="notebook_thumb_image"><a href="notebooks/{{ notebook.id }}{{ current_url }}">{{ notebook.picture.thumbnail_tag }}</a></div>
+        <div class="notebook_thumb_image"><a href="notebooks/{{ notebook.id }}{{ produt_link_args }}">{{ notebook.picture.thumbnail_tag }}</a></div>
         <div class="notebook_thumb_price">
-<a href="notebooks/{{ notebook.id }}{{ current_url }}">
+<a href="notebooks/{{ notebook.id }}{{ produt_link_args }}">
     {{ notebook.prettyMinPrice }}
     </a>
     
         </div>
-        <h2><a href="notebooks/{{ notebook.id }}{{ current_url }}">{{ notebook }}</a></h2>
+        <h2><a href="notebooks/{{ notebook.id }}{{ produt_link_args }}">{{ notebook }}</a></h2>
         <strong>Procesador:</strong> {{ notebook.processor.prettyPrint }}
         <br />
         <strong>RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})

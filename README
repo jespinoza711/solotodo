@@ -2,8 +2,8 @@ SoloNotebook is a project that seeks to create a complete
 and advanced notebook comparison and price search system
 for the chilean market.
 
-Installation instructions for SoloNotebooks on Ubuntu 10.04
-===========================================================
+Installation instructions for SoloNotebooks on Ubuntu 10.04 (Development)
+=========================================================================
 
 This document describes the steps to take to install the
 development version of SoloNotebooks on a freshly installed
@@ -95,6 +95,13 @@ $ tar xvzf south-0.7.1.tar.gz
 $ cd south/
 $ sudo python setup.py install
 
+1.7 Pycha
+
+Pycha is a chart generator extension for Python and we use it to
+generate the price change charts.
+
+
+
 
 2. Bringing in the source code
 ------------------------------
@@ -128,33 +135,24 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '[PATH_TO_SQLITE_DB]',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '[PATH_TO_SQLITE_DB]',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
 TIME_ZONE = 'America/Chicago'
-
 LANGUAGE_CODE = 'en-us'
-
 SITE_ID = 1
-
 USE_I18N = True
-
 USE_L10N = True
-
 MEDIA_ROOT = '[PATH_TO_REPOSITORY]/apache/media/pics'
-
 MEDIA_URL = '/media/pics/'
-
 ADMIN_MEDIA_PREFIX = '/media/admin/'
-
 THUMBNAIL_BASEDIR = 'resize'
-
 SECRET_KEY = 'ls!l1u6(#x89ltrbmj)m8*=nxusk5xdv=3x9jpaz^jvh2s@*n9'
 
 TEMPLATE_LOADERS = (

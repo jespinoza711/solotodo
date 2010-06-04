@@ -14,6 +14,7 @@ import datetime
 from math import ceil
 from forms.search_form import SearchForm
 from difflib import SequenceMatcher
+import pdb
                    
 # Class that represents the form in which the users can leave comments for a notebook                    
 class NotebookCommentForm(forms.Form):
@@ -60,14 +61,10 @@ def search(request):
     result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1), reverse = True)
     
     # Boilerplate code for setting up the links to each page of the results
-    if 'page_number' in request.GET:
-        page_number = int(request.GET['page_number'])
-    else:
-        page_number = 1
         
     page_count = ceil(len(result_notebooks) / 10.0);
-    result_notebooks = result_notebooks[(page_number - 1) * 10 : page_number * 10]
-    pages = filter(lambda(x): x > 0 and x <= page_count, range(page_number - 3, page_number + 3))
+    result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
+    pages = filter(lambda(x): x > 0 and x <= page_count, range(search_form.page_number - 3, search_form.page_number + 3))
     try:
         left_page = pages[0]
     except:
@@ -83,9 +80,9 @@ def search(request):
         'query': query,
         'form': search_form,
         'ntbk_results': result_notebooks,
-        'page_number': page_number,
-        'prev_page': page_number - 1,
-        'post_page': page_number + 1,
+        'page_number': search_form.page_number,
+        'prev_page': search_form.page_number - 1,
+        'post_page': search_form.page_number + 1,
         'page_count': int(page_count),
         'page_range': pages,
         'left_page': left_page,
@@ -95,144 +92,123 @@ def search(request):
 # View that handles the main search / browse windows, applying filters and ordering    
 def browse(request):
     search_form = initialize_search_form(request.GET)
-    
-    # Check if the advanced controls are enabled
-    if 'advanced_controls' in search_form.data and search_form.data['advanced_controls'] and int(search_form.data['advanced_controls']):
-        advanced_controls = True
-    else:
-        advanced_controls = False
         
     # Grab all the candidates (those currently available)
     result_notebooks = Notebook.objects.all().filter(is_available=True)
     
     # And apply each active filter...
-    if 'notebook_brand' in search_form.data and search_form.data['notebook_brand']:
-        result_notebooks = result_notebooks.filter(line__brand__id=search_form.data['notebook_brand'])
+    if search_form.notebook_brand:
+        result_notebooks = result_notebooks.filter(line__brand__id = search_form.notebook_brand)
         
-    if 'weight' in search_form.data and search_form.data['weight'] and advanced_controls:
-        req_weight = int(search_form.data['weight'])
-        result_notebooks = result_notebooks.filter(weight__gte = req_weight * 1000)
-        result_notebooks = result_notebooks.filter(weight__lte = (req_weight + 1) * 1000)        
+    if search_form.weight and search_form.advanced_controls:
+        req_weight = search_form.weight;
+        result_notebooks = result_notebooks.filter(weight__gte = (req_weight - 1) * 1000)
+        result_notebooks = result_notebooks.filter(weight__lte = req_weight * 1000)        
         
-    if 'processor_brand' in search_form.data and search_form.data['processor_brand']:
-        result_notebooks = result_notebooks.filter(processor__line__family__brand__id=search_form.data['processor_brand'])
+    if search_form.processor_brand:
+        result_notebooks = result_notebooks.filter(processor__line__family__brand__id = search_form.processor_brand)
         
-    if 'processor_line_family' in search_form.data and search_form.data['processor_line_family']:
-        result_notebooks = result_notebooks.filter(processor__line__family__id=search_form.data['processor_line_family'])
+    if search_form.processor_line_family:
+        result_notebooks = result_notebooks.filter(processor__line__family__id = search_form.processor_line_family)
         
-    if 'ram_quantity' in search_form.data and search_form.data['ram_quantity']:
-        result_notebooks = result_notebooks.filter(ram_quantity__value__gte=RamQuantity.objects.get(pk = search_form.data['ram_quantity']).value)
+    if search_form.ram_quantity:
+        result_notebooks = result_notebooks.filter(ram_quantity__value__gte = RamQuantity.objects.get(pk = search_form.ram_quantity).value)
         
-    if 'storage_capacity' in search_form.data and search_form.data['storage_capacity']:
-        result_notebooks = result_notebooks.filter(storage_drive__capacity__value__gte = StorageDriveCapacity.objects.get(pk = search_form.data['storage_capacity']).value).distinct()
+    if search_form.storage_capacity:
+        result_notebooks = result_notebooks.filter(storage_drive__capacity__value__gte = StorageDriveCapacity.objects.get(pk = search_form.storage_capacity).value).distinct()
         
-    if 'screen_size_family' in search_form.data and search_form.data['screen_size_family']:
-        result_notebooks = result_notebooks.filter(screen__size__family__id = search_form.data['screen_size_family'])
+    if search_form.screen_size_family:
+        result_notebooks = result_notebooks.filter(screen__size__family__id = search_form.screen_size_family)
         
-    if 'video_card_type' in search_form.data and search_form.data['video_card_type']:
-        result_notebooks = result_notebooks.filter(video_card__card_type__id = search_form.data['video_card_type']).distinct()
+    if search_form.video_card_type:
+        result_notebooks = result_notebooks.filter(video_card__card_type__id = search_form.video_card_type).distinct()
         
-    if 'operating_system' in search_form.data and search_form.data['operating_system']:
-        result_notebooks = result_notebooks.filter(operating_system__family__id = search_form.data['operating_system'])
+    if search_form.operating_system:
+        result_notebooks = result_notebooks.filter(operating_system__family__id = search_form.operating_system)
         
-    if 'notebook_line' in search_form.data and search_form.data['notebook_line'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(line__id=search_form.data['notebook_line'])
+    if search_form.notebook_line and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(line__id=search_form.notebook_line)
         
-    if 'processor_line' in search_form.data and search_form.data['processor_line'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(processor__line__id=search_form.data['processor_line'])
+    if search_form.processor_line and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(processor__line__id=search_form.processor_line)
         
-    if 'processor_family' in search_form.data and search_form.data['processor_family'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(processor__family__id=search_form.data['processor_family'])
+    if search_form.processor_family and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(processor__family__id=search_form.processor_family)
         
-    if 'processor' in search_form.data and search_form.data['processor'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(processor__id=search_form.data['processor'])
+    if search_form.processor and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(processor__id=search_form.processor)
         
-    if 'chipset' in search_form.data and search_form.data['chipset'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(chipset__id=search_form.data['chipset'])
+    if search_form.chipset and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(chipset__id=search_form.chipset)
         
-    if 'ram_type' in search_form.data and search_form.data['ram_type'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(ram_type__id=search_form.data['ram_type'])
+    if search_form.ram_type and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(ram_type__id=search_form.ram_type)
         
-    if 'ram_frequency' in search_form.data and search_form.data['ram_frequency'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(ram_frequency__value__gte=RamFrequency.objects.get(pk = search_form.data['ram_frequency']).value)
+    if search_form.ram_frequency and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(ram_frequency__value__gte=RamFrequency.objects.get(pk = search_form.ram_frequency).value)
         
-    if 'storage_type' in search_form.data and search_form.data['storage_type'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(storage_drive__drive_type__id = search_form.data['storage_type'])
+    if search_form.storage_type and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(storage_drive__drive_type__id = search_form.storage_type)
         
-    if 'screen_size' in search_form.data and search_form.data['screen_size'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(screen__size__id = search_form.data['screen_size'])
+    if search_form.screen_size and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(screen__size__id = search_form.screen_size)
         
-    if 'screen_resolution' in search_form.data and search_form.data['screen_resolution'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(screen__resolution__id = search_form.data['screen_resolution'])
+    if search_form.screen_resolution and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(screen__resolution__id = search_form.screen_resolution)
         
-    if 'screen_touch' in search_form.data and search_form.data['screen_touch'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(screen__is_touchscreen = search_form.data['screen_touch'])    
+    if search_form.screen_touch and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(screen__is_touchscreen = search_form.screen_touch)    
         
-    if 'video_card_brand' in search_form.data and search_form.data['video_card_brand'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(video_card__line__brand__id = search_form.data['video_card_brand']).distinct()
+    if search_form.video_card_brand and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(video_card__line__brand__id = search_form.video_card_brand).distinct()
         
-    if 'video_card_line' in search_form.data and search_form.data['video_card_line'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(video_card__line__id = search_form.data['video_card_line']).distinct()
+    if search_form.video_card_line and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(video_card__line__id = search_form.video_card_line).distinct()
         
-    if 'video_card' in search_form.data and search_form.data['video_card'] and advanced_controls:
-        result_notebooks = result_notebooks.filter(video_card__id = search_form.data['video_card']).distinct()
+    if search_form.video_card and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(video_card__id = search_form.video_card).distinct()
         
-    if 'min_price' in search_form.data and search_form.data['min_price']  and advanced_controls:
-        result_notebooks = result_notebooks.filter(min_price__gte = int(search_form.data['min_price']))
+    if search_form.min_price and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(min_price__gte = int(search_form.min_price))
 
-    if 'max_price' in search_form.data and search_form.data['max_price']  and advanced_controls:
-        result_notebooks = result_notebooks.filter(min_price__lte = int(search_form.data['max_price']))
-    
-    
-    # Check the ordering key, if the is none, use 'Price' by default    
-    if 'ordering' in search_form.data:
-        ordering = int(search_form.data['ordering'])
-    else:
-        ordering = 1
+    if search_form.max_price and search_form.advanced_controls:
+        result_notebooks = result_notebooks.filter(min_price__lte = int(search_form.max_price))
         
     # Check the ordering orientation, if it is not set, each criteria uses 
     # sensible defaults (asc fro price, desc for cpu performance, etc)
-    ordering_direction = None
-    if 'ordering_direction' in search_form.data and search_form.data['ordering_direction']:
-        ordering_direction = ['', '-'][int(search_form.data['ordering_direction'])]
+    ordering_direction = [None, '', '-'][search_form.ordering_direction]
     
     # Apply the corresponding ordering based on the key
-    if ordering == 1:
+    if search_form.ordering in [0, 1]:
         if ordering_direction == None:
             ordering_direction = ''
         result_notebooks = result_notebooks.order_by(ordering_direction + 'min_price')
-    elif ordering == 2:
+    elif search_form.ordering == 2:
         if ordering_direction == None:
             ordering_direction = '-'    
         result_notebooks = result_notebooks.order_by(ordering_direction + 'processor__speed_score')
-    elif ordering == 3:
+    elif search_form.ordering == 3:
         if ordering_direction == None:
             ordering_direction = '-'    
         # Note: A notebook may have more than one video card, grab the fastest
         result_notebooks = result_notebooks.annotate(max_video_card_score=Max('video_card__speed_score')).order_by(ordering_direction + 'max_video_card_score')
-    elif ordering == 4:
+    elif search_form.ordering == 4:
         if ordering_direction == None:
             ordering_direction = '-'    
         result_notebooks = result_notebooks.order_by(ordering_direction + 'ram_quantity__value')
-    elif ordering == 5:
+    elif search_form.ordering == 5:
         if ordering_direction == None:
             ordering_direction = '-'    
         # Note: A notebook may have more than one SD, grab the biggest
         result_notebooks = result_notebooks.annotate(max_hard_drive_capacity=Max('storage_drive__capacity__value')).order_by(ordering_direction + 'max_hard_drive_capacity')        
-    elif ordering == 6:
+    elif search_form.ordering == 6:
         if ordering_direction == None:
             ordering_direction = ''    
         result_notebooks = result_notebooks.order_by(ordering_direction + 'weight')
         
-    # Boilerplate code for page navigation numbering
-    if 'page_number' in search_form.data:
-        page_number = int(search_form.data['page_number'])
-    else:
-        page_number = 1
-        
     page_count = ceil(result_notebooks.count() / 10.0);        
     
-    pages = filter(lambda(x): x > 0 and x <= page_count, range(page_number - 3, page_number + 3))
+    pages = filter(lambda(x): x > 0 and x <= page_count, range(search_form.page_number - 3, search_form.page_number + 3))
     try:
         left_page = pages[0]
     except:
@@ -243,20 +219,21 @@ def browse(request):
     except:
         right_page = 0
         
-    result_notebooks = result_notebooks[(page_number - 1) * 10 : page_number * 10]        
+    result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]        
        
     return render_to_response('cotizador/index.html', {
         'form': search_form,
         'remove_filter_links': search_form.generateRemoveFilterLinks(),
         'result_notebooks': result_notebooks,
-        'page_number': page_number,
-        'prev_page': page_number - 1,
-        'post_page': page_number + 1,
+        'page_number': search_form.page_number,
+        'prev_page': search_form.page_number - 1,
+        'post_page': search_form.page_number + 1,
         'page_count': int(page_count),
         'page_range': pages,
         'left_page': left_page,
         'right_page': right_page,
         'current_url': search_form.generateUrlWithoutOrdering(),
+        'produt_link_args': search_form.generateProdutLinkArgs(),
         'ordering_direction_url': search_form.generateUrlWithoutOrderingDirection(),
         'ordering_direction': {'': 0, '-': 1}[ordering_direction]
     })
@@ -504,8 +481,6 @@ def all_video_card_lines(request):
 # Helper method to set the search_form for almost all of the views            
 def initialize_search_form(data):
     search_form = SearchForm(data)
-    
-    search_form.abs_min_price = utils.roundToFloor10000(Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min'])
-    search_form.abs_max_price = utils.roundToCeil10000(Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max'])
+    search_form.validate()
     
     return search_form
