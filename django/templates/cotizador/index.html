@@ -32,7 +32,7 @@
     <h3>Ordenar por:</h3>
     <select id="ordering_options">
         {% for ordering_criteria in form.getOrderingOptions %}
-            {% ifequal form.ordering.data ordering_criteria.0 %}
+            {% ifequal ordering ordering_criteria.0 %}
                 <option value="{{ ordering_criteria.0 }}" selected="selected">{{ ordering_criteria.1 }}</option>            
             {% else %}
                 <option value="{{ ordering_criteria.0}}">{{ ordering_criteria.1 }}</option>

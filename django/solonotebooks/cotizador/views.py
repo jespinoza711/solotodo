@@ -78,6 +78,7 @@ def search(request):
     result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
     
     
+    
     return render_to_response('cotizador/search.html', {
         'query': query,
         'form': search_form,
@@ -181,7 +182,7 @@ def browse(request):
     ordering_direction = [None, '', '-'][search_form.ordering_direction]
     
     # Apply the corresponding ordering based on the key
-    if search_form.ordering in [0, 1]:
+    if search_form.ordering == 1:
         if ordering_direction == None:
             ordering_direction = ''
         result_notebooks = result_notebooks.order_by(ordering_direction + 'min_price')
@@ -207,6 +208,10 @@ def browse(request):
         if ordering_direction == None:
             ordering_direction = ''    
         result_notebooks = result_notebooks.order_by(ordering_direction + 'weight')
+    else:
+        if ordering_direction == None:
+            ordering_direction = '-'    
+        result_notebooks = result_notebooks.order_by(ordering_direction + 'date_added')
         
     page_count = ceil(len(result_notebooks) / 10.0);        
     
@@ -237,7 +242,8 @@ def browse(request):
         'current_url': search_form.generateUrlWithoutOrdering(),
         'produt_link_args': search_form.generateProdutLinkArgs(),
         'ordering_direction_url': search_form.generateUrlWithoutOrderingDirection(),
-        'ordering_direction': {'': 0, '-': 1}[ordering_direction]
+        'ordering_direction': {'': 0, '-': 1}[ordering_direction],
+        'ordering': str(search_form.ordering),
     })
     
 # View for displaying every single notebook in the DB
@@ -484,5 +490,6 @@ def all_video_card_lines(request):
 def initialize_search_form(data):
     search_form = SearchForm(data)
     search_form.validate()
+    search_form.is_valid()
     
     return search_form

@@ -32,7 +32,7 @@ class SearchForm(forms.Form):
     
     weight_choices = (('0', 'Cualquiera'), ('1', '< 1 kg'), ('2', '1 - 2 kg'), ('3', '2 - 3 kg'), ('4', '3 - 4 kg'), ('5', '> 4 kg'))
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
-    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'))
+    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'), ('7', 'Nuevos modelos'))
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí')) 
     
     weight = forms.ChoiceField(choices = weight_choices)
@@ -116,11 +116,10 @@ class SearchForm(forms.Form):
             self.page_number = 1
             
         if self.ordering == 0:
-            self.ordering = 1
+            self.ordering = 7
         
     def getOrderingOptions(self):
-        return (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
-    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'))
+        return self.ordering_choices
     
     
     '''Generate the GET request (?var1=val1&var2=val2...) of the current query, 
@@ -261,4 +260,7 @@ class SearchForm(forms.Form):
             value = 'Precio minimo: ' + utils.prettyPrice(pk_value)
         if key == 'max_price':
             value = 'Precio maximo: ' + utils.prettyPrice(pk_value)
-        return value        
+        return value
+        
+    def is_valid(self):
+        return True   
