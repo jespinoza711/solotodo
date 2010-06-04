@@ -12,6 +12,7 @@ from utils import prettyPrice
 
 class Notebook(models.Model):
     name = models.CharField(max_length = 255)
+    date_added = models.DateField()
     
     is_ram_dual_channel = models.BooleanField()
     has_bluetooth = models.BooleanField()

@@ -50,10 +50,10 @@ def search(request):
     query = request.GET['search_keywords']
     
     # We grab all the candidates (those currently available)
-    available_notebooks = Notebook.objects.all().filter(is_available=True).order_by('?')
+    available_notebooks = Notebook.objects.all().filter(is_available=True)
     
     # For each one, we assign a score base on how many of the keywords match a 
-    # programatically generated, huge single line description of the notebook
+    # huge single line description of the notebook stored in the DB
     result_notebooks = [[ntbk, stringCompare(ntbk.long_description, query)] for ntbk in available_notebooks]
     # If the hit is too low (< 10%) they are eliminated
     result_notebooks = filter(lambda(x): x[1] > 10, result_notebooks) 
@@ -61,9 +61,9 @@ def search(request):
     result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1), reverse = True)
     
     # Boilerplate code for setting up the links to each page of the results
-        
+    
     page_count = ceil(len(result_notebooks) / 10.0);
-    result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
+        
     pages = filter(lambda(x): x > 0 and x <= page_count, range(search_form.page_number - 3, search_form.page_number + 3))
     try:
         left_page = pages[0]
@@ -74,6 +74,8 @@ def search(request):
         right_page = pages[len(pages) - 1]
     except:
         right_page = 0
+        
+    result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
     
     
     return render_to_response('cotizador/search.html', {
@@ -206,7 +208,7 @@ def browse(request):
             ordering_direction = ''    
         result_notebooks = result_notebooks.order_by(ordering_direction + 'weight')
         
-    page_count = ceil(result_notebooks.count() / 10.0);        
+    page_count = ceil(len(result_notebooks) / 10.0);        
     
     pages = filter(lambda(x): x > 0 and x <= page_count, range(search_form.page_number - 3, search_form.page_number + 3))
     try:
@@ -219,7 +221,7 @@ def browse(request):
     except:
         right_page = 0
         
-    result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]        
+    result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
        
     return render_to_response('cotizador/index.html', {
         'form': search_form,
