@@ -18,7 +18,7 @@ else{
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
-<link rel="stylesheet" type="text/css" href="<?php bloginfo('stylesheet_url'); ?>" />
+<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/javascript/imghover.js"> </script>
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="alternate" type="text/xml" title="RSS .92" href="<?php bloginfo('rss_url'); ?>" />
