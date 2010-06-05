@@ -130,6 +130,18 @@ def main():
     except:
         print('Error al obtener los notebooks de Magens')
         logMessage('Error al obtener los notebooks de Magens')
+    try:
+        p = GlobalMac()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de GlobalMac')
+        logMessage('Error al obtener los notebooks de GlobalMac')
+    try:
+        p = Syd()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Syd')
+        logMessage('Error al obtener los notebooks de Syd')                
                 
     updateAvailabilityAndPrice()
                 

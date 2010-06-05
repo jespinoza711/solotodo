@@ -19,6 +19,8 @@ from fetch_scripts.webco import Webco
 from fetch_scripts.ripley import Ripley
 from fetch_scripts.racle import Racle
 from fetch_scripts.magens import Magens
+from fetch_scripts.global_mac import GlobalMac
+from fetch_scripts.syd import Syd
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -40,4 +42,6 @@ __all__ = [ 'ProductData',
             'Webco',
             'Ripley',
             'Racle',
-            'Magens']
+            'Magens',
+            'GlobalMac',
+            'Syd']
