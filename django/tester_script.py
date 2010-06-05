@@ -7,7 +7,7 @@ from common_fetch_methods import *
 
 # Script to test the fetch script for a store
 def main():
-    p = Ripley()
+    p = Syd()
     p.getNotebooks()
                 
 if __name__ == '__main__':

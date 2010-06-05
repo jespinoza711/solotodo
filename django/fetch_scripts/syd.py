@@ -22,13 +22,13 @@ class Syd:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  'macbook_pro/?op=all&crit=',
-                            'macbook/?op=all&crit=',
-                            'macbook_air/?op=all&crit=',
+        url_extensions = [  'macbook_pro/',
+                            'macbook/',
+                            'macbook_air/',
                             ]
                             
         for url_extension in url_extensions:
-            urlWebpage = urlBase + urlBuscarProductos + url_extension
+            urlWebpage = urlBase + urlBuscarProductos + url_extension + '?op=all&crit='
 
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
@@ -41,7 +41,7 @@ class Syd:
                 productData = ProductData()
                 link = titles[i].find('a')
                 productData.custom_name = link.string
-                productData.url = link['href']
+                productData.url = urlBase + urlBuscarProductos + url_extension + link['href']
                 productData.comparison_field = productData.url
 
                 priceLinks = prices[i].findAll('a')
