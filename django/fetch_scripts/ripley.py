@@ -21,6 +21,7 @@ class Ripley:
         
         # Array containing the data for each product
         productsData = []
+        comparisonFields = []
         j = 1                    
         while True:
             urlWebpage = urlBase + urlBuscarProductos + str(j)
@@ -45,13 +46,20 @@ class Ripley:
            
             if len(productParagraphs) == 0:
                 break
+            end_script = False
             for i in range(len(productNames)):
                 productData = ProductData()
                 productData.custom_name = productNames[i]
                 productData.price = productPrices[i]
                 productData.url = productLinks[i]
                 productData.comparison_field = productData.url
+                if productData.comparison_field in comparisonFields:
+                    end_script = True
+                    break
+                comparisonFields.append(productData.comparison_field)
                 print productData
                 productsData.append(productData)
+            if end_script:
+                break
             j += 1
         return productsData
