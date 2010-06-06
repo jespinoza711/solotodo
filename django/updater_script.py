@@ -141,7 +141,13 @@ def main():
         analyzeStore(p)
     except:
         print('Error al obtener los notebooks de Syd')
-        logMessage('Error al obtener los notebooks de Syd')                
+        logMessage('Error al obtener los notebooks de Syd')
+    try:
+        p = MacOnline()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de MacOnline')
+        logMessage('Error al obtener los notebooks de MacOnline')
                 
     updateAvailabilityAndPrice()
                 
