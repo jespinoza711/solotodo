@@ -148,6 +148,12 @@ def main():
     except:
         print('Error al obtener los notebooks de MacOnline')
         logMessage('Error al obtener los notebooks de MacOnline')
+    try:
+        p = RkNotebooks()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de RkNotebooks')
+        logMessage('Error al obtener los notebooks de RkNotebooks')        
                 
     updateAvailabilityAndPrice()
                 

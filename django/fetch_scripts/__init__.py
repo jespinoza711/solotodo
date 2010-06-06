@@ -22,6 +22,7 @@ from fetch_scripts.magens import Magens
 from fetch_scripts.global_mac import GlobalMac
 from fetch_scripts.syd import Syd
 from fetch_scripts.mac_online import MacOnline
+from fetch_scripts.rk_notebooks import RkNotebooks
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -46,4 +47,5 @@ __all__ = [ 'ProductData',
             'Magens',
             'GlobalMac',
             'Syd',
-            'MacOnline']
+            'MacOnline',
+            'RkNotebooks']

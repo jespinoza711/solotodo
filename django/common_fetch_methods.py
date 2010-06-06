@@ -37,7 +37,7 @@ def logLostModel(shn):
 
 # Method to log that a notebook in the DB is no longer available
 def logLostNotebook(ntbk):
-    logMessage('Notebook perdido: ' + str(ntbk) + '(<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
+    logMessage('Notebook perdido: ' + str(ntbk) + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
 # Method to log that a store has changed the price on one of its models
 def logChangeModelPrice(shn, oldPrice, newPrice):

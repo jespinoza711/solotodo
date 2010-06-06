@@ -3,6 +3,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 import sys
 from copy import deepcopy
 from solonotebooks.cotizador.models import *
+from datetime import date
 
 ''' Utility method for cloning a notebook (useful when indexing and finding a 
 model very similar - but not equal - to one already in the database '''
@@ -11,6 +12,7 @@ def main():
     ntbk = Notebook.objects.get(pk = id_ntbk)
     clone_ntbk = deepcopy(ntbk)
     clone_ntbk.id = None
+    clone_ntbk.date_added = date.today()
     clone_ntbk.name += ' (clone)'
     clone_ntbk.save()
 
