@@ -7,7 +7,7 @@ from elementtree.ElementTree import Element
 from fetch_scripts import ProductData
 
 class RkNotebooks:
-    name = 'RkNotebooks'
+    name = 'rK-Notebooks'
 
     # Main method
     def getNotebooks(self):
