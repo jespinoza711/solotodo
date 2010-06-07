@@ -284,7 +284,7 @@ def notebook_details(request, notebook_id):
             notebook_comment.ip_address = request.META['REMOTE_ADDR']
             notebook_comment.date = datetime.date.today()        
             rawComment = commentForm.cleaned_data['comments']
-            notebook_comment.comments = rawComment.replace('\r', '<br />').replace('\n', '<br />')
+            notebook_comment.comments = rawComment.replace('\n', '<br />')
             notebook_comment.nickname = commentForm.cleaned_data['nickname']
             notebook_comment.notebook = notebook
             notebook_comment.save()
