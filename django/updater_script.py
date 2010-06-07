@@ -153,7 +153,13 @@ def main():
         analyzeStore(p)
     except:
         print('Error al obtener los notebooks de RkNotebooks')
-        logMessage('Error al obtener los notebooks de RkNotebooks')        
+        logMessage('Error al obtener los notebooks de RkNotebooks')
+    try:
+        p = Impulso()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Impulso')
+        logMessage('Error al obtener los notebooks de Impulso')        
                 
     updateAvailabilityAndPrice()
                 

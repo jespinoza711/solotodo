@@ -23,6 +23,7 @@ from fetch_scripts.global_mac import GlobalMac
 from fetch_scripts.syd import Syd
 from fetch_scripts.mac_online import MacOnline
 from fetch_scripts.rk_notebooks import RkNotebooks
+from fetch_scripts.impulso import Impulso
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -48,4 +49,5 @@ __all__ = [ 'ProductData',
             'GlobalMac',
             'Syd',
             'MacOnline',
-            'RkNotebooks']
+            'RkNotebooks',
+            'Impulso']
