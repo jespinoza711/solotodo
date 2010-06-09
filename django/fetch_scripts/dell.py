@@ -5,6 +5,7 @@ from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
 from fetch_scripts import ProductData
+import pdb
 
 class Dell:
     name = 'Dell'
@@ -78,20 +79,40 @@ class Dell:
     def retrieveAlienwareProductData(self, productUrl, productName):
         r = mechanize.urlopen(productUrl)
         soup = BeautifulSoup(r.read())
-
-        cotizadorLink = soup.findAll("a", { "class" : "lnk" })[2]['href']
         
-        r = mechanize.urlopen(cotizadorLink)
-        soup = BeautifulSoup(r.read())
+        productsData = []
 
-        productData = ProductData()
-        productData.url = productUrl
-        productData.custom_name = productName
-        productData.comparison_field = productData.url	    
+        cotizadorLinks = soup.findAll("a", { "class" : "lnk" })
+        
+        for cotizadorLink in cotizadorLinks:
+            productUrl = cotizadorLink['href']
+            if 'configure' not in productUrl:
+                continue
+                
+            r = mechanize.urlopen(productUrl)
+            soup = BeautifulSoup(r.read())
 
-        priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})
-        productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
-        return productData
+            productData = ProductData()
+            productData.url = productUrl
+            productData.custom_name = productName
+            productData.comparison_field = productData.url	    
+
+            priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})
+            try:
+                productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
+            except:
+                continue
+            
+            inList = False
+            for pd in productsData:
+                if productData.comparison_field == pd.comparison_field:
+                    inList = True
+                    break
+            
+            if not inList:
+                productsData.append(productData)
+                    
+        return productsData
 
     # Main method
     def getNotebooks(self):
@@ -147,7 +168,7 @@ class Dell:
                 modelNames.append(alienwareModelLink.string)
 
             for i in range(len(modelUrls)):
-                productsData.append(self.retrieveAlienwareProductData(modelUrls[i], modelNames[i]))
+                productsData += self.retrieveAlienwareProductData(modelUrls[i], modelNames[i])
         
         # Now for the business (Vostro / Latitude / Precision)        
         url_extensions = [  'empresas/notebooks/ct.aspx?refid=notebooks&s=bsd&cs=clbsdt1&~ck=mn',
