@@ -49,7 +49,7 @@ class Impulso:
                 productData.url = link['href']
                 productData.comparison_field = productData.url
                 
-                productData.price = int(prices[i].string.replace('$', '').replace('.', ''))
+                productData.price = int(prices[i + 1].string.replace('$', '').replace('.', ''))
                 print productData
                 productsData.append(productData)
 
