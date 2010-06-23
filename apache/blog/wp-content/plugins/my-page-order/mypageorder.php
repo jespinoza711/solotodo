@@ -3,16 +3,15 @@
 Plugin Name: My Page Order
 Plugin URI: http://www.geekyweekly.com/mypageorder
 Description: My Page Order allows you to set the order of pages through a drag and drop interface. The default method of setting the order page by page is extremely clumsy, especially with a large number of pages.
-Version: 2.9.1
+Version: 3.0
 Author: Andrew Charlton
 Author URI: http://www.geekyweekly.com
 Author Email: froman118@gmail.com
 */
 
 function mypageorder_menu()
-{   if (function_exists('add_submenu_page')) {
-        add_submenu_page(mypageorder_getTarget(), 'My Page Order', __('My Page Order', 'mypageorder'), 5,"mypageorder",'mypageorder');
-    }
+{    
+	add_pages_page(__('My Page Order', 'mypageorder'), __('My Page Order', 'mypageorder'), 'edit_pages', 'mypageorder', 'mypageorder');
 }
 
 function mypageorder_js_libs() {
@@ -28,7 +27,7 @@ function mypageorder_set_plugin_meta($links, $file) {
 	// create link
 	if ($file == $plugin) {
 		return array_merge( $links, array( 
-			'<a href="' .mypageorder_getTarget() . '?page=mypageorder">' . __('Order Pages', 'mypageorder') . '</a>',
+			'<a href="' . mypageorder_getTarget() . '">' . __('Order Pages', 'mypageorder') . '</a>',
 			'<a href="http://wordpress.org/tags/my-page-order?forum_id=10">' . __('Support Forum', 'mypageorder') . '</a>',
 			'<a href="http://geekyweekly.com/gifts-and-donations">' . __('Donate', 'mypageorder') . '</a>' 
 		));
@@ -38,45 +37,54 @@ function mypageorder_set_plugin_meta($links, $file) {
 
 add_filter('plugin_row_meta', 'mypageorder_set_plugin_meta', 10, 2 );
 add_action('admin_menu', 'mypageorder_menu');
-add_action('admin_menu', 'mypageorder_js_libs'); 
+add_action('admin_print_scripts', 'mypageorder_js_libs');
 
 function mypageorder()
 {
 global $wpdb;
-$mode = "";
-$mode = $_GET['mode'];
 $parentID = 0;
 
-if (isset($_GET['parentID']))
-	$parentID = $_GET['parentID'];
-	
-if(isset($_GET['hideNote']))
+if (isset($_POST['btnSubPages'])) { 
+	$parentID = $_POST['pages'];
+}
+elseif (isset($_POST['hdnParentID'])) { 
+	$parentID = $_POST['hdnParentID'];
+}
+
+if (isset($_POST['btnReturnParent'])) { 
+	$parentsParent = $wpdb->get_row("SELECT post_parent FROM $wpdb->posts WHERE ID = " . $_POST['hdnParentID'], ARRAY_N);
+	$parentID = $parentsParent[0];
+}
+
+if(isset($_GET['hideNote'])) {
 	update_option('mypageorder_hideNote', '1');
-	
+}
+
 $success = "";
-
-if($mode == "act_OrderPages")
+if (isset($_POST['btnOrderPages'])) { 
 	$success = mypageorder_updateOrder();
-	$subPageStr = mypageorder_getSubPages($parentID);
+}
 
+$subPageStr = mypageorder_getSubPages($parentID);
 ?>
 
 <div class='wrap'>
+<form name="frmMyPageOrder" method="post" action="">
 	<h2><?php _e('My Page Order', 'mypageorder') ?></h2>
 	<?php 
 	echo $success;
 	if (get_option("mypageorder_hideNote") != "1")
 	{	?>
 		<div class="updated">
-			<strong><p><?php _e('If you like my plugin please consider donating. Every little bit helps me provide support and continue development.','mypageorder'); ?> <a href="http://geekyweekly.com/gifts-and-donations"><?php _e('Donate', 'mypageorder'); ?></a>&nbsp;&nbsp;<small><a href="<?php echo mypageorder_getTarget() . "?page=mypageorder&hideNote=true"; ?>"><?php _e('No thanks, hide this', 'mypageorder'); ?></a></small></p></strong>
+			<strong><p><?php _e('If you like my plugin please consider donating. Every little bit helps me provide support and continue development.','mypageorder'); ?> <a href="http://geekyweekly.com/gifts-and-donations"><?php _e('Donate', 'mypageorder'); ?></a>&nbsp;&nbsp;<small><a href="<?php echo mypageorder_getTarget(); ?>&hideNote=true"><?php _e('No thanks, hide this', 'mypageorder'); ?></a></small></p></strong>
 		</div>
 	<?php
 	}
 	?>
 	
 	<p><?php _e('Choose a page from the drop down to order its subpages or order the pages on this level by dragging and dropping them into the desired order.', 'mypageorder') ?></p>
-	<?php echo mypageorder_getParentLink($parentID);
 	
+	<?php
  	if($subPageStr != "") 
 	{ ?>
 	
@@ -84,38 +92,67 @@ if($mode == "act_OrderPages")
 	<select id="pages" name="pages">
 		<?php echo $subPageStr; ?>
 	</select>
-	&nbsp;<input type="button" name="edit" Value="<?php _e('Order Subpages', 'mypageorder') ?>" onClick="javascript:goEdit();">
-<?php } ?>
+	&nbsp;<input type="submit" name="btnSubPages" class="button" id="btnSubPages" value="<?php _e('Order Subpages', 'mypageorder') ?>" />
+	<?php 
+	} 
+	?>
 
 	<h3><?php _e('Order Pages', 'mypageorder') ?></h3>
 	
-	<ul id="order" style="width: 90%; margin:10px 10px 10px 0px; padding:10px; border:1px solid #B2B2B2; list-style:none;">
+	<ul id="myPageOrderList">
 	<?php
 	$results = mypageorder_pageQuery($parentID);
 	foreach($results as $row)
-		echo "<li id='$row->ID' class='lineitem'>$row->post_title</li>";
+		echo "<li id='id_$row->ID' class='lineitem'>".__($row->post_title)."</li>";
 	?>
 	</ul>
-	
-	<input type="button" id="orderButton" Value="<?php _e('Click to Order Pages', 'mypageorder') ?>" onclick="javascript:orderPages();">&nbsp;&nbsp;<strong id="updateText"></strong>
 
+	<input type="submit" name="btnOrderPages" id="btnOrderPages" class="button-primary" value="<?php _e('Click to Order Pages', 'mypageorder') ?>" onclick="javascript:orderPages(); return true;" />
+	<?php echo mypageorder_getParentLink($parentID); ?>
+	&nbsp;&nbsp;<strong id="updateText"></strong>
+	<br /><br />
 	<p>
-	<a href="http://geekyweekly.com/mypageorder"><?php _e('Plugin Homepage', 'mypageorder') ?></a>
-	&nbsp;|&nbsp;
-	<a href="http://geekyweekly.com/gifts-and-donations"><?php _e('Donate', 'mypageorder') ?></a>
-	&nbsp;|&nbsp;
-	<a href="http://wordpress.org/tags/my-page-order?forum_id=10"><?php _e('Support Forum', 'mypageorder') ?></a>
+	<a href="http://geekyweekly.com/mypageorder"><?php _e('Plugin Homepage', 'mypageorder') ?></a>&nbsp;|&nbsp;<a href="http://geekyweekly.com/gifts-and-donations"><?php _e('Donate', 'mypageorder') ?></a>&nbsp;|&nbsp;<a href="http://wordpress.org/tags/my-page-order?forum_id=10"><?php _e('Support Forum', 'mypageorder') ?></a>
 	</p>
+	<input type="hidden" id="hdnMyPageOrder" name="hdnMyPageOrder" />
+	<input type="hidden" id="hdnParentID" name="hdnParentID" value="<?php echo $parentID; ?>" />
+</form>
 </div>
 
-<style>
-	li.lineitem {
-		margin: 3px 0px;
-		padding: 2px 5px 2px 5px;
-		background-color: #F1F1F1;
-		border:1px solid #B2B2B2;
-		cursor: move;
+<style type="text/css">
+	#myPageOrderList {
+		width: 90%; 
+		border:1px solid #B2B2B2; 
+		margin:10px 10px 10px 0px;
+		padding:5px 10px 5px 10px;
+		list-style:none;
+		background-color:#fff;
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+	}
 
+	li.lineitem {
+		border:1px solid #B2B2B2;
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+		background-color:#F1F1F1;
+		color:#000;
+		cursor:move;
+		font-size:13px;
+		margin-top:5px;
+		margin-bottom:5px;
+		padding: 2px 5px 2px 5px;
+		height:1.5em;
+		line-height:1.5em;
+	}
+	
+	.sortable-placeholder{ 
+		border:1px dashed #B2B2B2;
+		margin-top:5px;
+		margin-bottom:5px; 
+		padding: 2px 5px 2px 5px;
+		height:1.5em;
+		line-height:1.5em;	
 	}
 </style>
 
@@ -123,8 +160,8 @@ if($mode == "act_OrderPages")
 // <![CDATA[
 
 	function mypageorderaddloadevent(){
-		jQuery("#order").sortable({ 
-			placeholder: "ui-selected", 
+		jQuery("#myPageOrderList").sortable({ 
+			placeholder: "sortable-placeholder", 
 			revert: false,
 			tolerance: "pointer" 
 		});
@@ -133,17 +170,10 @@ if($mode == "act_OrderPages")
 	addLoadEvent(mypageorderaddloadevent);
 	
 	function orderPages() {
-		jQuery("#orderButton").css("display", "none");
 		jQuery("#updateText").html("<?php _e('Updating Page Order...', 'mypageorder') ?>");
-
-		idList = jQuery("#order").sortable("toArray");
-		location.href = '<?php echo mypageorder_getTarget(); ?>?page=mypageorder&mode=act_OrderPages&parentID=<?php echo $parentID; ?>&idString='+idList;
+		jQuery("#hdnMyPageOrder").val(jQuery("#myPageOrderList").sortable("toArray"));
 	}
 
-	function goEdit () {
-		if(jQuery("#pages").val() != "")
-			location.href="<?php echo mypageorder_getTarget(); ?>?page=mypageorder&mode=dsp_OrderPages&parentID="+jQuery("#pages").val();
-	}
 // ]]>
 </script>
 <?php
@@ -151,23 +181,32 @@ if($mode == "act_OrderPages")
 
 //Switch page target depending on version
 function mypageorder_getTarget() {
-	return "edit-pages.php";
+	global $wp_version;
+	if (version_compare($wp_version, "2.999", ">"))
+		return "edit.php?post_type=page&page=mypageorder";
+	else
+		return "edit-pages.php?page=mypageorder";
 }
 
 function mypageorder_updateOrder()
 {
-	global $wpdb;
+	if (isset($_POST['hdnMyPageOrder']) && $_POST['hdnMyPageOrder'] != "") { 
+		global $wpdb;
 
-	$idString = $_GET['idString'];
-	$IDs = explode(",", $idString);
-	$result = count($IDs);
+		$hdnMyPageOrder = $_POST['hdnMyPageOrder'];
+		$IDs = explode(",", $hdnMyPageOrder);
+		$result = count($IDs);
 
-	for($i = 0; $i < $result; $i++)
-	{
-		$wpdb->query("UPDATE $wpdb->posts SET menu_order = '$i' WHERE id ='$IDs[$i]'");
-    }
-	
-	return '<div id="message" class="updated fade"><p>'. __('Page order updated successfully.', 'mypageorder').'</p></div>';
+		for($i = 0; $i < $result; $i++)
+		{
+			$str = str_replace("id_", "", $IDs[$i]);
+			$wpdb->query("UPDATE $wpdb->posts SET menu_order = '$i' WHERE id ='$str'");
+		}
+
+		return '<div id="message" class="updated fade"><p>'. __('Page order updated successfully.', 'mypageorder').'</p></div>';
+	}
+	else
+		return '<div id="message" class="updated fade"><p>'. __('An error occured, order has not been saved.', 'mypageorder').'</p></div>';
 }
 
 function mypageorder_getSubPages($parentID)
@@ -180,7 +219,7 @@ function mypageorder_getSubPages($parentID)
 	{
 		$postCount=$wpdb->get_row("SELECT count(*) as postsCount FROM $wpdb->posts WHERE post_parent = $row->ID and post_type = 'page' AND post_status != 'trash' ", ARRAY_N);
 		if($postCount[0] > 0)
-	    	$subPageStr = $subPageStr."<option value='$row->ID'>$row->post_title</option>";
+	    	$subPageStr = $subPageStr."<option value='$row->ID'>".__($row->post_title)."</option>";
 	}
 	return $subPageStr;
 }
@@ -188,31 +227,22 @@ function mypageorder_getSubPages($parentID)
 function mypageorder_pageQuery($parentID)
 {
 	global $wpdb;
-	
 	return $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_parent = $parentID and post_type = 'page' AND post_status != 'trash' ORDER BY menu_order ASC");
 }
 
 function mypageorder_getParentLink($parentID)
 {
-	global $wpdb;
-	
 	if($parentID != 0)
-	{
-		$parentsParent = $wpdb->get_row("SELECT post_parent FROM $wpdb->posts WHERE ID = $parentID ", ARRAY_N);
-		return "<a href='". mypageorder_getTarget() . "?page=mypageorder&parentID=$parentsParent[0]'>" . __('Return to parent page', 'mypageorder') . "</a>";
-	}
-	
-	return "";
+		return "&nbsp;&nbsp;<input type='submit' class='button' id='btnReturnParent' name='btnReturnParent' value='" . __('Return to parent page', 'mypageorder') ."' />";
+	else
+		return "";
 }
 
-
-/* Load Translations */
 add_action('init', 'mypageorder_loadtranslation');
 
 function mypageorder_loadtranslation() {
 	load_plugin_textdomain('mypageorder', PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)), dirname(plugin_basename(__FILE__)));
 }
-
 
 class mypageorder_Widget extends WP_Widget {
 

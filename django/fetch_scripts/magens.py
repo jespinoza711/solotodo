@@ -62,6 +62,8 @@ class Magens:
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
             pageNavigator = baseSoup.find("td", { "class" : "result_right" })
+            if not pageNavigator:
+                continue
             relativePageLinks = pageNavigator.findAll('a')[:-1];
 
             # Array containing the catalog pages, beginning with the original one

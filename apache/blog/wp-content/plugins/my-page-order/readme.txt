@@ -3,8 +3,8 @@ Contributors: froman118
 Donate link: http://geekyweekly.com/gifts-and-donations
 Tags: page, order, sidebar, widget
 Requires at least: 2.8
-Tested up to: 2.9.1
-Stable tag: 2.9.1
+Tested up to: 3.0
+Stable tag: 3.0
 
 My Page Order allows you to set the order of pages through a drag and drop interface.
 
@@ -17,7 +17,16 @@ My Page Order allows you to set the order of pages through a drag and drop inter
 My Page Order has been out since WP 1.5 (2006) and hasn't really changed since then. As of version 2.8.6 of the plugin I'm breaking backwards compatibility to add new features like a replacement widget. Keep using version [2.8.3](http://downloads.wordpress.org/plugin/my-page-order.2.8.3.zip) if you are not on WP 2.8 yet.
 
 == Change Log ==
-
+= 3.0 =
+* Update for compatibility with 3.0
+* Switched way menu item was being added, any permission issues should be fixed
+* Updated drag and drop to include a placeholder, makes it much easier to see where items will move
+* Updated styles to fit in with Wordpress better
+* Updated page code to use regular submit buttons, less reliance on Javascript and query strings
+* Page titles now wrapped in localization code, thanks for the tip Florian
+* Added Polish translation, thanks Cezary
+* Added Turkish translation, thanks Demircan
+* Added Finnish translation, thanks Jussi
 = 2.9.1 =
 * Trashed pages are now being filtered out.
 = 2.8.6 =
@@ -28,7 +37,7 @@ My Page Order has been out since WP 1.5 (2006) and hasn't really changed since t
 = 2.8b =
 * Fixed drag and drop bug for sure this time
 * Added Czech translation (Jan)
-= 2.8 a
+= 2.8a =
 * Fixed bug breaking drag and drop in 2.7 (I think, can't test so let me know)
 * Added translations: Belorussian (Fatcow), French (updated, Annelies)
 = 2.8 =
@@ -51,7 +60,6 @@ My Page Order has been out since WP 1.5 (2006) and hasn't really changed since t
 2. Go to the "My Page Order" tab under Pages and specify your desired order for pages
 3. If you are using widgets then just make sure the "Page" widget is set to order by "Page order". The plugin also installs it's own widget with more options.
 4. If you aren't using widgets, modify your sidebar template to use correct sort order: `wp_list_pages('sort_column=menu_order&title_li=');`
-
 
 == Frequently Asked Questions ==
 
