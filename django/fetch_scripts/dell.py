@@ -69,7 +69,9 @@ class Dell:
             
             r = mechanize.urlopen(url)
             soup = BeautifulSoup(r.read())
-            priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})         
+            priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})
+            if not priceTag:
+                priceTag = soup.find('span', {'class': 'pricing_sale_price'})     
 
             productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
             productsData.append(productData)
@@ -159,6 +161,7 @@ class Dell:
             productsData = []
             for i in range(len(modelUrls)):
                 productsData += self.retrieveHomeProductsData(modelUrls[i], modelNames[i], urlBase)
+                pass
                 
             alienwareModelLinks = modelNavigator[-2].findAll('a')
             modelUrls = []

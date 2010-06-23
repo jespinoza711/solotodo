@@ -11,6 +11,7 @@ class Magens:
 
     # Method that extracts the data of a specific product given its page
     def retrieveProductsData(self, pageUrl):
+        print pageUrl
         br = mechanize.Browser()
         data = br.open(pageUrl).get_data()
         soup = BeautifulSoup(data)
@@ -54,29 +55,25 @@ class Magens:
                             ]
                             
         for url_extension in url_extensions:
-            urlWebpage = urlBase + urlBuscarProductos + url_extension
+            urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=100'
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
 
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            pageNavigator = baseSoup.find("td", { "class" : "result_right" })
-            if not pageNavigator:
-                continue
-            relativePageLinks = pageNavigator.findAll('a')[:-1];
-
-            # Array containing the catalog pages, beginning with the original one
-            pageLinks = [urlWebpage]
-
-            # Fix the relative links to the pages of the catalog and add the to the array
-            for relativePageLink in relativePageLinks:
-                pageLinks.append(relativePageLink['href'].split('&osCsid')[0])
-
-            # Retrieve the data for each of the products and add it to the array
-            for pageLink in pageLinks:
-                prods = self.retrieveProductsData(pageLink)
-                productsData += prods
-
+            nameDivs = baseSoup.findAll('div', { 'class': 'text11Red uppercase tituloProducto' })
+            priceSpans = baseSoup.findAll('span', { 'class': 'text12Green' })[::2]
+            print len(nameDivs)
+            print len(priceSpans)
+            for i in range(len(nameDivs)):
+                productData = ProductData()
+                link = nameDivs[i].find('a')
+                productData.custom_name = link.string.strip()
+                productData.url = link['href'].split('?osCsid')[0]
+                productData.comparison_field = productData.url
+                productData.price = int(priceSpans[i].string.replace('$', '').replace(',', ''))
+                print productData
+                productsData.append(productData)
+            
         return productsData
 
