@@ -64,6 +64,7 @@ class MacOnline:
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
+            
             baseSoup = BeautifulSoup(baseData)
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
@@ -73,7 +74,7 @@ class MacOnline:
             for i in range(len(titles)):
                 productData = ProductData()
                 link = titles[i].find('a')
-                productData.custom_name = link.string
+                productData.custom_name = link.string.encode('ascii','ignore')
                 productData.url = urlBase + link['href']
                 productData.comparison_field = productData.url
                 

@@ -53,14 +53,15 @@ class FullNotebook:
                     urls.append(rawLink.find("a")['href'])
                     
                 rawPrices = baseSoup.findAll("span", { 'id':'prei'})
-                for rawPrice in rawPrices:
-                    price = (rawPrice.contents[0].replace("Precio:", '').replace('.', '').strip())
-                    prices.append(int(price))
                     
                 for j in range(len(names)):
                     productData = ProductData()
                     productData.custom_name = names[j].encode('ascii','ignore').strip()
-                    productData.price = prices[j]
+                    price = rawPrices[j].contents[0].replace("Precio:", '').replace('.', '').strip()
+                    try:
+                        productData.price = int(price)
+                    except:
+                        continue
                     productData.url = urls[j]
                     productData.comparison_field = productData.url
                     print productData

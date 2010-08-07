@@ -4,7 +4,13 @@
     <script type="text/javascript" src="/media/js/processor_script.js"></script>
 {% endblock %}
 
-{% block title %}SoloNotebooks - {{ video_card_line }}{% endblock %}
+{% block title %}
+{% ifequal video_card None %}
+    SoloNotebooks - Tarjetas de video {{ video_card_line }}
+{% else %}
+    SoloNotebooks - Tarjeta de video {{ video_card }}
+{% endifequal %}
+{% endblock %}
 
 {% block mainContent %}
 

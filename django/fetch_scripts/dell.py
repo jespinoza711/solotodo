@@ -28,12 +28,17 @@ class Dell:
             if url[0] == '/':
                 url = urlBase + url
                 
-            if 'configure' in url or 'upsell' in url:            
+            if 'configure' in url or 'upsell' in url:           
+                print url 
                 productData.url = url
                 productData.custom_name = productName
                 
                 priceDiv = dataDivs[numNtbks + i]
                 priceTag = priceDiv.find('span', {'class': 'pricing_retail_nodiscount_price'})
+                if not priceTag:
+                    priceTag = priceDiv.find('span', {'class': 'pricing_sale_price'})
+                if not priceTag:
+                    continue 
                 productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
                 productData.comparison_field = productData.url
                 productsData.append(productData)
@@ -71,9 +76,11 @@ class Dell:
             soup = BeautifulSoup(r.read())
             priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})
             if not priceTag:
-                priceTag = soup.find('span', {'class': 'pricing_sale_price'})     
+                priceTag = soup.find('span', {'class': 'pricing_sale_price'})
+            if not priceTag:
+                continue    
 
-            productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
+            productData.price = int(round(float(priceTag.string.replace('CLP$', '').replace('.', '').replace(',', '.'))))
             productsData.append(productData)
 
         return productsData         
@@ -172,6 +179,7 @@ class Dell:
 
             for i in range(len(modelUrls)):
                 productsData += self.retrieveAlienwareProductData(modelUrls[i], modelNames[i])
+                pass
         
         # Now for the business (Vostro / Latitude / Precision)        
         url_extensions = [  'empresas/notebooks/ct.aspx?refid=notebooks&s=bsd&cs=clbsdt1&~ck=mn',
@@ -209,7 +217,11 @@ class Dell:
                 productData = ProductData()
                 productData.custom_name = latitudeCell.find('b').string
                 productData.url = urlBase + latitudeCell.parent.find('a')['href']
-                productData.price = int(latitudeCell.parent.find('span', {'class': 'pricing_retail_nodiscount_price'}).string.replace('CLP$', '').replace('.', ''))
+                print productData.url
+                span = latitudeCell.parent.find('span', {'class': 'pricing_retail_nodiscount_price'})
+                if not span:
+                    span = latitudeCell.parent.find('span', {'class': 'pricing_sale_price'})
+                productData.price = int(span.string.replace('CLP$', '').replace('.', ''))
                 productData.comparison_field = productData.url	    
                 productsData.append(productData)
 

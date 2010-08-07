@@ -36,7 +36,7 @@ class Impulso:
             baseSoup = BeautifulSoup(baseData)
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
-            titles = baseSoup.findAll('h3')
+            titles = baseSoup.findAll('h3')[1:]
             prices = baseSoup.findAll('span', {'class': 'price'})
 
             # Array containing the catalog pages, beginning with the original one

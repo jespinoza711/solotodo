@@ -46,6 +46,7 @@ class Wei:
         urlWebpage = urlBase + urlBuscarProductos + 'category.htm?action=subcategory&ccode=NB&sccode=79#sub'
 
         # Obtain and parse HTML information of the base webpage
+        print urlWebpage
         baseData = browser.open(urlWebpage).get_data()
         baseSoup = BeautifulSoup(baseData)
 
