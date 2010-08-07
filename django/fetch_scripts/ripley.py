@@ -31,7 +31,8 @@ class Ripley:
             baseSoup = BeautifulSoup(baseData)
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
-            productParagraphs = baseSoup.findAll("p", { "onmouseover" : "" })
+            productParagraphs = baseSoup.findAll("td", { "class" : "grisCatalogo" })
+            productParagraphs = productParagraphs[1::3]
             productPrices = baseSoup.findAll("span", { "class" : "normalHOME" })
             
             productLinks = []
@@ -42,7 +43,7 @@ class Ripley:
             
             productPrices = [int(price.string.replace('.', '').replace('$', '')) for price in productPrices]
             
-            productNames = [p.contents[0].strip() + ' ' + p.contents[2].replace('&nbsp;', '').strip() for p in productParagraphs]
+            productNames = [p.find('p').contents[0].strip() + ' ' + p.contents[2].replace('&nbsp;', '').strip() for p in productParagraphs]
            
             if len(productParagraphs) == 0:
                 break

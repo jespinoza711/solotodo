@@ -40,7 +40,7 @@ class Syd:
             for i in range(len(titles)):
                 productData = ProductData()
                 link = titles[i].find('a')
-                productData.custom_name = link.string
+                productData.custom_name = link.string.encode('ascii','ignore')
                 productData.url = urlBase + urlBuscarProductos + url_extension + link['href']
                 productData.comparison_field = productData.url
 

@@ -21,7 +21,7 @@ class Racle:
         # Array containing the data for each product
         productsData = []
         
-        urlWebpage = urlBase + '/ventas/tienda/notebook?limit=50&limitstart=0'            
+        urlWebpage = urlBase + '/ventas/tieda/notebook?limit=50&limitstart=0'            
 
         # Obtain and parse HTML information of the base webpage
         baseData = browser.open(urlWebpage).get_data()

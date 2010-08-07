@@ -32,13 +32,18 @@ class Webco:
             baseData = browser.open(urlWebpage).get_data()
             
             baseSoup = BeautifulSoup(baseData)
+            print urlWebpage
 
             # Obtain a reference tag for each product (in this case it image)
             productImages = baseSoup.findAll("img", { "width" : "193" })
             
+            print len(productImages)
             for productImage in productImages:
                 productData = ProductData()
-                productData.url = urlBase + productImage.parent['href']
+                try:
+                    productData.url = urlBase + productImage.parent['href']
+                except:
+                    continue
                 productData.custom_name = productImage.parent.parent.parent.parent.find('strong').string.encode('ascii','ignore').strip()
                 productData.price = int(productImage.parent.parent.parent.parent.find("td", { "class" : "precio" }).find('a').string.replace('$', '').replace('-', '').replace('.', '').strip())
                 productData.comparison_field = productData.url
