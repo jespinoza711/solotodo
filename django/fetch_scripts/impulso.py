@@ -35,9 +35,11 @@ class Impulso:
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
 
+            prods = baseSoup.find('ul', {'id': 'product_list'})
+
             # Obtain the links to the other pages of the catalog (2, 3, ...)
-            titles = baseSoup.findAll('h3')[1:]
-            prices = baseSoup.findAll('span', {'class': 'price'})
+            titles = prods.findAll('h3')
+            prices = prods.findAll('span', {'class': 'price'})
 
             # Array containing the catalog pages, beginning with the original one
             pageLinks = [urlWebpage]
@@ -49,7 +51,7 @@ class Impulso:
                 productData.url = link['href']
                 productData.comparison_field = productData.url
                 
-                productData.price = int(prices[i + 1].string.replace('$', '').replace('.', ''))
+                productData.price = int(prices[i].string.replace('$', '').replace('.', ''))
                 print productData
                 productsData.append(productData)
 

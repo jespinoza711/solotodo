@@ -45,7 +45,7 @@ class PCFactory:
         print 'Getting PCFactory notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.pcfactory.cl'
-        urlBuscarProductos = '/buscar_productos.php'
+        urlBuscarProductos = '/'
         
         # Browser initialization
         browser = mechanize.Browser()
@@ -53,49 +53,51 @@ class PCFactory:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  '?sc=-24&g=424',
-                            '?sc=-24&g=449',
-                            '?sc=-24&g=410',
-                            '?sc=-24&g=437',
-                            '?sc=-24&g=436'
+        url_extensions = [  '?papa=24&categoria=424',
+                            '?papa=24&categoria=449',
+                            '?papa=24&categoria=410',
+                            '?papa=24&categoria=437',
+                            '?papa=24&categoria=436'
                             ]
-                            
+                          
+        pageLinks = []                            
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
+            pageNumber = 1
+                
+            while True:
+                completeWebpage = urlWebpage + '&pagina=' + str(pageNumber)
 
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
+                baseData = browser.open(completeWebpage).get_data()
+                baseSoup = BeautifulSoup(baseData)
+
+                ntbkLinks = baseSoup.findAll('a', { 'class' : 'vinculoNombreProd' })
+                trigger = False
+                for ntbkLink in ntbkLinks:
+                    link = urlBase + ntbkLink['href']
+                    if link in pageLinks:
+                        trigger = True
+                        break
+                    pageLinks.append(link)
+                    
+                if trigger:
+                    break
+                    
+                pageNumber += 1
+                
+        for link in pageLinks:
+            baseData = browser.open(link).get_data()
             baseSoup = BeautifulSoup(baseData)
-
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            pageNavigator = baseSoup.find("span", { "class" : "textproductos" })
-            relativePageLinks = pageNavigator.findAll('a')[1:-1];
-
-            # Array containing the catalog pages, beginning with the original one
-            pageLinks = [urlWebpage]
-
-            # Fix the relative links to the pages of the catalog and add the to the array
-            for relativePageLink in relativePageLinks:
-                pageLinks.append(urlBase + urlBuscarProductos + relativePageLink['href'])
-
-            # Array containing the links to the specific products
-            productLinks = []
-
-            # For each of the pages, retrieve the fixed links to the products and add them to the array
-            for pageLink in pageLinks:
-                rawLinks = self.extractLinks(pageLink)
-                for rawLink in rawLinks:
-	                productLinks.append(urlBase + rawLink['href'])
-
-            # Retrieve the data for each of the products and add it to the array
-            for productLink in productLinks:
-                try:
-                    prod = self.retrieveProductData(productLink)
-                except:
-                    print 'Error ' + productLink
-                    continue
-                print prod
-                productsData.append(prod)
+            productData = ProductData()
+            titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
+            productData.custom_name = titleSpan.find('strong').string
+            productData.url = link
+            productData.comparison_field = link
+            
+            priceSpan = baseSoup.find('span', { 'id' : 'simulador' })
+            productData.price = int(priceSpan.string.replace('.', ''))
+            print productData
+            productsData.append(productData)
 
         return productsData
 
