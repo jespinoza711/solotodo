@@ -25,7 +25,7 @@ class NotebookCommentForm(forms.Form):
 def store_data(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
     search_form = initialize_search_form(request.GET)
-    shns = StoreHasNotebook.objects.filter(store = store).filter(~Q(notebook = None)).order_by('latest_price')
+    shns = StoreHasNotebook.objects.filter(store = store).filter(~Q(notebook = None)).filter(is_available = True).order_by('latest_price')
         
     return render_to_response('cotizador/store_details.html', {
         'form': search_form,
