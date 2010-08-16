@@ -722,3 +722,8 @@ span.processor_table_notice {
     font-size: 12px;
     font-weight: bold;
 }
+
+td.notebook_availability_message {
+  font-size: 12px;
+  font-weight: bold;
+}
