@@ -40,21 +40,32 @@
                 <th>Tienda</th>
                 <th>Precio</th>
             </tr>
-            {% for notebook_price in notebook_prices %}
-                <tr>
-                    <td>
-                        <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.store.picture.thumbnail_tag }}</a>
-                    </td>
-                    <td>
-                        <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.prettyPrice }}</a>
-                    </td>
-                </tr>
-            {% endfor %}
+            {% ifequal notebook_prices|length 0 %}
+              <tr>
+                <td colspan="2" class="notebook_availability_message">
+                  Este notebook no está disponible actualmente
+                </td>
+              </tr>
+            {% else %}
+              {% for notebook_price in notebook_prices %}
+                  <tr>
+                      <td>
+                          <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.store.picture.thumbnail_tag }}</a>
+                      </td>
+                      <td>
+                          <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.prettyPrice }}</a>
+                      </td>
+                  </tr>
+              {% endfor %}
+            {% endifequal %}
         </table>
     </div>
-    <div id="price_suggestion_box">
-        <a href="/?advanced_controls=1&max_price={{ max_suggested_price }}&ordering=2"> ¿Qué es lo mejor que hay por este precio? </a>
-    </div>
+    
+    {% ifnotequal notebook_prices|length 0 %}
+      <div id="price_suggestion_box">
+          <a href="/?advanced_controls=1&max_price={{ max_suggested_price }}&ordering=2"> ¿Qué es lo mejor que hay por este precio? </a>
+      </div>
+    {% endifnotequal %}
     <div class="similar_notebooks">
         <h2>Notebooks similares</h2>
         {% for ntbk in similar_notebooks %}

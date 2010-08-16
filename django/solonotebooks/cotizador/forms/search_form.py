@@ -53,7 +53,41 @@ class SearchForm(forms.Form):
         'weight', 'min_price', 'max_price', 'processor_line', 'processor',
         'processor_family', 'ram_type', 'ram_frequency', 'storage_type',
         'screen_size', 'screen_resolution', 'screen_touch', 'video_card_brand',
-        'video_card_line', 'video_card', 'chipset']       
+        'video_card_line', 'video_card', 'chipset']  
+        
+    def generateTitle(self):
+        # We are going to skip the special "filters" as they don't apply
+        skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction']
+        valid_keys = []        
+        
+        # For each filter (including those not active, represented by empty)
+        for key in self.fields:
+            if key in skip_keys:
+                continue
+                
+            # If this filter requires advanced controls, but they are not activated, skip
+            if not self.advanced_controls and key in self.attribute_requiring_advanced_controls:
+                continue
+                
+            # If the query includes a min/max price, we only show the link to
+            # remove it if it is not the default min/max price
+            min_price = Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min']
+            max_price = Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max']
+            if key == 'min_price' and self.min_price == utils.roundToFloor10000(min_price):
+                continue
+            if key == 'max_price' and self.max_price == utils.roundToCeil10000(max_price):
+                continue
+    
+            # If the filter is active (i.e., its value is not empty)...
+            if key in self.__dict__ and self.__dict__[key]:
+                valid_keys.append(key)
+                
+        if len(valid_keys) == 0:
+            return 'Catálogo de notebooks'
+        elif len(valid_keys) == 1:
+            return self.generateTitleTag(valid_keys[0], self.__dict__[valid_keys[0]])
+        else: 
+            return 'Resultados de la búsqueda'
         
     def validate(self):
         fields = [[field_name, self.fields[field_name]] for field_name in self.fields]
@@ -261,6 +295,69 @@ class SearchForm(forms.Form):
         if key == 'max_price':
             value = 'Precio maximo: ' + utils.prettyPrice(pk_value)
         return value
+        
+    # Method that, given a key (e.g.: notebook_brand, processor, etc) and a
+    # particular value for that key (usually a foreign key int), generates
+    # a sensible message to alert of the current use of that filter
+    def generateTitleTag(self, key, pk_value):
+        value = ''
+        if key == 'notebook_brand':
+            value = 'Notebooks ' + unicode(NotebookBrand.objects.get(pk = pk_value))
+        if key == 'notebook_line':
+            value = 'Notebooks ' + unicode(NotebookLine.objects.get(pk = pk_value))
+        if key == 'processor_brand':
+            value = 'Notebooks con procesadores ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
+        if key == 'processor_line':
+            value = 'Notebooks con procesadores ' + unicode(ProcessorLine.objects.get(pk = pk_value))
+        if key == 'processor_line_family':
+            value = 'Notebooks con procesadores ' + unicode(ProcessorLineFamily.objects.get(pk = pk_value))
+        if key == 'processor_family':
+            value = 'Notebooks con procesadores ' + unicode(ProcessorFamily.objects.get(pk = pk_value))
+        if key == 'processor':
+            value = 'Notebooks con procesadores ' + unicode(Processor.objects.get(pk = pk_value))
+        if key == 'chipset':
+            value = 'Notebooks con chipset ' + unicode(Chipset.objects.get(pk = pk_value))
+        if key == 'ram_quantity':
+            value = 'Notebooks con ' + unicode(RamQuantity.objects.get(pk = pk_value)) + ' de RAM'
+        if key == 'ram_frequency':
+            value = 'Notebooks con memoria RAM a ' + unicode(RamFrequency.objects.get(pk = pk_value))
+        if key == 'ram_type':
+            value = 'Notebooks con memoria RAM ' + unicode(RamType.objects.get(pk = pk_value))
+        if key == 'storage_type':
+            value = 'Notebooks con almacenamiento de tipo ' + unicode(StorageDriveType.objects.get(pk = pk_value))
+        if key == 'storage_capacity':
+            value = 'Notebooks con ' + unicode(StorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
+        if key == 'screen_size':
+            value = 'Notebooks con pantallas de ' + ScreenSize.objects.get(pk = pk_value).titleText()
+        if key == 'screen_size_family':
+            value = 'Notebooks con pantallas de ' + ScreenSizeFamily.objects.get(pk = pk_value).titleText()
+        if key == 'screen_resolution':
+            value = 'Notebooks con resolucion de ' + unicode(ScreenResolution.objects.get(pk = pk_value))
+        if key == 'operating_system':
+            value = 'Notebooks con ' + unicode(OperatingSystemFamily.objects.get(pk = pk_value))
+        if key == 'video_card_brand':
+            value = 'Notebooks con tarjetas de video ' + unicode(VideoCardBrand.objects.get(pk = pk_value))
+        if key == 'video_card_line':
+            value = 'Notebooks con tarjetas de video ' + unicode(VideoCardLine.objects.get(pk = pk_value))
+        if key == 'video_card_type':
+            value = 'Notebooks con tarjetas de video ' + unicode(VideoCardType.objects.get(pk = pk_value)).lower()
+        if key == 'video_card':
+            value = 'Notebooks con tarjetas de video ' + unicode(VideoCard.objects.get(pk = pk_value))
+        if key == 'screen_touch':
+            value = 'Notebooks ' + ['sin', 'con'][pk_value - 1] + ' pantalla táctil'
+        if key == 'weight':
+            val = pk_value
+            if val == 1:
+                value = 'Notebook con peso menor a 1 kg.'
+            elif val == 5:
+                value = 'Notebooks con peso mayor a 4 kg.'
+            else:
+                value = 'Notebooks con peso entre ' + str(val - 1) + ' y ' + str(val) + ' kg.'
+        if key == 'min_price':
+            value = 'Notebooks con un precio mínimo de ' + utils.prettyPrice(pk_value)
+        if key == 'max_price':
+            value = 'Notebooks con un precio máximo de ' + utils.prettyPrice(pk_value)
+        return value        
         
     def is_valid(self):
         return True   
