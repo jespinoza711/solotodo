@@ -159,7 +159,13 @@ def main():
         analyzeStore(p)
     except:
         print('Error al obtener los notebooks de Impulso')
-        logMessage('Error al obtener los notebooks de Impulso')        
+        logMessage('Error al obtener los notebooks de Impulso') 
+    try:
+        p = Peta()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de Peta')
+        logMessage('Error al obtener los notebooks de Peta')       
                 
     updateAvailabilityAndPrice()
                 
