@@ -24,6 +24,7 @@ from fetch_scripts.syd import Syd
 from fetch_scripts.mac_online import MacOnline
 from fetch_scripts.rk_notebooks import RkNotebooks
 from fetch_scripts.impulso import Impulso
+from fetch_scripts.peta import Peta
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -50,4 +51,5 @@ __all__ = [ 'ProductData',
             'Syd',
             'MacOnline',
             'RkNotebooks',
-            'Impulso']
+            'Impulso',
+            'Peta']
