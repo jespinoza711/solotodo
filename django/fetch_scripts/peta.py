@@ -85,6 +85,7 @@ class Peta:
                     productData.custom_name = link.string.encode('ascii', 'ignore')
                     productData.comparison_field = link['href']
                     productData.price = int(ntbkCell.find('span', {'class': 'price'}).string.replace('.', '').replace('$', ''))
+                    productsData.append(productData)
                     print productData
                     pageLinks.append(link['href'])
                     

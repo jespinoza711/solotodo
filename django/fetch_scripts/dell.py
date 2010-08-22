@@ -29,7 +29,6 @@ class Dell:
                 url = urlBase + url
                 
             if 'configure' in url or 'upsell' in url:           
-                print url 
                 productData.url = url
                 productData.custom_name = productName
                 
@@ -217,7 +216,6 @@ class Dell:
                 productData = ProductData()
                 productData.custom_name = latitudeCell.find('b').string
                 productData.url = urlBase + latitudeCell.parent.find('a')['href']
-                print productData.url
                 span = latitudeCell.parent.find('span', {'class': 'pricing_retail_nodiscount_price'})
                 if not span:
                     span = latitudeCell.parent.find('span', {'class': 'pricing_sale_price'})
