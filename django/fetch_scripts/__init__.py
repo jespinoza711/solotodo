@@ -25,6 +25,7 @@ from fetch_scripts.mac_online import MacOnline
 from fetch_scripts.rk_notebooks import RkNotebooks
 from fetch_scripts.impulso import Impulso
 from fetch_scripts.peta import Peta
+from fetch_scripts.hp_online import HPOnline
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -52,4 +53,5 @@ __all__ = [ 'ProductData',
             'MacOnline',
             'RkNotebooks',
             'Impulso',
-            'Peta']
+            'Peta',
+            'HPOnline',]

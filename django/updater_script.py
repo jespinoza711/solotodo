@@ -166,6 +166,12 @@ def main():
     except:
         print('Error al obtener los notebooks de Peta')
         logMessage('Error al obtener los notebooks de Peta')       
+    try:
+        p = HPOnline()
+        analyzeStore(p)
+    except:
+        print('Error al obtener los notebooks de HP Online')
+        logMessage('Error al obtener los notebooks de HP Online')       
                 
     updateAvailabilityAndPrice()
                 
