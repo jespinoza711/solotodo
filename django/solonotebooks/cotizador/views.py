@@ -265,7 +265,7 @@ def store_notebook_redirect(request, store_notebook_id):
     store_notebook.save()
     external_visit = ExternalVisit()
     external_visit.shn = store_notebook
-    external_visit.ip_address = request.META['REMOTE_ADDR']
+    external_visit.ip_address = ''
     external_visit.date = datetime.date.today()
     external_visit.save()
     return HttpResponseRedirect(store_notebook.url)
@@ -281,7 +281,7 @@ def notebook_details(request, notebook_id):
         commentForm = NotebookCommentForm(request.POST)
         if commentForm.is_valid():
             notebook_comment = NotebookComment()
-            notebook_comment.ip_address = request.META['REMOTE_ADDR']
+            notebook_comment.ip_address = ''
             notebook_comment.date = datetime.date.today()        
             rawComment = commentForm.cleaned_data['comments']
             notebook_comment.comments = rawComment.replace('\n', '<br />')

@@ -6,8 +6,9 @@ from fetch_scripts import *
 from common_fetch_methods import *
 
 ntbks = Notebook.objects.all()
+s = Store.objects.get(name = 'Peta')
 for ntbk in ntbks:
-    shns = StoreHasNotebook.objects.filter(notebook = ntbk).filter(is_available = True).filter(is_hidden = False)
+    shns = StoreHasNotebook.objects.filter(store = s).filter(notebook = ntbk).filter(is_available = True).filter(is_hidden = False)
     stores = set()
     for shn in shns:
         if shn.store in stores:

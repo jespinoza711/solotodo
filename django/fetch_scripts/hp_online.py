@@ -24,6 +24,7 @@ class HPOnline:
         
         url_extensions = [  'productos.aspx?cmd=Z2x4eA==',
                             'productos.aspx?cmd=ZWx4eA==',
+                            'remates.aspx',
                             ]
                           
         pageLinks = []                            
