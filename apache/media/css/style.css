@@ -727,3 +727,8 @@ td.notebook_availability_message {
   font-size: 12px;
   font-weight: bold;
 }
+
+div#side_advertisement {
+    text-align: center;
+    margin-top: 20px;
+}
