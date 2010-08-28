@@ -27,7 +27,7 @@ def store_data(request, store_id):
     search_form = initialize_search_form(request.GET)
     shns = StoreHasNotebook.objects.filter(store = store).filter(~Q(notebook = None)).filter(is_available = True).order_by('latest_price')
         
-    return render_to_response('cotizador/store_details.html', {
+    return append_ads_to_response('cotizador/store_details.html', {
         'form': search_form,
         'store': store,
         'shns': shns,
@@ -37,7 +37,7 @@ def store_data(request, store_id):
 def store_index(request):
     stores = Store.objects.all()
     search_form = initialize_search_form(request.GET)
-    return render_to_response('cotizador/store_index.html', {
+    return append_ads_to_response('cotizador/store_index.html', {
         'form': search_form,
         'stores': stores,
     })  
@@ -79,7 +79,7 @@ def search(request):
     
     
     
-    return render_to_response('cotizador/search.html', {
+    return append_ads_to_response('cotizador/search.html', {
         'query': query,
         'form': search_form,
         'ntbk_results': result_notebooks,
@@ -92,14 +92,16 @@ def search(request):
         'right_page': right_page,        
     })
     
-def generate_ad():
-    return Advertisement.objects.all()[0]
+def append_ads_to_response(template, args):
+    ad = Advertisement.objects.all()[0]
+    ad.impressions += 1
+    ad.save()
+    args['side_ad'] = ad
+    return render_to_response(template, args)
     
 # View that handles the main search / browse windows, applying filters and ordering    
 def browse(request):
     search_form = initialize_search_form(request.GET)
-    
-    side_ad = generate_ad()
         
     # Grab all the candidates (those currently available)
     result_notebooks = Notebook.objects.all().filter(is_available=True)
@@ -233,7 +235,7 @@ def browse(request):
         
     result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
        
-    return render_to_response('cotizador/index.html', {
+    return append_ads_to_response('cotizador/index.html', {
         'form': search_form,
         'remove_filter_links': search_form.generateRemoveFilterLinks(),
         'result_notebooks': result_notebooks,
@@ -249,7 +251,6 @@ def browse(request):
         'ordering_direction_url': search_form.generateUrlWithoutOrderingDirection(),
         'ordering_direction': {'': 0, '-': 1}[ordering_direction],
         'ordering': str(search_form.ordering),
-        'side_ad': side_ad,
     })
     
 # View for displaying every single notebook in the DB
@@ -257,7 +258,7 @@ def all_notebooks(request):
     notebooks = Notebook.objects.all()
     search_form = initialize_search_form(request.GET)
         
-    return render_to_response('cotizador/all_notebooks.html', {
+    return append_ads_to_response('cotizador/all_notebooks.html', {
         'form': search_form,
         'result_notebooks': notebooks
     })
@@ -290,7 +291,6 @@ def ad_visited(request, advertisement_id):
         
 # View in charge of showing the details of a notebook and handle commment submissions        
 def notebook_details(request, notebook_id):
-    side_ad = generate_ad()
     notebook = get_object_or_404(Notebook, pk = notebook_id)
     notebook = Notebook.objects.all().get(pk = notebook_id)
     search_form = initialize_search_form(request.GET)
@@ -333,7 +333,7 @@ def notebook_details(request, notebook_id):
         
     max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
     
-    return render_to_response('cotizador/notebook_details.html', {
+    return append_ads_to_response('cotizador/notebook_details.html', {
         'notebook': notebook,
         'form': search_form,
         'comment_form': commentForm,
@@ -343,7 +343,6 @@ def notebook_details(request, notebook_id):
         'admin_user': admin_user,
         'similar_notebooks': notebook.findSimilarNotebooks(),
         'max_suggested_price': max_suggested_price,
-        'side_ad': side_ad,
         })
         
 # Page to login to the manager, everything is boilerplate
@@ -360,7 +359,7 @@ def login_page(request):
         return HttpResponseRedirect('/manager/news/')
     else:
         search_form = initialize_search_form(request.GET)
-        return render_to_response('cotizador/login.html', {
+        return append_ads_to_response('cotizador/login.html', {
                 'form': search_form,
             })
     
@@ -368,7 +367,7 @@ def login_page(request):
 def news(request):
     # Shows the logs for the last week
     last_logs = LogEntry.objects.filter(date__gte = datetime.date.today() - datetime.timedelta(days = 7)).order_by('-date').all()
-    return render_to_response('cotizador/manager_news.html', {
+    return append_ads_to_response('cotizador/manager_news.html', {
             'form': SearchForm(),
             'last_logs': last_logs,
         })
@@ -377,7 +376,7 @@ def news(request):
 def comments(request):
     # Shows the comments pending for aproval
     due_comments = NotebookComment.objects.filter(validated = False)
-    return render_to_response('cotizador/manager_comments.html', {
+    return append_ads_to_response('cotizador/manager_comments.html', {
             'form': SearchForm(),
             'due_comments': due_comments,
         })
@@ -386,7 +385,7 @@ def comments(request):
 def new_notebooks(request):
     # Shows the models that don't have an associated notebook in the DB (i.e.: pending)
     new_notebooks = StoreHasNotebook.objects.filter(is_available = True).filter(is_hidden = False).filter(notebook = None)
-    return render_to_response('cotizador/manager_new_notebooks.html', {
+    return append_ads_to_response('cotizador/manager_new_notebooks.html', {
             'form': SearchForm(),
             'new_notebooks': new_notebooks,
         })
@@ -416,7 +415,7 @@ def validate_all(request):
             comment.save()
         return HttpResponseRedirect('/manager')
     else:
-        return render_to_response('cotizador/login.html', {
+        return append_ads_to_response('cotizador/login.html', {
                 'form': SearchForm(),
             })
             
@@ -444,7 +443,7 @@ def processor_line_family_details(request, processor_line_family_id):
         
     search_form = initialize_search_form(request.GET)
     processors = Processor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
-    return render_to_response('cotizador/processor_line_family_details.html', {
+    return append_ads_to_response('cotizador/processor_line_family_details.html', {
                 'form': search_form,
                 'processor_line_family': processor_line_family,
                 'processors': processors,
@@ -476,7 +475,7 @@ def video_card_line_details(request, video_card_line_id):
     search_form = initialize_search_form(request.GET)
     
     video_cards = VideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
-    return render_to_response('cotizador/video_card_line_details.html', {
+    return append_ads_to_response('cotizador/video_card_line_details.html', {
                 'form': search_form,
                 'video_card_line': video_card_line,
                 'video_cards': video_cards,
@@ -490,7 +489,7 @@ def all_processor_line_families(request):
     processor_line_families = ProcessorLineFamily.objects.all()
     processors = Processor.objects.order_by('-speed_score')
     search_form = initialize_search_form(request.GET)
-    return render_to_response('cotizador/all_processor_line_families.html', {
+    return append_ads_to_response('cotizador/all_processor_line_families.html', {
                 'form': search_form,
                 'processor_line_families': processor_line_families,
                 'processors': processors
@@ -500,7 +499,7 @@ def all_video_card_lines(request):
     video_card_lines = VideoCardLine.objects.all()
     video_cards = VideoCard.objects.order_by('-speed_score')
     search_form = initialize_search_form(request.GET)
-    return render_to_response('cotizador/all_video_card_lines.html', {
+    return append_ads_to_response('cotizador/all_video_card_lines.html', {
                 'form': search_form,
                 'video_card_lines': video_card_lines,
                 'video_cards': video_cards
