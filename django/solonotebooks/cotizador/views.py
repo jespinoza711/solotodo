@@ -92,9 +92,14 @@ def search(request):
         'right_page': right_page,        
     })
     
+def generate_ad():
+    return Advertisement.objects.all()[0]
+    
 # View that handles the main search / browse windows, applying filters and ordering    
 def browse(request):
     search_form = initialize_search_form(request.GET)
+    
+    side_ad = generate_ad()
         
     # Grab all the candidates (those currently available)
     result_notebooks = Notebook.objects.all().filter(is_available=True)
@@ -244,6 +249,7 @@ def browse(request):
         'ordering_direction_url': search_form.generateUrlWithoutOrderingDirection(),
         'ordering_direction': {'': 0, '-': 1}[ordering_direction],
         'ordering': str(search_form.ordering),
+        'side_ad': side_ad,
     })
     
 # View for displaying every single notebook in the DB

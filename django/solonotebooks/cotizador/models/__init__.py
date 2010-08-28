@@ -55,6 +55,9 @@ from solonotebooks.cotizador.models.store_notebook_history import StoreNotebookH
 from solonotebooks.cotizador.models.log_entry import LogEntry
 from solonotebooks.cotizador.models.log_entry_message import LogEntryMessage
 from solonotebooks.cotizador.models.external_visit import ExternalVisit
+from solonotebooks.cotizador.models.advertisement_position import AdvertisementPosition
+from solonotebooks.cotizador.models.advertisement import Advertisement
+from solonotebooks.cotizador.models.advertisement_visit import AdvertisementVisit
 
 __all__ = [ 'ProcessorBrand', 
             'ProcessorLineFamily',
@@ -112,4 +115,7 @@ __all__ = [ 'ProcessorBrand',
             'ProcessorManufacturing',
             'ProcessorFamily',
             'ExternalVisit',
+            'AdvertisementPosition',
+            'Advertisement',
+            'AdvertisementVisit',                        
             ]
