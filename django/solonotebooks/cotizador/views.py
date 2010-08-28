@@ -275,9 +275,22 @@ def store_notebook_redirect(request, store_notebook_id):
     external_visit.date = datetime.date.today()
     external_visit.save()
     return HttpResponseRedirect(store_notebook.url)
+    
+# View that gets called when a user clicks an ad
+def ad_visited(request, advertisement_id):
+    advertisement = get_object_or_404(Advertisement, pk = advertisement_id)
+    ad_visit = AdvertisementVisit()
+    if 'HTTP_REFERER' in request.META:
+        ad_visit.referer_url = request.META['HTTP_REFERER']
+    else:
+        ad_visit.referer_url = ''
+    ad_visit.advertisement = advertisement
+    ad_visit.save()
+    return HttpResponseRedirect(advertisement.target_url)
         
 # View in charge of showing the details of a notebook and handle commment submissions        
 def notebook_details(request, notebook_id):
+    side_ad = generate_ad()
     notebook = get_object_or_404(Notebook, pk = notebook_id)
     notebook = Notebook.objects.all().get(pk = notebook_id)
     search_form = initialize_search_form(request.GET)
@@ -329,7 +342,8 @@ def notebook_details(request, notebook_id):
         'posted_comment': posted_comment,
         'admin_user': admin_user,
         'similar_notebooks': notebook.findSimilarNotebooks(),
-        'max_suggested_price': max_suggested_price
+        'max_suggested_price': max_suggested_price,
+        'side_ad': side_ad,
         })
         
 # Page to login to the manager, everything is boilerplate
