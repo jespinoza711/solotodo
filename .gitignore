@@ -1,5 +1,6 @@
 apache/media/pics/**/*
-apache/meadia/ads
+apache/media/ads
+apache/media/ads/**
 apache/robots.txt
 apache/sitemap.xml
 apache/blog/wp-config.php
