@@ -14,7 +14,11 @@
 
 {% block mainContent %}
 
-<h1>Tarjetas de video {{ video_card_line }}</h1>
+{% ifequal video_card None %}
+    <h1>Tarjetas de video {{ video_card_line }}</h1>
+{% else %}
+    <h1>Tarjeta de video {{ video_card }}</h1>
+{% endifequal %}
 
 <div>
     <h2>Ver otras líneas</h2>
