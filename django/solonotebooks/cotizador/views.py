@@ -93,9 +93,12 @@ def search(request):
     })
     
 def append_ads_to_response(template, args):
-    ad = Advertisement.objects.all()[0]
-    ad.impressions += 1
-    ad.save()
+    try:
+        ad = Advertisement.objects.all()[0]
+        ad.impressions += 1
+        ad.save()
+    except:
+        ad = None
     args['side_ad'] = ad
     return render_to_response(template, args)
     
@@ -332,6 +335,8 @@ def notebook_details(request, notebook_id):
         admin_user = False
         
     max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
+    similar_notebooks_ids = notebook.similar_notebooks.split(',')
+    similar_notebooks = [Notebook.objects.get(pk = ntbk_id) for ntbk_id in similar_notebooks_ids if ntbk_id]
     
     return append_ads_to_response('cotizador/notebook_details.html', {
         'notebook': notebook,
@@ -341,7 +346,7 @@ def notebook_details(request, notebook_id):
         'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('date'),
         'posted_comment': posted_comment,
         'admin_user': admin_user,
-        'similar_notebooks': notebook.findSimilarNotebooks(),
+        'similar_notebooks': similar_notebooks,
         'max_suggested_price': max_suggested_price,
         })
         

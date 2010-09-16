@@ -116,7 +116,7 @@
     {% else %}
         <ul>
             {% for video_card in notebook.video_card.all %}
-            <li>{{ video_card }}</li>
+            <li><a href="/video_card_line/{{video_card.line.id}}/?video_card={{video_card.id}}">{{ video_card }}</a></li>
         {% endfor %}
     </ul>
     {% endifequal %}

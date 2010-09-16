@@ -54,6 +54,8 @@ class Notebook(models.Model):
     video_port = models.ManyToManyField(VideoPort)
     storage_drive = models.ManyToManyField(StorageDrive)    
     
+    similar_notebooks = models.CommaSeparatedIntegerField(max_length = 30)
+    
     picture = ImageWithThumbnailsField(
         thumbnail = { 'size': (120, 120), },
         extra_thumbnails = {

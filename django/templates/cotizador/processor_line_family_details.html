@@ -15,7 +15,11 @@
 
 {% block mainContent %}
 
-<h1>Procesadores {{ processor_line_family }}</h1>
+{% ifequal processor None %}
+    <h1>Procesadores {{ processor_line_family }}</h1>
+{% else %}
+    <h1>Procesador {{ processor }}</h1>
+{% endifequal %}
 
 <div class="processor_details_container">
     <div class="processor_image_container">
