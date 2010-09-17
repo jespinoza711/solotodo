@@ -11,17 +11,12 @@ class SearchForm(forms.Form):
     notebook_brand = ClassChoiceField(NotebookBrand)
     notebook_line = ClassChoiceField(NotebookLine)
     processor_brand = ClassChoiceField(ProcessorBrand)
-    processor_line = ClassChoiceField(ProcessorLine)
     processor_line_family = ClassChoiceField(ProcessorLineFamily)
-    processor_family = ClassChoiceField(ProcessorFamily)
     processor = ClassChoiceField(Processor)
-    chipset = ClassChoiceField(Chipset)
     ram_quantity = ClassChoiceField(RamQuantity)
-    ram_frequency = ClassChoiceField(RamFrequency)
     ram_type = ClassChoiceField(RamType)
     storage_type = ClassChoiceField(StorageDriveType)
     storage_capacity = ClassChoiceField(StorageDriveCapacity)
-    screen_size = ClassChoiceField(ScreenSize)
     screen_size_family = ClassChoiceField(ScreenSizeFamily)
     screen_resolution = ClassChoiceField(ScreenResolution)    
     operating_system = ClassChoiceField(OperatingSystemFamily)
@@ -30,14 +25,18 @@ class SearchForm(forms.Form):
     video_card_type = ClassChoiceField(VideoCardType)
     video_card = ClassChoiceField(VideoCard)
     
-    weight_choices = (('0', 'Cualquiera'), ('1', '< 1 kg'), ('2', '1 - 2 kg'), ('3', '2 - 3 kg'), ('4', '3 - 4 kg'), ('5', '> 4 kg'))
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
     ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'), ('7', 'Nuevos modelos'))
-    screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí')) 
+    screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
+    usage_choices = (('0', 'Cualquiera'), 
+        ('1', 'Hogar / Oficina'), 
+        ('2', 'Netbook'),
+        ('3', 'Ultraportátil'),
+        ('4', 'Juegos'))  
     
-    weight = forms.ChoiceField(choices = weight_choices)
     ordering = forms.ChoiceField(choices = ordering_choices)
     screen_touch = forms.ChoiceField(choices = screen_touch_choices)
+    usage = forms.ChoiceField(choices = usage_choices)
     
     ordering_direction = forms.IntegerField(widget=forms.HiddenInput())
     advanced_controls = forms.IntegerField()
@@ -50,10 +49,10 @@ class SearchForm(forms.Form):
     
     # These attributes are used only when querying with advanced filters
     attribute_requiring_advanced_controls = ['notebook_line',
-        'weight', 'min_price', 'max_price', 'processor_line', 'processor',
-        'processor_family', 'ram_type', 'ram_frequency', 'storage_type',
-        'screen_size', 'screen_resolution', 'screen_touch', 'video_card_brand',
-        'video_card_line', 'video_card', 'chipset']  
+        'processor',
+        'ram_type', 'storage_type',
+        'screen_resolution', 'screen_touch', 'video_card_brand',
+        'video_card_line', 'video_card']
         
     def generateTitle(self):
         # We are going to skip the special "filters" as they don't apply
@@ -244,28 +243,18 @@ class SearchForm(forms.Form):
             value = 'Linea: ' + unicode(NotebookLine.objects.get(pk = pk_value))
         if key == 'processor_brand':
             value = 'Marca procesador: ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
-        if key == 'processor_line':
-            value = 'Linea esp. procesador: ' + unicode(ProcessorLine.objects.get(pk = pk_value))
         if key == 'processor_line_family':
             value = 'Linea procesador: ' + unicode(ProcessorLineFamily.objects.get(pk = pk_value))
-        if key == 'processor_family':
-            value = 'Familia procesador: ' + unicode(ProcessorFamily.objects.get(pk = pk_value))
         if key == 'processor':
             value = 'Processor: ' + unicode(Processor.objects.get(pk = pk_value))
-        if key == 'chipset':
-            value = 'Chipset: ' + unicode(Chipset.objects.get(pk = pk_value))
         if key == 'ram_quantity':
             value = 'Cantidad RAM: ' + unicode(RamQuantity.objects.get(pk = pk_value))
-        if key == 'ram_frequency':
-            value = 'Frecuencia RAM: ' + unicode(RamFrequency.objects.get(pk = pk_value))
         if key == 'ram_type':
             value = 'Tipo RAM: ' + unicode(RamType.objects.get(pk = pk_value))
         if key == 'storage_type':
             value = 'Tipo almacenamiento: ' + unicode(StorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
             value = 'Capacidad almacenamiento: ' + unicode(StorageDriveCapacity.objects.get(pk = pk_value))
-        if key == 'screen_size':
-            value = 'Tamano esp. pantalla: ' + unicode(ScreenSize.objects.get(pk = pk_value))
         if key == 'screen_size_family':
             value = 'Tamano pantalla: ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))                
         if key == 'screen_resolution':
@@ -282,14 +271,8 @@ class SearchForm(forms.Form):
             value = 'Tarjeta de video: ' + unicode(VideoCard.objects.get(pk = pk_value))
         if key == 'screen_touch':
             value = 'Pantalla tactil: ' + ['No', 'Si'][pk_value - 1]
-        if key == 'weight':
-            val = pk_value
-            if val == 1:
-                value = 'Peso menor a 1 kg.'
-            elif val == 5:
-                value = 'Peso mayor a 4 kg.'
-            else:
-                value = 'Peso entre ' + str(val - 1) + ' y ' + str(val) + ' kg.'
+        if key == 'usage':
+            value = 'Uso: ' + self.usage_choices[pk_value][1]
         if key == 'min_price':
             value = 'Precio minimo: ' + utils.prettyPrice(pk_value)
         if key == 'max_price':
@@ -307,28 +290,18 @@ class SearchForm(forms.Form):
             value = 'Notebooks ' + unicode(NotebookLine.objects.get(pk = pk_value))
         if key == 'processor_brand':
             value = 'Notebooks con procesadores ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
-        if key == 'processor_line':
-            value = 'Notebooks con procesadores ' + unicode(ProcessorLine.objects.get(pk = pk_value))
         if key == 'processor_line_family':
             value = 'Notebooks con procesadores ' + unicode(ProcessorLineFamily.objects.get(pk = pk_value))
-        if key == 'processor_family':
-            value = 'Notebooks con procesadores ' + unicode(ProcessorFamily.objects.get(pk = pk_value))
         if key == 'processor':
             value = 'Notebooks con procesadores ' + unicode(Processor.objects.get(pk = pk_value))
-        if key == 'chipset':
-            value = 'Notebooks con chipset ' + unicode(Chipset.objects.get(pk = pk_value))
         if key == 'ram_quantity':
             value = 'Notebooks con ' + unicode(RamQuantity.objects.get(pk = pk_value)) + ' de RAM'
-        if key == 'ram_frequency':
-            value = 'Notebooks con memoria RAM a ' + unicode(RamFrequency.objects.get(pk = pk_value))
         if key == 'ram_type':
             value = 'Notebooks con memoria RAM ' + unicode(RamType.objects.get(pk = pk_value))
         if key == 'storage_type':
             value = 'Notebooks con almacenamiento de tipo ' + unicode(StorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
             value = 'Notebooks con ' + unicode(StorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
-        if key == 'screen_size':
-            value = 'Notebooks con pantallas de ' + ScreenSize.objects.get(pk = pk_value).titleText()
         if key == 'screen_size_family':
             value = 'Notebooks con pantallas de ' + ScreenSizeFamily.objects.get(pk = pk_value).titleText()
         if key == 'screen_resolution':
@@ -345,14 +318,15 @@ class SearchForm(forms.Form):
             value = 'Notebooks con tarjetas de video ' + unicode(VideoCard.objects.get(pk = pk_value))
         if key == 'screen_touch':
             value = 'Notebooks ' + ['sin', 'con'][pk_value - 1] + ' pantalla táctil'
-        if key == 'weight':
-            val = pk_value
-            if val == 1:
-                value = 'Notebook con peso menor a 1 kg.'
-            elif val == 5:
-                value = 'Notebooks con peso mayor a 4 kg.'
-            else:
-                value = 'Notebooks con peso entre ' + str(val - 1) + ' y ' + str(val) + ' kg.'
+        if key == 'usage':
+            if pk_value == 1:
+                value = 'Notebooks para hogar y oficina'
+            elif pk_value == 2:
+                value = 'Netbooks'
+            elif pk_value == 3:
+                value = 'Ultraportátiles' 
+            elif pk_value == 4:
+                value = 'Notebooks para jugar'
         if key == 'min_price':
             value = 'Notebooks con un precio mínimo de ' + utils.prettyPrice(pk_value)
         if key == 'max_price':

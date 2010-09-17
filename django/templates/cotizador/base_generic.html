@@ -60,6 +60,10 @@
         <strong>Datos generales</strong>
     </div>
     <div class="filter_item">
+        <label for="id_usage">Uso</label>
+        {{ form.usage }}
+    </div>    
+    <div class="filter_item">
         <label for="id_notebook_brand">Marca</label>
         {{ form.notebook_brand }}
     </div>
@@ -67,12 +71,8 @@
         <label for="id_notebook_line">Línea</label>
         {{ form.notebook_line }}
     </div>
-    <div class="hidden_filter_item">
-        <label for="id_weight">Peso</label>
-        {{ form.weight }}
-    </div>
     
-    <div class="hidden_filter_item">
+    <div class="filter_item">
         <input id="abs_min_price" type="hidden" value="{{ form.abs_min_price }}" />
         <input id="abs_max_price" type="hidden" value="{{ form.abs_max_price }}" />
         <label>Precio</label>
@@ -94,25 +94,8 @@
         {{ form.processor_line_family }}
     </div>
     <div class="hidden_filter_item">
-        <label for="id_processor_line">Familia</label>
-        {{ form.processor_line }}
-    </div>
-    <div class="hidden_filter_item">
-        <label for="id_processor_family">Arquitectura</label>
-        {{ form.processor_family }}
-    </div>
-    <div class="hidden_filter_item">
-        <label for="id_processor">Procesador</label>    
+        <label for="id_processor">Modelo</label>    
         {{ form.processor }}
-    </div>
-    
-    <!-- Filtros de chipset -->    
-    <div class="sub_title_container, hidden_filter_item">
-        <strong>Chipset</strong>
-    </div>
-    <div class="hidden_filter_item">
-        <label for="id_processor_brand">Nombre</label>
-        {{ form.chipset }}
     </div>
     
     <!-- Filtros de RAM -->    
@@ -126,10 +109,6 @@
     <div class="hidden_filter_item">
         <label for="id_ram_type">Tipo</label>
         {{ form.ram_type }}
-    </div>
-    <div class="hidden_filter_item">
-        <label for="id_ram_frequency">Frec. min.</label>
-        {{ form.ram_frequency }}
     </div>
     
     <!-- Filtros de almacenamiento -->    
@@ -152,10 +131,6 @@
     <div class="filter_item">
         <label for="id_screen_size_family">Tamaño</label>
         {{ form.screen_size_family }}
-    </div>
-    <div class="hidden_filter_item">
-        <label for="id_screen_size">Tam. esp.</label>
-        {{ form.screen_size }}
     </div>
     <div class="hidden_filter_item">
         <label for="id_screen_resolution">Resolución</label>
