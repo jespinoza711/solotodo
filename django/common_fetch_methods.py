@@ -90,19 +90,6 @@ def saveNotebooks(ntbks, s):
             snh.date = date.today()
             snh.registry = current_shn
             snh.save()
-            
-# Method that uses a store fetch grabs its models and compares the data to DB
-def analyzeStore(p):
-    # The Store entry in the DB might not exist, so we check for that first
-    try:
-        s = Store.objects.get(name = p.name)
-    except Store.DoesNotExist:
-        s = Store()
-        s.name = p.name
-        s.save()
-        
-    ntbks = p.getNotebooks()
-    saveNotebooks(ntbks, s)
     
 # Method to generate the price change chart of a notebook and save it    
 def generateChart(ntbk):
@@ -169,28 +156,33 @@ def updateAvailabilityAndPrice():
     for shn in shns:
         print ''
         print str(shn)
-        if shn.is_available:
+        if shn.is_available and not shn.prevent_availability_change:
             print 'Buscando logs de registro'
             last_logs = shn.storenotebookhistory_set.order_by('-date')
-            last_log = last_logs[0]
-            if not last_log.date == (date.today()):
-                print 'Ultimo registro no es de hoy, dejando entrada no disponible'
-                shn.is_available = False
-                logLostModel(shn)
-                shn.save()
-            else:
-                print 'Ultimo registro es de hoy, viendo si hay cambios'
-                try:
-                    yesterday_log = last_logs[1]
-                    if yesterday_log.price != last_log.price:
-                        print 'Hubieron cambios de precio, registrando'
-                        shn.latest_price = last_log.price
-                        shn.save()
-                        logChangeModelPrice(shn, yesterday_log.price, last_log.price)
-                    else:
-                        print 'No hay cambios'
-                except IndexError:
-                    pass
+            try:    
+                last_log = last_logs[0]
+                if not last_log.date == (date.today()):
+                    print 'Ultimo registro no es de hoy, dejando entrada no disponible'
+                    shn.is_available = False
+                    logLostModel(shn)
+                    shn.save()
+                else:
+                    print 'Ultimo registro es de hoy, viendo si hay cambios'
+                    try:
+                        yesterday_log = last_logs[1]
+                        if yesterday_log.price != last_log.price:
+                            print 'Hubieron cambios de precio, registrando'
+                            shn.latest_price = last_log.price
+                            shn.save()
+                            logChangeModelPrice(shn, yesterday_log.price, last_log.price)
+                        else:
+                            print 'No hay cambios'
+                    except IndexError:
+                        pass
+            except IndexError:
+                pass
+        shn.prevent_availability_change = False
+        shn.save()
     
     print 'Actualizando precios minimos'
     for notebook in Notebook.objects.all():
@@ -232,8 +224,28 @@ def updateAvailabilityAndPrice():
             
         notebook.long_description = notebook.rawText()
         
+        '''
         similar_notebooks = [str(ntbk.id) for ntbk in notebook.findSimilarNotebooks()]
         notebook.similar_notebooks = ','.join(similar_notebooks)
+        '''
         
         notebook.save()
         generateChart(notebook)
+        
+def getStoreNotebooks(fetch_store):
+    try:
+        store = Store.objects.get(name = fetch_store.name)
+    except Store.DoesNotExist:
+        store = Store()
+        store.name = fetch_store.name
+        store.save()
+    try:
+        ntbks = fetch_store.getNotebooks()
+        saveNotebooks(ntbks, store)
+    except:
+        print('Error al obtener los notebooks de ' + store.name)
+        logMessage('Error al obtener los notebooks de ' + store.name)
+        shns = StoreHasNotebook.objects.filter(store = store)
+        for shn in shns:
+            shn.prevent_availability_change = True
+            shn.save()
