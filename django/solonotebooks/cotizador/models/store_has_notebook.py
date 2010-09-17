@@ -6,6 +6,7 @@ class StoreHasNotebook(models.Model):
     url = models.TextField()
     custom_name = models.CharField(max_length = 255)
     is_available = models.BooleanField()
+    prevent_availability_change = models.BooleanField()
     is_hidden = models.BooleanField()
     visitorCount = models.IntegerField()
     latest_price = models.IntegerField()
