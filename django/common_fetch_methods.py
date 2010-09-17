@@ -224,10 +224,10 @@ def updateAvailabilityAndPrice():
             
         notebook.long_description = notebook.rawText()
         
-        '''
+        
         similar_notebooks = [str(ntbk.id) for ntbk in notebook.findSimilarNotebooks()]
         notebook.similar_notebooks = ','.join(similar_notebooks)
-        '''
+        
         
         notebook.save()
         generateChart(notebook)
