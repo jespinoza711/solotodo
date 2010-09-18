@@ -57,7 +57,7 @@ class SearchForm(forms.Form):
     def generateTitle(self):
         # We are going to skip the special "filters" as they don't apply
         skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction']
-        valid_keys = []        
+        valid_keys = []
         
         # For each filter (including those not active, represented by empty)
         for key in self.fields:
