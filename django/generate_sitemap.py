@@ -1,8 +1,12 @@
+#-*- coding: UTF-8 -*-
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
 from xml.dom import minidom
+from django.forms import ChoiceField
 from solonotebooks.cotizador.models import *
+from solonotebooks.cotizador.forms import *
+from solonotebooks.cotizador.fields import *
 
 # Script that generates the sitemap of the catalog, including notebooks,
 # processor lines and video card lines
@@ -96,6 +100,37 @@ def main():
         procElem.appendChild(priorityElem)        
         
         rootElem.appendChild(procElem)
+        
+    sf = SearchForm()
+    for field in sf.fields:
+        field_value = sf.fields[field]
+        if isinstance(field_value, ClassChoiceField):
+            queryset = field_value.queryset
+            ids = [elem.id for elem in queryset]
+        elif isinstance(field_value, ChoiceField):
+            queryset = field_value.choices
+            ids = [elem[0] for elem in queryset]
+        else:
+            continue
+        for i in ids:
+            procElem = xml.createElement('url')
+        
+            locText = xml.createTextNode('http://www.solonotebooks.net/?advanced_controls=1&' + field + '=' + str(i))
+            locElem = xml.createElement('loc')
+            locElem.appendChild(locText)
+            procElem.appendChild(locElem)
+            
+            changeFreqText = xml.createTextNode('daily')
+            changeFreqElem = xml.createElement('changefreq')
+            changeFreqElem.appendChild(changeFreqText)
+            procElem.appendChild(changeFreqElem)
+            
+            priorityText = xml.createTextNode('1.00')
+            priorityElem = xml.createElement('priority')
+            priorityElem.appendChild(priorityText)
+            procElem.appendChild(priorityElem)        
+            
+            rootElem.appendChild(procElem)
         
     xml.appendChild(rootElem)
     
