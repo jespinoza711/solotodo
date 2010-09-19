@@ -33,6 +33,7 @@ urlpatterns = patterns('',
     (r'^manager/delete/(?P<comment_id>\d+)$', 'solonotebooks.cotizador.views.delete_comment'),
     (r'^manager/hide_notebook/(?P<store_has_notebook_id>\d+)$', 'solonotebooks.cotizador.views.hide_notebook'),
     (r'^manager/validate_all$', 'solonotebooks.cotizador.views.validate_all'),
+    (r'^manager/analyze_searches$', 'solonotebooks.cotizador.views.analyze_searches'),    
     (r'^admin/', include(admin.site.urls)),
 
 )

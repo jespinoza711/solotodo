@@ -2,14 +2,18 @@ import operator
 from django.db.models import Min, Max, Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404, HttpResponseRedirect
+from django.forms import ChoiceField
 from django import forms
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.models import utils
+from solonotebooks.cotizador.fields import *
+from solonotebooks import settings
 from utils import stringCompare
 import sys
 import cairo
+from pycha.pie import PieChart
 import datetime
 from math import ceil
 from forms.search_form import SearchForm
@@ -500,11 +504,64 @@ def all_video_card_lines(request):
                 'video_card_lines': video_card_lines,
                 'video_cards': video_cards
             })
+
+@login_required            
+def analyze_searches(request):
+    sf = SearchForm()
+    results = {}
+    for field_name, field in sf.fields.items():
+        if isinstance(field, ClassChoiceField) or isinstance(field, CustomChoiceField):
+            results[field] = {'data': {}, 'meta': {'total': 0}}
+        
+    srs = SearchRegistry.objects.all()
+    num_queries = len(srs)
+    for sr in srs:
+        key_vals = sr.query.split('&')
+        for key_val in key_vals:
+            vals = key_val.split('=')
+            field_name = vals[0]
+            field = sf.fields[field_name]
+            if not (isinstance(field, ClassChoiceField) or isinstance(field, CustomChoiceField)):
+                continue
+                
+            val = vals[1]
+            str_val = field.get_object_name(val)
+            if str_val not in results[field]['data']:
+                results[field]['data'][str_val] = [0, 0]
+            results[field]['data'][str_val][0] += 1
+            results[field]['meta']['total'] += 1
+            
+    for field, field_dict in results.items():
+        try: 
+            results[field]['meta']['percentage'] = 100.0 * results[field]['meta']['total'] / num_queries
+        except:
+            results[field]['meta']['percentage'] = 0.0
+        sub_total = results[field]['meta']['total']
+        for field_option, sub_results in field_dict['data'].items():
+            sub_results[1] = 100.0 * sub_results[0] / sub_total
+            
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 400, 400)
+        chart = PieChart(surface)
+                
+        dataSet = [(field_option, [[0, sub_results[1]]]) for field_option, sub_results in field_dict['data'].items()]
+        if dataSet:
+            chart.addDataset(dataSet)
+            chart.render()
+            surface.write_to_png(settings.MEDIA_ROOT + "/temp/" + str(field.name) + ".png")
+            results[field]['meta']['is_available'] = True
+        else:
+            results[field]['meta']['is_available'] = False
+            
+    return append_ads_to_response('cotizador/manager_analyze_searches.html', {
+                'form': sf,
+                'results': results,
+            })
             
 # Helper method to set the search_form for almost all of the views            
 def initialize_search_form(data):
     search_form = SearchForm(data)
     search_form.validate()
     search_form.is_valid()
+    search_form.save()
     
     return search_form

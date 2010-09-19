@@ -4,26 +4,27 @@ from django import forms
 from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.models import utils
-from solonotebooks.cotizador.fields import ClassChoiceField
+from solonotebooks.cotizador.fields import ClassChoiceField, CustomChoiceField
+from datetime import date
 import pdb
 
 class SearchForm(forms.Form):
-    notebook_brand = ClassChoiceField(NotebookBrand)
-    notebook_line = ClassChoiceField(NotebookLine)
-    processor_brand = ClassChoiceField(ProcessorBrand)
-    processor_line_family = ClassChoiceField(ProcessorLineFamily)
-    processor = ClassChoiceField(Processor)
-    ram_quantity = ClassChoiceField(RamQuantity)
-    ram_type = ClassChoiceField(RamType)
-    storage_type = ClassChoiceField(StorageDriveType)
-    storage_capacity = ClassChoiceField(StorageDriveCapacity)
-    screen_size_family = ClassChoiceField(ScreenSizeFamily)
-    screen_resolution = ClassChoiceField(ScreenResolution)    
-    operating_system = ClassChoiceField(OperatingSystemFamily)
-    video_card_brand = ClassChoiceField(VideoCardBrand)
-    video_card_line = ClassChoiceField(VideoCardLine)
-    video_card_type = ClassChoiceField(VideoCardType)
-    video_card = ClassChoiceField(VideoCard)
+    notebook_brand = ClassChoiceField(NotebookBrand, 'Marca')
+    notebook_line = ClassChoiceField(NotebookLine, 'Línea')
+    processor_brand = ClassChoiceField(ProcessorBrand, 'Marca procesador')
+    processor_line_family = ClassChoiceField(ProcessorLineFamily, 'Línea procesador')
+    processor = ClassChoiceField(Processor, 'Procesador')
+    ram_quantity = ClassChoiceField(RamQuantity, 'Cantidad RAM')
+    ram_type = ClassChoiceField(RamType, 'Tipo RAM')
+    storage_type = ClassChoiceField(StorageDriveType, 'Tipo almacenamiento')
+    storage_capacity = ClassChoiceField(StorageDriveCapacity, 'Cantidad almacenamiento')
+    screen_size_family = ClassChoiceField(ScreenSizeFamily, 'Tamaño pantalla')
+    screen_resolution = ClassChoiceField(ScreenResolution, 'Resolución pantalla')
+    operating_system = ClassChoiceField(OperatingSystemFamily, 'Sistema operativo')
+    video_card_brand = ClassChoiceField(VideoCardBrand, 'Marca tarjeta de video')
+    video_card_line = ClassChoiceField(VideoCardLine, 'Línea tarjeta de video')
+    video_card_type = ClassChoiceField(VideoCardType, 'Tipo tarjeta de video')
+    video_card = ClassChoiceField(VideoCard, 'Tarjeta de video')
     
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
     ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'), ('7', 'Nuevos modelos'))
@@ -34,9 +35,9 @@ class SearchForm(forms.Form):
         ('3', 'Ultraportátil'),
         ('4', 'Juegos'))  
     
-    ordering = forms.ChoiceField(choices = ordering_choices)
-    screen_touch = forms.ChoiceField(choices = screen_touch_choices)
-    usage = forms.ChoiceField(choices = usage_choices)
+    ordering = CustomChoiceField(choices = ordering_choices).set_name('Ordenamiento')
+    screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Pantalla Táctil')
+    usage = CustomChoiceField(choices = usage_choices).set_name('Uso')
     
     ordering_direction = forms.IntegerField(widget=forms.HiddenInput())
     advanced_controls = forms.IntegerField()
@@ -334,4 +335,11 @@ class SearchForm(forms.Form):
         return value        
         
     def is_valid(self):
-        return True   
+        return True 
+        
+    def save(self):
+        query = '&'.join([field + '=' + str(self.__dict__[field]) for field in self.fields if self.__dict__[field]])
+        search_registry = SearchRegistry()
+        search_registry.query = query
+        search_registry.date = date.today()
+        search_registry.save()
