@@ -109,6 +109,7 @@ def append_ads_to_response(template, args):
 # View that handles the main search / browse windows, applying filters and ordering    
 def browse(request):
     search_form = initialize_search_form(request.GET)
+    search_form.save()
         
     # Grab all the candidates (those currently available)
     result_notebooks = Notebook.objects.all().filter(is_available=True)
@@ -562,6 +563,5 @@ def initialize_search_form(data):
     search_form = SearchForm(data)
     search_form.validate()
     search_form.is_valid()
-    search_form.save()
     
     return search_form

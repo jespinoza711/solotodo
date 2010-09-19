@@ -6,6 +6,5 @@ apache/sitemap.xml
 apache/blog/wp-config.php
 django/solonotebooks/settings.py
 apache/blog/wp-content/uploads/**/**/*
-django/solonotebooks/apache/django.wsgi
 *~
 *.pyc
