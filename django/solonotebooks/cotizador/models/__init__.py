@@ -58,6 +58,7 @@ from solonotebooks.cotizador.models.external_visit import ExternalVisit
 from solonotebooks.cotizador.models.advertisement_position import AdvertisementPosition
 from solonotebooks.cotizador.models.advertisement import Advertisement
 from solonotebooks.cotizador.models.advertisement_visit import AdvertisementVisit
+from solonotebooks.cotizador.models.search_registry import SearchRegistry
 
 __all__ = [ 'ProcessorBrand', 
             'ProcessorLineFamily',
@@ -117,5 +118,6 @@ __all__ = [ 'ProcessorBrand',
             'ExternalVisit',
             'AdvertisementPosition',
             'Advertisement',
-            'AdvertisementVisit',                        
+            'AdvertisementVisit',
+            'SearchRegistry'                     
             ]
