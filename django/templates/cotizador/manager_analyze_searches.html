@@ -11,7 +11,7 @@
         {% for subkey, subvalue in value.data.items %}
             <i>{{ subkey }}:</i> {{ subvalue.0 }} ({{ subvalue.1|floatformat }}%)<br />
         {% endfor %}
-    <img src="/media/pics/temp/{{ key.name }}.png" />
+    <img src="/media/pics/temp/{{ key.name }}-{{num_queries}}.png" />
     {% endif %}    
 {% endfor %}
 

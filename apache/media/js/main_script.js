@@ -116,8 +116,148 @@ $(function() {
     $('.LS').click(function() {
         window.location.replace('/')
     });
-
+    
+    $('#error_message').slideDown().delay(3000).slideUp()
+    
+    $('#register_link').click(function(event) {
+        event.preventDefault()
+    
+        $( "#dialog-confirm" ).dialog({
+	        resizable: false,
+	        height: 240,
+	        width: 400,
+	        modal: true,
+	        buttons: [
+                {
+                    text: "Confirmar",
+                    click: function() { validate_signup_form() },
+                    'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
+                },
+                {
+                    text: "Cancelar",
+                    click: function() { $(this).dialog("close"); },
+                    'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
+                }
+            ]
+        });
+    });
+    
+    $('#regenerate_link').click(function(event) {
+        event.preventDefault()
+    
+        $( "#dialog_regenerate" ).dialog({
+	        resizable: false,
+	        height: 240,
+	        width: 400,
+	        modal: true,
+	        buttons: [
+                {
+                    text: "Confirmar",
+                    click: function() { validate_regenerate_form() },
+                    'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
+                },
+                {
+                    text: "Cancelar",
+                    click: function() { $(this).dialog("close"); },
+                    'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
+                }
+            ]
+        });
+    });
+    
 })
+
+function validate_regenerate_form() {
+    username = $.trim($('#regenerate_username').val())
+    
+    if (username == '') {
+        display_regenerate_error('Por favor ingrese un nombre de usuario')
+        return
+    }
+    
+    $('#regenerate_error').slideUp()
+    
+    $.post('/account/request_password_regeneration/', {
+        username: username,
+    },
+    function(data) {
+        response = $.parseJSON(data)
+        if (response.code == 'OK') {
+            location.reload(true)
+        } else {
+            display_regenerate_error(response.message)
+        }
+    })
+    
+}
+
+function display_regenerate_error(message) {
+    $('#regenerate_error').slideUp(function() {
+        $('#regenerate_error').html(message).slideDown()
+    })
+}
+
+function validate_signup_form() {
+    username = $.trim($('#signup_username').val())
+    
+    if (username == '') {
+        display_signup_error('Por favor ingrese un nombre de usuario')
+        return
+    }
+    
+    if (username.length > 30) {
+        display_signup_error('El nombre de usuario no puede tener mas de 30 caracteres')
+        return
+    }
+    
+    email = $.trim($('#signup_email').val())
+    if (!validate_email(email)) {
+        display_signup_error('Por favor ingrese un correo electrónico válido')
+    }
+    
+    password = $.trim($('#signup_password').val())
+    if (password == '') {
+        display_signup_error('Por favor ingrese una contraseña')
+        return
+    }
+    
+    repeat_password = $.trim($('#signup_repeat_password').val())
+    if (password != repeat_password) {
+        display_signup_error('Las contraseñas no concuerdan')
+        return
+    }    
+    
+    signup_key = $('#signup_key').val()
+    
+    $('#signup_error').slideUp()
+    
+    $.post('/account/signup/', {
+            username: username,
+            email: email,
+            password: password,
+            repeat_password: repeat_password,
+            signup_key: signup_key,
+        },
+        function(data) {
+            response = $.parseJSON(data)
+            if (response.code == 'OK') {
+                location.reload(true)
+            } else {
+                display_signup_error(response.message)
+            }
+        })
+}
+
+function validate_email(email) {
+   var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+   return reg.test(email)
+}
+
+function display_signup_error(message) {
+    $('#signup_error').slideUp(function() {
+        $('#signup_error').html(message).slideDown()
+    })
+}
 
 /* Function that takes care of keeping everything up to date when the slider
 moves, in this case that means updating the input fields for the price range

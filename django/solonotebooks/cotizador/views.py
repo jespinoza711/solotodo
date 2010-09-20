@@ -1,24 +1,46 @@
+#-*- coding: UTF-8 -*-
 import operator
+from django.template import Context
 from django.db.models import Min, Max, Q
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.utils import simplejson 
+from django.utils.http import urlquote
 from django.forms import ChoiceField
 from django import forms
-from django.contrib.auth import authenticate, login
+from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.core.validators import email_re
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.models import utils
 from solonotebooks.cotizador.fields import *
 from solonotebooks import settings
+from django.core.mail import send_mail
 from utils import stringCompare
+from django.contrib.auth.models import User
+import hashlib
 import sys
 import cairo
 from pycha.pie import PieChart
 import datetime
+from time import time
 from math import ceil
 from forms.search_form import SearchForm
 from difflib import SequenceMatcher
+from django.template.loader import get_template
 import pdb
+import os
+
+def manager_login_required(f):
+    def wrap(request, *args, **kwargs):
+        if not request.user.is_staff:
+            return HttpResponseRedirect('/account/login')
+        else:
+            return f(request, *args, **kwargs)
+    
+    wrap.__doc__ = f.__doc__
+    wrap.__name__ = f.__name__
+    return wrap
                    
 # Class that represents the form in which the users can leave comments for a notebook                    
 class NotebookCommentForm(forms.Form):
@@ -31,7 +53,7 @@ def store_data(request, store_id):
     search_form = initialize_search_form(request.GET)
     shns = StoreHasNotebook.objects.filter(store = store).filter(~Q(notebook = None)).filter(is_available = True).order_by('latest_price')
         
-    return append_ads_to_response('cotizador/store_details.html', {
+    return append_ads_to_response(request, 'cotizador/store_details.html', {
         'form': search_form,
         'store': store,
         'shns': shns,
@@ -41,7 +63,7 @@ def store_data(request, store_id):
 def store_index(request):
     stores = Store.objects.all()
     search_form = initialize_search_form(request.GET)
-    return append_ads_to_response('cotizador/store_index.html', {
+    return append_ads_to_response(request, 'cotizador/store_index.html', {
         'form': search_form,
         'stores': stores,
     })  
@@ -83,7 +105,7 @@ def search(request):
     
     
     
-    return append_ads_to_response('cotizador/search.html', {
+    return append_ads_to_response(request, 'cotizador/search.html', {
         'query': query,
         'form': search_form,
         'ntbk_results': result_notebooks,
@@ -96,7 +118,7 @@ def search(request):
         'right_page': right_page,        
     })
     
-def append_ads_to_response(template, args):
+def append_ads_to_response(request, template, args):
     try:
         ad = Advertisement.objects.all()[0]
         ad.impressions += 1
@@ -104,7 +126,17 @@ def append_ads_to_response(template, args):
     except:
         ad = None
     args['side_ad'] = ad
-    return render_to_response(template, args)
+    return append_user_to_response(request, template, args)
+    
+def append_user_to_response(request, template, args):
+    args['user'] = request.user
+    args['flash'] = request.flash
+    if 'REQUEST_URI' in request.META:
+        args['next'] = urlquote(request.META['REQUEST_URI'])
+    if 'signup_key' not in request.session:
+        request.session['signup_key'] = int(time())
+    args['signup_key'] = request.session['signup_key']
+    return render_to_response(template, args)    
     
 # View that handles the main search / browse windows, applying filters and ordering    
 def browse(request):
@@ -234,7 +266,7 @@ def browse(request):
         
     result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
        
-    return append_ads_to_response('cotizador/index.html', {
+    return append_ads_to_response(request, 'cotizador/index.html', {
         'form': search_form,
         'remove_filter_links': search_form.generateRemoveFilterLinks(),
         'result_notebooks': result_notebooks,
@@ -257,7 +289,7 @@ def all_notebooks(request):
     notebooks = Notebook.objects.all()
     search_form = initialize_search_form(request.GET)
         
-    return append_ads_to_response('cotizador/all_notebooks.html', {
+    return append_ads_to_response(request, 'cotizador/all_notebooks.html', {
         'form': search_form,
         'result_notebooks': notebooks
     })
@@ -334,7 +366,7 @@ def notebook_details(request, notebook_id):
     similar_notebooks_ids = notebook.similar_notebooks.split(',')
     similar_notebooks = [Notebook.objects.get(pk = ntbk_id) for ntbk_id in similar_notebooks_ids if ntbk_id]
     
-    return append_ads_to_response('cotizador/notebook_details.html', {
+    return append_ads_to_response(request, 'cotizador/notebook_details.html', {
         'notebook': notebook,
         'form': search_form,
         'comment_form': commentForm,
@@ -347,51 +379,229 @@ def notebook_details(request, notebook_id):
         })
         
 # Page to login to the manager, everything is boilerplate
-def login_page(request):
+def login(request):
+    next_url = '/'
+    if 'next' in request.GET:
+        next_url = request.GET['next']
+        
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(username = username, password = password)
+        user = auth.authenticate(username = username, password = password)
         
-        if user is not None and user.is_active:
-            login(request, user)
+        if user is not None:
+            auth.login(request, user)
+        else:
+            request.flash['error'] = 'Nombre de usuario o contraseña incorrectos'
+            return HttpResponseRedirect('/account/login/?next=%s' % urlquote(next_url))
     
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/manager/news/')
+        return HttpResponseRedirect(next_url)
     else:
         search_form = initialize_search_form(request.GET)
-        return append_ads_to_response('cotizador/login.html', {
+        return append_ads_to_response(request, 'cotizador/login.html', {
                 'form': search_form,
             })
-    
+            
 @login_required    
+def logout(request):
+    auth.logout(request)
+    next_url = '/'
+    if 'next' in request.GET:
+        next_url = request.GET['next']
+    return HttpResponseRedirect(next_url)
+    
+class SignupException(Exception):
+    def __init__(self, value):
+        self.parameter = value    
+        
+    def __str__(self):
+        return self.parameter
+        
+    
+def signup(request):
+    response = {'code': 'ERROR'}
+    if request.method == 'POST':
+        try:
+            username = request.POST['username']
+            if username == '':
+                raise SignupException('Debe introducir un nombre de usuario')
+            if len(username) > 30:
+                raise SignupException('El nombre de usuario debe tener menos de 30 caracteres')
+            
+            existing_users = User.objects.filter(username = username)
+            if existing_users:
+                raise SignupException('El nombre de usuario ya esta tomado')
+                
+            email = request.POST['email']
+            if not email_re.match(email):
+                raise SignupException('Por favor ingrese un correo electrónico válido')
+                
+            password = request.POST['password']
+            if password == '':
+                raise SignupException('Debe ingresar una contraseña')
+            
+            repeat_password = request.POST['repeat_password']
+            if repeat_password != password:
+                raise SignupException('Las contraseñas no concuerdan')
+            
+            signup_key = int(request.POST['signup_key'])
+            if signup_key != request.session['signup_key']:
+                raise SignupException('Error desconocido')                
+            
+            user = User.objects.create_user(username, email, password)
+            user.is_active = False
+            user.save()
+            
+            auth_user = auth.authenticate(username = username, password = password)
+            auth.login(request, auth_user)
+            
+            send_confirmation_mail(user)
+            
+            response['code'] = 'OK'
+            response['message'] = 'OK'
+            
+        except SignupException, e:
+            response['message'] = str(e)
+        except Exception, e:
+            response['message'] = 'Error desconocido'
+    else:
+        response['message'] = 'GET requests not allowed'
+
+    data = simplejson.dumps(response, indent=4)    
+    return HttpResponse(data, mimetype='application/javascript')
+    
+@login_required
+def validate_email(request):
+    try:
+        validation_key = request.GET['validation_key']
+        user = request.user
+        if user.is_active:
+            raise Exception
+        orig_validation_key = hashlib.sha224(settings.SECRET_KEY + user.username + user.email).hexdigest()
+        if validation_key != orig_validation_key:
+            raise Exception
+            
+        user.is_active = True;
+        user.save()
+        return append_ads_to_response(request, 'cotizador/validate_email.html', {
+                'success': True,
+                'form': initialize_search_form(request.GET)
+            })
+    except:
+        return append_ads_to_response(request, 'cotizador/validate_email.html', {
+                'success': False,
+                'form': initialize_search_form(request.GET)
+            })
+    
+def send_confirmation_mail(user):
+    subject = 'Confirmación correo electrónico de SoloNotebooks'
+    user_digest = hashlib.sha224(settings.SECRET_KEY + user.username + user.email).hexdigest()
+    
+    t = get_template('cotizador/confirmation_mail.html')
+    body = t.render(Context({'user': user, 'user_digest': user_digest}))
+    send_mail(subject, body, 'SoloNotebooks <vj@solonotebooks.net>', [ user.username + '<' + user.email + '>' ])
+    
+def request_password_regeneration(request):
+    response = {'code': 'ERROR'}
+    if request.method == 'POST':
+        try:
+            username = request.POST['username']
+            if username == '':
+                raise SignupException('Debe introducir un nombre de usuario')
+            
+            existing_users = User.objects.filter(username = username)
+            if not existing_users:
+                raise SignupException('El usuario no existe')
+            
+            user = existing_users[0]
+            
+            if not user.is_active:
+                raise SignupException('El correo del usuario no ha sido validado')
+            
+            send_password_regeneration_mail(user)
+            
+            response['code'] = 'OK'
+            response['message'] = 'OK'
+            
+        except SignupException, e:
+            response['message'] = str(e)
+        except Exception, e:
+            response['message'] = 'Error desconocido'
+    else:
+        response['message'] = 'GET requests not allowed'
+
+    data = simplejson.dumps(response, indent=4)    
+    return HttpResponse(data, mimetype='application/javascript')
+    
+def send_password_regeneration_mail(user):
+    subject = 'Regeneración de contraseña de SoloNotebooks'
+    user_digest = hashlib.sha224(settings.SECRET_KEY + user.email + user.username).hexdigest()
+    
+    t = get_template('cotizador/password_regeneration_mail.html')
+    body = t.render(Context({'user': user, 'user_digest': user_digest}))
+    send_mail(subject, body, 'SoloNotebooks <vj@solonotebooks.net>', [ user.username + '<' + user.email + '>' ])    
+    
+def regenerate_password(request):
+    success = False
+    try:
+        user_id = int(request.GET['id'])
+        validation_key = request.GET['validation_key']
+        user = User.objects.get(pk = user_id)
+        
+        orig_validation_key = hashlib.sha224(settings.SECRET_KEY + user.email + user.username).hexdigest()
+        if validation_key != orig_validation_key:
+            raise Exception
+            
+        new_password = User.objects.make_random_password()
+        user.set_password(new_password);
+        user.save()
+        
+        send_new_password_mail(user, new_password)
+        success = True
+    except:
+        pass
+        
+    return append_ads_to_response(request, 'cotizador/regenerate_password.html', {
+        'success': success,
+        'form': initialize_search_form(request.GET)
+    })
+
+def send_new_password_mail(user, new_password):
+    subject = 'Nueva contraseña de SoloNotebooks'
+    
+    t = get_template('cotizador/new_password_mail.html')
+    body = t.render(Context({'user': user, 'new_password': new_password}))
+    send_mail(subject, body, 'SoloNotebooks <vj@solonotebooks.net>', [ user.username + '<' + user.email + '>' ])    
+        
+@manager_login_required    
 def news(request):
     # Shows the logs for the last week
     last_logs = LogEntry.objects.filter(date__gte = datetime.date.today() - datetime.timedelta(days = 7)).order_by('-date').all()
-    return append_ads_to_response('cotizador/manager_news.html', {
+    return append_ads_to_response(request, 'cotizador/manager_news.html', {
             'form': SearchForm(),
             'last_logs': last_logs,
         })
         
-@login_required    
+@manager_login_required    
 def comments(request):
     # Shows the comments pending for aproval
     due_comments = NotebookComment.objects.filter(validated = False)
-    return append_ads_to_response('cotizador/manager_comments.html', {
+    return append_ads_to_response(request, 'cotizador/manager_comments.html', {
             'form': SearchForm(),
             'due_comments': due_comments,
         })
         
-@login_required    
+@manager_login_required    
 def new_notebooks(request):
     # Shows the models that don't have an associated notebook in the DB (i.e.: pending)
     new_notebooks = StoreHasNotebook.objects.filter(is_available = True).filter(is_hidden = False).filter(notebook = None)
-    return append_ads_to_response('cotizador/manager_new_notebooks.html', {
+    return append_ads_to_response(request, 'cotizador/manager_new_notebooks.html', {
             'form': SearchForm(),
             'new_notebooks': new_notebooks,
         })
         
-@login_required
+@manager_login_required
 def hide_notebook(request, store_has_notebook_id):
     # Makes a model invisible to the "pending" page if it is stupid (e.g. iPad)
     # or doesn't apply (combos of notebooks + printers, notebook sleeves, etc)
@@ -400,7 +610,7 @@ def hide_notebook(request, store_has_notebook_id):
     shn.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER']);
 
-@login_required            
+@manager_login_required            
 def delete_comment(request, comment_id):
     # Deletes a comment
     comment = get_object_or_404(NotebookComment, pk = comment_id)
@@ -416,7 +626,7 @@ def validate_all(request):
             comment.save()
         return HttpResponseRedirect('/manager')
     else:
-        return append_ads_to_response('cotizador/login.html', {
+        return append_ads_to_response(request, 'cotizador/login.html', {
                 'form': SearchForm(),
             })
             
@@ -444,7 +654,7 @@ def processor_line_family_details(request, processor_line_family_id):
         
     search_form = initialize_search_form(request.GET)
     processors = Processor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
-    return append_ads_to_response('cotizador/processor_line_family_details.html', {
+    return append_ads_to_response(request, 'cotizador/processor_line_family_details.html', {
                 'form': search_form,
                 'processor_line_family': processor_line_family,
                 'processors': processors,
@@ -476,7 +686,7 @@ def video_card_line_details(request, video_card_line_id):
     search_form = initialize_search_form(request.GET)
     
     video_cards = VideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
-    return append_ads_to_response('cotizador/video_card_line_details.html', {
+    return append_ads_to_response(request, 'cotizador/video_card_line_details.html', {
                 'form': search_form,
                 'video_card_line': video_card_line,
                 'video_cards': video_cards,
@@ -490,7 +700,7 @@ def all_processor_line_families(request):
     processor_line_families = ProcessorLineFamily.objects.all()
     processors = Processor.objects.order_by('-speed_score')
     search_form = initialize_search_form(request.GET)
-    return append_ads_to_response('cotizador/all_processor_line_families.html', {
+    return append_ads_to_response(request, 'cotizador/all_processor_line_families.html', {
                 'form': search_form,
                 'processor_line_families': processor_line_families,
                 'processors': processors
@@ -500,13 +710,13 @@ def all_video_card_lines(request):
     video_card_lines = VideoCardLine.objects.all()
     video_cards = VideoCard.objects.order_by('-speed_score')
     search_form = initialize_search_form(request.GET)
-    return append_ads_to_response('cotizador/all_video_card_lines.html', {
+    return append_ads_to_response(request, 'cotizador/all_video_card_lines.html', {
                 'form': search_form,
                 'video_card_lines': video_card_lines,
                 'video_cards': video_cards
             })
 
-@login_required            
+@manager_login_required            
 def analyze_searches(request):
     sf = SearchForm()
     results = {}
@@ -516,6 +726,16 @@ def analyze_searches(request):
         
     srs = SearchRegistry.objects.all()
     num_queries = len(srs)
+    
+    folder = settings.MEDIA_ROOT + '/temp/'
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except:
+            pass
+    
     for sr in srs:
         key_vals = sr.query.split('&')
         for key_val in key_vals:
@@ -541,21 +761,22 @@ def analyze_searches(request):
         for field_option, sub_results in field_dict['data'].items():
             sub_results[1] = 100.0 * sub_results[0] / sub_total
             
-        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 400, 400)
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 600, 400)
         chart = PieChart(surface)
                 
         dataSet = [(field_option, [[0, sub_results[1]]]) for field_option, sub_results in field_dict['data'].items()]
         if dataSet:
             chart.addDataset(dataSet)
             chart.render()
-            surface.write_to_png(settings.MEDIA_ROOT + "/temp/" + str(field.name) + ".png")
+            surface.write_to_png(settings.MEDIA_ROOT + "/temp/" + str(field.name) + "-" + str(num_queries) + ".png")
             results[field]['meta']['is_available'] = True
         else:
             results[field]['meta']['is_available'] = False
             
-    return append_ads_to_response('cotizador/manager_analyze_searches.html', {
+    return append_ads_to_response(request, 'cotizador/manager_analyze_searches.html', {
                 'form': sf,
                 'results': results,
+                'num_queries': num_queries,
             })
             
 # Helper method to set the search_form for almost all of the views            
