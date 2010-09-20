@@ -1,0 +1,29 @@
+{% extends "cotizador/base_browse.html" %}
+
+{% block title %}SoloNotebooks - Validación de correo{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block mainContent %}
+
+{% if success %}
+
+<h1>Validación exitosa</h1>
+
+<p>Congratulaciones, tu cuenta de correo ha sido activada correctamente</p>
+
+{% else %}
+
+<h1>Error en la validación</h1>
+
+<p>Hemos detectado un problema durante la validación, por favor verifica lo siguiente: </p>
+
+<ul>
+    <li>Estas ingresado en el sistema con el usuario asignado a la cuenta de correo que recibió el mensaje</li>
+    <li>La dirección en la barra de tu navegador es idéntica a la que te llegó a tu correo</li>
+    <li>Verifica que no hayas validado ya tu cuenta</li>    
+</ul>
+
+{% endif %}
+{% endblock %}
