@@ -25,7 +25,7 @@ from pycha.pie import PieChart
 import datetime
 from time import time
 from math import ceil
-from forms.search_form import SearchForm
+from forms import *
 from difflib import SequenceMatcher
 from django.template.loader import get_template
 import pdb
@@ -132,7 +132,8 @@ def append_user_to_response(request, template, args):
     args['user'] = request.user
     args['flash'] = request.flash
     if 'REQUEST_URI' in request.META:
-        args['next'] = urlquote(request.META['REQUEST_URI'])
+        if 'account' not in request.META['REQUEST_URI']:
+            args['next'] = urlquote(request.META['REQUEST_URI'])
     if 'signup_key' not in request.session:
         request.session['signup_key'] = int(time())
     args['signup_key'] = request.session['signup_key']
@@ -456,7 +457,7 @@ def signup(request):
             auth_user = auth.authenticate(username = username, password = password)
             auth.login(request, auth_user)
             
-            send_confirmation_mail(user)
+            send_confirmation_mail_from_template(user, 'cotizador/confirmation_mail.html')
             
             response['code'] = 'OK'
             response['message'] = 'OK'
@@ -494,11 +495,11 @@ def validate_email(request):
                 'form': initialize_search_form(request.GET)
             })
     
-def send_confirmation_mail(user):
+def send_confirmation_mail_from_template(user, template):
     subject = 'Confirmación correo electrónico de SoloNotebooks'
     user_digest = hashlib.sha224(settings.SECRET_KEY + user.username + user.email).hexdigest()
     
-    t = get_template('cotizador/confirmation_mail.html')
+    t = get_template(template)
     body = t.render(Context({'user': user, 'user_digest': user_digest}))
     send_mail(subject, body, 'SoloNotebooks <vj@solonotebooks.net>', [ user.username + '<' + user.email + '>' ])
     
@@ -786,3 +787,55 @@ def initialize_search_form(data):
     search_form.is_valid()
     
     return search_form
+
+@login_required    
+def subscriptions(request):
+    return append_ads_to_response(request, 'cotizador/account_subscriptions.html', {
+        'form': initialize_search_form(request.GET),
+    })
+    
+@login_required    
+def change_email(request):
+    if request.method == 'POST':
+        change_email_form = ChangeEmailForm(request.POST)
+        user = request.user
+        if change_email_form.validate_password_and_form(user):
+            new_email = change_email_form.cleaned_data['new_email']
+            user.email = new_email
+            user.is_active = False
+            user.save()
+            send_confirmation_mail_from_template(user, 'cotizador/change_email.html')
+            request.flash['message'] = 'Correo cambiado exitosamente, hemos enviado un mensaje para que pueda activarlo'
+            return HttpResponseRedirect('/account/')
+    else:
+        change_email_form = ChangeEmailForm()
+    return append_ads_to_response(request, 'cotizador/account_change_email.html', {
+        'form': initialize_search_form(request.GET),
+        'change_email_form': change_email_form,
+    })
+    
+@login_required    
+def change_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        user = request.user
+        if form.validate_password_and_form(user):
+            new_pass = form.cleaned_data['new_password']            
+            user.set_password(new_pass);
+            user.save()
+            request.flash['message'] = 'Contraseña cambiada exitosamente'
+            return HttpResponseRedirect('/account/')
+    else:
+        form = ChangePasswordForm()
+    return append_ads_to_response(request, 'cotizador/account_change_password.html', {
+        'form': initialize_search_form(request.GET),
+        'p_form': form, })
+        
+@login_required
+def send_confirmation_mail(request):
+    if not request.user.is_active:
+        send_confirmation_mail_from_template(request.user, 'cotizador/confirmation_mail.html')
+        request.flash['message'] = 'Correo de validación enviado'
+    else:
+        request.flash['message'] = 'Tu cuenta de correo ya está activada'
+    return HttpResponseRedirect('/account/')
