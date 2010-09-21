@@ -24,7 +24,7 @@
         {% if user.is_authenticated %}    
             <div id="logout">
                 <div id="logout_links">
-                    {{ user.username }} | Mis notebooks | <a href="/account/logout/{% if next %}?next={{ next|iriencode }}{% endif %}">Logout</a>
+                    {{ user.username }} | <a href="/account/">Mis Notebooks</a> | <a href="/account/logout/{% if next %}?next={{ next|iriencode }}{% endif %}">Logout</a>
                 </div>
             </div>            
         {% else %}
@@ -56,6 +56,7 @@
     <div class="CONMAN">
 <!-- Start SC -->
         <div class="SC2">
+        {% block alertContent %}{% endblock %}
         {% block mainContent %}{% endblock %}
         </div> 
 <!-- End SC -->

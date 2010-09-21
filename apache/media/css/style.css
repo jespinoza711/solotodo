@@ -783,12 +783,15 @@ div#side_advertisement {
     font-size: 12px;
 }
 
-#error_message {
+.error_message {
     border: 2px solid #970000;
     background-color: #FFB2B2;
     color: #970000;
     padding: 10px;
     margin: 10px;
+}
+
+#error_message {
     display: none;
 }
 
@@ -817,4 +820,27 @@ div#side_advertisement {
     margin: 5px;
     display: none;
     padding-left: 10px;
+}
+
+#custom_form label {
+    width: 200px;
+}
+
+.errorlist {
+    font-weight: bold;
+    font-size: 11px;
+    color: #970000;
+    list-style-type: none;
+}
+
+.info_message {
+    border: 2px solid #468130;
+    background-color: #83C183;
+    color: #216B1A;
+    padding: 10px;
+    margin: 10px;
+}
+
+#info_message {
+    display: none;
 }

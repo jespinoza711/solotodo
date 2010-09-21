@@ -1,4 +1,4 @@
-{% extends "cotizador/base_manager.html" %}
+{% extends "cotizador/base_browse.html" %}
 
 {% block title %}SoloNotebooks - Login{% endblock %}
 
@@ -7,7 +7,7 @@
 <h1>Sistema de Login</h1>
 
 {% if flash.error %}
-    <div id="error_message">
+    <div id="error_message" class="error_message">
         {{ flash.error }}
     </div>
 {% endif %}

@@ -118,6 +118,7 @@ $(function() {
     });
     
     $('#error_message').slideDown().delay(3000).slideUp()
+    $('#info_message').slideDown().delay(3000).slideUp()    
     
     $('#register_link').click(function(event) {
         event.preventDefault()
