@@ -43,7 +43,7 @@ select { font-family: 'Verdana', 'sans-serif'; color: #282b31; font-size: 11px;}
 .Header h1 a:visited { color:#fff; text-decoration: none; }
 .Header h1 a:hover { color:#fff; text-decoration: none; }
 .Header .Desc { color:#75c0d9; font-size: 14px; line-height: 14px; font-weight: bold; letter-spacing: -1px; font-family: 'Arial'; padding: 0px; margin: 0px 0px 0px 100px;}
-.Header .LS { position: absolute; top: 30px; left: 30px; background: url(images/Logo.png) no-repeat left top; width: 383px; height: 130px;}
+.Header .LS { position: absolute; top: 30px; left: 5px; background: url(images/Logo.png) no-repeat left top; width: 383px; height: 130px;}
 
 /* Menu +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
@@ -338,7 +338,7 @@ label {
 .notebook_thumb_image {
     float: left;
     margin-right: 15px;
-    height: 80px;
+    height: 100px;
 }
 
 .notebook_thumb_price {
@@ -740,7 +740,6 @@ div#side_advertisement {
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 10px;
-    height: 50px;
 }
 
 #login_header a:link {
@@ -785,14 +784,11 @@ div#side_advertisement {
 
 .error_message {
     border: 2px solid #970000;
-    background-color: #FFB2B2;
+    background-color: #FFD4D4;
     color: #970000;
     padding: 10px;
     margin: 10px;
-}
-
-#error_message {
-    display: none;
+    display: none;    
 }
 
 .dialog_button {
@@ -813,7 +809,7 @@ div#side_advertisement {
 
 .dialog_error {
     border: 2px solid #970000;
-    background-color: #FFB2B2;
+    background-color: #FFD4D4;
     color: #970000;
     font-size: 12px;
     padding: 2px;
@@ -835,12 +831,60 @@ div#side_advertisement {
 
 .info_message {
     border: 2px solid #468130;
-    background-color: #83C183;
+    background-color: #B4E0B4;
     color: #216B1A;
     padding: 10px;
     margin: 10px;
+    display: none;
 }
 
-#info_message {
+.top_ad {
+    float: right;
+    margin-top: 12px;
+}
+
+.ajax_loader {
     display: none;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#price_suggestion_box img {
+    margin-right: 5px;
+}
+
+#signup_text {
+    margin-bottom: 10px;
+}
+
+#subscription_list td {
+    padding: 3px;
+}
+
+#subscription_list th {
+    padding: 3px;
+}
+
+#subscription_list {
+    width: 100%;
+}
+
+.notebook_column {
+    width: 450px;
+}
+
+.subscription_notebook_min_price {
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.subscription_notebook_thumb_image {
+    float: left;
+    margin-right: 15px;
+    height: 130px;
+}
+
+.email_notification_choice_cell {
+    font-size: 16px;
 }

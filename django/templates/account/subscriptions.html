@@ -1,0 +1,63 @@
+{% extends "account/base.html" %}
+
+{% block title %}SoloNotebooks - Mis notebooks{% endblock %}
+
+{% block mainContent %}
+
+<h1>Mis notebooks</h1>
+
+{% if not notebook_subscriptions %}
+    
+    <h3>No tienes ninguna suscripción!</h3>
+
+{% else %}
+
+<table id="subscription_list">
+    <tr>
+        <th>Notebook</th>
+        <th>Notificaciones por mail</th>
+        <th>Eliminar</th>        
+    </tr>
+    {% for ns in notebook_subscriptions %}
+        <tr>
+            <td class="notebook_column">
+                <div class="notebook_container">
+                    <div class="subscription_notebook_thumb_image"><a href="notebooks/{{ ns.notebook.id }}{{ produt_link_args }}">{{ ns.notebook.picture.thumbnail_tag }}</a></div>
+                    <h2><a href="notebooks/{{ ns.notebook.id }}{{ produt_link_args }}">{{ ns.notebook }}</a></h2>
+                    <strong>Procesador:</strong> {{ ns.notebook.processor.prettyPrint }}
+                    <br />
+                    <strong>RAM: </strong> {{ ns.notebook.ram_quantity }} ({{ns.notebook.ram_type}}-{{ns.notebook.ram_frequency.value}})
+                    <br />
+                    <strong>Disco Duro: </strong> {{ ns.notebook.storage_drive.all.0 }}
+                            <br />
+                    <strong>Pantalla: </strong> 
+                    {{ ns.notebook.screen.prettyDisplay }}
+                    <br />
+                    <div class="subscription_notebook_min_price">
+                        <a href="notebooks/{{ ns.notebook.id }}{{ produt_link_args }}">
+                            {{ ns.notebook.prettyMinPrice }}
+                        </a>
+                    </div>
+                </div>
+            </td>
+            <td class="email_notification_choice_cell">
+                {% if ns.email_notifications %}
+                    <strong>Sí</strong> / 
+                    <a href="/account/disable_subscription_mail/{{ ns.id }}">No</a>
+                {% else %}
+                    <a href="/account/enable_subscription_mail/{{ ns.id }}">Sí</a> / 
+                    <strong>No</strong>
+                {% endif %}
+            </td>
+            <td>
+                <form method="post" action="/account/remove_subscription/{{ ns.id }}/">
+                    <input type="submit" value="Eliminar" />
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}
