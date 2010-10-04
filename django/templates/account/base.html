@@ -17,11 +17,6 @@
 {% endblock %}
 
 {% block alertContent %}
-{% if flash.message %}
-    <div id="info_message" class="info_message">
-        {{ flash.message }}
-    </div>
-{% endif %}
 
 {% if not user.is_active %}
     <div class="error_message">

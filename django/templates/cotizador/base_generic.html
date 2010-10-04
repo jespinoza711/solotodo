@@ -13,6 +13,9 @@
     <script type="text/javascript" src="/media/js/jquery/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="/media/js/main_script.js"></script>
     <meta name="google-site-verification" content="_LS4YqLaSpHUPBM7dg2oRWgl0lvlF3ZZrU3UT2tA2C0" />    
+    <script type="text/javascript">
+        authenticated_user = {% if user.is_authenticated %}true{% else %}false{% endif %}
+    </script>
     {% block header %}
     {% endblock %}
 </head>
@@ -38,7 +41,7 @@
                     </form>
                 </div>
                 <div id="login_options">
-                    <span id="login_span"><a href="" id="register_link">Registrarse</a> | <a href="" id="regenerate_link">¿Olvidaste tu contraseña?</a></span>
+                    <span id="login_span"><a href="" id="register_link">Registrarse</a> | <a href="" class="regenerate_link">¿Olvidaste tu contraseña?</a></span>
                 </div>
             </div>
         {% endif %}
@@ -46,6 +49,9 @@
     
     <div class="Header">
         <div class="LS"></div>
+        <div class="top_ad">
+            {{ top_ad.embedding_html|safe }}
+        </div>
     </div>
 
     <div class="Menu">
@@ -56,6 +62,22 @@
     <div class="CONMAN">
 <!-- Start SC -->
         <div class="SC2">
+        <div id="js_info_message" class="info_message"></div>
+        <div id="js_error_message" class="error_message"></div>
+        {% block flash_message %}
+            {% if flash.message %}
+                <div id="info_message" class="info_message">
+                    {{ flash.message }}
+                </div>
+            {% endif %}
+        {% endblock %}
+        {% block flash_error %}
+            {% if flash.error %}
+                <div id="error_message" class="error_message">
+                    {{ flash.error }}
+                </div>
+            {% endif %}
+        {% endblock %}
         {% block alertContent %}{% endblock %}
         {% block mainContent %}{% endblock %}
         </div> 
@@ -237,6 +259,7 @@
 {% if not user.is_authenticated %}
 <div class="dialog_form" id="dialog-confirm" title="Formulario de registro" style="display: none;">
 	<div>
+        <div id="signup_text"></div>
 	    <form id="signup_form" method="post" action="/account/signup">
 	        <div class="dialog_error" id="signup_error"></div>
 	        <div class="signup_element">
@@ -257,6 +280,9 @@
             </div>
             <input type="hidden" name="sigup_key" id="signup_key" value="{{ signup_key }}" />
 	    </form>
+        <div id="signup_ajax_loader" class="ajax_loader">
+            <img src="/media/assets/ajax-loader.gif" />
+        </div>
 	</div>
 </div>
 
@@ -272,6 +298,9 @@
                 <input type="text" name="username" id="regenerate_username" />
             </div>
 	    </form>
+        <div id="regenerate_ajax_loader" class="ajax_loader">
+            <img src="/media/assets/ajax-loader.gif" />
+        </div>	    
 	</div>
 </div>
 {% endif %}

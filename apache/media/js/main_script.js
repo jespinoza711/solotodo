@@ -122,33 +122,17 @@ $(function() {
     
     $('#register_link').click(function(event) {
         event.preventDefault()
-    
-        $( "#dialog-confirm" ).dialog({
-	        resizable: false,
-	        height: 240,
-	        width: 400,
-	        modal: true,
-	        buttons: [
-                {
-                    text: "Confirmar",
-                    click: function() { validate_signup_form() },
-                    'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
-                },
-                {
-                    text: "Cancelar",
-                    click: function() { $(this).dialog("close"); },
-                    'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
-                }
-            ]
-        });
+        show_signup_dialog('', 250, function() { 
+            location.reload(true) 
+        })
     });
     
-    $('#regenerate_link').click(function(event) {
+    $('.regenerate_link').click(function(event) {
         event.preventDefault()
     
-        $( "#dialog_regenerate" ).dialog({
+        $("#dialog_regenerate").dialog({
 	        resizable: false,
-	        height: 240,
+	        height: 230,
 	        width: 400,
 	        modal: true,
 	        buttons: [
@@ -166,7 +150,42 @@ $(function() {
         });
     });
     
+    $('.subscribe_link').click(function(event) {
+        event.preventDefault()
+        
+        subscribe(authenticated_user, false, 1)
+    })
+    
+    $('.favorite_link').click(function(event) {
+        event.preventDefault()
+        
+        subscribe(authenticated_user, false, 0)
+    })
+    
 })
+
+function show_signup_dialog(text, height, callback) {
+    $('#signup_text').html(text)
+    $('#signup_error').hide()
+    $("#dialog-confirm").dialog({
+        resizable: false,
+        height: height,
+        width: 400,
+        modal: true,
+        buttons: [
+            {
+                text: "Confirmar",
+                click: function() { validate_signup_form(callback) },
+                'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
+            },
+            {
+                text: "Cancelar",
+                click: function() { $(this).dialog("close"); },
+                'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
+            }
+        ]
+    });
+}
 
 function validate_regenerate_form() {
     username = $.trim($('#regenerate_username').val())
@@ -176,7 +195,9 @@ function validate_regenerate_form() {
         return
     }
     
-    $('#regenerate_error').slideUp()
+    $('#regenerate_error').slideUp(function() {
+        $('#regenerate_ajax_loader').slideDown()
+    })
     
     $.post('/account/request_password_regeneration/', {
         username: username,
@@ -184,7 +205,9 @@ function validate_regenerate_form() {
     function(data) {
         response = $.parseJSON(data)
         if (response.code == 'OK') {
-            location.reload(true)
+            $('#regenerate_ajax_loader').slideUp()        
+            $("#dialog_regenerate").dialog('close')
+            show_js_message('Correo de regeneración de contraseña enviado')
         } else {
             display_regenerate_error(response.message)
         }
@@ -192,13 +215,34 @@ function validate_regenerate_form() {
     
 }
 
+function show_js_error(text) {
+    $('#js_error_message').html(text).slideDown().delay(3000).slideUp()
+}
+
+function show_js_message(text) {
+    $('#js_info_message').html(text).slideDown().delay(3000).slideUp()
+}
+
 function display_regenerate_error(message) {
-    $('#regenerate_error').slideUp(function() {
-        $('#regenerate_error').html(message).slideDown()
+    $('#regenerate_ajax_loader').slideUp(function() {
+        $('#regenerate_error').slideUp(function() {
+            $('#regenerate_error').html(message).slideDown()
+        })
     })
 }
 
-function validate_signup_form() {
+function subscribe(registered, reload_on_finish, include_email) {
+    if (!registered) {
+        show_signup_dialog('Para suscribirte a un notebook primero tienes que registrarte, no te preocupes, sólo tomará un segundo', 280, function() { subscribe(true, true, include_email) })
+    } else {
+        url = '/account/add_subscription?notebook=' + notebook_id + '&email_notifications=' + include_email
+        window.location = url
+    }
+}
+
+
+
+function validate_signup_form(callback) {
     username = $.trim($('#signup_username').val())
     
     if (username == '') {
@@ -214,6 +258,7 @@ function validate_signup_form() {
     email = $.trim($('#signup_email').val())
     if (!validate_email(email)) {
         display_signup_error('Por favor ingrese un correo electrónico válido')
+        return
     }
     
     password = $.trim($('#signup_password').val())
@@ -230,23 +275,25 @@ function validate_signup_form() {
     
     signup_key = $('#signup_key').val()
     
-    $('#signup_error').slideUp()
-    
-    $.post('/account/signup/', {
-            username: username,
-            email: email,
-            password: password,
-            repeat_password: repeat_password,
-            signup_key: signup_key,
-        },
-        function(data) {
-            response = $.parseJSON(data)
-            if (response.code == 'OK') {
-                location.reload(true)
-            } else {
-                display_signup_error(response.message)
-            }
+    $('#signup_error').slideUp(function() {
+        $('#signup_ajax_loader').slideDown(function() {
+            $.post('/account/signup/', {
+                username: username,
+                email: email,
+                password: password,
+                repeat_password: repeat_password,
+                signup_key: signup_key,
+            },
+            function(data) {
+                response = $.parseJSON(data)
+                if (response.code == 'OK') {
+                    callback()
+                } else {
+                    display_signup_error(response.message)
+                }
+            })  
         })
+    })
 }
 
 function validate_email(email) {
@@ -255,7 +302,7 @@ function validate_email(email) {
 }
 
 function display_signup_error(message) {
-    $('#signup_error').slideUp(function() {
+    $('#signup_ajax_loader').slideUp(function() {
         $('#signup_error').html(message).slideDown()
     })
 }

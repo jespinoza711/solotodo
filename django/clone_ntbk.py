@@ -6,13 +6,14 @@ from solonotebooks.cotizador.models import *
 from datetime import date
 
 ''' Utility method for cloning a notebook (useful when indexing and finding a 
-model very similar - but not equal - to one already in the database '''
+model very similar - but not equal - to one already in the database) '''
 def main():
     id_ntbk = sys.argv[1]
     ntbk = Notebook.objects.get(pk = id_ntbk)
     clone_ntbk = deepcopy(ntbk)
     clone_ntbk.id = None
     clone_ntbk.date_added = date.today()
+    clone_ntbk.is_available = False
     clone_ntbk.name += ' (clone)'
     clone_ntbk.save()
 

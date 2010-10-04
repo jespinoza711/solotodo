@@ -6,12 +6,6 @@
 
 <h1>Sistema de Login</h1>
 
-{% if flash.error %}
-    <div id="error_message" class="error_message">
-        {{ flash.error }}
-    </div>
-{% endif %}
-
 <form id="signup_form" method="POST" action="">
     <label for="username">Nombre de usuario: </label> 
     <input type="text" id="username" name="username" />
@@ -21,5 +15,6 @@
     <br />
     <input type="submit" value="Ingresar" />
 </form>
+<h3><a href="" class="regenerate_link">¿Olvidaste tu contraseña?</a></h3>
 
 {% endblock %}

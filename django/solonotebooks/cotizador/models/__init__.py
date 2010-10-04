@@ -59,6 +59,8 @@ from solonotebooks.cotizador.models.advertisement_position import AdvertisementP
 from solonotebooks.cotizador.models.advertisement import Advertisement
 from solonotebooks.cotizador.models.advertisement_visit import AdvertisementVisit
 from solonotebooks.cotizador.models.search_registry import SearchRegistry
+from solonotebooks.cotizador.models.notebook_subscription import NotebookSubscription
+from solonotebooks.cotizador.models.user_profile import UserProfile
 
 __all__ = [ 'ProcessorBrand', 
             'ProcessorLineFamily',
@@ -119,5 +121,7 @@ __all__ = [ 'ProcessorBrand',
             'AdvertisementPosition',
             'Advertisement',
             'AdvertisementVisit',
-            'SearchRegistry'                     
+            'SearchRegistry',
+            'NotebookSubscription',
+            'UserProfile',
             ]
