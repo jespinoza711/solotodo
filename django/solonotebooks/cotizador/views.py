@@ -360,7 +360,7 @@ def notebook_details(request, notebook_id):
         'notebook_subscription': notebook_subscription,
         })
         
-# Page to login to the manager, everything is boilerplate
+# Page to login to the account, everything is boilerplate
 def login(request):
     next_url = '/'
     if 'next' in request.GET:
@@ -382,6 +382,25 @@ def login(request):
     else:
         return append_ads_to_response(request, 'cotizador/login.html', {
             })
+            
+def ajax_login(request):
+    response = {'code': 'ERROR'}
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username = username, password = password)
+        
+        if user is not None:
+            auth.login(request, user)
+            response['code'] = 'OK'
+            response['message'] = 'OK'
+        else:
+            response['message'] = 'Nombre de usuario o contraseña incorrectos'
+    else:
+        response['message'] = 'Error en el proceso de login'
+        
+    data = simplejson.dumps(response, indent=4)    
+    return HttpResponse(data, mimetype='application/javascript') 
             
 @login_required    
 def logout(request):
@@ -441,7 +460,7 @@ def signup(request):
                 user.delete()
             response['message'] = 'Error desconocido'
     else:
-        response['message'] = 'GET requests not allowed'
+        response['message'] = 'Error desconocido'
 
     data = simplejson.dumps(response, indent=4)    
     return HttpResponse(data, mimetype='application/javascript')
@@ -464,7 +483,7 @@ def add_subscription(request):
         notebook_subscription.email_notifications = bool(int(request.GET['email_notifications']))
         notebook_subscription.save()
         
-        request.flash['message'] = 'Suscripción creada exitosamente'
+        request.flash['message'] = 'Suscripción agregada'
     except Exception, e:
         request.flash['error'] = str(e)
 
@@ -526,7 +545,7 @@ def request_password_regeneration(request):
         except Exception, e:
             response['message'] = 'Error desconocido'
     else:
-        response['message'] = 'GET requests not allowed'
+        response['message'] = 'Error desconocido'
 
     data = simplejson.dumps(response, indent=4)    
     return HttpResponse(data, mimetype='application/javascript')

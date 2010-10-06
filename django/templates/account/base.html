@@ -19,7 +19,7 @@
 {% block alertContent %}
 
 {% if not user.is_active %}
-    <div class="error_message">
+    <div class="error_message" id="always_on_error_message">
         <strong>Tu correo electrónico aún no ha sido validado</strong>
         <p>
             Validar tu correo te permitirá suscribirte a los cambios de precio  y disponibilidad en tus notebooks favoritos, además de poder regenerar tu contraseña en caso de extravío.
