@@ -41,7 +41,7 @@ def send_email(user, subject, template, args):
     args['server_name'] = settings.SERVER_NAME
     args['user'] = user
     body = template.render(Context(args))
-    send_mail(subject, body, 'SoloNotebooks <vj@solonotebooks.net>', [ user.username + '<' + user.email + '>' ])
+    send_mail(subject, body, settings.EMAIL_FULL_ADDRESS, [ user.username + '<' + user.email + '>' ])
     
 def send_signup_mail(user):
     if user.get_profile().confirmation_mails_sent >= 5:

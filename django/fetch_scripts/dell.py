@@ -219,7 +219,10 @@ class Dell:
                 span = latitudeCell.parent.find('span', {'class': 'pricing_retail_nodiscount_price'})
                 if not span:
                     span = latitudeCell.parent.find('span', {'class': 'pricing_sale_price'})
-                productData.price = int(span.string.replace('CLP$', '').replace('.', ''))
+                try:
+                    productData.price = int(span.string.replace('CLP$', '').replace('.', ''))
+                except:
+                    continue
                 productData.comparison_field = productData.url	    
                 productsData.append(productData)
 
