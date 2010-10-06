@@ -6,15 +6,104 @@
 
 <h2>Últimos eventos</h2>
 
-{% for one_last_log in last_logs %}
-    <strong>{{ one_last_log.date }}</strong>
-    <br />
-    <ul>
-        {% for log_entry in one_last_log.logentrymessage_set.all %}
-            <li>{{ log_entry|safe }}</li>
+{% for log in last_logs %}
+    <h3>{{ log.date }}</h3>
+    
+    <h4>Nuevos modelos</h4>
+    
+    {% if log.lognewmodel_set.all %}
+        <ul>
+        {% for log_new_model in log.lognewmodel_set.all %}
+            <li>{{ log_new_model.message|safe }}</li>
         {% endfor %}
-    </ul>
-    <br />
+        </ul>    
+    {% else %}
+        <p>No se reportaron nuevos modelos</p>
+    {% endif %}
+    
+    <h4>Modelos perdidos</h4>
+    
+    {% if log.loglostmodel_set.all %}
+        <ul>
+        {% for log_lost_model in log.loglostmodel_set.all %}
+            <li>{{ log_lost_model.message|safe }}</li>
+        {% endfor %}
+        </ul>    
+    {% else %}
+        <p>No se reportaron pérdidas de modelos</p>
+    {% endif %}
+    
+    <h4>Modelos resucitados</h4>
+    
+    {% if log.logrevivemodel_set.all %}
+        <ul>
+        {% for log_revive_model in log.logrevivemodel_set.all %}
+            <li>{{ log_revive_model.message|safe }}</li>
+        {% endfor %}
+        </ul>    
+    {% else %}
+        <p>No se reportaron resucitaciones de modelos</p>
+    {% endif %}    
+    
+    <h4>Modelos con cambios de precio</h4>
+    
+    {% if log.logchangemodelprice_set.all %}
+        <ul>
+        {% for log_change_model_price in log.logchangemodelprice_set.all %}
+            <li>{{ log_change_model_price.message|safe }}</li>
+        {% endfor %}
+        </ul>    
+    {% else %}
+        <p>No se reportaron cambios de precio en los modelos</p>
+    {% endif %}
+
+    <h4>Notebooks perdidos</h4>
+
+    {% if log.loglostnotebook_set.all %}
+        <ul>
+        {% for log_lost_notebook in log.loglostnotebook_set.all %}
+            <li>{{ log_lost_notebook.message|safe }}</li>
+        {% endfor %}
+        </ul>    
+    {% else %}
+        <p>No se reportaron pérdidas de notebooks</p>
+    {% endif %}
+    
+    <h4>Notebooks resucitados</h4>
+    
+    {% if log.logrevivenotebook_set.all %}
+        <ul>
+        {% for log_revive_notebook in log.logrevivenotebook_set.all %}
+            <li>{{ log_revive_notebook.message|safe }}</li>
+        {% endfor %}
+        </ul>    
+    {% else %}
+        <p>No se reportaron resucitaciones de notebooks</p>
+    {% endif %}    
+    
+    <h4>Notebooks con cambios de precio</h4>
+    
+    {% if log.logchangenotebookprice_set.all %}
+        <ul>
+        {% for log_change_notebook_price in log.logchangenotebookprice_set.all %}
+            <li>{{ log_change_notebook_price.message|safe }}</li>
+        {% endfor %}
+        </ul>    
+    {% else %}
+        <p>No se reportaron cambios de precio en los notebooks</p>
+    {% endif %}
+
+    <h4>Errores de recepción</h4>
+    
+    {% if log.logentrymessage_set.all %}    
+        <ul>
+            {% for log_entry in log.logentrymessage_set.all %}
+                <li>{{ log_entry|safe }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No se reportaron errores</p>
+    {% endif %}        
 {% endfor %}
 
 {% endblock %}

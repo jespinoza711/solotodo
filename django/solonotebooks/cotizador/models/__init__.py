@@ -61,6 +61,13 @@ from solonotebooks.cotizador.models.advertisement_visit import AdvertisementVisi
 from solonotebooks.cotizador.models.search_registry import SearchRegistry
 from solonotebooks.cotizador.models.notebook_subscription import NotebookSubscription
 from solonotebooks.cotizador.models.user_profile import UserProfile
+from solonotebooks.cotizador.models.log_new_model import LogNewModel
+from solonotebooks.cotizador.models.log_revive_model import LogReviveModel
+from solonotebooks.cotizador.models.log_lost_model import LogLostModel
+from solonotebooks.cotizador.models.log_change_model_price import LogChangeModelPrice
+from solonotebooks.cotizador.models.log_revive_notebook import LogReviveNotebook
+from solonotebooks.cotizador.models.log_lost_notebook import LogLostNotebook
+from solonotebooks.cotizador.models.log_change_notebook_price import LogChangeNotebookPrice
 
 __all__ = [ 'ProcessorBrand', 
             'ProcessorLineFamily',
@@ -124,4 +131,11 @@ __all__ = [ 'ProcessorBrand',
             'SearchRegistry',
             'NotebookSubscription',
             'UserProfile',
+            'LogNewModel',
+            'LogReviveModel',
+            'LogChangeModelPrice',            
+            'LogLostModel',                        
+            'LogReviveNotebook',
+            'LogLostNotebook',
+            'LogChangeNotebookPrice',
             ]

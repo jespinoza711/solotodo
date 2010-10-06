@@ -11,6 +11,7 @@ them into the database, logging price changes, new models and disappearing
 models'''
 def main():
     for shn in StoreHasNotebook.objects.all():
+        print shn
         shn.prevent_availability_change = False
         shn.save()
 

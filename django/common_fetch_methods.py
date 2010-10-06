@@ -8,46 +8,10 @@ from solonotebooks.cotizador.utils import *
 
 # Method to write a raw string as a log message
 def logMessage(message):
-    try:
-        today_log = LogEntry.objects.get(date = date.today())
-    except LogEntry.DoesNotExist:
-        today_log = LogEntry()
-        today_log.date = date.today()
-        today_log.save()
-        
     log_message = LogEntryMessage()
-    log_message.logEntry = today_log
+    log_message.logEntry, created = LogEntry.objects.get_or_create(date = date.today())
     log_message.message = message
     log_message.save()
-
-# Method to log the finding of a new model at a store
-def logNewModel(shn):
-    logMessage('Nuevo modelo: ' + str(shn) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
-
-# Method to log the finding of a model that already existed ago, but was deleted    
-def logReviveModel(shn):
-    logMessage('Modelo restaurado: ' + str(shn)  + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
-
-# Method to log that a notebook in the DB is once again available
-def logReviveNotebook(ntbk):
-    logMessage('Notebook restaurado: ' + str(ntbk)  + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
-    
-# Method to log that a store has pull a model from its website
-def logLostModel(shn):
-    logMessage('Modelo perdido: ' + str(shn) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
-
-# Method to log that a notebook in the DB is no longer available
-def logLostNotebook(ntbk):
-    logMessage('Notebook perdido: ' + str(ntbk) + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
-    
-# Method to log that a store has changed the price on one of its models
-def logChangeModelPrice(shn, oldPrice, newPrice):
-    logMessage('Modelo cambia de precio: ' + str(shn) + ' de ' + str(oldPrice) + ' a ' + str(newPrice) + ' (<a href="' + shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(shn.id) + '/">Editar</a>)')
-    
-# Method to log that a notebook in the DB has changed its minimum price among
-# the stores that carry it with availability
-def logChangeNotebookPrice(ntbk, oldPrice, newPrice):
-    logMessage('Notebook cambia de precio: ' + str(ntbk) + ' de ' + str(oldPrice) + ' a ' + str(newPrice) + ' (<a href="/admin/cotizador/notebook/' + str(ntbk.id) + '/">Editar</a>)')
     
 '''Method that takes a list of ProductData objects adn the store they came from,
 checks whether they already exists, if they do, it checks for price differences,
@@ -70,12 +34,12 @@ def saveNotebooks(ntbks, s):
             current_shn.visitorCount = 0
             current_shn.latest_price = ntbk.price
             current_shn.save()
-            logNewModel(current_shn)
+            LogNewModel.new(current_shn).save()
         
         print 'Viendo si esta registrado como desaparecido'
         if not current_shn.is_available:
             print 'Estaba desaparecido, registrando resucitacion'
-            logReviveModel(current_shn)
+            LogReviveModel.new(current_shn).save()
             current_shn.is_available = True
             
         print 'Guardando estado del notebook en tienda'
@@ -91,6 +55,14 @@ def saveNotebooks(ntbks, s):
             snh.date = date.today()
             snh.registry = current_shn
             snh.save()    
+        else:
+            print 'Hay un registro existente, viendo si hay cambios de precio'
+            today_history = today_history[0]
+            if today_history.price != ntbk.price:
+                print 'Hubo un cambio de precio'
+                today_history = ntbk.price
+                today_history.save()
+                
     
 ''' Management method that keeps everything coherent (e.g. updating the price of
 the notebooks to the minimum among the stores that carry it, etc)'''
@@ -108,17 +80,20 @@ def updateAvailabilityAndPrice():
                 if not last_log.date == (date.today()):
                     print 'Ultimo registro no es de hoy, dejando entrada no disponible'
                     shn.is_available = False
-                    logLostModel(shn)
+                    LogLostModel.new(shn).save()
                     shn.save()
                 else:
                     print 'Ultimo registro es de hoy, viendo si hay cambios'
                     try:
                         yesterday_log = last_logs[1]
-                        if yesterday_log.price != last_log.price:
+                        
+                        # The second condition helps when executing the "manual_update" script many times
+                        # in a single day, preventing repeated log messages
+                        if yesterday_log.price != last_log.price and last_log.price != shn.latest_price:
                             print 'Hubieron cambios de precio, registrando'
                             shn.latest_price = last_log.price
                             shn.save()
-                            logChangeModelPrice(shn, yesterday_log.price, last_log.price)
+                            LogChangeModelPrice.new(shn, yesterday_log.price, last_log.price).save()
                         else:
                             print 'No hay cambios'
                     except IndexError:
@@ -137,7 +112,7 @@ def updateAvailabilityAndPrice():
             print 'El notebook tiene registros de disponibilidad'
             
             if new_price != notebook.min_price:
-                logChangeNotebookPrice(notebook, notebook.min_price, new_price)
+                LogChangeNotebookPrice.new(notebook, notebook.min_price, new_price).save()
                 npc = NotebookPriceChange()
                 npc.notebook = notebook
                 npc.price = new_price
@@ -146,14 +121,14 @@ def updateAvailabilityAndPrice():
                 notebook.min_price = new_price
             
             if not notebook.is_available:
-                logReviveNotebook(notebook)
+                LogReviveNotebook.new(notebook).save
 
             notebook.is_available = True
         else:
             print 'El notebook no tiene registros de disponibilidad'
 
             if notebook.is_available:
-                 logLostNotebook(notebook)
+                 LogLostNotebook.new(notebook).save()
 
             notebook.is_available = False
             
@@ -168,8 +143,8 @@ def updateAvailabilityAndPrice():
         notebook.long_description = notebook.rawText()
         
         
-        similar_notebooks = [str(ntbk.id) for ntbk in notebook.findSimilarNotebooks()]
-        notebook.similar_notebooks = ','.join(similar_notebooks)
+        #similar_notebooks = [str(ntbk.id) for ntbk in notebook.findSimilarNotebooks()]
+        #notebook.similar_notebooks = ','.join(similar_notebooks)
         
         
         notebook.save()
@@ -185,9 +160,9 @@ def getStoreNotebooks(fetch_store):
     try:
         ntbks = fetch_store.getNotebooks()
         saveNotebooks(ntbks, store)
-    except:
+    except Exception, e:
         print('Error al obtener los notebooks de ' + store.name)
-        logMessage('Error al obtener los notebooks de ' + store.name)
+        logMessage('Error al obtener los notebooks de ' + store.name + ': ' + str(e))
         shns = StoreHasNotebook.objects.filter(store = store)
         for shn in shns:
             shn.prevent_availability_change = True

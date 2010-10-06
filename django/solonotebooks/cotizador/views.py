@@ -2,9 +2,9 @@
 import os
 import sys
 import hashlib
-import datetime
 import cairo
 import operator
+from datetime import date, timedelta
 from time import time
 from math import ceil
 from pycha.pie import PieChart
@@ -283,7 +283,7 @@ def store_notebook_redirect(request, store_notebook_id):
     external_visit = ExternalVisit()
     external_visit.shn = store_notebook
     external_visit.ip_address = ''
-    external_visit.date = datetime.date.today()
+    external_visit.date = date.today()
     external_visit.save()
     return HttpResponseRedirect(store_notebook.url)
     
@@ -310,7 +310,7 @@ def notebook_details(request, notebook_id):
         if commentForm.is_valid():
             notebook_comment = NotebookComment()
             notebook_comment.ip_address = ''
-            notebook_comment.date = datetime.date.today()        
+            notebook_comment.date = date.today()        
             rawComment = commentForm.cleaned_data['comments']
             notebook_comment.comments = rawComment.replace('\n', '<br />')
             notebook_comment.nickname = commentForm.cleaned_data['nickname']
@@ -562,7 +562,8 @@ def regenerate_password(request):
 @manager_login_required    
 def news(request):
     # Shows the logs for the last week
-    last_logs = LogEntry.objects.filter(date__gte = datetime.date.today() - datetime.timedelta(days = 7)).order_by('-date').all()
+    today = date.today()
+    last_logs = LogEntry.objects.filter(date__gte = today - timedelta(days = 1)).order_by('-date').all()
     return append_ads_to_response(request, 'manager/news.html', {
             'last_logs': last_logs,
         })

@@ -20,7 +20,7 @@ class Wei:
 
 	    priceCells = soup.findAll("td", { "class" : "TXTB" })
 	    price = int(priceCells[1].string.strip().replace(',', ''))
-	    productData.custom_name = title
+	    productData.custom_name = title.encode('ascii','ignore')
 	    productData.price = price
 	    productData.url = productUrl
 	    productData.comparison_field = productData.url

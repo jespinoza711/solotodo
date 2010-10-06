@@ -44,6 +44,7 @@ class PCFactory:
                 trigger = False
                 for ntbkLink in ntbkLinks:
                     link = urlBase + ntbkLink['href']
+                    link = link.encode('ascii', 'ignore')
                     if link in pageLinks:
                         trigger = True
                         break
@@ -59,7 +60,7 @@ class PCFactory:
             baseSoup = BeautifulSoup(baseData)
             productData = ProductData()
             titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
-            productData.custom_name = titleSpan.find('strong').string
+            productData.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
             productData.url = link
             productData.comparison_field = link
             
