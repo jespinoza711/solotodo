@@ -280,6 +280,8 @@
             </div>
             <input type="hidden" name="sigup_key" id="signup_key" value="{{ signup_key }}" />
 	    </form>
+	    <br />
+	    <a href="#" id="already_registered_link">¿Ya estás registrado?</a>
         <div id="signup_ajax_loader" class="ajax_loader">
             <img src="/media/assets/ajax-loader.gif" />
         </div>
@@ -299,6 +301,25 @@
             </div>
 	    </form>
         <div id="regenerate_ajax_loader" class="ajax_loader">
+            <img src="/media/assets/ajax-loader.gif" />
+        </div>	    
+	</div>
+</div>
+
+<div class="dialog_form" id="dialog_login" title="Login" style="display: none;">
+	<div>
+	    <form id="login_form" method="post" action="/account/ajax_login">
+	        <div class="dialog_error" id="login_error"></div>
+	        <div class="signup_element">
+                <label for="username" maxlength="30">Nombre de usuario: </label> 
+                <input type="text" name="username" id="login_username" />
+            </div>
+	        <div class="signup_element">
+                <label for="password">Contraseña: </label> 
+                <input type="text" name="password" id="login_password" />
+            </div>            
+	    </form>
+        <div id="login_ajax_loader" class="ajax_loader">
             <img src="/media/assets/ajax-loader.gif" />
         </div>	    
 	</div>
