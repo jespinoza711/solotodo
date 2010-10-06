@@ -111,24 +111,27 @@ def updateAvailabilityAndPrice():
         if new_price:
             print 'El notebook tiene registros de disponibilidad'
             
+            log_price_change = True
+            if not notebook.is_available:
+                LogReviveNotebook.new(notebook).send_notification_mails()
+                log_price_change = False
+            
             if new_price != notebook.min_price:
-                LogChangeNotebookPrice.new(notebook, notebook.min_price, new_price).save()
+                if log_price_change:
+                    LogChangeNotebookPrice.new(notebook, notebook.min_price, new_price).send_notification_mails()
                 npc = NotebookPriceChange()
                 npc.notebook = notebook
                 npc.price = new_price
                 npc.date = date.today()
                 npc.save()
                 notebook.min_price = new_price
-            
-            if not notebook.is_available:
-                LogReviveNotebook.new(notebook).save
 
             notebook.is_available = True
         else:
             print 'El notebook no tiene registros de disponibilidad'
 
             if notebook.is_available:
-                 LogLostNotebook.new(notebook).save()
+                 LogLostNotebook.new(notebook).send_notification_mails()
 
             notebook.is_available = False
             

@@ -6,6 +6,7 @@ class NotebookSubscription(models.Model):
     notebook = models.ForeignKey(Notebook)
     user = models.ForeignKey(User)
     email_notifications = models.BooleanField()
+    is_active = models.BooleanField(default = True)
     
     def __unicode__(self):
         return self.user.username + ' - ' + unicode(self.notebook)
