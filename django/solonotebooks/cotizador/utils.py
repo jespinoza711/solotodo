@@ -151,7 +151,7 @@ def generateChart(ntbk):
 def set_subscription_mail_notifications(request, subscription_id, new_mail_notification_status):
     try:
         subscription = NotebookSubscription.objects.get(pk = subscription_id)
-        if subscription.user != request.user:
+        if subscription.user != request.user or not subscription.is_active:
             raise SubscriptionException('Error de seguridad')
         subscription.email_notifications = new_mail_notification_status
         subscription.save()

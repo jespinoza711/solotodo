@@ -345,7 +345,7 @@ def notebook_details(request, notebook_id):
     similar_notebooks = [Notebook.objects.get(pk = ntbk_id) for ntbk_id in similar_notebooks_ids if ntbk_id]
     
     try:
-        notebook_subscription = NotebookSubscription.objects.filter(user = request.user, notebook = notebook)[0]
+        notebook_subscription = NotebookSubscription.objects.filter(user = request.user, notebook = notebook, is_active = True)[0]
     except:
         notebook_subscription = None
     
@@ -455,6 +455,7 @@ def add_subscription(request):
         existing_notebook_subscriptions = NotebookSubscription.objects.filter(user = user).filter(notebook = notebook)
         if existing_notebook_subscriptions:
             notebook_subscription = existing_notebook_subscriptions[0]
+            notebook_subscription.is_active = True
         else:
             notebook_subscription = NotebookSubscription()
             notebook_subscription.user = user
@@ -752,7 +753,7 @@ def analyze_searches(request):
 
 @login_required    
 def subscriptions(request):
-    notebook_subscriptions = NotebookSubscription.objects.filter(user = request.user)
+    notebook_subscriptions = NotebookSubscription.objects.filter(user = request.user, is_active = True)
     return append_ads_to_response(request, 'account/subscriptions.html', {
         'notebook_subscriptions': notebook_subscriptions,
     })
@@ -773,7 +774,8 @@ def remove_subscription(request, subscription_id):
         subscription = NotebookSubscription.objects.get(pk = subscription_id)
         if subscription.user != request.user:
             raise SubscriptionException('Error de seguridad')
-        subscription.delete()
+        subscription.is_active = False;
+        subscription.save()
     except SubscriptionException, e:
         request.flash['error'] = str(e)
     except Exception, e:

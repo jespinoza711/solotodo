@@ -68,6 +68,9 @@ from solonotebooks.cotizador.models.log_change_model_price import LogChangeModel
 from solonotebooks.cotizador.models.log_revive_notebook import LogReviveNotebook
 from solonotebooks.cotizador.models.log_lost_notebook import LogLostNotebook
 from solonotebooks.cotizador.models.log_change_notebook_price import LogChangeNotebookPrice
+from solonotebooks.cotizador.models.mail_change_notebook_price import MailChangeNotebookPrice
+from solonotebooks.cotizador.models.mail_lost_notebook import MailLostNotebook
+from solonotebooks.cotizador.models.mail_revive_notebook import MailReviveNotebook
 
 __all__ = [ 'ProcessorBrand', 
             'ProcessorLineFamily',
@@ -138,4 +141,7 @@ __all__ = [ 'ProcessorBrand',
             'LogReviveNotebook',
             'LogLostNotebook',
             'LogChangeNotebookPrice',
+            'MailChangeNotebookPrice',
+            'MailLostNotebook', 
+            'MailReviveNotebook', 
             ]
