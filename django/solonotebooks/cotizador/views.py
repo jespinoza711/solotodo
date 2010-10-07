@@ -54,7 +54,12 @@ def store_index(request):
 # View for handling the search of notebooks using keywords    
 def search(request):
     # The keywords
-    query = request.GET['search_keywords']
+    try:
+        query = request.GET['search_keywords']
+        if not query:
+            return HttpResponseRedirect('/')
+    except:
+        return HttpResponseRedirect('/')
     
     # We grab all the candidates (those currently available)
     available_notebooks = Notebook.objects.all().filter(is_available=True)
@@ -309,19 +314,24 @@ def notebook_details(request, notebook_id):
         commentForm = NotebookCommentForm(request.POST)
         if commentForm.is_valid():
             notebook_comment = NotebookComment()
-            notebook_comment.ip_address = ''
             notebook_comment.date = date.today()        
             rawComment = commentForm.cleaned_data['comments']
             notebook_comment.comments = rawComment.replace('\n', '<br />')
-            notebook_comment.nickname = commentForm.cleaned_data['nickname']
             notebook_comment.notebook = notebook
+            if not request.user.is_anonymous():
+                notebook_comment.user = request.user
+                notebook_comment.validated = True
+            else:
+                notebook_comment.nickname = commentForm.cleaned_data['nickname']
+                request.session['posted_comment'] = True
+                
             notebook_comment.save()
-            request.session['posted_comment'] = True
             return HttpResponseRedirect(request.META['HTTP_REFERER']);
     else:
         commentForm = NotebookCommentForm()
         
-    # Check if this is the redirect response generated after submitting a comment
+        
+    # Check if this is the redirect response generated after submitting an anonymous comment
     # If it is, show a message that the comment needs to be validated and hide
     # the form (to prevent users from posting again feeling that it didn't work)
     posted_comment = False
@@ -333,12 +343,6 @@ def notebook_details(request, notebook_id):
     
     # Find the stores with this notebook available
     stores_with_notebook_available = notebook.storehasnotebook_set.all().filter(is_available=True).filter(is_hidden = False).order_by('latest_price')
-    
-    # If the user is admin, there are some link to allow the editing of the ntbk
-    if request.user.is_authenticated():
-        admin_user = True
-    else:
-        admin_user = False
         
     max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
     similar_notebooks_ids = notebook.similar_notebooks.split(',')
@@ -355,7 +359,6 @@ def notebook_details(request, notebook_id):
         'notebook_prices': stores_with_notebook_available,
         'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('date'),
         'posted_comment': posted_comment,
-        'admin_user': admin_user,
         'similar_notebooks': similar_notebooks,
         'notebook_subscription': notebook_subscription,
         })
@@ -485,7 +488,7 @@ def add_subscription(request):
         
         request.flash['message'] = 'Suscripción agregada'
     except Exception, e:
-        request.flash['error'] = str(e)
+        request.flash['error'] = 'Error desconocido'
 
     return HttpResponseRedirect('/notebooks/%d' % notebook.id )    
     
@@ -592,8 +595,10 @@ def news(request):
 def comments(request):
     # Shows the comments pending for aproval
     due_comments = NotebookComment.objects.filter(validated = False)
+    app_comments = NotebookComment.objects.filter(validated = True).filter(date__gte = date.today() - timedelta(days = 2)).order_by('-date').all()
     return append_ads_to_response(request, 'manager/comments.html', {
             'due_comments': due_comments,
+            'app_comments': app_comments,            
         })
         
 @manager_login_required    

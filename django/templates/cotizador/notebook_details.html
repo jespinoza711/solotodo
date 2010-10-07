@@ -249,12 +249,18 @@
     {% else %}
         {% for comment in notebook_comments %}
             <div class="notebok_comment">
-                <span class="comment_nickname">{{ comment.nickname }}</span>
+                <span class="comment_nickname">
+                    {% if comment.user %}
+                        {{ comment.user.username}}
+                    {% else %}
+                        {{ comment.nickname }}
+                    {% endif %}
+                </span>
                 <span class="comment_date">{{ comment.date }}</span>
                 <div class="comment_body">
                 {{ comment.comments|safe }}
                 </div>
-                {% if admin_user %}
+                {% if user.is_staff %}
                     <small><a href="/manager/delete/{{ comment.id }}">Eliminar</a></small>
                 {% endif %}
                 <hr />
@@ -264,18 +270,23 @@
     </div>
     <div id="notebook_comment_add">
     {% if posted_comment %}
-    <strong>Gracias por tus comentarios, dentro de unos minutos será publicado</strong>
+    <strong>Gracias por tus comentarios, dentro de unos minutos será publicado. Recuerda que <a href="#" class="register_link">si te registras</a> tus próximos mensajes aparecerán inmediatamente.</strong>
     {% else %}
         ¿Preguntas, comentarios o sugerencias de este notebook? Deja tu mensaje!
         <form action="" id="comment_form" method="post">
             <div>
                 <span class="comment_form_label">Nombre:</span>
-                {{ comment_form.nickname }}
-                <br />
-                <span class="comment_form_label">Comentarios:</span>
-                <br />
-                {{ comment_form.comments }}
-                <br />
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% else %}
+                    {{ comment_form.nickname }}
+                {% endif %}
+                <p>
+                    <span class="comment_form_label">Comentarios:</span>
+                    <br />
+                    {{ comment_form.comments }}
+                    <br />
+                </p>
                 <input type="submit" value="Enviar" />
             </div>
         </form>
