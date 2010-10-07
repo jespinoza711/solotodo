@@ -120,7 +120,7 @@ $(function() {
     $('#error_message').slideDown().delay(3000).slideUp()
     $('#info_message').slideDown().delay(3000).slideUp()    
     
-    $('#register_link').click(function(event) {
+    $('.register_link').click(function(event) {
         event.preventDefault()
         show_signup_dialog('', 270, false, function() { 
             location.reload(true) 

@@ -1,13 +1,14 @@
 from django.db import models
 from django.forms import ModelForm
+from django.contrib.auth.models import User
 from solonotebooks.cotizador.models import Notebook
 
 class NotebookComment(models.Model):
     validated = models.BooleanField()
-    ip_address = models.IPAddressField()
     comments = models.TextField()
     date = models.DateField()
-    nickname = models.CharField(max_length = 255)
+    nickname = models.CharField(max_length = 255, null = True, blank = True)
+    user = models.ForeignKey(User, null = True, blank = True)
     
     notebook = models.ForeignKey(Notebook)
     
