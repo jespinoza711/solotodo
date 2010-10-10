@@ -68,7 +68,7 @@ class Magens:
             for i in range(len(nameDivs)):
                 productData = ProductData()
                 link = nameDivs[i].find('a')
-                productData.custom_name = link.string.strip()
+                productData.custom_name = link.string.encode('ascii', 'ignore').strip()
                 productData.url = link['href'].split('?osCsid')[0]
                 productData.comparison_field = productData.url
                 productData.price = int(priceSpans[i].string.replace('$', '').replace(',', ''))

@@ -19,7 +19,7 @@ class LogReviveNotebook(models.Model):
         return str(self.log_entry.date) + ' - ' + str(self.notebook)
         
     def message(self):
-        return str(self.notebook)  + ' (<a href="/admin/cotizador/notebook/' + str(self.notebook.id) + '/">Editar</a>)'
+        return str(self.notebook)  + ' (<a href="/notebooks/' + str(self.notebook.id) + '/">Link</a> / <a href="/admin/cotizador/notebook/' + str(self.notebook.id) + '/">Editar</a>)'
         
     def send_notification_mails(self):
             from solonotebooks.cotizador.models import MailReviveNotebook

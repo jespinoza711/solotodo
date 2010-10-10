@@ -17,7 +17,7 @@ class LogNewModel(models.Model):
         return str(self.log_entry.date) + ' - ' + str(self.shn)
         
     def message(self):
-        return str(self.shn) + ' (<a href="' + self.shn.url + '">Link</a>) (<a href="/admin/cotizador/storehasnotebook/' + str(self.shn.id) + '/">Editar</a>)'
+        return str(self.shn) + ' (<a href="' + self.shn.url + '">Link</a> / <a href="/admin/cotizador/storehasnotebook/' + str(self.shn.id) + '/">Editar</a>)'
     
     class Meta:
         app_label = 'cotizador'

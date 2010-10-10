@@ -24,7 +24,7 @@ class LogChangeNotebookPrice(models.Model):
         return str(self.log_entry.date) + ' - ' + str(self.notebook)
         
     def message(self):
-        return str(self.notebook) + ' de ' + prettyPrice(self.old_price, '') + ' a ' + prettyPrice(self.new_price, '') + ' (<a href="/admin/cotizador/notebook/' + str(self.notebook.id) + '/">Editar</a>)'
+        return str(self.notebook) + ' de ' + prettyPrice(self.old_price, '') + ' a ' + prettyPrice(self.new_price, '') + ' (<a href="/notebooks/' + str(self.notebook.id) + '/">Link</a> / <a href="/admin/cotizador/notebook/' + str(self.notebook.id) + '/">Editar</a>)'
         
     def send_notification_mails(self):
         from solonotebooks.cotizador.models import MailChangeNotebookPrice
