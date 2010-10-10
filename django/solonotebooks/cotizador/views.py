@@ -719,7 +719,7 @@ def analyze_searches(request):
         if isinstance(field, ClassChoiceField) or isinstance(field, CustomChoiceField):
             results[field] = {'data': {}, 'meta': {'total': 0}}
         
-    srs = SearchRegistry.objects.all()
+    srs = SearchRegistry.objects.filter(date__gte = date.today() - timedelta(days = 7)) 
     num_queries = len(srs)
     
     folder = settings.MEDIA_ROOT + '/temp/'

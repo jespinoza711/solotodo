@@ -6,6 +6,14 @@ from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.utils import *
 
+# Dynamically loads a class
+def import_store(name):
+    mod = __import__('fetch_scripts.' + name)
+    components = name.split('.')
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    return mod
+
 # Method to write a raw string as a log message
 def logMessage(message):
     log_message = LogEntryMessage()

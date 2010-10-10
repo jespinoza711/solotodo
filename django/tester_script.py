@@ -4,10 +4,11 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 from datetime import datetime
 from fetch_scripts import *
 from common_fetch_methods import *
+import sys
 
 # Script to test the fetch script for a store
 def main():
-    p = PCFactory()
+    p = eval(sys.argv[1] + '()')
     p.getNotebooks()
                 
 if __name__ == '__main__':

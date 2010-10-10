@@ -1,3 +1,4 @@
+import sys
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
@@ -7,7 +8,7 @@ from common_fetch_methods import *
 
 # Script to test the fetch script for a store
 def main():
-    p = Sistemax()
+    p = eval(sys.argv[1] + '()')
     getStoreNotebooks(p)
     
     updateAvailabilityAndPrice()    
