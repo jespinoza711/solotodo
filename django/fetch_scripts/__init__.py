@@ -26,6 +26,7 @@ from fetch_scripts.rk_notebooks import RkNotebooks
 from fetch_scripts.impulso import Impulso
 from fetch_scripts.peta import Peta
 from fetch_scripts.hp_online import HPOnline
+from fetch_scripts.portatil_chile import PortatilChile
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -54,4 +55,5 @@ __all__ = [ 'ProductData',
             'RkNotebooks',
             'Impulso',
             'Peta',
-            'HPOnline',]
+            'HPOnline',
+            'PortatilChile']
