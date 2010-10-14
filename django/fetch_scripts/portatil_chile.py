@@ -39,6 +39,7 @@ class PortatilChile:
             productData.comparison_field = productData.url
             priceData = productCell.findAll('strong')[1].text
             productData.price = int(priceData.replace('.', '').replace('$', ''))
+            productsData.append(productData)
             print productData
 
         return productsData
