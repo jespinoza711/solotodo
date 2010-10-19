@@ -27,6 +27,7 @@ from fetch_scripts.impulso import Impulso
 from fetch_scripts.peta import Peta
 from fetch_scripts.hp_online import HPOnline
 from fetch_scripts.portatil_chile import PortatilChile
+from fetch_scripts.tecno_group import TecnoGroup
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -56,4 +57,5 @@ __all__ = [ 'ProductData',
             'Impulso',
             'Peta',
             'HPOnline',
-            'PortatilChile']
+            'PortatilChile',
+            'TecnoGroup']
