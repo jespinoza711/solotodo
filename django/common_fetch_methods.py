@@ -1,7 +1,7 @@
 import cairo
 import pycha.line
 from copy import deepcopy
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.utils import *
@@ -68,8 +68,10 @@ def saveNotebooks(ntbks, s):
             today_history = today_history[0]
             if today_history.price != ntbk.price:
                 print 'Hubo un cambio de precio'
-                today_history = ntbk.price
+                today_history.price = ntbk.price
                 today_history.save()
+                current_shn.latest_price = ntbk.price
+                current_shn.save()
                 
     
 ''' Management method that keeps everything coherent (e.g. updating the price of
@@ -152,6 +154,14 @@ def updateAvailabilityAndPrice():
             npc.save()  
             
         notebook.long_description = notebook.rawText()
+        
+        t = date.today()
+        d = timedelta(days = 7)
+        old_price = notebook.price_at(t - d)
+        try:
+            notebook.week_discount = int(100 * (old_price - notebook.min_price) / old_price)
+        except:
+            notebook.week_discount = 0;
         
         
         #similar_notebooks = [str(ntbk.id) for ntbk in notebook.findSimilarNotebooks()]

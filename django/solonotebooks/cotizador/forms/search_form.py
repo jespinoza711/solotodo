@@ -29,15 +29,15 @@ class SearchForm(forms.Form):
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
     ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'), ('7', 'Nuevos modelos'))
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
-    usage_choices = (('0', 'Cualquiera'), 
-        ('1', 'Hogar / Oficina'), 
-        ('2', 'Netbook'),
-        ('3', 'Ultraportátil'),
-        ('4', 'Juegos'))  
+    usage_choices = (('0', 'Todos'), 
+        ('1', 'Juegos'),    
+        ('2', 'Hogar / Oficina'), 
+        ('3', 'Ultraportátiles'),         
+        ('4', 'Netbooks'))
     
     ordering = CustomChoiceField(choices = ordering_choices).set_name('Ordenamiento')
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Pantalla Táctil')
-    usage = CustomChoiceField(choices = usage_choices).set_name('Uso')
+    usage = ClassChoiceField(NotebookType, 'Uso', 'Todos')
     
     ordering_direction = forms.IntegerField(widget=forms.HiddenInput())
     advanced_controls = forms.IntegerField()

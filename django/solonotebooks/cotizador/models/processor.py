@@ -19,6 +19,7 @@ class Processor(models.Model):
     socket = models.ForeignKey(ProcessorSocket)
     family = models.ForeignKey(ProcessorFamily)
     speed_score = models.IntegerField()
+    consumption = models.IntegerField()
     
     
     def __unicode__(self):
@@ -40,7 +41,7 @@ class Processor(models.Model):
         
         return result
         
-    def prettyPrint(self):
+    def pretty_print(self):
         return unicode(self.line) + ' ' + self.name + ' (' + unicode(self.frequency) + ')'
         
     def tablePrint(self):
