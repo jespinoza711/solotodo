@@ -358,6 +358,10 @@ label {
     height: 130px;
 }
 
+.publicized_notebook_container {
+    border: 1px solid #9BD3D5;
+}
+
 .notebook_details_sidebar {
     float: right;
     width: 300px;
@@ -898,4 +902,30 @@ div#side_advertisement {
 
 #always_on_error_message {
     display: block;
+}
+
+.avatar {
+    float: left;
+    margin-right: 10px;
+}
+
+.notebook_comment {
+    clear: left;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.comment_separator {
+    clear: left;
+}
+
+.advertisement_div {
+    height: 500px;
+    overflow: auto;
+}
+
+#available_notebook_div {
+    width: 350px;
+    float: left;
+    margin-right: 15px;
 }

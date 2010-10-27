@@ -1,4 +1,5 @@
 {% extends "cotizador/base_browse.html" %}
+{% load mytags %}
 
 {% block title %}SoloNotebooks - {{ notebook }}{% endblock %}
 
@@ -248,7 +249,17 @@
         No hay comentarios para este notebook
     {% else %}
         {% for comment in notebook_comments %}
-            <div class="notebok_comment">
+            <div class="notebook_comment">
+                <table><tr><td valign="top">
+                    {% show_gravatar comment.user 48 %}
+                    {% if user.is_staff %}
+                        <br />
+                        <small><a href="/manager/delete/{{ comment.id }}">Eliminar</a></small>
+                        <br />
+                        <small><a href="/admin/cotizador/notebookcomment/{{ comment.id }}">Editar</a></small>
+                    {% endif %}
+                </td>                
+                <td valign="top">
                 <span class="comment_nickname">
                     {% if comment.user %}
                         {{ comment.user.username}}
@@ -260,11 +271,9 @@
                 <div class="comment_body">
                 {{ comment.comments|safe }}
                 </div>
-                {% if user.is_staff %}
-                    <small><a href="/manager/delete/{{ comment.id }}">Eliminar</a></small>
-                {% endif %}
-                <hr />
+                </td></tr></table>
             </div>
+            <hr class="comment_separator" />
         {% endfor %}
     {% endifequal %}
     </div>

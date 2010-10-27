@@ -1,6 +1,8 @@
-import utils
 from django.db import models
+from django.db.models import Min, Max, Q
+from sorl.thumbnail.fields import ImageWithThumbnailsField
 from solonotebooks.cotizador.models import Notebook, Store
+from utils import prettyPrice
 
 class StoreHasNotebook(models.Model):
     url = models.TextField()
@@ -19,8 +21,8 @@ class StoreHasNotebook(models.Model):
         return unicode(self.store) + ' - ' + self.custom_name
         
     def prettyPrice(self):
-        return utils.prettyPrice(self.latest_price)
+        return prettyPrice(self.latest_price)
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Store has notebook'
+        verbose_name = 'Store has notebook' 

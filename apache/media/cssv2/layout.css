@@ -1,0 +1,618 @@
+/*
+Theme Name: Solo Notebooks 1.0
+Theme URI: http://www.solonotebooks.net/
+Description: Template de Solo Notebooks por Javier Vasquez
+Version: 0.7
+Author: Javier Vasquez y VJ como nana :)
+Author URI: solonotebooks.net 
+
+ Todo este codigo deberia estar bajo licencia Creative Commons… pero no!
+ 
+ La mayoria de la pega no la hago yo, si no los maestro de Blueprint css el mejor Frameworks de la tierra… no lo conoces? entonces partio a revisarlo.  
+
+ Bienvenido a las entrañas de solo notebooks esperamos aprenda algo :) 
+*/
+
+/* --------------------------------------------------------------
+
+   typography.css
+   * Sets up some sensible default typography.
+
+-------------------------------------------------------------- */
+
+/* Default font settings.
+   The font-size percentage is of 16px. (0.75 * 16px = 12px) */
+html { font-size:100.01%; }
+body {
+  font-size: 75%;
+  color: #555;
+  background: #fff url(img/bg.jpg) repeat;
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+
+/* Headings
+-------------------------------------------------------------- */
+
+h1,h2,h3,h4,h5,h6 { font-weight: normal; color: #111; }
+
+h1 { font-size: 3em; line-height: 1; margin-bottom: 0.5em; }
+h2 { font-size: 2em; margin-bottom: 0.75em; }
+h3 { font-size: 1.5em; line-height: 1; margin-bottom: 1em; }
+h4 { font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; }
+h5 { font-size: 1em; font-weight: bold; margin-bottom: 1.5em; }
+h6 { font-size: 1em; font-weight: bold; }
+
+h1 img, h2 img, h3 img,
+h4 img, h5 img, h6 img {
+  margin: 0;
+}
+
+
+/* Text elements
+-------------------------------------------------------------- */
+
+p           { margin: 0 0 1.5em; }
+/* 
+	These can be used to pull an image at the start of a paragraph, so 
+	that the text flows around it (usage: <p><img class="left">Text</p>) 
+ */
+.left  			{ float: left !important; }
+p .left			{ margin: 1.5em 1.5em 1.5em 0; padding: 0; }
+.right 			{ float: right !important; }
+p .right 		{ margin: 1.5em 0 1.5em 1.5em; padding: 0; }
+
+a:focus		 {text-decoration: none;}
+a:hover     { text-decoration: underline; }
+a           { color: #013257; text-decoration: none;}
+
+blockquote  { margin: 1.5em; color: #666; font-style: italic; }
+strong,dfn	{ font-weight: bold; }
+em,dfn      { font-style: italic; }
+sup, sub    { line-height: 0; }
+
+abbr,
+acronym     { border-bottom: 1px dotted #666; }
+address     { margin: 0 0 1.5em; font-style: italic; }
+del         { color:#666; }
+
+pre         { margin: 1.5em 0; white-space: pre; }
+pre,code,tt { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
+
+
+/* Lists
+-------------------------------------------------------------- */
+
+li ul,
+li ol       { margin: 0; }
+
+ul          { list-style-type: none; }
+ol          { list-style-type: none; }
+
+dl          { margin: 0 0 1.5em 0; }
+dl dt       { font-weight: bold; }
+dd          { margin-left: 1.5em;}
+
+
+/* Tables
+-------------------------------------------------------------- */
+
+/* 
+	Because of the need for padding on TH and TD, the vertical rhythm 
+	on table cells has to be 27px, instead of the standard 18px or 36px 
+	of other elements. 
+ */ 
+table       { margin-bottom: 1.4em; width:100%; }
+th          { font-weight: bold; }
+thead th    { background: #c3d9ff; }
+th,td,caption { padding: 4px 10px 4px 5px; }
+/*
+	You can zebra-stripe your tables in outdated browsers by adding 
+	the class "even" to every other table row. 
+ */
+tbody tr:nth-child(even) td, 
+tbody tr.even td  { 
+	background: #e5ecf9; 
+}
+tfoot       { font-style: italic; }
+caption     { background: #eee; }
+
+
+/* Misc classes
+-------------------------------------------------------------- */
+
+.small      { font-size: .8em; margin-bottom: 1.875em; line-height: 1.875em; }
+.large      { font-size: 1.2em; line-height: 2.5em; margin-bottom: 1.25em; }
+.hide       { display: none; }
+
+.quiet      { color: #666; }
+.loud       { color: #000; }
+.highlight  { background:#ff0; }
+.added      { background:#060; color: #fff; }
+.removed    { background:#900; color: #fff; }
+
+.first      { margin-left:0; padding-left:0; }
+.last       { margin-right:0; padding-right:0; }
+.top        { margin-top:0; padding-top:0; }
+.bottom     { margin-bottom:0; padding-bottom:0; }
+
+
+/* --------------------------------------------------------------
+
+   forms.css
+   * Sets up some default styling for forms
+   * Gives you classes to enhance your forms
+
+   Usage:
+   * For text fields, use class .title or .text
+   * For inline forms, use .inline (even when using columns)
+
+-------------------------------------------------------------- */
+
+/* 
+	A special hack is included for IE8 since it does not apply padding 
+	correctly on fieldsets
+ */ 
+label       { font-weight: bold; }
+fieldset    { padding:0 1.4em 1.4em 1.4em; margin: 0 0 1.5em 0; border: 1px solid #ccc; }
+legend      { font-weight: bold; font-size:1.2em; margin-top:-0.2em; margin-bottom:1em; }
+
+fieldset, #IE8#HACK { padding-top:1.4em; } 
+legend, #IE8#HACK { margin-top:0; margin-bottom:0; }
+
+/* Form fields
+-------------------------------------------------------------- */
+
+/* 
+  Attribute selectors are used to differentiate the different types 
+  of input elements, but to support old browsers, you will have to 
+  add classes for each one. ".title" simply creates a large text  
+  field, this is purely for looks.
+ */
+input[type=text], input[type=password],
+input.text, input.title,
+textarea {
+  background-color:#fff;
+  border:1px solid #bbb;
+}
+input[type=text]:focus, input[type=password]:focus,
+input.text:focus, input.title:focus,
+textarea:focus {
+  border-color:#666;
+}
+select { background-color:#fff; border-width:1px; border-style:solid; }
+
+input[type=text], input[type=password],
+input.text, input.title,
+textarea, select {
+  margin:0.5em 0;
+}
+
+input.text,
+input.title   { width: 300px; padding:5px; }
+input.title   { font-size:1.5em; }
+textarea      { width: 390px; height: 250px; padding:5px; }
+
+/* 
+  This is to be used on forms where a variety of elements are 
+  placed side-by-side. Use the p tag to denote a line. 
+ */
+form.inline { line-height:3; }
+form.inline p { margin-bottom:0; }
+
+
+/* Success, info, notice and error/alert boxes
+-------------------------------------------------------------- */
+
+.error,
+.alert, 
+.notice,
+.success, 
+.info 			{ padding: 0.8em; margin-bottom: 1em; border: 2px solid #ddd; }
+
+.error, .alert { background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
+.notice     { background: #fff6bf; color: #514721; border-color: #ffd324; }
+.success    { background: #e6efc2; color: #264409; border-color: #c6d880; }
+.info 			{ background: #d5edf8; color: #205791; border-color: #92cae4; }
+.error a, .alert a { color: #8a1f11; }
+.notice a   { color: #514721; }
+.success a  { color: #264409; }
+.info a			{ color: #205791; }
+
+
+/* --------------------------------------------------------------
+
+   head base del sitio 
+
+-------------------------------------------------------------- */
+
+#head {background: url(img/bg-head.jpg) repeat-x; height: 164px;}
+#nav-user {height: 27px;}
+
+#nav-user ul {margin-top: 4px; margin-right: 0;}
+#nav-user ul li {float: left; color: #fff; text-shadow: #151516 0 1px 0;}
+#nav-user ul li a {font-weight: bold; margin-left: 5px; color: #649f50;   padding: 6px 10px;}
+#nav-user ul li a:hover {text-shadow: #111 0 1px 5px; text-decoration: none; background: #2d2f30;}
+
+#menu {margin-top: 30px; height: 71px;}
+#combo-search img {margin-top: 1px;}
+
+#areas-site ul{margin-right: 0;}
+#areas-site ul li { float: left; padding: 25px 0 2px; margin-left: 20px; display: block;}
+
+#areas-site ul li a {
+ color: #dee8f2;
+ text-decoration: none;
+ font-size: 14px; 
+ font-weight: bold;
+ text-shadow: #010407 0 1px 0;
+}
+
+#areas-site ul li.sprite-inicio {background: url(img/inicio.png) no-repeat 6px 0;}
+#areas-site ul li.sprite-inicio:hover {background: url(img/inicio.png) no-repeat 6px -50px;}
+
+#areas-site ul li.sprite-catalogo {background: url(img/catalogo.png) no-repeat 12px 0;}
+#areas-site ul li.sprite-catalogo:hover {background: url(img/catalogo.png) no-repeat 12px -50px;}
+
+#areas-site ul li.sprite-blog {background: url(img/blog.png) no-repeat 6px 0;}
+#areas-site ul li.sprite-blog:hover {background: url(img/blog.png) no-repeat 6px -50px;}
+
+#areas-site ul li.sprite-inicio-active {background: url(img/inicio.png) no-repeat 6px -50px;}
+#areas-site ul li.sprite-catalogo-active {background: url(img/catalogo.png) no-repeat 12px -50px;}
+#areas-site ul li.sprite-blog-active {background: url(img/blog.png) no-repeat 6px -50px;}
+
+.catalogo {margin-left: 26px;}
+.catalogo li {
+ float: left; 
+ margin-right: 3px;
+ font-size: 14px; 
+ color: #dee8f2; 
+ text-shadow: #224b70 0 1px 0;
+ padding: 6px 14px;
+ background: url(img/tabs.jpg) repeat-x;
+ border-top: #5d90bd 1px solid;
+ border-left: #5d90bd 1px solid;
+ border-right: #5d90bd 1px solid;
+ display: block;
+}
+
+.catalogo li:hover {
+ background: url(img/tabsh.jpg) repeat-x;
+ border-top: #afd69e 1px solid;
+ border-left: #afd69e 1px solid;
+ border-right: #afd69e 1px solid;
+}
+
+.catalogo li a { color: #dee8f2; font-weight: bold;}
+.catalogo li a:hover { text-decoration: none; text-shadow: #417531 0 1px 0;}
+.catalogo li.intro-catalogo {font-size: 12px; color: #b5cce5; background: none; border: none; margin-top: 3px; margin-right: 12px;}
+
+.catalogo li.active-menu {
+ background: url(img/tabsh.jpg) repeat-x;
+ border-top: #afd69e 1px solid;
+ border-left: #afd69e 1px solid;
+ border-right: #afd69e 1px solid;
+}
+
+.catalogo li.active-menu a{text-decoration: none; text-shadow: #417531 0 1px 0;}
+
+.social {margin-top: 8px; margin-right: 0;}
+.social li {float: left; margin-left: 15px;}
+.social li a {color: #bfd2e1; font-weight: bold;}
+.social li a:hover {color: #79ae67; text-decoration: none;}
+.social li.rss {background: url(img/rss.png) no-repeat left; padding-left: 22px; padding-bottom: 1px;}
+.social li.twitter {background: url(img/twitter.png) no-repeat left; padding-left: 22px; padding-bottom: 1px;}
+
+/* login
+-------------------------------------------------------------- */
+
+#login-box { width:189px; position: relative;}
+#topnav {margin-left: 15px;}
+#topnav a.signin, #topnav a.signin:hover {
+ *background-position:0 3px!important;
+}
+
+#topnav a {background: #2d2f30;}
+#login-box #topnav a:hover {background: #26282a;}
+#topnav a.menu-open { background:#2d2f30!important; outline:none;}
+
+#small_signup {
+    display:inline;
+    float:none;
+    line-height:23px;
+    margin:25px 0 0;
+    width:170px;
+}
+
+#signin_menu {
+    display:none;
+    background-color:#2d2f30;
+    position:absolute;
+    width:210px;
+    z-index:100;
+    border:1px transparent;
+    text-align:left;
+    padding:12px;
+    top: 17px; 
+    right: 2px; 
+    margin-top:5px;
+    margin-right: 0px;
+    *margin-right: -1px;
+    color:#555;
+    font-size:11px;
+}
+
+#signin_menu input[type=text], #signin_menu input[type=password] {
+    display:block;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    border: none;
+    font-size:12px;
+    margin:0 0 5px;
+    padding:4px;
+    width:203px;
+}
+#signin_menu p, #signin_menu label {margin:0; color: #fff; }
+#signin_menu a {color:#6AC;}
+#signin_menu label { font-weight:normal;}
+#signin_menu p.remember { padding:10px 0;}
+#signin_menu p.forgot a{ clear:both; margin: -3px 0 0 -8px; color: #fff; font-weight: normal; }
+#signin_menu p.forgot a:hover {color: #649F50;}
+
+#signin_submit {
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    background:url("img/hover-more1.jpg") repeat-x scroll 0 0 transparent;
+    border:1px solid #406791;
+    color:#fff;
+    text-shadow:0 -1px 0 #223E5C;
+    padding:4px 10px 5px;
+    font-size:11px;
+    margin:0 5px 0 0;
+    font-weight:bold;
+}
+#signin_submit::-moz-focus-inner { padding:0; border:0;}
+#signin_submit:hover, #signin_submit:focus { background:url("img/hover-more2.jpg") repeat-x scroll 0 0 transparent; cursor:pointer; border:1px solid #629450;}
+
+/* search
+-------------------------------------------------------------- */
+#search {margin-top: 2px; margin-left: 21px;}
+#search li {float: left;}
+
+#search li .input-search {
+ display: block;
+ width: 364px;
+ height: 39px;
+ border: 0 none;
+ padding: 2px 0px 0px 10px;
+ background: url(img/search-l.jpg) no-repeat ;
+ font-size: 15px;
+ line-height: 10px;
+ margin: 0;
+ color: #fff;
+ font-weight: bold;
+ text-shadow: #041c2f 0 1px 0;
+}
+
+.input-search:hover { border: none;}
+
+.btn-search {
+ background: url(img/search-r.jpg) 0 0;
+ margin-left: -10px;
+ height: 40px;
+ width: 42px;
+ display: block;
+ border: 0 none;
+ cursor: pointer;
+}
+
+.btn-search:hover {background: url(img/search-r.jpg) 0 -40px;}
+
+/* --------------------------------------------------------------
+
+   layout base del sitio + top ads
+
+-------------------------------------------------------------- */
+
+#ad-top {margin-top: 20px;}
+#ad-top a {margin-left: 110px;}
+
+#content {background: #fff; min-height: 700px; margin-top: 20px; }
+#left {float: left; width: 640px; margin-right: 20px;}
+#right {float: left; width: 290px; }
+
+#top-left {height: 38px; background: url(img/bg-fake-h1.jpg) repeat-x; margin-left: -5px; margin-top: 20px;}
+#top-left span {font-size: 14px; font-weight: bold; color: #fff; margin-left: 5px; margin-top: 5px; text-shadow: #082e4b 0 -1px 0;}
+
+#top-left ul {margin-right: 0px;}
+#top-left ul li { float: left; padding: 6px 8px; display: block;}
+#top-left ul li a {font-size: 14px; font-weight: bold; color: #bfd2e1; text-shadow: #082e4b 0 -1px 0;}
+#top-left ul li a:hover {text-decoration: none; color: #fff;}
+#top-left ul li.active-top-left  {background: #2c5074;}
+#top-left ul li.active-top-left  a {background: url(img/active-fake.png) no-repeat center bottom; padding-bottom: 16px; color: #fff;}
+
+.more-index {background: url(img/hover-more1.jpg) repeat-x; text-transform: uppercase; font-size: 12px; font-weight: bold; color: #fff; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; border: 1px solid #406791; padding: 5px 233px 5px 233px; margin-bottom: 10px; text-shadow: #223e5c 0 1px 0; }
+
+.more-index:hover {background: url(img/hover-more2.jpg) repeat-x; border: 1px solid #629450; color: #fff; text-decoration: none; text-shadow: #517e41 0 1px 0;}
+
+.contacto {background: url(img/contacto.png) no-repeat 0 0; padding: 45px 25px; position: fixed; top: 295px; left: 0;
+}
+.contacto:hover {background: url(img/contacto.png) no-repeat 0 -114px;}
+
+/* --------------------------------------------------------------
+
+   Catalogo index
+
+-------------------------------------------------------------- */
+
+#cat-index {margin: 20px 0 20px 20px;}
+.producto-li {margin-bottom: 20px;}
+
+.thumb-juego, .thumb-hogar, .thumb-oficina, .thumb-netbooks {width:90px; float: left; }
+.thumb-juego img, .thumb-hogar img, .thumb-oficina img, .thumb-netbooks img {margin: 1px 0 0 1px;}
+.thumb-juego a:hover, .thumb-hogar a:hover, .thumb-oficina a:hover, .thumb-netbooks a:hover {text-decoration: none; opacity: 0.8;}
+
+.thumb-juego {background: #dedfe0;}
+.thumb-juego p {color: #959595; text-shadow: #f7f7f7 0 1px 0; font-size: 10px; font-weight: bold; margin: -2px 0 1px 23px; text-transform: uppercase;}
+
+.thumb-hogar {background: #e4e0b4;}
+.thumb-hogar p {color: #9e9969; text-shadow: #f7f7f7 0 1px 0; font-size: 10px; font-weight: bold; margin: -2px 0 1px 27px; text-transform: uppercase;}
+
+.thumb-oficina {background: #cddec6;}
+.thumb-oficina p {color: #698e5c; text-shadow: #f7f7f7 0 1px 0; font-size: 10px; font-weight: bold; margin: -2px 0 1px 25px; text-transform: uppercase;}
+
+.thumb-netbooks {background: #d8ebf3;}
+.thumb-netbooks p {color: #829da9; text-shadow: #f7f7f7 0 1px 0; font-size: 10px; font-weight: bold; margin: -2px 0 1px 17px; text-transform: uppercase;}
+
+.content-producto {
+ display:block;
+ margin-left: 10px;
+ width: 520px;
+ float: left;
+ font-size: 12px;
+ line-height: 16px;
+ float: left;
+ border-bottom: 1px solid #d8d8d8;
+}
+
+.content-producto a, .content-producto-c a { color: #013257; font-size: 14px; font-weight: bold; line-height: 1;}
+.content-producto a:hover, .content-producto-c a:hover {color: #518840; text-decoration: none;}
+.info-producto, .precio-producto {margin-top: 13px;}
+
+.precio-producto li a {font-size: 16px; color: #013257; line-height: 1.2; }
+.precio-producto li a:hover {color: #518840; text-decoration: none;}
+.precio-producto li {text-align: right;}
+.precio-producto li.mas-barato {color: #649f50;}
+.precio-producto li.mas-caro {color: #b85050;}
+
+.content-producto .findex, .content-producto-c .findex {background: #f5f6f8 url(img/findex.png) left no-repeat; border: 1px solid #dbe2e9; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; padding: 4px 4px 3px 19px; font-size: 10px; text-transform: uppercase; color: #8e96a7; margin-top: -10px; margin-bottom: 5px; text-shadow: #fff 0 1px 0;}
+.content-producto .findex:hover, .content-producto-c .findex:hover {border-color: #b3bdca; background: #e7ebf0 url(img/findex.png) left no-repeat; text-decoration: none; color: #426782}
+
+
+/* --------------------------------------------------------------
+
+   Right Index
+
+-------------------------------------------------------------- */
+
+#ad-right {margin-left: 3px; margin-bottom: 20px;}
+#ad-right a img {border: 1px solid #d3d3d3;}
+
+#arbol-site {margin-left: 3px;}
+#arbol-site ul {float: left; margin-right: 20px; width: 123px;}
+#arbol-site ul li {margin-bottom: 2px;}
+#arbol-site ul li span {border-bottom: 1px solid #c4c3c3; padding-right: 45px; margin-bottom: 5px;}
+#arbol-site ul li a:hover {color: #013257;}
+
+/* search rapido right
+-------------------------------------------------------------- */
+
+#search-index {background: #406790; margin: 20px 0 23px 3px; height: 290px;}
+#search-index img {margin-right: -5px;}
+#search-index h3 {font-size: 14px; color: #fff; text-shadow:0 -1px 0 #082E4B; font-weight: bold; padding: 10px 0 11px 10px; margin-bottom: 10px; background: url(img/div-azul.png) repeat-x bottom;}
+
+.spacer-search {margin: 0 15px;}
+.spacer-search span {font-size: 12px; font-weight: bold; text-shadow:0 -1px 0 #082E4B; color:#BFD2E1; line-height: 1;}
+.spacer-search select {
+ margin-bottom: 10px; 
+ margin-top: 0;
+ width: 260px;
+ border: 1px solid #2b4867;
+ background: #345679;
+ padding: 2px 0 2px 2px;
+ text-shadow:0 -1px 0 #082E4B; 
+ color:#fff;
+}
+
+.spacer-search input {background: url(img/buscar.png) no-repeat 0 -30px; border: none; padding: 4px 11px 5px 13px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #fff; text-shadow: #082E4B 0 -1px 0; margin-top: 3px;}
+.spacer-search input:hover {background: url(img/buscar.png) no-repeat 0 0; cursor: pointer;}
+
+/* search rapido right
+-------------------------------------------------------------- */
+
+#noticias-index {background: #e9eef2 url(img/bg-box-r.png) repeat; border: 1px solid #c8d0d8; margin: 0 20px 20px 3px;}
+#noticias-index h3 {font-size: 14px; color: #fff; text-shadow:0 -1px 0 #082E4B; font-weight: bold; padding: 10px 0 11px 10px; margin-bottom: 10px; background: #406790;} 
+
+#noticias-index ul {margin: -5px 7px 3px 7px; }
+#noticias-index ul li {background: url(img/div-azul2.png) repeat-x bottom; padding: 7px 0 7px;}
+#noticias-index ul li:last-child {background: none;}
+
+.tumb-n {height: 40px; width: 40px; float: left;}
+.tumb-n img {border: 1px solid #eaeff3;}
+.info-n {float: right; width: 203px; color: #555; font-size: 10px; line-height: 1.4; text-shadow:0 1px 0 #fff;}
+.info-n a{float: right; width: 203px; color: #013257; font-size: 10px; font-weight: bold; line-height: 1.2; }
+
+
+/* --------------------------------------------------------------
+
+   Layout Catalogo
+
+-------------------------------------------------------------- */
+
+#left-c {float: left; width: 230px; margin-right: 10px;}
+#right-c {float: left; width: 690px;}
+.content-producto-c { display:block; margin-left: 10px; width: 565px; float: left; font-size: 12px; line-height: 16px; float: left; border-bottom: 1px solid #d8d8d8; }
+
+#left-c h2 {font-size: 14px; font-weight: bold; color: #636363; padding: 3px 0 3px 10px; text-shadow: #fff 0 1px 0; background: #ecedee; margin-bottom: 5px;;}
+
+.cat-p {margin-bottom: 15px;}
+.cat-p li {font-size: 12px; padding: 3px 0 3px 10px; line-height: 1.4; }
+.cat-p li.active-cat {text-shadow: #fff 0 1px 0; background: #ecedee; }
+
+.cat-h {margin-left: -10px;}
+.cat-h li {line-height: 1.2;}
+.cat-h li a{ margin-left: 10px;}
+
+/* parametros de busqueda por categoria
+-------------------------------------------------------------- */
+
+#param-cat { height: 79px;  background: #426b94 url(img/contraste.png) repeat-x top; margin: 20px 0 20px 18px; border-left: 1px solid #a3adb8; border-right: 1px solid #a3adb8;}
+
+#breadcrumbs {float: left; margin: 12px 0 0 5px;}
+#breadcrumbs li {float: left; font-size: 11px; font-weight: bold; color: #fff; margin-left: 5px; text-shadow: #35557c 0 1px 0;}
+#breadcrumbs li a {color: #fff;}
+#breadcrumbs li a.delete-param {font-size: 9px; line-height: 1; padding-left: 1px;}
+#breadcrumbs li a.delete-param:hover {text-decoration: none;}
+
+#order-list {float: right; margin-top: 17px; margin-right: 8px;}
+#order-list select {border: 1px solid #a3adb8;}
+#order-list span {font-size: 11px; font-weight: bold; color: #406790; text-shadow: #fff 0 1px 0 ; margin-right: 4px;}
+
+.precio-cat {font-size: 11px; font-weight: bold; color: #406790; text-shadow: #fff 0 1px 0; margin-top: 23px; margin-left: 8px;}
+
+.resultados-p {margin-bottom: 5px;}
+
+
+/* --------------------------------------------------------------
+
+   Pagination
+
+-------------------------------------------------------------- */
+
+#pagination {
+ text-align: center;
+ background:url("img/hover-more1.jpg") repeat-x; 
+ height: 28px;
+  line-height: 2.3;
+ margin: 5px 3px 20px 20px;
+ -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
+}
+#pagination span {color: #285c17; font-size: 12px; font-weight: bold; background:url(img/hover-more2.jpg) repeat-x; padding: 5px 7px 6px; text-shadow: #addc9a 0 1px 0; margin: 0 3px; }
+
+#pagination a { font-size: 12px; font-weight: bold; color: #fff; text-shadow: #223e5c 0 1px 0; padding: 5px 7px 6px;}
+#pagination a:hover {text-decoration: none; background:url(img/hover-more2.jpg) repeat-x;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

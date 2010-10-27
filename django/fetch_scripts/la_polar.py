@@ -52,7 +52,7 @@ class LaPolar:
                         priceString = priceField.contents[0].replace('$', '').replace('.', '')
                         price = int(priceString)
                         productData = ProductData()
-                        productData.custom_name = name
+                        productData.custom_name = name.encode('ascii','ignore').strip()
                         productData.url = link
                         productData.price = price
                         productData.comparison_field = productData.url

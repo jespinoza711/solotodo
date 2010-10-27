@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    (r'^$', 'solonotebooks.cotizador.views.browse'),
+    (r'^$', 'solonotebooks.cotizador.views.index'),
     (r'^notebooks/(?P<notebook_id>\d+)/$', 'solonotebooks.cotizador.views.notebook_details'),
     (r'^processor_line_families/(?P<processor_line_family_id>\d+)/$', 'solonotebooks.cotizador.views.processor_line_family_details'),
     (r'^processor_line_families/$', 'solonotebooks.cotizador.views.all_processor_line_families'),    
@@ -49,5 +49,9 @@ urlpatterns = patterns('',
     (r'^account/enable_subscription_mail/(?P<subscription_id>\d+)/$', 'solonotebooks.cotizador.views.enable_subscription_mail'),
     (r'^account/disable_subscription_mail/(?P<subscription_id>\d+)/$', 'solonotebooks.cotizador.views.disable_subscription_mail'),    
     (r'^account/remove_subscription/(?P<subscription_id>\d+)/$', 'solonotebooks.cotizador.views.remove_subscription'),
+    (r'^advertisement/manage/$', 'solonotebooks.cotizador.views_advertisement.manage'),    
+    (r'^advertisement/get_advertisement_options/$', 'solonotebooks.cotizador.views_advertisement.get_advertisement_options'),        
+    (r'^advertisement/submit/$', 'solonotebooks.cotizador.views_advertisement.submit'),
+    (r'^advertisement/remove/$', 'solonotebooks.cotizador.views_advertisement.remove'),    
     (r'^admin/', include(admin.site.urls)),
 )

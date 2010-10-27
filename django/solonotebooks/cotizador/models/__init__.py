@@ -42,15 +42,16 @@ from solonotebooks.cotizador.models.ram_quantity import RamQuantity
 from solonotebooks.cotizador.models.ram_type import RamType
 from solonotebooks.cotizador.models.ram_frequency import RamFrequency
 from solonotebooks.cotizador.models.notebook_card_reader import NotebookCardReader
+from solonotebooks.cotizador.models.city import City
+from solonotebooks.cotizador.models.store import Store
+from solonotebooks.cotizador.models.notebook_type import NotebookType
 from solonotebooks.cotizador.models.notebook import Notebook
+from solonotebooks.cotizador.models.store_has_notebook import StoreHasNotebook
+from solonotebooks.cotizador.models.notebook_price_change import NotebookPriceChange
 from solonotebooks.cotizador.models.notebook_review import NotebookReview
 from solonotebooks.cotizador.models.notebook_comment import NotebookComment
 from solonotebooks.cotizador.models.notebook_picture import NotebookPicture
-from solonotebooks.cotizador.models.notebook_price_change import NotebookPriceChange
-from solonotebooks.cotizador.models.city import City
-from solonotebooks.cotizador.models.store import Store
 from solonotebooks.cotizador.models.sucursal import Sucursal
-from solonotebooks.cotizador.models.store_has_notebook import StoreHasNotebook
 from solonotebooks.cotizador.models.store_notebook_history import StoreNotebookHistory
 from solonotebooks.cotizador.models.log_entry import LogEntry
 from solonotebooks.cotizador.models.log_entry_message import LogEntryMessage
@@ -144,4 +145,5 @@ __all__ = [ 'ProcessorBrand',
             'MailChangeNotebookPrice',
             'MailLostNotebook', 
             'MailReviveNotebook', 
+            'NotebookType',             
             ]

@@ -35,7 +35,7 @@ class Screen(models.Model):
             resultado += ' Rotatoria'
         return resultado
         
-    def prettyDisplay(self):
+    def pretty_display(self):
         return unicode(self.size) + ' (' + unicode(self.resolution) + ')'
     
     class Meta:
