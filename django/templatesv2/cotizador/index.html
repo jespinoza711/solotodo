@@ -115,8 +115,8 @@
 				<div id="arbol-site">
 					<ul>
 						<li><span>NOTEBOOKS</span></li>
-						{% for notebook_type in form.fields.usage.choices %}
-                        <li><a href="/catalog?usage={{notebook_type.0}}" title="{{notebook_type.1}}">{{notebook_type.1}}</a></li>						
+						{% for notebook_type in form.fields.ntype.choices %}
+                        <li><a href="/catalog?ntype={{notebook_type.0}}" title="{{notebook_type.1}}">{{notebook_type.1}}</a></li>						
                         {% endfor %}
 					</ul>
 					<ul>

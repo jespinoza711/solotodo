@@ -6,6 +6,8 @@
 		<link rel="stylesheet" href="/media/cssv2/screen.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/cssv2/layout.css" type="text/css" media="screen, projection" />
    	 	<link rel="shortcut icon" href="/media/iconsv2/favicon.ico" type="image/x-icon" />
+   	 	{% block header_content %}
+		{% endblock %}
 
 		<!--[if IE 7]>
 			<link rel="stylesheet" type="text/css" href="/media/cssv2/ie7style.css" />
@@ -13,8 +15,6 @@
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/media/cssv2/ie8style.css" />
 		<![endif]-->
-		
-		<script src="/media/jsv2/jquery-1.4.3.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
 		        $(document).ready(function() {
 		
@@ -75,7 +75,7 @@
 					
 				<div id="menu">
 					<div id="combo-search" class="left">
-						<a href="#" title="Inicio" title="Solo Notebooks" class="left"><img src="/media/cssv2/img/logo.png" /></a>
+						<a href="/" title="Inicio" title="Solo Notebooks" class="left"><img src="/media/cssv2/img/logo.png" /></a>
 						<ol id="search" class="left">
 						    <form method="get" action="/search">
 							<li>
@@ -100,8 +100,8 @@
 				<div id="tabs">
 					<ul class="catalogo left">
 						<li class="intro-catalogo">Tipos de Notebooks</li>
-						{% for notebook_type in form.fields.usage.choices %}
-                        <li {% ifequal notebook_type.0 '' %}class="active-menu"{% endifequal %}><a href="/catalog?usage={{notebook_type.0}}" title="{{notebook_type.1}}">{{notebook_type.1}}</a></li>						
+						{% for notebook_type in form.fields.ntype.choices %}
+                        <li {% ifequal notebook_type.0|add:"0" ntype_comparison_key|add:"0" %}class="active-menu"{% endifequal %}><a href="/catalog?{{change_ntype_url}}ntype={{notebook_type.0}}" title="{{notebook_type.1}}">{{notebook_type.1}}</a></li>						
                         {% endfor %}
 					</ul>
 					

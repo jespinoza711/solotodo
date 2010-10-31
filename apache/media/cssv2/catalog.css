@@ -1,0 +1,40 @@
+.filter_item .hidden_filter_item {
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.filter_item select {
+    font-size: 11px;
+    padding: 1px;
+    width: 150px;
+}
+
+.hidden_filter_item select {
+    font-size: 11px;
+    padding: 1px;
+    width: 150px;
+}
+
+.always_hidden_filter_item {
+    display: none;
+}
+
+label {
+    float:left;
+    width:25%;
+    margin-right: 10px;
+    padding-top:0.6em;
+    text-align:right;
+    font-weight:bold;
+}
+
+#price_slider {
+    padding-top: 40px;
+    padding-bottom: 5px;
+    margin-left: 30px;
+    margin-right: 30px;    
+}
+
+.contacto {
+    display: none;
+}

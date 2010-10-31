@@ -6,7 +6,6 @@ from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.models import utils
 from solonotebooks.cotizador.fields import ClassChoiceField, CustomChoiceField
 from datetime import date
-import pdb
 
 class SearchForm(forms.Form):
     notebook_brand = ClassChoiceField(NotebookBrand, 'Marca')
@@ -29,22 +28,37 @@ class SearchForm(forms.Form):
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
     ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'), ('7', 'Nuevos modelos'))
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
-    usage_choices = (('0', 'Todos'), 
-        ('1', 'Juegos'),    
-        ('2', 'Hogar / Oficina'), 
-        ('3', 'Ultraportátiles'),         
-        ('4', 'Netbooks'))
     
     ordering = CustomChoiceField(choices = ordering_choices).set_name('Ordenamiento')
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Pantalla Táctil')
-    usage = ClassChoiceField(NotebookType, 'Uso', 'Todos')
+    ntype = ClassChoiceField(NotebookType, 'Uso', 'Todos')
     
-    ordering_direction = forms.IntegerField(widget=forms.HiddenInput())
+    ordering_direction = forms.IntegerField(widget = forms.HiddenInput())
     advanced_controls = forms.IntegerField()
+        
+    price_choices = (('0', '0'),
+                    ('100000', '100.000'),
+                    ('150000', '150.000'),
+                    ('200000', '200.000'),
+                    ('250000', '250.000'),
+                    ('300000', '300.000'),
+                    ('350000', '350.000'),
+                    ('400000', '400.000'),
+                    ('450000', '450.000'),
+                    ('500000', '500.000'),
+                    ('550000', '550.000'),
+                    ('600000', '600.000'),
+                    ('650000', '650.000'),
+                    ('700000', '700.000'),
+                    ('750000', '750.000'),
+                    ('800000', '800.000'),
+                    ('850000', '850.000'),
+                    ('900000', '900.000'),
+                    ('950000', '950.000'),
+                    ('1000000', '1.000.000+'))
     
-    # These two are disabled in the HTML rendering because there is a slider
-    min_price = forms.IntegerField(widget = forms.TextInput(attrs = {'class': 'price_range_input', 'disabled':'disabled'}))
-    max_price = forms.IntegerField(widget = forms.TextInput(attrs = {'class': 'price_range_input', 'disabled':'disabled'}))
+    min_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Mínimo')
+    max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
         
     page_number = forms.IntegerField()
     
@@ -57,7 +71,7 @@ class SearchForm(forms.Form):
         
     def generateTitle(self):
         # We are going to skip the special "filters" as they don't apply
-        skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction']
+        skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction', 'min_price', 'max_price']
         valid_keys = []
         
         # For each filter (including those not active, represented by empty)
@@ -67,15 +81,6 @@ class SearchForm(forms.Form):
                 
             # If this filter requires advanced controls, but they are not activated, skip
             if not self.advanced_controls and key in self.attribute_requiring_advanced_controls:
-                continue
-                
-            # If the query includes a min/max price, we only show the link to
-            # remove it if it is not the default min/max price
-            min_price = Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min']
-            max_price = Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max']
-            if key == 'min_price' and self.min_price == utils.roundToFloor10000(min_price):
-                continue
-            if key == 'max_price' and self.max_price == utils.roundToCeil10000(max_price):
                 continue
     
             # If the filter is active (i.e., its value is not empty)...
@@ -112,13 +117,14 @@ class SearchForm(forms.Form):
         for pair in choice_fields:
             try:
                 choice_field_selection = self.data[pair[0]]
-                choices_dict = [x[0] for x in self.fields[pair[0]].choices]
+                choices_dict = dict([[x[0], x[1]] for x in self.fields[pair[0]].choices])
+                
                 if not choice_field_selection in choices_dict:
                     choice_field_selection = 0
                 
                 self.__dict__[pair[0]] = int(choice_field_selection)
             except:
-                self.__dict__[pair[0]] = 0                     
+                self.__dict__[pair[0]] = 0
                 
         integer_fields = filter(lambda x: isinstance(x[1], forms.IntegerField), fields)
         
@@ -129,22 +135,12 @@ class SearchForm(forms.Form):
             except:
                 self.__dict__[pair[0]] = 0
                 
-        # We manually add the maximum and minimum allowable prices
-        self.abs_min_price = utils.roundToFloor10000(Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min'])
-        self.abs_max_price = utils.roundToCeil10000(Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max'])
-                
         # Particular cases
         if not self.ordering_direction in [0, 1, 2]:
             self.ordering_direction = 0
             
         if not self.advanced_controls in [0, 1]:
             self.advanced_controls = 0
-            
-        if self.min_price < self.abs_min_price:
-            self.min_price = self.abs_min_price
-            
-        if self.max_price > self.abs_max_price:
-            self.max_price = self.abs_max_price
             
         if self.page_number <= 0:
             self.page_number = 1
@@ -160,17 +156,13 @@ class SearchForm(forms.Form):
     allowing to skip some of the keys if necessary (for example, when creating
     the link to the next and previous page, we need to delete the current 
     "page_number")'''
-    def generateCurrentUrlWithSkip(self, skip_keys):
+    def generateCurrentUrlWithSkip(self, skip_keys, start_symbol = '?'):
         keyvalues = []
         for key in self.fields:
             if key not in self.__dict__ or not self.__dict__[key] or key in skip_keys:
                 continue
-            if key == 'min_price' and self.min_price == self.abs_min_price:
-                continue
-            if key == 'max_price' and self.max_price == self.abs_max_price:
-                continue
             keyvalues.append(key + '=' + str(self.__dict__[key]))
-        return '?' + '&'.join(keyvalues)
+        return start_symbol + '&'.join(keyvalues)
         
     '''Simple method used to create the base link called when the user changes
     the sorting criteria (for example, from weight to price), in these cases we
@@ -192,6 +184,11 @@ class SearchForm(forms.Form):
     need to take away the ordering_direction'''
     def generateUrlWithoutOrderingDirection(self):
         return self.generateCurrentUrlWithSkip(['page_number', 'ordering_direction']) + '&ordering_direction='
+        
+    '''Simple method used to create the base link when the user changes the 
+    notebook type without modifying the other criteria'''
+    def generate_url_without_ntype(self):
+        return self.generateCurrentUrlWithSkip(['page_number', 'ntype'], '') + '&'
     
     '''Simple method used to generate the base links to the other pages of the 
     query results'''
@@ -203,11 +200,11 @@ class SearchForm(forms.Form):
     generates all those links for each of the active filters as a dictionary
     that binds a message (e.g.: Marca procesador: AMD) to a url that removes
     that criteria from the current list of filters'''
-    def generateRemoveFilterLinks(self):
+    def generate_remove_filter_links(self):
         filters = {}
         
         # We are going to skip the special "filters" as they don't apply
-        skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction']
+        skip_keys = ['page_number', 'ordering', 'ordering_direction', 'min_price', 'max_price', 'advanced_controls']
         
         # For each filter (including those not active, represented by empty)
         for key in self.fields:
@@ -216,15 +213,6 @@ class SearchForm(forms.Form):
                 
             # If this filter requires advanced controls, but they are not activated, skip
             if not self.advanced_controls and key in self.attribute_requiring_advanced_controls:
-                continue
-                
-            # If the query includes a min/max price, we only show the link to
-            # remove it if it is not the default min/max price
-            min_price = Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min']
-            max_price = Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max']
-            if key == 'min_price' and self.min_price == utils.roundToFloor10000(min_price):
-                continue
-            if key == 'max_price' and self.max_price == utils.roundToCeil10000(max_price):
                 continue
     
             # If the filter is active (i.e., its value is not empty)...
@@ -239,41 +227,41 @@ class SearchForm(forms.Form):
     def getKeyDataValue(self, key, pk_value):
         value = ''
         if key == 'notebook_brand':
-            value = 'Marca: ' + unicode(NotebookBrand.objects.get(pk = pk_value))
+            value = unicode(NotebookBrand.objects.get(pk = pk_value))
         if key == 'notebook_line':
-            value = 'Linea: ' + unicode(NotebookLine.objects.get(pk = pk_value))
+            value = unicode(NotebookLine.objects.get(pk = pk_value))
         if key == 'processor_brand':
-            value = 'Marca procesador: ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
+            value = 'Procesador ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
         if key == 'processor_line_family':
-            value = 'Linea procesador: ' + unicode(ProcessorLineFamily.objects.get(pk = pk_value))
+            value = 'Procesador: ' + unicode(ProcessorLineFamily.objects.get(pk = pk_value))
         if key == 'processor':
-            value = 'Processor: ' + unicode(Processor.objects.get(pk = pk_value))
+            value = 'Procesador: ' + unicode(Processor.objects.get(pk = pk_value))
         if key == 'ram_quantity':
-            value = 'Cantidad RAM: ' + unicode(RamQuantity.objects.get(pk = pk_value))
+            value = unicode(RamQuantity.objects.get(pk = pk_value)) + ' de RAM'
         if key == 'ram_type':
-            value = 'Tipo RAM: ' + unicode(RamType.objects.get(pk = pk_value))
+            value = 'RAM ' + unicode(RamType.objects.get(pk = pk_value))
         if key == 'storage_type':
-            value = 'Tipo almacenamiento: ' + unicode(StorageDriveType.objects.get(pk = pk_value))
+            value = 'Almacenamiento ' + unicode(StorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
-            value = 'Capacidad almacenamiento: ' + unicode(StorageDriveCapacity.objects.get(pk = pk_value))
+            value = unicode(StorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
         if key == 'screen_size_family':
-            value = 'Tamano pantalla: ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))                
+            value = 'Pantalla de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))                
         if key == 'screen_resolution':
-            value = 'Resolucion pantalla: ' + unicode(ScreenResolution.objects.get(pk = pk_value))
+            value = 'Resolución de ' + unicode(ScreenResolution.objects.get(pk = pk_value))
         if key == 'operating_system':
-            value = 'Sistema operativo: ' + unicode(OperatingSystemFamily.objects.get(pk = pk_value))
+            value = unicode(OperatingSystemFamily.objects.get(pk = pk_value))
         if key == 'video_card_brand':
-            value = 'Marca tarjeta de video: ' + unicode(VideoCardBrand.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(VideoCardBrand.objects.get(pk = pk_value))
         if key == 'video_card_line':
-            value = 'Linea tarjeta de video: ' + unicode(VideoCardLine.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(VideoCardLine.objects.get(pk = pk_value))
         if key == 'video_card_type':
-            value = 'Tipo tarjeta de video: ' + unicode(VideoCardType.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(VideoCardType.objects.get(pk = pk_value))
         if key == 'video_card':
-            value = 'Tarjeta de video: ' + unicode(VideoCard.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(VideoCard.objects.get(pk = pk_value))
         if key == 'screen_touch':
-            value = 'Pantalla tactil: ' + ['No', 'Si'][pk_value - 1]
-        if key == 'usage':
-            value = 'Uso: ' + self.usage_choices[pk_value][1]
+            value = ['Sin', 'Con'][pk_value - 1] + ' pantalla táctil'
+        if key == 'ntype':
+            value = unicode(NotebookType.objects.get(pk = pk_value))
         if key == 'min_price':
             value = 'Precio minimo: ' + utils.prettyPrice(pk_value)
         if key == 'max_price':
@@ -319,15 +307,8 @@ class SearchForm(forms.Form):
             value = 'Notebooks con tarjetas de video ' + unicode(VideoCard.objects.get(pk = pk_value))
         if key == 'screen_touch':
             value = 'Notebooks ' + ['sin', 'con'][pk_value - 1] + ' pantalla táctil'
-        if key == 'usage':
-            if pk_value == 1:
-                value = 'Notebooks para hogar y oficina'
-            elif pk_value == 2:
-                value = 'Netbooks'
-            elif pk_value == 3:
-                value = 'Ultraportátiles' 
-            elif pk_value == 4:
-                value = 'Notebooks para jugar'
+        if key == 'ntype':
+            value = unicode(NotebookType.objects.get(pk = pk_value))
         if key == 'min_price':
             value = 'Notebooks con un precio mínimo de ' + utils.prettyPrice(pk_value)
         if key == 'max_price':
