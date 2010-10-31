@@ -50,13 +50,14 @@ def index(request):
     
 # View that handles the main catalog, applying filters and ordering
 # (/catalog)
-def browse(request):
+def catalog(request):
     search_form = initialize_search_form(request.GET)
     search_form.save()
-        
+    
+    
     # Grab all the candidates (those currently available)
-    base_notebooks = Notebook.objects.all().filter(is_available = True)
-    result_notebooks, ordering_direction = filter_notebooks(base_notebooks, search_form)
+    result_notebooks, ordering_direction = filter_notebooks(Notebook.get_valid_notebooks(), search_form)
+    num_results = len(result_notebooks)
     
     page_count = ceil(len(result_notebooks) / 10.0);        
     
@@ -71,13 +72,13 @@ def browse(request):
     except:
         right_page = 0
     
-    result_notebooks = result_notebooks[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
+    first_result_index = (search_form.page_number - 1) * 10 + 1
+    last_result_index = search_form.page_number * 10
+    if last_result_index > num_results:
+        last_result_index = num_results
+    result_notebooks = result_notebooks[first_result_index - 1 : last_result_index]
     
     product_link_args = search_form.generateProdutLinkArgs()
-    
-    for ntbk in result_notebooks:
-        ntbk.url = '/notebooks/' + str(ntbk.id) + product_link_args
-    
     '''
     publicized_notebooks = Notebook.objects.filter(is_available = True).filter(~Q(publicized_offer = None))
     
@@ -95,7 +96,29 @@ def browse(request):
             counter += 1
             if counter == len(insert_positions):
                 break
-    '''    
+    '''
+    d = dict(SearchForm.price_choices)
+    
+    return append_ads_to_response(request, 'cotizador/catalog.html', {
+        'form': search_form,
+        'max_price': d[str(search_form.max_price)], 
+        'min_price': d[str(search_form.min_price)],
+        'remove_filter_links': search_form.generate_remove_filter_links(),
+        'change_ntype_url': search_form.generate_url_without_ntype(),
+        'num_results': num_results,
+        'first_result_index': first_result_index,
+        'last_result_index': last_result_index,
+        'notebooks': result_notebooks,
+        'current_url': search_form.generateUrlWithoutOrdering(),
+        'page_number': search_form.page_number,
+        'prev_page': search_form.page_number - 1,
+        'post_page': search_form.page_number + 1,
+        'page_count': int(page_count),
+        'left_page': left_page,
+        'right_page': right_page,
+        'page_range': pages,
+        'ordering': str(search_form.ordering),
+    })
     
 # View for showing a particular store with the notebooks it offers    
 def store_data(request, store_id):
@@ -184,6 +207,12 @@ def append_user_to_response(request, template, args):
         
     if 'form' not in args:
         args['form'] = initialize_search_form(request.GET)
+        
+    ntype_comparison_key = str(args['form'].ntype)
+    if ntype_comparison_key == '0':
+        ntype_comparison_key = '';
+    
+    args['ntype_comparison_key'] = ntype_comparison_key
     args['signup_key'] = request.session['signup_key']
     return render_to_response(template, args)
        
@@ -192,18 +221,9 @@ def append_user_to_response(request, template, args):
         'remove_filter_links': search_form.generateRemoveFilterLinks(),
         'result_notebooks': result_notebooks,
         #'publicized_notebooks': chosen_publicized_notebooks,
-        'page_number': search_form.page_number,
-        'prev_page': search_form.page_number - 1,
-        'post_page': search_form.page_number + 1,
-        'page_count': int(page_count),
-        'page_range': pages,
-        'left_page': left_page,
-        'right_page': right_page,
-        'current_url': search_form.generateUrlWithoutOrdering(),
         'produt_link_args': product_link_args,
         'ordering_direction_url': search_form.generateUrlWithoutOrderingDirection(),
         'ordering_direction': {'': 0, '-': 1}[ordering_direction],
-        'ordering': str(search_form.ordering),
     })
     
 # View for displaying every single notebook in the DB

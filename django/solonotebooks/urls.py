@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -14,6 +15,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^$', 'solonotebooks.cotizador.views.index'),
+    (r'^catalog/$', 'solonotebooks.cotizador.views.catalog'),
     (r'^notebooks/(?P<notebook_id>\d+)/$', 'solonotebooks.cotizador.views.notebook_details'),
     (r'^processor_line_families/(?P<processor_line_family_id>\d+)/$', 'solonotebooks.cotizador.views.processor_line_family_details'),
     (r'^processor_line_families/$', 'solonotebooks.cotizador.views.all_processor_line_families'),    
@@ -53,5 +55,7 @@ urlpatterns = patterns('',
     (r'^advertisement/get_advertisement_options/$', 'solonotebooks.cotizador.views_advertisement.get_advertisement_options'),        
     (r'^advertisement/submit/$', 'solonotebooks.cotizador.views_advertisement.submit'),
     (r'^advertisement/remove/$', 'solonotebooks.cotizador.views_advertisement.remove'),    
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.STATIC_DOC_ROOT}),
     (r'^admin/', include(admin.site.urls)),
 )

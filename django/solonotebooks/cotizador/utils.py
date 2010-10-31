@@ -86,23 +86,22 @@ def send_new_password_mail(user, new_password):
     
 # Helper method to set the search_form for almost all of the views            
 def initialize_search_form(data):
-    search_form = SearchForm(data)
+    qd = data.copy()
+    if 'max_price' not in qd:
+        qd['max_price'] = '1000000'
+    if 'min_price' not in qd:
+        qd['min_price'] = '0'
+    if 'ordering' not in qd:
+        qd['ordering'] = 7
+    search_form = SearchForm(qd)
     search_form.validate()
     search_form.is_valid()
     
     return search_form
     
 def filter_notebooks(notebooks, search_form):
-    if search_form.usage:
-        value = search_form.usage
-        if value == 1:
-            notebooks = notebooks.filter(screen__size__family__base_size__gte = 13).filter(screen__size__family__base_size__lt = 16).filter(ram_quantity__value__gte = 2).filter(processor__speed_score__gte = 900).filter(storage_drive__capacity__value__gte = 160).distinct()
-        elif value == 2:
-            notebooks = notebooks.filter(screen__size__family__base_size__gte = 7).filter(screen__size__family__base_size__lt = 12).filter(Q(processor__line__family__id = 11)|Q(processor__line__family__id = 1))
-        elif value == 3:
-            notebooks = notebooks.filter(screen__size__family__base_size__gte = 11).filter(screen__size__family__base_size__lt = 13).filter(processor__line__family__id = 2)
-        elif value == 4:
-            notebooks = notebooks.filter(ram_quantity__value__gte = 2).filter(processor__speed_score__gte = 1300).filter(video_card__speed_score__gte = 3000).filter(storage_drive__capacity__value__gte = 250).distinct()
+    if search_form.ntype:
+        notebooks = notebooks.filter(ntype = search_form.ntype)
     
     if search_form.notebook_brand:
         notebooks = notebooks.filter(line__brand__id = search_form.notebook_brand)
