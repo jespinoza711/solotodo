@@ -1,7 +1,5 @@
 #-*- coding: UTF-8 -*-
 import hashlib
-import cairo
-import pycha.line
 from copy import deepcopy
 from random import randint
 from datetime import date, datetime
@@ -199,6 +197,9 @@ def filter_notebooks(notebooks, search_form):
     return [notebooks, ordering_direction]
     
 def generateChart(ntbk):
+    import cairo
+    import pycha.line
+
     npcs = NotebookPriceChange.objects.filter(notebook = ntbk).order_by('date')
     min_price = npcs.aggregate(Min('price'))['price__min']
     max_price = npcs.aggregate(Max('price'))['price__max'] 

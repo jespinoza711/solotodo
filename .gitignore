@@ -8,3 +8,4 @@ django/solonotebooks/settings.py
 apache/blog/wp-content/uploads/**/**/*
 *~
 *.pyc
+*.db
