@@ -2,12 +2,10 @@
 import os
 import sys
 import hashlib
-import cairo
 import operator
 from datetime import date, timedelta
 from time import time
 from math import ceil
-from pycha.pie import PieChart
 from django.db.models import Min, Max, Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
@@ -669,6 +667,9 @@ def all_video_card_lines(request):
 
 @manager_login_required            
 def analyze_searches(request):
+    import cairo
+    from pycha.pie import PieChart
+
     results = {}
     sf = initialize_search_form(request.GET)
     for field_name, field in sf.fields.items():
