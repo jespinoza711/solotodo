@@ -9,3 +9,4 @@ apache/blog/wp-content/uploads/**/**/*
 *~
 *.pyc
 *.db
+.DS_Store
