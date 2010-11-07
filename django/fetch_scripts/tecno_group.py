@@ -58,8 +58,13 @@ class TecnoGroup:
                 priceSpan = priceSpans[i]
                 
                 productData = ProductData()
+                
+                url = nameLink['href']
+                i = url.find('&osCsid')
+                if i != -1:
+                    url = url[:i]
                 productData.custom_name = nameLink.string
-                productData.url = nameLink['href']
+                productData.url = url
                 productData.comparison_field = productData.url
                 productData.price = int(priceSpan.string.replace('$', '').replace('.', ''))
                 print productData

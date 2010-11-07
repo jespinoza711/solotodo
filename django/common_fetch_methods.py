@@ -68,8 +68,10 @@ def saveNotebooks(ntbks, s):
             today_history = today_history[0]
             if today_history.price != ntbk.price:
                 print 'Hubo un cambio de precio'
-                today_history = ntbk.price
+                today_history.price = ntbk.price
                 today_history.save()
+                current_shn.latest_price = ntbk.price
+                current_shn.save()
                 
     
 ''' Management method that keeps everything coherent (e.g. updating the price of
