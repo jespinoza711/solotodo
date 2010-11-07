@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="/media/cssv2/screen.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/cssv2/layout.css" type="text/css" media="screen, projection" />
    	 	<link rel="shortcut icon" href="/media/iconsv2/favicon.ico" type="image/x-icon" />
+   	 	<script type="text/javascript" src="/media/jsv2/jquery-1.4.3.min.js"></script>
    	 	{% block header_content %}
 		{% endblock %}
 
@@ -124,17 +125,6 @@
 		
 		<div id="content" class="container">
 			{% block content %}
-			<div id="left">
-			
-			</div> 
-			<!-- !end left -->
-				
-			<div id="right">
-				
-				{% block right_content %}
-				{% endblock %}
-				
-			</div> <!-- !end right -->
     		{% endblock %}					
 		<br class="clear" />
 		</div> <!-- !end #content-->	
