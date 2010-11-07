@@ -7,11 +7,6 @@ Author: Design Disease
 Author URI: http://wp-themes.designdisease.com/
 */
 
-
-body { background: #2d2d2d; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; padding: 0px; margin: 0px; color:#35383d;}
-
-html { padding: 0; margin: 0;}
-
 a:link { text-decoration: none; color : #00a0e3; border: 0px; -moz-outline-style: none;}
 a:active { text-decoration: underline; color : #00a0e3; border: 0px; -moz-outline-style: none;}
 a:visited { text-decoration: none; color : #00a0e3; border: 0px; -moz-outline-style: none;}
@@ -390,9 +385,10 @@ label {
     width: 300px;
 }
 
-.table_notebook_detail_prices td {
+.table_notebook_detail_prices tr.store_row td {
     text-align: center;
     font-size: 16px;
+    background: #FFFFFF;
 }
 
 .table_notebook_detail_prices th {
@@ -928,4 +924,8 @@ div#side_advertisement {
     width: 350px;
     float: left;
     margin-right: 15px;
+}
+
+.notebook_details_specs {
+    padding: 10px;
 }
