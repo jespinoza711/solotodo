@@ -25,6 +25,7 @@ class Ripley:
         j = 1                    
         while True:
             urlWebpage = urlBase + urlBuscarProductos + str(j)
+            #print urlWebpage
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
@@ -33,34 +34,39 @@ class Ripley:
             # Obtain the links to the other pages of the catalog (2, 3, ...)
             productParagraphs = baseSoup.findAll("td", { "class" : "grisCatalogo" })
             productParagraphs = productParagraphs[1::3]
-            productPrices = baseSoup.findAll("span", { "class" : "normalHOME" })
+            productParagraphs = productParagraphs[:len(productParagraphs)/2]
+            productParagraphs = [pp.parent.parent for pp in productParagraphs]
             
-            productLinks = []
-            for productPrice in productPrices:
-                notebookCell = productPrice.parent.parent.parent.parent
-                link = notebookCell.find('a')['href']
-                productLinks.append('http://www.ripley.cl/webapp/wcs/stores/servlet/' + link)
-            
-            productPrices = [int(price.string.replace('.', '').replace('$', '')) for price in productPrices]
-            
-            productNames = [p.find('p').contents[0].strip() + ' ' + p.contents[2].replace('&nbsp;', '').strip() for p in productParagraphs]
-           
-            if len(productParagraphs) == 0:
+            if not productParagraphs:
                 break
-            end_script = False
-            for i in range(len(productNames)):
-                productData = ProductData()
-                productData.custom_name = productNames[i]
-                productData.price = productPrices[i]
-                productData.url = productLinks[i]
-                productData.comparison_field = productData.url
-                if productData.comparison_field in comparisonFields:
-                    end_script = True
-                    break
-                comparisonFields.append(productData.comparison_field)
-                print productData
-                productsData.append(productData)
-            if end_script:
-                break
+                
+            for p in productParagraphs:
+                names = p.findAll('td', {'class': 'grisCatalogo'})
+                #print len(names)
+                #print names[1]
+                names = names[1].find('p').contents
+                name = names[0].strip() + ' ' + names[2].strip()
+                name = name.strip().replace('&nbsp;', '')
+                #print name
+                try:
+                    price = p.find('span', {'class': 'normalHOME'}).string
+                    price = int(price.replace('$', '').replace('.', ''))    
+                except:
+                    price = p.find('div', {'class': 'rojo'}).find('strong').contents[0]
+                    price = int(price.replace('$', '').replace('.', ''))            
+                            
+                #print price
+                url = 'http://www.ripley.cl/webapp/wcs/stores/servlet/' + p.find('a')['href']
+                #print url
+                
+                pd = ProductData()
+                pd.custom_name = name
+                pd.url = url
+                pd.price = price
+                pd.comparison_field = url
+                print pd
+                productsData.append(pd)
+                
             j += 1
+            
         return productsData

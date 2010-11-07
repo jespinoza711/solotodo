@@ -11,7 +11,7 @@ class MailLostNotebook(models.Model):
     
     @staticmethod
     def new(subscription, log):
-        m = MailLogNotebook()
+        m = MailLostNotebook()
         m.subscription = subscription
         m.log = log
         m.try_and_send_mail()
