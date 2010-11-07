@@ -6,6 +6,8 @@ apache/sitemap.xml
 apache/blog/wp-config.php
 django/solonotebooks/settings.py
 apache/blog/wp-content/uploads/**/**/*
+apache/sitemap.xml
+apache/robots.txt
 *~
 *.pyc
 *.db
