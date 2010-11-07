@@ -104,10 +104,10 @@ def main():
     sf = SearchForm()
     for field in sf.fields:
         field_value = sf.fields[field]
-        if isinstance(field_value, ClassChoiceField):
+        if field_value.__class__.__name__ == 'ClassChoiceField':
             queryset = field_value.queryset
             ids = [elem.id for elem in queryset]
-        elif isinstance(field_value, ChoiceField):
+        elif field_value.__class__.__name__ == 'CustomChoiceField':
             queryset = field_value.choices
             ids = [elem[0] for elem in queryset]
         else:
