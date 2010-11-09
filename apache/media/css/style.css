@@ -737,7 +737,6 @@ div#side_advertisement {
     color: #C5C5C5;
     text-align: right;
     padding-right: 10px;
-    padding-top: 5px;
     padding-bottom: 5px;
     font-size: 10px;
 }
@@ -761,7 +760,7 @@ div#side_advertisement {
     height: 15px;
     background-color: #1D1D1D;
     border: solid #C5C5C5 1px;
-    color: white;
+    color: black;
 }
 
 .login_button {
@@ -780,6 +779,7 @@ div#side_advertisement {
 #logout_links {
     font-weight: bold;
     font-size: 12px;
+    color: #FFFFFF;
 }
 
 .error_message {
@@ -928,4 +928,13 @@ div#side_advertisement {
 
 .notebook_details_specs {
     padding: 10px;
+}
+
+#login-form {
+    float: left;
+    color: #FFFFFF;
+}
+
+#login_options {
+    padding-top: 5px;
 }
