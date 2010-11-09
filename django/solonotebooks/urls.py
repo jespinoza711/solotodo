@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -49,5 +50,8 @@ urlpatterns = patterns('',
     (r'^account/enable_subscription_mail/(?P<subscription_id>\d+)/$', 'solonotebooks.cotizador.views.enable_subscription_mail'),
     (r'^account/disable_subscription_mail/(?P<subscription_id>\d+)/$', 'solonotebooks.cotizador.views.disable_subscription_mail'),    
     (r'^account/remove_subscription/(?P<subscription_id>\d+)/$', 'solonotebooks.cotizador.views.remove_subscription'),
+    (r'^latest_notebooks/$', 'solonotebooks.cotizador.views.latest_notebooks'),
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.STATIC_DOC_ROOT}),
     (r'^admin/', include(admin.site.urls)),
 )
