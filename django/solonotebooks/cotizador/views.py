@@ -3,6 +3,7 @@ import os
 import sys
 import hashlib
 import operator
+import simplejson, urllib
 from datetime import date, timedelta
 from time import time
 from math import ceil
@@ -254,8 +255,29 @@ def append_ads_to_response(request, template, args):
     return append_user_to_response(request, template, args)
     
 def append_user_to_response(request, template, args):
+    authenticated_user = False
+    username = ''
+    
+    facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
+    if facebook_cookie_name in request.COOKIES:
+        authenticated_user = True
+        cookie = request.COOKIES[facebook_cookie_name]
+        cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
+        uid = cookie_info['uid']
+        access_token = cookie_info['access_token']
+        
+        url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
+        user_data = simplejson.load(urllib.urlopen(url))
+        username = user_data['name']
+    
+    if request.user.is_authenticated():
+        authenticated_user = True
+        username = request.user.username
+        
     args['user'] = request.user
+    args['authenticated_user'] = authenticated_user
     args['flash'] = request.flash
+    args['username'] = username
     if 'REQUEST_URI' in request.META:
             args['next'] = urlquote(request.META['REQUEST_URI'])
     if 'signup_key' not in request.session:

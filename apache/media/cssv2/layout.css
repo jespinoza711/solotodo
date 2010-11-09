@@ -231,7 +231,7 @@ form.inline p { margin-bottom:0; }
 
 #nav-user ul {margin-top: 4px; margin-right: 0;}
 #nav-user ul li {float: left; color: #fff; text-shadow: #151516 0 1px 0;}
-#nav-user ul li a {font-weight: bold; margin-left: 5px; color: #649f50;   padding: 6px 10px;}
+#nav-user ul li a {font-weight: bold; margin-left: 2px; color: #649f50;   padding: 6px 10px;}
 #nav-user ul li a:hover {text-shadow: #111 0 1px 5px; text-decoration: none; background: #2d2f30;}
 
 #menu {margin-top: 30px; height: 71px;}

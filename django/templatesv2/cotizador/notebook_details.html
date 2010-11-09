@@ -4,7 +4,6 @@
 {% block title %}SoloNotebooks - {{ notebook }}{% endblock %}
 
 {% block header_content %}
-    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
     <link href="/media/css/galleria.css" rel="stylesheet" type="text/css" media="screen" /> 
     <script type="text/javascript" src="/media/js/galleria/jquery.galleria.js"></script>
     <script type="text/javascript"> 
@@ -177,9 +176,9 @@
         <small><a href="/admin/cotizador/notebook/{{ notebook.id }}">Editar</a></small>
     {% endif %}
     <h2>Especificaciones esenciales</h2>
-    <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.prettyPrint }}</a>
+    <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
     <br />
-    <strong>Pantalla: </strong> {{ notebook.screen.prettyDisplay }}
+    <strong>Pantalla: </strong> {{ notebook.screen.pretty_display }}
     <br />
     <strong>Memoria RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})
     <br />
@@ -243,9 +242,8 @@
     <br />
     <strong>¿Conexión FireWire?: </strong> {% if notebook.has_firewire %} Sí {% else %} No {% endif %}
     <br />
-<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.solonotebooks.net%2Fnotebooks%2F{{notebook.id}}&amp;layout=standard&amp;show_faces=true&amp;width=450&amp;action=like&amp;colorscheme=light&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
+    <fb:like href="http://www.solonotebooks.net/notebooks/{{ notebook.id }}"></fb:like>
     <br />
-    <iframe src="http://www.facebook.com/plugins/activity.php?site=http%3A%2F%2Fwww.solonotebooks.net%2F&amp;width=300&amp;height=300&amp;header=true&amp;colorscheme=light&amp;recommendations=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:300px; height:300px;" allowTransparency="true"></iframe>
     <hr />
     <div id="notebook_comments">
     <h2>Comentarios</h2>

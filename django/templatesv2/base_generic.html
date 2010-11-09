@@ -3,10 +3,12 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<title>SoloNotebooks - Todo Sobre Notebooks</title>
+	    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
 		<link rel="stylesheet" href="/media/cssv2/screen.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/cssv2/layout.css" type="text/css" media="screen, projection" />
    	 	<link rel="shortcut icon" href="/media/iconsv2/favicon.ico" type="image/x-icon" />
    	 	<script type="text/javascript" src="/media/jsv2/jquery-1.4.3.min.js"></script>
+   	 	<script src="http://connect.facebook.net/en_US/all.js"></script>
    	 	{% block header_content %}
 		{% endblock %}
 
@@ -46,30 +48,30 @@
 			<div id="content-head" class="container">
 				
 				<div id="nav-user">
-					<ul class="right">
-						<li>¿Todavía no eres usuario?</li>
-						<li><a href="#" title="Registrarte">Registrate</a></li>
-						<li id="login-box">
-							<span id="topnav" class="topnav"> Tienes una cuenta <a href="login" class="signin"><span>Ingresar</span></a></span> 
-							  <fieldset id="signin_menu">
-							    <form method="post" id="signin" action="/account/login/">
-							      <label for="username">Nombre de usuario</label>
-							      <input id="username" name="username" value="" title="username" tabindex="4" type="text">
-							      </p>
-							      <p>
-							        <label for="password">Clave</label>
-							        <input id="password" name="password" value="" title="password" tabindex="5" type="password">
-							      </p>
-							      <p class="remember">
-							        <input id="signin_submit" value="Ingresar" tabindex="6" type="submit">
-							        <input id="remember" name="remember_me" value="1" tabindex="7" type="checkbox">
-							        <label for="remember">Recordar mi cuenta</label>
-							      </p>
-							      <p class="forgot"><a href="#" >¿Olvidaste tu contraseña?</a> </p>
-							    </form>
-							  </fieldset>
-						</li>
-					</ul>
+					{% if authenticated_user %}    
+                        <div id="logout">
+                            <div>
+                                <span id="logout_links">
+                                {{ username }} | <a href="/account/">Mis Notebooks</a> | <a href="/account/logout/{% if next %}?next={{ next|iriencode }}{% endif %}">Logout</a>
+                                </span>
+                            </div>
+                        </div>            
+                    {% else %}
+                        <div id="login">
+                            <form id="login-form" method="post" action="/account/login/{% if next %}?next={{ next|iriencode }}{% endif %}">
+                                Nombre: <input class="login_input" type="text" name="username" id="username">
+                                &nbsp;
+                                Contraseña: <input class="login_input" type="password" name="password" id="password">
+                                <input type="submit" value="Entrar" class="login_button" />
+                            </form>
+                            <div id="login_options">
+                                &nbsp;
+                                <span><a href="" class="register_link">Registrarse</a> | <a href="" class="regenerate_link">¿Olvidaste tu contraseña?</a>
+                                </span>
+                                <fb:login-button perms="email"></fb:login-button>
+                            </div>
+                        </div>
+                    {% endif %}
 					
 				<br class="clear" />	
 				</div><!-- end nav user -->
@@ -131,6 +133,16 @@
 		<!-- !end content global -->
 		
 		<div id="footer"></div> <!-- end #footer -->
-		
+		<div id="fb-root"></div>
+<script>
+  FB.init({appId: '174309255912734', status: true, cookie: true, xfbml: true});
+  FB.Event.subscribe('auth.sessionChange', function(response) {
+    if (response.session) {
+        window.location.reload()
+    } else {
+      // The user has logged out, and the cookie has been cleared
+    }
+  });
+</script>
 	</body>
 </html>				
