@@ -34,6 +34,14 @@ def manager_login_required(f):
     wrap.__name__ = f.__name__
     return wrap
     
+def latest_notebooks(request):
+    ntbks = Notebook.objects.filter(is_available = True).order_by('-date_added')[:10]
+    
+    response = [[ntbk.id, str(ntbk)] for ntbk in ntbks]
+        
+    data = simplejson.dumps(response, indent=4)    
+    return HttpResponse(data, mimetype='application/javascript')     
+    
 # View for showing a particular store with the notebooks it offers    
 def store_data(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
