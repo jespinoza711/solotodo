@@ -29,7 +29,7 @@ class LogChangeNotebookPrice(models.Model):
     def send_notification_mails(self):
         from solonotebooks.cotizador.models import MailChangeNotebookPrice
     
-        active_subscriptions = NotebookSubscription.objects.filter(notebook = self.notebook).filter(email_notifications = True).filter(user__is_active = True)
+        active_subscriptions = NotebookSubscription.objects.filter(notebook = self.notebook).filter(email_notifications = True).filter(user__is_active = True).filter(is_active = True)
         for subscription in active_subscriptions:
             MailChangeNotebookPrice.new(subscription, self)
     

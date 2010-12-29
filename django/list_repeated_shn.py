@@ -1,17 +1,25 @@
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
-
+import sys
 from datetime import datetime
 from fetch_scripts import *
 from common_fetch_methods import *
 
+try:
+    store_name = sys.argv[1]
+    stores = Store.objects.filter(name = store_name)
+except:
+    stores = Store.objects.all()
+    
 ntbks = Notebook.objects.all()
-s = Store.objects.get(name = 'Peta')
 for ntbk in ntbks:
-    shns = StoreHasNotebook.objects.filter(store = s).filter(notebook = ntbk).filter(is_available = True).filter(is_hidden = False)
-    stores = set()
+    shns = StoreHasNotebook.objects.filter(notebook = ntbk).filter(is_available = True).filter(is_hidden = False)
+    shn_stores = set()
     for shn in shns:
-        if shn.store in stores:
+        if not shn.store in stores:
+            continue
+            
+        if shn.store in shn_stores:
             print str(ntbk.id) + ' ' + str(ntbk)
             break
-        stores.add(shn.store)
+        shn_stores.add(shn.store)

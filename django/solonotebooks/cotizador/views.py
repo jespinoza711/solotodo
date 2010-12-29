@@ -37,7 +37,7 @@ def manager_login_required(f):
 def latest_notebooks(request):
     ntbks = Notebook.objects.filter(is_available = True).order_by('-date_added')[:10]
     
-    response = [[ntbk.id, str(ntbk)] for ntbk in ntbks]
+    response = dict([[str(ntbk.id), str(ntbk)] for ntbk in ntbks])
         
     data = simplejson.dumps(response, indent=4)    
     return HttpResponse(data, mimetype='application/javascript')     
@@ -365,7 +365,7 @@ def notebook_details(request, notebook_id):
         'notebook': notebook,
         'comment_form': commentForm,
         'notebook_prices': stores_with_notebook_available,
-        'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('date'),
+        'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('id'),
         'posted_comment': posted_comment,
         'similar_notebooks': similar_notebooks,
         'notebook_subscription': notebook_subscription,
