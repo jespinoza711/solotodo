@@ -21,11 +21,12 @@ class Ripley:
         
         # Array containing the data for each product
         productsData = []
+        productUrls = []
         comparisonFields = []
         j = 1                    
         while True:
             urlWebpage = urlBase + urlBuscarProductos + str(j)
-            #print urlWebpage
+            print urlWebpage
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
@@ -58,12 +59,15 @@ class Ripley:
                 #print price
                 url = 'http://www.ripley.cl/webapp/wcs/stores/servlet/' + p.find('a')['href']
                 #print url
+                if url in productUrls:
+                    return productsData
                 
                 pd = ProductData()
                 pd.custom_name = name
                 pd.url = url
                 pd.price = price
                 pd.comparison_field = url
+                productUrls.append(url)
                 print pd
                 productsData.append(pd)
                 

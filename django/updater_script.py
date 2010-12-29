@@ -15,7 +15,7 @@ def main():
         shn.prevent_availability_change = False
         shn.save()
 
-    stores = [NotebookCenter(), PackardBell(), Bip(), LaPolar(), Bym(), Clie(), Falabella(), ENotebook(), FullNotebook(), Paris(), PCFactory(), Sym(), TecnoCl(), Wei(), Sistemax(), Dell(), Webco(), Ripley(), Racle(), Magens(), GlobalMac(), Syd(), MacOnline(), Impulso(), Peta(), HPOnline(), PortatilChile(), TecnoGroup()]
+    stores = [NotebookCenter(), PackardBell(), LaPolar(), Bym(), Clie(), Falabella(), ENotebook(), FullNotebook(), Paris(), PCFactory(), Sym(), TecnoCl(), Wei(), Sistemax(), Dell(), Webco(), Racle(), Magens(), GlobalMac(), Syd(), MacOnline(), Impulso(), Peta(), HPOnline(), PortatilChile(), TecnoGroup(), Ripley()]
     
     for store in stores:
         getStoreNotebooks(store)
