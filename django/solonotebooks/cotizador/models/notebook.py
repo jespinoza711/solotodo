@@ -1,4 +1,5 @@
 import operator
+from datetime import date, timedelta
 from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
@@ -272,8 +273,17 @@ class Notebook(models.Model):
             print ntype.name + ' ' + str(ntype.evaluate(self))
 
     @staticmethod
-    def get_valid_notebooks():
-        return Notebook.objects.all().filter(is_available = True)
+    def get_valid():
+        return Notebook.objects.filter(is_available = True)
+        
+    def update_week_discount(self):
+        t = date.today()
+        d = timedelta(days = 7)
+        old_price = self.price_at(t - d)
+        try:
+            self.week_discount = int(100 * (old_price - self.min_price) / old_price)
+        except:
+            self.week_discount = 0;
     
     class Meta:
         app_label = 'cotizador'

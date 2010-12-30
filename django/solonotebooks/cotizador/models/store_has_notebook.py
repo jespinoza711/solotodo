@@ -20,7 +20,7 @@ class StoreHasNotebook(models.Model):
     def __unicode__(self):
         return unicode(self.store) + ' - ' + self.custom_name
         
-    def prettyPrice(self):
+    def pretty_price(self):
         return prettyPrice(self.latest_price)
     
     class Meta:

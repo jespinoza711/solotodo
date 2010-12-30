@@ -3,129 +3,100 @@
 {% block content %}
 <div id="left">
     <div id="top-left">
-					<img src="/media/cssv2/img/fake-h1.png" class="left" /> <span class="left">Destacados por</span>
-					<ul class="right">
-					    {% for ordering_option in hnf.fields.highlighted_ordering.choices %}
-                            <li {% ifequal hnf.cleaned_data.highlighted_ordering ordering_option.0 %} class="active-top-left" {% endifequal %}><a href="?highlighted_ordering={{ ordering_option.0 }}" title="{{ ordering_option.1 }}">{{ordering_option.1}}</a></li>
-                        {% endfor %}
-					</ul>
-					<br class="clear" />
-				</div> <!-- !end top left -->
-			    <!-- !end top left -->
-				<div id="cat-index">
-					{% for notebook in notebooks %}
-					    <div class="producto-li">
-						    <div class="{{ notebook.ntype.css_name }}">
-							    <a href="/notebooks/{{ notebook.id}}" title="{{ notebook }}">
-								    {{ notebook.picture.thumbnail_tag }}<br />
-							    </a>
-							    <p>{{ notebook.ntype.name }}</p>	
-						    </div>
-						    <div class="content-producto">
-							    <a href="/notebooks/{{ notebook.id}}" title="{{ notebook }}">{{ notebook }}</a>
-							    <ul class="info-producto left">
-								    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
-								    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
-								    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
-								    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
-							    </ul>
-							    <ul class="precio-producto right">
-								    <li><a href="/notebooks/{{ notebook.id}}">{{ notebook.pretty_min_price }}</a></li>
-								    {% if notebook.week_discount >= 10 %}
-								    <li class="mas-barato"><strong>{{ notebook.week_discount }}</strong>% de Descuento</li>
-								    {% endif %}
-							    </ul>
-						    <br class="clear" />
-							    <a href="#" class="right findex" title="Agregar a Favoritos">agregar</a>
-						    </div>
-					    <br class="clear" />
-					    </div> <!-- end producto li -->
-                    {% endfor %}
-					<a href="#" title="Ver Listado Completo" class="more-index">Ver Listado Completo</a>
-					
-				</div> <!-- !end cat index -->
-			<!-- !end loop de producto -->	
+	    <img src="/media/cssv2/img/fake-h1.png" class="left" />
+        <span class="left">Destacados por</span>
+		<ul class="right">
+		    {% for ordering_option in hnf.fields.highlighted_ordering.choices %}
+                <li {% ifequal hnf.cleaned_data.highlighted_ordering ordering_option.0 %} class="active-top-left" {% endifequal %}>
+                    <a href="?highlighted_ordering={{ ordering_option.0 }}" title="{{ ordering_option.1 }}">{{ordering_option.1}}</a>
+                </li>
+            {% endfor %}
+		</ul>
+		<br class="clear" />
+	</div> <!-- !end top left -->
+	<div id="cat-index">
+		{% for notebook in notebooks %}
+		    <div class="producto-li">
+			    <div class="{{ notebook.ntype.css_name }}">
+				    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
+					    {{ notebook.picture.thumbnail_tag }}<br />
+				    </a>
+				    <p>{{ notebook.ntype.name }}</p>	
+			    </div>
+			    <div class="content-producto">
+				    <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook }}</a>
+				    <ul class="info-producto left">
+					    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
+					    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
+					    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
+					    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
+				    </ul>
+				    <ul class="precio-producto right">
+					    <li>
+					        <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.pretty_min_price }}</a>
+				        </li>
+					    {% if notebook.week_discount >= 10 %}
+					        <li class="mas-barato">
+					            <strong>{{ notebook.week_discount }}</strong>% de Descuento
+			                </li>
+					    {% endif %}
+				    </ul>
+    			    <br class="clear" />
+				    <a href="#" class="right findex" title="Agregar a Favoritos">agregar</a>
+			    </div>
+		    <br class="clear" />
+		    </div> <!-- end producto li -->
+        {% endfor %}
+		<a href="#" title="Ver Listado Completo" class="more-index">Ver Listado Completo</a>
+		
+	</div> <!-- !end cat index -->
+<!-- !end loop de producto -->	
 </div> 
 <!-- !end left -->
-	
+
 <div id="right">
-<div id="search-index">
-					<img src="/media/cssv2/img/fake-search.png" class="right" />
-					<h3>Búsqueda Rápida</h3>
-						
-						<div class="spacer-search">
-						    <form method="get" action="/catalog">
-							    <span>Marca</span><br />
-							    {{ form.notebook_brand }}
-							
-							    <span>Procesador</span><br />
-                                {{ form.processor_line_family }}
-							
-							    <span>Cantidad RAM</span><br />
-                                {{ form.ram_quantity }}
-							
-							    <span>Tipo tarjeta de video</span><br />
-                                {{ form.video_card_type }}
-							
-							    <input type="submit" class="right" value="Buscar" />
-					        </form>
-						</div>
-					<br class="clear" />
-				</div> <!-- end search index -->
+    <div id="search-index">
+		<img src="/media/cssv2/img/fake-search.png" class="right" />
+		<h3>Búsqueda Rápida</h3>
+			
+			<div class="spacer-search">
+			    <form method="get" action="/catalog">
+				    <span>Marca</span><br />
+				    {{ form.notebook_brand }}
 				
-				<div id="ad-right">
-					<fb:recommendations site="www.solonotebooks.net"></fb:recommendations>
-				</div> <!-- end ad right -->
+				    <span>Procesador</span><br />
+                    {{ form.processor_line_family }}
 				
-				<!--
-				<div id="noticias-index">
-					<h3>Ultimas Noticias</h3>
-					<ul>
-						<li>
-							<span class="tumb-n"><img src="/media/demov2/35.jpg" class="right" /></span>
-							<span class="info-n">
-								<a href="#" title="El titulo del link">Mac OS X Leopard installed on HTC Shift, just a WiFi shy of awesomeness</a><br />
-								25 Sep, 2010 1:35PM
-							</span><br class="clear" />
-						</li>
-						<li>
-							<span class="tumb-n"><img src="/media/demov2/35.jpg" class="right" /></span>
-							<span class="info-n">
-								<a href="#" title="El titulo del link">Mac OS X Leopard installed on HTC Shift, just a WiFi shy of awesomeness</a><br />
-								25 Sep, 2010 1:35PM
-							</span><br class="clear" />
-						</li>
-						<li>
-							<span class="tumb-n"><img src="/media/demov2/35.jpg" class="right" /></span>
-							<span class="info-n">
-								<a href="#" title="El titulo del link">Mac OS X Leopard installed on HTC Shift, just a WiFi shy of awesomeness</a><br />
-								25 Sep, 2010 1:35PM
-							</span><br class="clear" />
-						</li>
-						<li>
-							<span class="tumb-n"><img src="/media/demov2/35.jpg" class="right" /></span>
-							<span class="info-n">
-								<a href="#" title="El titulo del link">Mac OS X Leopard installed on HTC Shift, just a WiFi shy of awesomeness</a><br />
-								25 Sep, 2010 1:35PM
-							</span><br class="clear" />
-						</li>
-					</ul>
-				</div> -->
+				    <span>Cantidad RAM</span><br />
+                    {{ form.ram_quantity }}
 				
-				<div id="arbol-site">
-					<ul>
-						<li><span>NOTEBOOKS</span></li>
-						{% for notebook_type in form.fields.ntype.choices %}
-                        <li><a href="/catalog?ntype={{notebook_type.0}}" title="{{notebook_type.1}}">{{notebook_type.1}}</a></li>						
-                        {% endfor %}
-					</ul>
-					<ul>
-						<li><span>CATEGORIAS</span></li>
-						<li><a href="/catalog" title="Catálogo">Catálogo</a></li>
-						<li><a href="/blog" title="Blog">Blog</a></li>
-						<li><a href="/blog/about" title="Nosotros">Nosotros</a></li>
-						<li><a href="/blog/contacto" title="Contacto">Contacto</a></li>
-					</ul>
-				</div> <!-- end arbol site -->
-			</div> <!-- !end right -->				
+				    <span>Tipo tarjeta de video</span><br />
+                    {{ form.video_card_type }}
+				
+				    <input type="submit" class="right" value="Buscar" />
+		        </form>
+			</div>
+		<br class="clear" />
+	</div> <!-- end search index -->
+	
+	<div id="ad-right">
+		{{ side_ad.embedding_html|safe }}
+	</div> <!-- end ad right -->
+	
+	<div id="arbol-site">
+		<ul>
+			<li><span>NOTEBOOKS</span></li>
+			{% for notebook_type in form.fields.ntype.choices %}
+            <li><a href="{% url cotizador.views.catalog %}?ntype={{notebook_type.0}}" title="{{ notebook_type.1 }}">{{ notebook_type.1 }}</a></li>						
+            {% endfor %}
+		</ul>
+		<ul>
+			<li><span>CATEGORIAS</span></li>
+			<li><a href="{% url cotizador.views.catalog %}" title="Catálogo">Catálogo</a></li>
+			<li><a href="/blog" title="Blog">Blog</a></li>
+			<li><a href="/blog/about" title="Nosotros">Nosotros</a></li>
+			<li><a href="/blog/contacto" title="Contacto">Contacto</a></li>
+		</ul>
+	</div> <!-- end arbol site -->
+</div> <!-- !end right -->				
 {% endblock %}

@@ -2,13 +2,16 @@
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>SoloNotebooks - Todo Sobre Notebooks</title>
-	    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+		<title>
+		    {% block title %}
+		        SoloNotebooks - Todo sobre notebooks
+	        {% endblock %}
+	    </title>
 		<link rel="stylesheet" href="/media/cssv2/screen.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/cssv2/layout.css" type="text/css" media="screen, projection" />
+   	 	<link rel="stylesheet" href="/media/cssv2/mine.css" type="text/css" media="screen, projection" />
    	 	<link rel="shortcut icon" href="/media/iconsv2/favicon.ico" type="image/x-icon" />
    	 	<script type="text/javascript" src="/media/jsv2/jquery-1.4.3.min.js"></script>
-   	 	<script src="http://connect.facebook.net/en_US/all.js"></script>
    	 	{% block header_content %}
 		{% endblock %}
 
@@ -52,7 +55,7 @@
                         <div id="logout">
                             <div>
                                 <span id="logout_links">
-                                {{ username }} | <a href="/account/">Mis Notebooks</a> | <a href="/account/logout/{% if next %}?next={{ next|iriencode }}{% endif %}">Logout</a>
+                                {{ username }} | <a href="{% url cotizador.views_account.subscriptions %}">Mis Notebooks</a> | <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}">Logout</a>
                                 </span>
                             </div>
                         </div>            
@@ -68,7 +71,6 @@
                                 &nbsp;
                                 <span><a href="" class="register_link">Registrarse</a> | <a href="" class="regenerate_link">¿Olvidaste tu contraseña?</a>
                                 </span>
-                                <fb:login-button perms="email"></fb:login-button>
                             </div>
                         </div>
                     {% endif %}
@@ -78,7 +80,7 @@
 					
 				<div id="menu">
 					<div id="combo-search" class="left">
-						<a href="/" title="Inicio" title="Solo Notebooks" class="left"><img src="/media/cssv2/img/logo.png" /></a>
+						<a href="{% url cotizador.views.index %}" title="Inicio" title="Solo Notebooks" class="left"><img src="/media/cssv2/img/logo.png" /></a>
 						<ol id="search" class="left">
 						    <form method="get" action="/search">
 							<li>
@@ -92,8 +94,8 @@
 					
 					<div id="areas-site" class="right">
 						<ul>
-							<li class="sprite-inicio-active"><a href="/" title="Inicio">Inicio</a></li>
-							<li class="sprite-catalogo"><a href="/catalog" title="Catálogo">Catálogo</a></li>
+							<li class="sprite-inicio-active"><a href="{% url cotizador.views.index %}" title="Inicio">Inicio</a></li>
+							<li class="sprite-catalogo"><a href="{% url cotizador.views.catalog %}" title="Catálogo">Catálogo</a></li>
 							<li class="sprite-blog"><a href="/blog" title="Blog">Blog</a></li>
 						</ul>
 					</div> <!-- end areas -->
@@ -103,8 +105,12 @@
 				<div id="tabs">
 					<ul class="catalogo left">
 						<li class="intro-catalogo">Tipos de Notebooks</li>
-						{% for notebook_type in form.fields.ntype.choices %}
-                        <li {% ifequal notebook_type.0|add:"0" ntype_comparison_key|add:"0" %}class="active-menu"{% endifequal %}><a href="/catalog?{{change_ntype_url}}ntype={{notebook_type.0}}" title="{{notebook_type.1}}">{{notebook_type.1}}</a></li>						
+					    {% for notebook_type in form.fields.ntype.choices %}
+                            <li {% ifequal notebook_type.0|add:"0" ntype_comparison_key|add:"0" %}class="active-menu"{% endifequal %}>
+                                <a href="{% url cotizador.views.catalog %}?{{change_ntype_url}}ntype={{notebook_type.0}}" title="{{ notebook_type.1 }}">
+                                    {{notebook_type.1}}
+                                </a>
+                            </li>
                         {% endfor %}
 					</ul>
 					
@@ -123,26 +129,14 @@
 			{{ top_ad.embedding_html|safe }}
 		</div> <!-- !end ads-top -->
 		
-		<a href="#" title="Contacto" class="contacto">&nbsp</a>
-		
 		<div id="content" class="container">
 			{% block content %}
     		{% endblock %}					
-		<br class="clear" />
+		    <br class="clear" />
 		</div> <!-- !end #content-->	
 		<!-- !end content global -->
 		
 		<div id="footer"></div> <!-- end #footer -->
 		<div id="fb-root"></div>
-<script>
-  FB.init({appId: '174309255912734', status: true, cookie: true, xfbml: true});
-  FB.Event.subscribe('auth.sessionChange', function(response) {
-    if (response.session) {
-        window.location.reload()
-    } else {
-      // The user has logged out, and the cookie has been cleared
-    }
-  });
-</script>
 	</body>
 </html>				

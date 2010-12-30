@@ -1,0 +1,20 @@
+#notebook_list_container {
+    margin: 20px 0 20px 18px;
+}
+
+.processor_table {
+    width: auto;
+}
+
+.default_table {
+    width: auto;
+    background-color: white;
+}
+
+.default_table tr.even td {
+    background-color: white;
+}
+
+.default_table tbody tr.even td  { 
+	background-color: #ffffff; 
+}

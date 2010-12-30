@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Todos los procesadores - SoloNotebooks{% endblock %}
+
+{% block content %}
+
+<h1>Todos los procesadores</h1>
+
+<div>
+    <h2>Ver línea específica</h2>
+    <ul>
+    {% for processor_line_family in processor_line_families %}
+        <li><a href="{% url cotizador.views.processor_line_details processor_line_family.id %}">{{ processor_line_family }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<table class="processor_table">
+    <tr>
+        <th>Modelo</th>
+        <th>Núcleos</th>
+        <th>Frecuencia</th>
+        <th>Velocidad <sup>*</sup></th>        
+        <th>FSB</th>
+        <th>Cache</th>
+        <th>Consumo</th>
+        <th>Modo Turbo</th>
+    </tr>
+    {% for processor in processors %}
+        <tr>
+            <td><a href="{% url cotizador.views.catalog %}?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
+            <td>{{ processor.core_number }}</td>
+            <td>{{ processor.frequency }}</td>
+            <td>{{ processor.speed_score }}</td>                
+            <td>{{ processor.fsb }}</td>
+            <td>{{ processor.cache }}</td>
+            <td>{{ processor.tdp }} W</td>
+            <td>{% if processor.has_turbo_mode %} Sí {% else %} No {% endif %}</td>
+        </tr>
+    {% endfor %}
+</table>
+<span class="processor_table_notice">
+<sup>*</sup> Este valor sirve para comparar dos procesadores distintos, aún si son de marcas diferentes
+</span>
+
+{% endblock %}

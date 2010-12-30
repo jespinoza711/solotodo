@@ -20,6 +20,7 @@ def stringCompare(comp1, comp2):
         for comp1_word in comp1_words:
             if word in comp1_word:
                 counter += 1;
+                break
             
     return 100.0 * counter / len(comp2_words)
 
@@ -90,7 +91,7 @@ def initialize_search_form(data):
     if 'min_price' not in qd:
         qd['min_price'] = '0'
     if 'ordering' not in qd:
-        qd['ordering'] = 7
+        qd['ordering'] = '1'
     search_form = SearchForm(qd)
     search_form.validate()
     search_form.is_valid()
@@ -266,3 +267,10 @@ def set_subscription_mail_notifications(request, subscription_id, new_mail_notif
         request.flash['error'] = str(e)
     except Exception, e:
         request.flash['error'] = 'Error desconocido'
+        
+def concat_dictionary(d):
+    vals = ['%s=%s' % (k, v) for k, v in d.items()]
+    if vals:
+        return '?' + '&'.join(vals)
+    else:
+        return ''
