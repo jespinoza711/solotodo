@@ -308,11 +308,9 @@ def all_notebooks(request):
 # someday...
 def store_notebook_redirect(request, store_notebook_id):
     store_notebook = get_object_or_404(StoreHasNotebook, pk = store_notebook_id)
-    store_notebook.visitorCount += 1
     store_notebook.save()
     external_visit = ExternalVisit()
     external_visit.shn = store_notebook
-    external_visit.ip_address = ''
     external_visit.date = date.today()
     external_visit.save()
     return HttpResponseRedirect(store_notebook.url)

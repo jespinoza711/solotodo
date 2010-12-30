@@ -39,7 +39,6 @@ def saveNotebooks(ntbks, s):
             current_shn.comparison_field = ntbk.comparison_field
             current_shn.store = s
             current_shn.is_available = True
-            current_shn.visitorCount = 0
             current_shn.latest_price = ntbk.price
             current_shn.save()
             LogNewModel.new(current_shn).save()
