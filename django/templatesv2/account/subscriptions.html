@@ -1,0 +1,75 @@
+{% extends "account/base.html" %}
+
+{% block title %}SoloNotebooks - Mis notebooks{% endblock %}
+
+{% block header_content %}
+	<script type="text/javascript" src="/media/jsv2/subscriptions.js"></script>
+{% endblock %}
+
+{% block account_content %}
+
+<h1>Mis notebooks</h1>
+
+{% if not notebook_subscriptions %}
+    
+    <h3>No tienes ninguna suscripción!</h3>
+
+{% else %}
+
+<table class="default_table" id="subscription_list">
+    <tr>
+        <th>Notebook</th>
+        <th>Notificaciones por mail</th>
+        <th>Eliminar</th>        
+    </tr>
+    {% for ns in notebook_subscriptions %}
+        <tr>
+            <td class="notebook_column">
+                <div class="producto-li">
+		            <div class="{{ ns.notebook.ntype.css_name }}">
+			            <a href="{% url cotizador.views.notebook_details ns.notebook.id %}" title="{{ ns.notebook }}">
+				            {{ ns.notebook.picture.thumbnail_tag }}<br />
+			            </a>
+			            <p>{{ ns.notebook.ntype.name }}</p>	
+		            </div>
+		            <div class="content-producto">
+			            <a href="{% url cotizador.views.notebook_details ns.notebook.id %}" title="{{ ns.notebook }}">{{ ns.notebook }}</a>
+			            <ul class="info-producto left">
+				            <li><strong>Procesador:</strong> {{ ns.notebook.processor.pretty_print }}</li>
+				            <li><strong>RAM:</strong> {{ ns.notebook.ram_quantity }} ({{ ns.notebook.ram_type }}-{{ ns.notebook.ram_frequency.value }})</li>
+				            <li><strong>Disco Duro:</strong> {{ ns.notebook.storage_drive.all.0 }}</li>
+				            <li><strong>Pantalla:</strong> {{ ns.notebook.screen.pretty_display }}</li>
+			            </ul>
+			            <ul class="precio-producto right">
+				            <li><a href="{% url cotizador.views.notebook_details ns.notebook.id %}">{{ ns.notebook.pretty_min_price }}</a></li>
+			            </ul>
+		            <br class="clear" />
+		            </div>
+	            <br class="clear" />
+	            </div> <!-- end producto li -->
+            </td>
+            <td class="email_notification_choice_cell">
+                {% if ns.email_notifications %}
+                    <form method="post" action="/account/disable_subscription_mail/">
+                        <input type="hidden" name="subscription_id" value="{{ ns.id }}" />
+                        <strong>Sí</strong> /  <a class="subscription_link" href="#">No</a>
+                    </form>
+                {% else %}
+                    <form method="post" action="/account/enable_subscription_mail/">
+                        <input type="hidden" name="subscription_id" value="{{ ns.id }}" />
+                        <a class="subscription_link" href="#">Sí</a> / <strong>No</strong>
+                    </form>
+                {% endif %}
+            </td>
+            <td>
+                <form method="post" action="/account/remove_subscription/{{ ns.id }}/">
+                    <input type="submit" value="Eliminar" />
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}

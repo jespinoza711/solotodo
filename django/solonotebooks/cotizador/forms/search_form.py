@@ -25,8 +25,8 @@ class SearchForm(forms.Form):
     video_card_type = ClassChoiceField(VideoCardType, 'Tipo tarjeta de video')
     video_card = ClassChoiceField(VideoCard, 'Tarjeta de video')
     
-    ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Velocidad de la tarjeta de video'), ('4', 'Cantidad de RAM'),
-    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'), ('7', 'Nuevos modelos'))
+    ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Capacidad para juegos'), ('4', 'Cantidad de RAM'),
+    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'))
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     
     ordering = CustomChoiceField(choices = ordering_choices).set_name('Ordenamiento')

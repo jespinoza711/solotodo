@@ -1,0 +1,145 @@
+{% extends "base_generic.html" %}
+{% block header_content %}
+	<link rel="stylesheet" href="/media/cssv2/catalog.css" type="text/css" media="screen, projection" />
+	<script type="text/javascript" src="/media/jsv2/slider/jquery-ui-1.8.5.custom.min.js"></script>
+	<script type="text/javascript" src="/media/jsv2/slider/selectToUISlider.jQuery.js"></script>
+	<link rel="stylesheet" href="/media/cssv2/slider/redmond/jquery-ui-1.7.1.custom.css" type="text/css" />
+	<link rel="stylesheet" href="/media/cssv2/slider/ui.slider.extras.css" type="text/css" />
+	<script type="text/javascript" src="/media/jsv2/catalog.js"></script>
+
+{% endblock %}
+
+{% block content %}
+<div id="left-c">
+    <div id="top-left">
+		<img src="/media/cssv2/img/fake-h1.png" class="left" /> <span class="left">Filtros de Busqueda</span>
+		<br class="clear" />
+	</div> <!-- !end top left -->
+	<br />
+				
+	<form id="search_form" action="" method="get">
+		<!-- Filtros generales -->
+		<h2>Datos generales</h2>	
+		<div class="filter_item">
+			<label for="id_notebook_brand">Marca</label>
+			{{ form.notebook_brand }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_notebook_line">Línea</label>
+			{{ form.notebook_line }}
+		</div>
+
+		<div class="filter_item">
+			<input id="abs_min_price" type="hidden" value="{{ form.abs_min_price }}" />
+			<input id="abs_max_price" type="hidden" value="{{ form.abs_max_price }}" />
+		    <div id="price_slider">
+				{{ form.min_price }} {{ form.max_price }}
+			</div>
+			<br />
+		</div>
+	
+		<!-- Filtros de procesador -->    
+		<h2>Procesador</h2>
+		<div class="filter_item">
+			<label for="id_processor_brand">Marca</label>
+			{{ form.processor_brand }}
+		</div>
+		<div class="filter_item">
+			<label for="id_processor_line_family">Línea</label>
+			{{ form.processor_line_family }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_processor">Modelo</label>    
+			{{ form.processor }}
+		</div>
+
+		<!-- Filtros de RAM -->    
+		<h2>RAM</h2>
+		<div class="filter_item">
+			<label for="id_ram_quantity">Cant. min.</label>
+			{{ form.ram_quantity }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_ram_type">Tipo</label>
+			{{ form.ram_type }}
+		</div>
+
+		<!-- Filtros de almacenamiento -->    
+		<h2>Disco Duro</h2>
+		<div class="filter_item">
+			<label for="id_storage_capacity">Cant. min.</label>
+			{{ form.storage_capacity }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_storage_type">Tipo</label>
+			{{ form.storage_type }}
+		</div>
+
+		<!-- Filtros de pantalla -->    
+		<h2>Pantalla</h2>
+		<div class="filter_item">
+			<label for="id_screen_size_family">Tamaño</label>
+			{{ form.screen_size_family }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_screen_resolution">Resolución</label>
+			{{ form.screen_resolution }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_screen_touch">Táctil</label>
+			{{ form.screen_touch }}
+		</div>
+		<!-- Filtros de tarjeta de video -->    
+		<h2>Tarjeta de video</h2>
+		<div class="filter_item">
+			<label for="id_video_card_type">Tipo</label>
+			{{ form.video_card_type }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_video_card_brand">Marca</label>
+			{{ form.video_card_brand }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_video_card_line">Línea</label>
+			{{ form.video_card_line }}
+		</div>
+		<div class="hidden_filter_item">
+			<label for="id_video_card">Modelo</label>
+			{{ form.video_card }}
+		</div>
+
+		<!-- Filtros de sistema operativo -->    
+		<h2>Sistema Operativo</h2>
+		<div class="filter_item">
+			<label for="id_operating_system">Nombre</label>
+			{{ form.operating_system }}
+		</div>
+
+		<a id="toggle_hidden_link" href="">Búsqueda avanzada</a>
+		<div>
+			<input type="hidden" value="1" name="page_number"/>
+		</div>
+		<div class="always_hidden_filter_item">    
+			{{ form.ordering }}
+			{{ form.ntype }}
+            {{ form.advanced_controls }}
+		</div>
+		<div>
+			{{ form.ordering_direction }}
+		</div>
+		<hr />
+		<!-- Botón de envío -->
+		<div id="submit_container">
+			<input type="submit" value="Buscar" />
+		</div>
+	</form>
+				
+				
+</div> <!-- !end left -->
+<!-- !end left -->	
+	
+<div id="right-c">
+    {% block catalog_content %}
+    {% endblock %}
+</div> <!-- !end right -->
+{% endblock %}		

@@ -1,0 +1,77 @@
+{% extends "cotizador/base_catalog.html" %}
+
+{% block title %}SoloNotebooks - Resultados de la búsqueda{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block catalog_content %}
+
+<h1>Resultados de la búsqueda</h1>
+
+<p><b>Términos utilizados:</b> {{ query }}</p>
+
+{% ifequal result_notebooks.count 0 %}
+
+<h2>No se han encontrado equipos con esas características</h2>
+
+{% endifequal %}
+
+{% for notebook in ntbk_results %}
+    <div class="producto-li">
+	    <div class="{{ notebook.ntype.css_name }}">
+		    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
+			    {{ notebook.picture.thumbnail_tag }}<br />
+		    </a>
+		    <p>{{ notebook.ntype.name }}</p>	
+	    </div>
+	    <div class="content-producto">
+		    <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook }}</a> ({{ notebook.matching|floatformat }}%)
+		    <ul class="info-producto left">
+			    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
+			    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
+			    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
+			    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
+		    </ul>
+		    <ul class="precio-producto right">
+			    <li>
+			        <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.pretty_min_price }}</a>
+		        </li>
+			    {% if notebook.week_discount >= 10 %}
+			        <li class="mas-barato">
+			            <strong>{{ notebook.week_discount }}</strong>% de Descuento
+	                </li>
+			    {% endif %}
+		    </ul>
+		    <br class="clear" />
+		    <a href="#" class="right findex" title="Agregar a Favoritos">agregar</a>
+	    </div>
+    <br class="clear" />
+    </div> <!-- end producto li -->
+{% endfor %}
+
+<div id="pagination">
+    {% ifnotequal page_count 0 %}
+        {% ifnotequal page_number 1 %}
+		    <a href="/search/?search_keywords={{query}}&page_number={{ prev_page }}" title="Anterior">&laquo; Anterior</a>                        
+        {% endifnotequal %}
+        {% ifnotequal left_page 1 %}
+            ...
+        {% endifnotequal %}
+        {% for page in page_range %}
+            {% ifequal page page_number %}
+                <span class="page-active">Pagina: {{ page }}</span>
+            {% else %}
+			    <a href="/search/?search_keywords={{query}}&page_number={{ page }}" title="Numero pagina">{{ page }}</a>
+            {% endifequal %}
+        {% endfor %}
+        {% ifnotequal right_page page_count %}
+            ...
+        {% endifnotequal %}
+        {% ifnotequal page_number page_count %}
+            <a href="/search/?search_keywords={{query}}&page_number={{ post_page }}" title="Siguiente">Siguiente &raquo;</a>
+        {% endifnotequal %}
+    {% ifnotequal page_count 0 %}
+</div> <!-- end pagination -->
+
+{% endblock %}

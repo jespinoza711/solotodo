@@ -3,178 +3,14 @@
 
 {% block title %}SoloNotebooks - {{ notebook }}{% endblock %}
 
-{% block header_content %}
-    <link href="/media/css/galleria.css" rel="stylesheet" type="text/css" media="screen" /> 
-    <script type="text/javascript" src="/media/js/galleria/jquery.galleria.js"></script>
-    <script type="text/javascript"> 
-        $(function() { 
-            $('ul.gallery').galleria({
-			    history   : false, 
-			    clickNext : false, 
-			    insert    : '#image_container',
-			    onImage   : undefined,
-			    onThumb   : function() { $('ul.gallery img:first').click() },
-		    });
-		    
-		    notebook_id = {{ notebook.id }}
-
-        }); 
-    </script>
-{% endblock %}
-
 {% block content %}
 
-<div class="notebook_details_sidebar">
-    <div class="notebook_details_images">
-        <div id="image_container"></div>
-        <ul class="gallery">
-            <li>{{ notebook.picture.extra_thumbnails_tag.large }}</li>
-            {% for picture in notebook.notebookpicture_set.all %}
-                <li>{{ picture.picture.extra_thumbnails_tag.large }}</li>
-            {% endfor %}
-            <li><img src="/media/pics/charts/{{ notebook.id }}.png" alt="Grafico cambios de precio"/></li>
-        </ul>
-    </div>
-    <div class="price_table_container">
-        <table class="table_notebook_detail_prices">
-            <tr>
-                <th>Tienda</th>
-                <th>Precio</th>
-            </tr>
-            {% ifequal notebook_prices|length 0 %}
-              <tr>
-                <td colspan="2" class="notebook_availability_message">
-                  Este notebook no está disponible actualmente
-                </td>
-              </tr>
-            {% else %}
-              {% for notebook_price in notebook_prices %}
-                  <tr class="store_row">
-                      <td>
-                          <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.store.picture.thumbnail_tag }}</a>
-                      </td>
-                      <td>
-                          <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.prettyPrice }}</a>
-                      </td>
-                  </tr>
-              {% endfor %}
-            {% endifequal %}
-        </table>
-    </div>
-    
-    <div id="price_suggestion_box">
-        {% if not notebook_subscription %}
-        <table>
-            <tr>
-                <td>
-                    <a href="" class="subscribe_link">
-                    <img src="/media/assets/subscribe-icon.png" />
-                    </a>
-                </td>
-                <td>
-                    <a href="" class="subscribe_link">
-                    {% if notebook.is_available %}
-                        Enviarme cambios de precio
-                    {% else %}
-                        Avisarme cuando esté disponible
-                    {% endif %}
-                    </a>
-                </td>                
-            </tr>
-            <tr>
-                <td>
-                    <a href="" class="favorite_link">
-                    <img src="/media/assets/favorite-icon.png" />
-                    </a>
-                </td>
-                <td>
-                    <a href="" class="favorite_link">
-                    Agregar a mis favoritos
-                    </a>
-                </td>                
-            </tr>            
-        </table>
-        {% else %}
-            {% if notebook_subscription.email_notifications %}
-                <table>
-                    <tr>
-                        <td>
-                            <img src="/media/assets/subscribe-icon.png" />
-                        </td>
-                        <td>
-                            {% if notebook.is_available %}
-                                Estás recibiendo los cambios de precio
-                            {% else %}
-                                Te avisaremos cuando esté disponible
-                            {% endif %}
-                        </td>                
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="/media/assets/favorite-icon.png" />
-                        </td>
-                        <td>
-                            Este notebook está en tus favoritos
-                        </td>                
-                    </tr>                         
-                </table>            
-            {% else %}
-                <table>
-                    <tr>
-                        <td>
-                            <a href="" class="subscribe_link">
-                            <img src="/media/assets/subscribe-icon.png" />
-                            </a>
-                        </td>
-                        <td>
-                            <a href="" class="subscribe_link">
-                            {% if notebook.is_available %}
-                                Enviarme cambios de precio
-                            {% else %}
-                                Avisarme cuando esté disponible
-                            {% endif %}
-                            </a>
-                        </td>                
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="/media/assets/favorite-icon.png" />
-                        </td>
-                        <td>
-                            Este notebook está en tus favoritos
-                        </td>                
-                    </tr>                         
-                </table>
-            {% endif %}
-        {% endif %}
-    </div>
-
-    <div class="similar_notebooks">
-        <h2>Notebooks similares</h2>
-        {% for ntbk in similar_notebooks %}
-        <div class="notebook_container">
-            <div class="notebook_thumb_image">
-                <a href="../{{ ntbk.id }}">{{ ntbk.picture.thumbnail_tag }}</a>
-            </div>
-	    <div class="similar_notebook_stats">
-	            <a href="../{{ ntbk.id }}">
-        	        {{ ntbk }}
-	            </a>
-        	    <p>
-                	{{ ntbk.processor }} <br />
-	                {{ ntbk.screen.prettyDisplay }}<br />
-        	        <strong>{{ ntbk.prettyMinPrice }}</strong>
-	            </p>
-	    </div>
-        </div>
-        {% endfor %}
-    </div>
+<div id="notebook_picture_container">
+    {{ notebook.picture.extra_thumbnails_tag.large }}
 </div>
+
 <div class="notebook_details_specs">
     <h1>{{ notebook }}</h1>
-    {% if user.is_staff %}
-        <small><a href="/admin/cotizador/notebook/{{ notebook.id }}">Editar</a></small>
-    {% endif %}
     <h2>Especificaciones esenciales</h2>
     <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
     <br />
@@ -241,9 +77,101 @@
     <strong>¿Lector de huellas digitales?: </strong> {% if notebook.has_fingerprint_reader %} Sí {% else %} No {% endif %}
     <br />
     <strong>¿Conexión FireWire?: </strong> {% if notebook.has_firewire %} Sí {% else %} No {% endif %}
-    <br />
-    <fb:like href="http://www.solonotebooks.net/notebooks/{{ notebook.id }}"></fb:like>
-    <br />
+</div>
+
+<div class="price_table_container">
+    <table class="table_notebook_detail_prices">
+        <tr>
+            <th>Tienda</th>
+            <th>Precio</th>
+        </tr>
+        {% ifequal notebook_prices|length 0 %}
+          <tr>
+            <td colspan="2" class="notebook_availability_message">
+              Este notebook no está disponible actualmente
+            </td>
+          </tr>
+        {% else %}
+          {% for notebook_price in notebook_prices %}
+              <tr class="store_row">
+                  <td>
+                      <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.store.picture.thumbnail_tag }}</a>
+                  </td>
+                  <td>
+                      <a href="/store_notebook/{{notebook_price.id}}">{{ notebook_price.pretty_price }}</a>
+                  </td>
+              </tr>
+          {% endfor %}
+        {% endifequal %}
+    </table>
+</div>
+    
+<div id="price_suggestion_box">
+    {% if not notebook_subscription %}
+        <p>
+            <a href="" class="subscribe_link">
+                {% if notebook.is_available %}
+                    Enviarme cambios de precio
+                {% else %}
+                    Avisarme cuando esté disponible
+                {% endif %}
+            </a>
+        </p>
+        <p>
+            <a href="" class="favorite_link">
+                Agregar a mis favoritos
+            </a>
+        </p>
+    {% else %}
+        {% if notebook_subscription.email_notifications %}
+            <p>        
+                {% if notebook.is_available %}
+                    Estás recibiendo los cambios de precio
+                {% else %}
+                    Te avisaremos cuando esté disponible
+                {% endif %}
+            </p>
+            <p>
+                Este notebook está en tus favoritos
+            </p>
+        {% else %}
+            <p>
+                <a href="" class="subscribe_link">
+                    {% if notebook.is_available %}
+                        Enviarme cambios de precio
+                    {% else %}
+                        Avisarme cuando esté disponible
+                    {% endif %}
+                </a>
+            </p>
+            <p>
+                Este notebook está en tus favoritos
+            </p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<div class="similar_notebooks">
+    <h2>Notebooks similares</h2>
+    {% for ntbk in similar_notebooks %}
+    <div class="notebook_container">
+        <div class="notebook_thumb_image">
+            <a href="../{{ ntbk.id }}">{{ ntbk.picture.thumbnail_tag }}</a>
+        </div>
+    <div class="similar_notebook_stats">
+            <a href="../{{ ntbk.id }}">
+    	        {{ ntbk }}
+            </a>
+    	    <p>
+            	{{ ntbk.processor }} <br />
+                {{ ntbk.screen.pretty_display }}<br />
+    	        <strong>{{ ntbk.pretty_min_price }}</strong>
+            </p>
+    </div>
+    </div>
+    {% endfor %}
+</div>
+    
     <hr />
     <div id="notebook_comments">
     <h2>Comentarios</h2>

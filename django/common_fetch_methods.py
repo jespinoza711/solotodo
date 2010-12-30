@@ -154,15 +154,7 @@ def updateAvailabilityAndPrice():
             npc.save()  
             
         notebook.long_description = notebook.rawText()
-        
-        t = date.today()
-        d = timedelta(days = 7)
-        old_price = notebook.price_at(t - d)
-        try:
-            notebook.week_discount = int(100 * (old_price - notebook.min_price) / old_price)
-        except:
-            notebook.week_discount = 0;
-        
+        notebook.update_week_discount()
         
         #similar_notebooks = [str(ntbk.id) for ntbk in notebook.findSimilarNotebooks()]
         #notebook.similar_notebooks = ','.join(similar_notebooks)

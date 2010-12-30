@@ -17,7 +17,6 @@ class NotebookType(models.Model):
         from solonotebooks.cotizador.models import Notebook
         from math import fabs
         total_score = 0
-        
         total_score += fabs(self.screen_size - ntbk.screen.size.size) * 2.0
         total_score += fabs(self.processor_speed - ntbk.processor.speed_score) / 100.0
         total_score += fabs(self.processor_consumption - ntbk.processor.consumption)

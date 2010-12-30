@@ -1,0 +1,23 @@
+{% extends "account/base.html" %}
+
+{% block title %}SoloNotebooks - Mis notebooks{% endblock %}
+
+{% block account_content %}
+
+<h1>Cambiar correo electrónico</h1>
+
+<form id="custom_form" method="post">
+    <div class="field_wrapper">
+        {{ change_email_form.password.errors }}
+        <label for="id_password">Contraseña actual: </label>
+        {{ change_email_form.password }}
+    </div>
+    <div class="field_wrapper">
+        {{ change_email_form.new_email.errors }}    
+        <label for="id_new_email">Nuevo correo electrónico: </label>
+        {{ change_email_form.new_email }}
+    </div>
+    <p><input type="submit" value="Cambiar correo electrónico" /></p>
+</form>
+
+{% endblock %}
