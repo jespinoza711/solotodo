@@ -166,6 +166,14 @@ def notebook_details(request, notebook_id):
         'notebook_subscription': notebook_subscription,
         })    
     
+def latest_notebooks(request):
+    ntbks = Notebook.objects.filter(is_available = True).order_by('-date_added')[:10]
+    
+    response = dict([[str(ntbk.id), str(ntbk)] for ntbk in ntbks])
+        
+    data = simplejson.dumps(response, indent=4)    
+    return HttpResponse(data, mimetype='application/javascript')     
+    
 # View for showing a particular store with the notebooks it offers    
 def store_details(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
@@ -320,6 +328,65 @@ def ad_visited(request, advertisement_id):
     ad_visit.advertisement = advertisement
     ad_visit.save()
     return HttpResponseRedirect(advertisement.target_url)
+        
+# View in charge of showing the details of a notebook and handle commment submissions        
+def notebook_details(request, notebook_id):
+    notebook = get_object_or_404(Notebook, pk = notebook_id)
+    notebook = Notebook.objects.all().get(pk = notebook_id)
+    
+    # If this is a comment submission, validate and save
+    if request.method == 'POST': 
+        commentForm = NotebookCommentForm(request.POST)
+        if commentForm.is_valid():
+            notebook_comment = NotebookComment()
+            notebook_comment.date = date.today()        
+            rawComment = commentForm.cleaned_data['comments']
+            notebook_comment.comments = rawComment.replace('\n', '<br />')
+            notebook_comment.notebook = notebook
+            if not request.user.is_anonymous():
+                notebook_comment.user = request.user
+                notebook_comment.validated = True
+            else:
+                notebook_comment.nickname = commentForm.cleaned_data['nickname']
+                request.session['posted_comment'] = True
+                
+            notebook_comment.save()
+            return HttpResponseRedirect(request.META['HTTP_REFERER']);
+    else:
+        commentForm = NotebookCommentForm()
+        
+        
+    # Check if this is the redirect response generated after submitting an anonymous comment
+    # If it is, show a message that the comment needs to be validated and hide
+    # the form (to prevent users from posting again feeling that it didn't work)
+    posted_comment = False
+    
+    if 'posted_comment' in request.session and request.session['posted_comment'] == True:
+        posted_comment = True
+        request.session['posted_comment'] = False
+    
+    
+    # Find the stores with this notebook available
+    stores_with_notebook_available = notebook.storehasnotebook_set.all().filter(is_available=True).filter(is_hidden = False).order_by('latest_price')
+        
+    max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
+    similar_notebooks_ids = notebook.similar_notebooks.split(',')
+    similar_notebooks = [Notebook.objects.get(pk = ntbk_id) for ntbk_id in similar_notebooks_ids if ntbk_id]
+    
+    try:
+        notebook_subscription = NotebookSubscription.objects.filter(user = request.user, notebook = notebook, is_active = True)[0]
+    except:
+        notebook_subscription = None
+    
+    return append_ads_to_response(request, 'cotizador/notebook_details.html', {
+        'notebook': notebook,
+        'comment_form': commentForm,
+        'notebook_prices': stores_with_notebook_available,
+        'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('id'),
+        'posted_comment': posted_comment,
+        'similar_notebooks': similar_notebooks,
+        'notebook_subscription': notebook_subscription,
+        })
             
 # View in charge of showing the processors of a particular line, nothing fancy            
 def redirect_processor_line_family_details(request, processor_line_family_id):
