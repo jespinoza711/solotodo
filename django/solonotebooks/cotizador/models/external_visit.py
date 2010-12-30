@@ -3,7 +3,6 @@ from django.forms import ModelForm
 from solonotebooks.cotizador.models import StoreHasNotebook
 
 class ExternalVisit(models.Model):
-    ip_address = models.IPAddressField()
     date = models.DateField()
     
     shn = models.ForeignKey(StoreHasNotebook)

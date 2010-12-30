@@ -14,7 +14,6 @@ class NotebookReview(models.Model):
     score_speed = models.IntegerField(choices = SCORE_CHOICES)
     score_mobility = models.IntegerField(choices = SCORE_CHOICES)
     score_total = models.IntegerField(choices = SCORE_CHOICES)
-    ip_address = models.IPAddressField()
     comments = models.TextField()
     email = models.EmailField()
     date = models.DateField()

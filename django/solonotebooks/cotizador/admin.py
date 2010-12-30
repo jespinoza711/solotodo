@@ -2,7 +2,7 @@ from solonotebooks.cotizador.models import *
 from django.contrib import admin
 
 class StoreHasNotebookAdmin(admin.ModelAdmin):
-    list_display = ('custom_name','notebook', 'is_available', 'visitorCount')
+    list_display = ('custom_name','notebook', 'is_available')
     search_fields = ['custom_name']
 
 admin.site.register(ProcessorBrand)
