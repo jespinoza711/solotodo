@@ -54,9 +54,8 @@ class MacOnline:
         productsData = []
         
         url_extensions = [  '178-MacBook.html',
-                            '179-MacBook%20Pro.html',
-                            '350-MacBook%20Pro%20(New).html',
-                            '190-MacBook%20Air.html',
+                            '379-MacBook%20Pro.html',
+                            '384-New_MacBook_Air.html'
                             ]
                             
         for url_extension in url_extensions:

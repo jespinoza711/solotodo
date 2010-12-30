@@ -9,36 +9,12 @@ from fetch_scripts import ProductData
 class Bym:
     name = 'Bym'
 
-    # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
-	    br = mechanize.Browser()
-	    data = br.open(productUrl).get_data()
-	    soup = BeautifulSoup(data)
-
-	    productData = ProductData()
-
-	    titleSpan = soup.find("td", { "class" : "pageHeading" })
-	    title = str(titleSpan.string).strip()
-
-	    priceCell = soup.findAll("td", { "class" : "main" })[1]
-	    price = int(str(priceCell.find("strong").string.replace('.', '').replace('$', '')))
-
-	    productData.custom_name = title
-	    productData.price = price
-	    productData.url = productUrl.split('&osCsid')[0]
-	    productData.comparison_field = productData.url	    	    
-	    
-	    print productData
-
-	    return productData
-
-
     # Main method
     def getNotebooks(self):
         print 'Getting Bym notebooks'
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.bymcomputer.cl'
-        urlBuscarProductos = '/catalog/index.php'
+        urlBase = 'http://www.ttchile.cl/'
+        urlBuscarProductos = 'subpro.php'
         
         # Browser initialization
         browser = mechanize.Browser()
@@ -46,7 +22,7 @@ class Bym:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  '?cPath=84_147',
+        url_extensions = [  '?idCat=21&idSubCat=20',
                             ]
                             
         for url_extension in url_extensions:
@@ -55,19 +31,30 @@ class Bym:
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
-
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            rawLinks = baseSoup.findAll("td", { "class" : "productListing-data" })
-            rawLinks = rawLinks[2::5]
             
-            productLinks = []
-            for rawLink in rawLinks:
-                productLinks.append(rawLink.find("a")['href'])
-                
-                
+            productLinks = [div.find('a')['href'] for div in baseSoup.findAll('div', {'class': 'linkTitPro'})]
+            
             for productLink in productLinks:
-                prod = self.retrieveProductData(productLink)
-                productsData.append(prod)
+                urlProduct = urlBase + productLink
+                
+                baseData = browser.open(urlProduct).get_data()
+                baseSoup = BeautifulSoup(baseData)
+                
+                productData = ProductData()
+                
+                title = baseSoup.find('div', { 'class' : 'textTituloProducto'}).string.strip()
+                
+                prices = baseSoup.findAll('div', { 'class' : 'textOtrosPrecios' })
+                price = prices[0].string
+                price = int(price.replace('.', '').replace('$', ''))
+
+                productData.custom_name = title
+                productData.price = price
+                productData.url = urlProduct.split('&osCsid')[0]
+                productData.comparison_field = productData.url	    	    
+                productsData.append(productData)
+                
+                print productData
 
         return productsData
 

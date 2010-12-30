@@ -96,7 +96,7 @@ class Dell:
             productUrl = cotizadorLink['href']
             if 'configure' not in productUrl:
                 continue
-                
+               
             r = mechanize.urlopen(productUrl)
             soup = BeautifulSoup(r.read())
 
@@ -106,6 +106,9 @@ class Dell:
             productData.comparison_field = productData.url	    
 
             priceTag = soup.find('span', {'class': 'pricing_retail_nodiscount_price'})
+            if not priceTag:
+                priceTag = soup.find('span', {'class': 'pricing_sale_price'})
+
             try:
                 productData.price = int(priceTag.string.replace('CLP$', '').replace('.', ''))
             except:
@@ -178,7 +181,6 @@ class Dell:
 
             for i in range(len(modelUrls)):
                 productsData += self.retrieveAlienwareProductData(modelUrls[i], modelNames[i])
-                pass
         
         # Now for the business (Vostro / Latitude / Precision)        
         url_extensions = [  'empresas/notebooks/ct.aspx?refid=notebooks&s=bsd&cs=clbsdt1&~ck=mn',

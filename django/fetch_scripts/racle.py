@@ -21,24 +21,29 @@ class Racle:
         # Array containing the data for each product
         productsData = []
         
-        urlWebpage = urlBase + '/ventas/tieda/notebook?limit=50&limitstart=0'            
+        urlSearch = '/ventas/tienda/'            
 
-        # Obtain and parse HTML information of the base webpage
-        baseData = browser.open(urlWebpage).get_data()
-        baseSoup = BeautifulSoup(baseData)
+        urlExtensions = ['netbook', 'notebook']
 
-        # Obtain the links to the other pages of the catalog (2, 3, ...)
-        productNames = baseSoup.findAll("a", { "class" : "producto_titulo" })
-        productPrices = baseSoup.findAll("span", { "class" : "productPrice" })
-        
-        for i in range(len(productNames)):
-            productData = ProductData()
-            productData.custom_name = ' '.join(productNames[i].string.split())
-            productData.url = urlBase + productNames[i]['href'].split('?')[0]
-            productData.price = int(productPrices[i].string.replace('$', '').replace(' ', ''))
-            productData.comparison_field = productData.url
-            print productData
-            productsData.append(productData)        
+        for urlExtension in urlExtensions:
+            urlWebpage = urlBase + urlSearch + urlExtension + '?limit=50&limitstart=0'
+
+            # Obtain and parse HTML information of the base webpage
+            baseData = browser.open(urlWebpage).get_data()
+            baseSoup = BeautifulSoup(baseData)
+
+            # Obtain the links to the other pages of the catalog (2, 3, ...)
+            productNames = baseSoup.findAll("a", { "class" : "producto_titulo" })
+            productPrices = baseSoup.findAll("span", { "class" : "productPrice" })
+            
+            for i in range(len(productNames)):
+                productData = ProductData()
+                productData.custom_name = ' '.join(productNames[i].string.split())
+                productData.url = urlBase + productNames[i]['href'].split('?')[0]
+                productData.price = int(productPrices[i].string.replace('$', '').replace(' ', ''))
+                productData.comparison_field = productData.url
+                print productData
+                productsData.append(productData)        
             
         return productsData
 

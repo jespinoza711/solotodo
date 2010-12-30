@@ -33,6 +33,8 @@ class PCFactory:
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
             pageNumber = 1
+            
+            localLinks = []
                 
             while True:
                 completeWebpage = urlWebpage + '&pagina=' + str(pageNumber)
@@ -45,16 +47,19 @@ class PCFactory:
                 for ntbkLink in ntbkLinks:
                     link = urlBase + ntbkLink['href']
                     link = link.encode('ascii', 'ignore')
-                    if link in pageLinks:
+                    if link in localLinks:
                         trigger = True
                         break
-                    pageLinks.append(link)
+                    localLinks.append(link)
                     
                 if trigger:
+                    pageLinks.extend(localLinks)
                     break
                     
                 pageNumber += 1
                 
+        pageLinks = list(set(pageLinks))
+
         for link in pageLinks:
             baseData = browser.open(link).get_data()
             baseSoup = BeautifulSoup(baseData)
