@@ -57,16 +57,47 @@ def comments(request):
 @manager_login_required    
 def new_notebooks(request):
     # Shows the models that don't have an associated notebook in the DB (i.e.: pending)
-    new_notebooks = StoreHasNotebook.objects.filter(is_available = True).filter(is_hidden = False).filter(notebook = None)
+    new_notebooks = StoreHasNotebookEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shn__isnull = True)
     return append_ads_to_response(request, 'manager/new_notebooks.html', {
             'new_notebooks': new_notebooks,
         })
         
 @manager_login_required
+def storehasnotebookentity_edit(request, store_has_notebook_entity_id):
+    shne = get_object_or_404(StoreHasNotebookEntity, pk = store_has_notebook_entity_id)
+
+    if request.method == 'POST':
+        form = StoreHasNotebookEntityEditForm(request.POST)
+        if form.is_valid():
+            notebook = form.cleaned_data['notebook']
+            store = form.cleaned_data['store']
+            
+            shns = StoreHasNotebook.objects.filter(store = store).filter(notebook = notebook)
+            if shns:
+                shn = shns[0]
+            else:
+                shn = StoreHasNotebook()
+                shn.notebook = notebook
+                shn.store = store
+                shn.save()
+               
+            print shn.id 
+            shne.shn = shn
+            shne.save()
+            return HttpResponseRedirect('/manager/new_notebooks')
+    else:
+        form = StoreHasNotebookEntityEditForm()
+        
+    return append_ads_to_response(request, 'manager/store_has_notebook_entity_edit.html', {
+        'shne_form': form,
+        'shne': shne
+    })
+        
+@manager_login_required
 def hide_notebook(request, store_has_notebook_id):
     # Makes a model invisible to the "pending" page if it is stupid (e.g. iPad)
     # or doesn't apply (combos of notebooks + printers, notebook sleeves, etc)
-    shn = get_object_or_404(StoreHasNotebook, pk = store_has_notebook_id)
+    shn = get_object_or_404(StoreHasNotebookEntity, pk = store_has_notebook_id)
     shn.is_hidden = True
     shn.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER']);

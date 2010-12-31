@@ -2,7 +2,7 @@
 from django.db import models
 from django.template.loader import get_template
 from solonotebooks.cotizador.models import NotebookSubscription, LogLostNotebook
-from solonotebooks.cotizador.utils import send_email
+from solonotebooks import settings
 
 class MailLostNotebook(models.Model):
     subscription = models.ForeignKey(NotebookSubscription)
@@ -17,9 +17,11 @@ class MailLostNotebook(models.Model):
         m.try_and_send_mail()
         
     def try_and_send_mail(self):
+        from solonotebooks.cotizador.utils import send_email
         try:
             t = get_template('mails/lost_notebook.html')
-            send_email(self.subscription.user, str(self.subscription.notebook) + ' ya no está disponible', t, {'notebook': self.subscription.notebook })
+            if not settings.DEBUG:
+                send_email(self.subscription.user, str(self.subscription.notebook) + ' ya no está disponible', t, {'notebook': self.subscription.notebook })
             self.success = True
         except:
             self.success = False

@@ -177,7 +177,7 @@ def latest_notebooks(request):
 # View for showing a particular store with the notebooks it offers    
 def store_details(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
-    shns = StoreHasNotebook.objects.filter(store = store).filter(~Q(notebook = None)).filter(is_available = True).order_by('latest_price')
+    shns = StoreHasNotebook.objects.filter(store = store).filter(shne__isnull = False).order_by('shne__latest_price')
         
     return append_ads_to_response(request, 'cotizador/store_details.html', {
         'store': store,
@@ -307,7 +307,7 @@ def all_notebooks(request):
 # we log this for statistical purposes and... maybe build a business model
 # someday...
 def store_notebook_redirect(request, store_notebook_id):
-    store_notebook = get_object_or_404(StoreHasNotebook, pk = store_notebook_id)
+    store_notebook = get_object_or_404(StoreHasNotebookEntity, pk = store_notebook_id)
     store_notebook.save()
     external_visit = ExternalVisit()
     external_visit.shn = store_notebook
@@ -365,7 +365,7 @@ def notebook_details(request, notebook_id):
     
     
     # Find the stores with this notebook available
-    stores_with_notebook_available = notebook.storehasnotebook_set.all().filter(is_available=True).filter(is_hidden = False).order_by('latest_price')
+    stores_with_notebook_available = notebook.storehasnotebook_set.filter(shne__isnull = False).order_by('shne__latest_price')
         
     max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
     similar_notebooks_ids = notebook.similar_notebooks.split(',')

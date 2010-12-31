@@ -1,10 +1,6 @@
 from solonotebooks.cotizador.models import *
 from django.contrib import admin
 
-class StoreHasNotebookAdmin(admin.ModelAdmin):
-    list_display = ('custom_name','notebook', 'is_available')
-    search_fields = ['custom_name']
-
 admin.site.register(ProcessorBrand)
 admin.site.register(ProcessorLine)
 admin.site.register(ProcessorLineFamily)
@@ -53,7 +49,8 @@ admin.site.register(NotebookPriceChange)
 admin.site.register(City)
 admin.site.register(Store)
 admin.site.register(Sucursal)
-admin.site.register(StoreHasNotebook, StoreHasNotebookAdmin)
+admin.site.register(StoreHasNotebook)
+admin.site.register(StoreHasNotebookEntity)
 admin.site.register(StoreNotebookHistory)
 admin.site.register(LogEntry)
 admin.site.register(LogEntryMessage)

@@ -65,24 +65,31 @@
 
 {% for notebook in ntbks %}
 
-    <div class="notebook_container">
-        <div class="notebook_thumb_image"><a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.picture.thumbnail_tag }}</a></div>
-        <div class="notebook_thumb_price">
-<a href="{% url cotizador.views.notebook_details notebook.id %}">
-    {{ notebook.prettyMinPrice }}
-    </a>
-    
-        </div>
-        <h2><a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook }}</a></h2>
-        <strong>Procesador:</strong> {{ notebook.processor.pretty_print }}
-        <br />
-        <strong>RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})
-        <br />
-        <strong>Disco Duro: </strong> {{ notebook.storage_drive.all.0 }}
-                <br />
-        <strong>Pantalla: </strong> 
-        {{ notebook.screen.pretty_display }}
-    </div>
+<div class="producto-li">
+		    <div class="{{ notebook.ntype.css_name }}">
+			    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
+				    {{ notebook.picture.thumbnail_tag }}<br />
+			    </a>
+			    <p>{{ notebook.ntype.name }}</p>	
+		    </div>
+		    <div class="content-producto">
+			    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">{{ notebook }}</a>
+			    <ul class="info-producto left">
+				    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
+				    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
+				    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
+				    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
+			    </ul>
+			    <ul class="precio-producto right">
+				    <li><a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.pretty_min_price }}</a></li>
+				    {% if notebook.week_discount >= 10 %}
+				    <li class="mas-barato"><strong>{{ notebook.week_discount }}</strong>% de Descuento</li>
+				    {% endif %}
+			    </ul>
+		    <br class="clear" />
+		    </div>
+	    <br class="clear" />
+	    </div> <!-- end producto li -->
 
 {% endfor %}
 
