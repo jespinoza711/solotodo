@@ -156,7 +156,7 @@ def filter_notebooks(notebooks, search_form):
     if search_form.min_price:
         notebooks = notebooks.filter(min_price__gte = int(search_form.min_price))
 
-    if search_form.max_price:
+    if search_form.max_price and search_form.max_price != 1000000:
         notebooks = notebooks.filter(min_price__lte = int(search_form.max_price))
         
     # Check the ordering orientation, if it is not set, each criteria uses 

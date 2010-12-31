@@ -17,7 +17,7 @@ class Notebook(models.Model):
     has_firewire = models.BooleanField()
     is_available = models.BooleanField()
     
-    publicized_offer = models.ForeignKey('StoreHasNotebook', null = True, blank = True, related_name = 'ntbk')
+    publicized_offer = models.ForeignKey('StoreHasNotebookEntity', null = True, blank = True, related_name = 'ntbk')
     battery_mah = models.IntegerField()
     battery_mwh = models.IntegerField()
     battery_mv = models.IntegerField()
@@ -64,10 +64,6 @@ class Notebook(models.Model):
         },                                          
         upload_to = 'notebook_pics',
         generate_on_save = True,)
-        
-    def save(self):
-        self.determine_type()
-        super(Notebook, self).save()
 
         
     def rawText(self):

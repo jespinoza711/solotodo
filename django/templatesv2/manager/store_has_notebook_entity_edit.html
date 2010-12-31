@@ -1,0 +1,16 @@
+{% extends "manager/base.html" %}
+
+{% block title %}SoloNotebooks - Manager{% endblock %}
+
+{% block manager_content %}
+
+<h2><a href="{{ shne.url }}">{{ shne }}</a></h2>
+
+<form method="post" action="">
+    {{ shne_form.as_p }}
+    <p>
+        <input type="submit" value="Guardar" />
+    </p>
+</form>
+
+{% endblock %}

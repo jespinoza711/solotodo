@@ -11,15 +11,12 @@ try:
 except:
     stores = Store.objects.all()
     
-ntbks = Notebook.objects.all()
-for ntbk in ntbks:
-    shns = StoreHasNotebook.objects.filter(notebook = ntbk).filter(is_available = True).filter(is_hidden = False)
-    shn_stores = set()
-    for shn in shns:
-        if not shn.store in stores:
-            continue
-            
-        if shn.store in shn_stores:
-            print str(ntbk.id) + ' ' + str(ntbk)
-            break
-        shn_stores.add(shn.store)
+shns = StoreHasNotebook.objects.all()
+
+for shn in shns:
+    shnes = shn.storehasnotebookentity_set.filter(is_available = True).filter(is_hidden = False)
+    
+    if len(shnes) > 1 and shn.store in stores:
+        print str(shn.notebook.id) + ' - ' + unicode(shn)
+        for shne in shnes:
+            print '* ' + str(shne.id)

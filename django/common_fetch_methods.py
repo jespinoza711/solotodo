@@ -29,38 +29,39 @@ def saveNotebooks(ntbks, s):
         print 'Guardando ' + str(ntbk)
         print 'Buscando si tiene un registro existente'
         try:
-            current_shn = StoreHasNotebook.objects.filter(store = s).get(comparison_field = ntbk.comparison_field)
+            current_shne = StoreHasNotebookEntity.objects.filter(shn__store = s).get(comparison_field = ntbk.comparison_field)
             print 'Si tiene registro existente, usandolo'
-        except StoreHasNotebook.DoesNotExist:
+        except StoreHasNotebookEntity.DoesNotExist:
             print 'No tiene registro existente, creandolo'
-            current_shn = StoreHasNotebook()
-            current_shn.url = ntbk.url
-            current_shn.custom_name = ntbk.custom_name
-            current_shn.comparison_field = ntbk.comparison_field
-            current_shn.store = s
-            current_shn.is_available = True
-            current_shn.latest_price = ntbk.price
-            current_shn.save()
-            LogNewModel.new(current_shn).save()
+            current_shne = StoreHasNotebookEntity()
+            current_shne.url = ntbk.url
+            current_shne.custom_name = ntbk.custom_name
+            current_shne.comparison_field = ntbk.comparison_field
+            current_shne.shn = None
+            current_shne.is_available = True
+            current_shne.is_hidden = False
+            current_shne.latest_price = ntbk.price
+            current_shne.save()
+            LogNewModel.new(current_shne).save()
         
         print 'Viendo si esta registrado como desaparecido'
-        if not current_shn.is_available:
+        if not current_shne.is_available:
             print 'Estaba desaparecido, registrando resucitacion'
-            LogReviveModel.new(current_shn).save()
-            current_shn.is_available = True
+            LogReviveModel.new(current_shne).save()
+            current_shne.is_available = True
             
         print 'Guardando estado del notebook en tienda'
-        current_shn.save()
+        current_shne.save()
 
         # We keep track of prices for every day, and we need to avoid clashes
         print 'Viendo si ya se solicito un catastro para hoy'
-        today_history = StoreNotebookHistory.objects.filter(date = date.today()).filter(registry = current_shn)
+        today_history = StoreNotebookHistory.objects.filter(date = date.today()).filter(registry = current_shne)
         if len(today_history) == 0:
             print 'No hay registro de hoy, creandolo'
             snh = StoreNotebookHistory()
             snh.price = ntbk.price
             snh.date = date.today()
-            snh.registry = current_shn
+            snh.registry = current_shne
             snh.save()    
         else:
             print 'Hay un registro existente, viendo si hay cambios de precio'
@@ -69,28 +70,30 @@ def saveNotebooks(ntbks, s):
                 print 'Hubo un cambio de precio'
                 today_history.price = ntbk.price
                 today_history.save()
-                current_shn.latest_price = ntbk.price
-                current_shn.save()
+                current_shne.latest_price = ntbk.price
+                current_shne.save()
                 
     
 ''' Management method that keeps everything coherent (e.g. updating the price of
 the notebooks to the minimum among the stores that carry it, etc)'''
 def updateAvailabilityAndPrice():
     print 'Actualizando status de disponibilidad de las tiendas'
-    shns = StoreHasNotebook.objects.all()
-    for shn in shns:
+    
+    print 'Paso 1: Actualizando StoreHasNotebookEntities'
+    shnes = StoreHasNotebookEntity.objects.all()
+    for shne in shnes:
         print ''
-        print str(shn)
-        if shn.is_available and not shn.prevent_availability_change:
+        print str(shne)
+        if shne.is_available and shne.shn and not shne.shn.prevent_availability_change:
             print 'Buscando logs de registro'
-            last_logs = shn.storenotebookhistory_set.order_by('-date')
+            last_logs = shne.storenotebookhistory_set.order_by('-date')
             try:    
                 last_log = last_logs[0]
                 if not last_log.date == (date.today()):
                     print 'Ultimo registro no es de hoy, dejando entrada no disponible'
-                    shn.is_available = False
-                    LogLostModel.new(shn).save()
-                    shn.save()
+                    shne.is_available = False
+                    LogLostModel.new(shne).save()
+                    shne.save()
                 else:
                     print 'Ultimo registro es de hoy, viendo si hay cambios'
                     try:
@@ -98,24 +101,37 @@ def updateAvailabilityAndPrice():
                         
                         # The second condition helps when executing the "manual_update" script many times
                         # in a single day, preventing repeated log messages
-                        if yesterday_log.price != last_log.price and last_log.price != shn.latest_price:
+                        if yesterday_log.price != last_log.price and last_log.price != shne.latest_price:
                             print 'Hubieron cambios de precio, registrando'
-                            shn.latest_price = last_log.price
-                            shn.save()
-                            LogChangeModelPrice.new(shn, yesterday_log.price, last_log.price).save()
+                            shne.latest_price = last_log.price
+                            shne.save()
+                            LogChangeModelPrice.new(shne, yesterday_log.price, last_log.price).save()
                         else:
                             print 'No hay cambios'
                     except IndexError:
                         pass
             except IndexError:
                 pass
+        shne.save()
+        
+    print 'Paso 2: Actualizando StoreHasNotebook'
+    shns = StoreHasNotebook.objects.all()
+    for shn in shns:
+        print shn
+        shnes = shn.storehasnotebookentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
+        if shnes:
+            shn.shne = shnes[0]
+        else:
+            shn.shne = None
+            
         shn.save()
-    
-    print 'Actualizando precios minimos'
+        
+    print 'Paso 3: Actualizando Notebook'
+
     for notebook in Notebook.objects.all():
         print notebook
         
-        new_price = notebook.storehasnotebook_set.all().filter(is_available = True).filter(is_hidden = False).aggregate(Min('latest_price'))['latest_price__min']
+        new_price = notebook.storehasnotebook_set.filter(shne__isnull = False).aggregate(Min('shne__latest_price'))['shne__latest_price__min']
         
         if new_price:
             print 'El notebook tiene registros de disponibilidad'

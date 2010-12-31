@@ -11,7 +11,7 @@ def main():
     p = eval(sys.argv[1] + '()')
     getStoreNotebooks(p)
     
-    updateAvailabilityAndPrice()    
+    #updateAvailabilityAndPrice()    
                 
 if __name__ == '__main__':
     print datetime.now()

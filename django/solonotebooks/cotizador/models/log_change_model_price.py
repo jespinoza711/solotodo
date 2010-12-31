@@ -1,10 +1,10 @@
 from datetime import date
 from django.db import models
 from utils import prettyPrice
-from solonotebooks.cotizador.models import LogEntry, StoreHasNotebook
+from solonotebooks.cotizador.models import LogEntry, StoreHasNotebookEntity
 
 class LogChangeModelPrice(models.Model):
-    shn = models.ForeignKey(StoreHasNotebook)
+    shn = models.ForeignKey(StoreHasNotebookEntity)
     log_entry = models.ForeignKey(LogEntry) 
     old_price = models.IntegerField()
     new_price = models.IntegerField()
@@ -23,7 +23,7 @@ class LogChangeModelPrice(models.Model):
         return str(self.log_entry.date) + ' - ' + str(self.shn)
         
     def message(self):
-        return str(self.shn) + ' de ' + prettyPrice(self.old_price, '') + ' a ' + prettyPrice(self.new_price, '') + ' (<a href="' + self.shn.url + '">Link</a> / <a href="/admin/cotizador/storehasnotebook/' + str(self.shn.id) + '/">Editar</a>)'
+        return str(self.shn) + ' de ' + prettyPrice(self.old_price, '') + ' a ' + prettyPrice(self.new_price, '') + ' (<a href="' + self.shn.url + '">Link</a> / <a href="/admin/cotizador/storehasnotebookentity/' + str(self.shn.id) + '/">Editar</a>)'
     
     class Meta:
         app_label = 'cotizador'

@@ -5,19 +5,14 @@ from solonotebooks.cotizador.models import Notebook, Store
 from utils import prettyPrice
 
 class StoreHasNotebook(models.Model):
-    url = models.TextField()
-    custom_name = models.CharField(max_length = 255)
-    is_available = models.BooleanField()
+    # comment next line before script    
     prevent_availability_change = models.BooleanField()
-    is_hidden = models.BooleanField()
-    latest_price = models.IntegerField()
-    comparison_field = models.TextField()    
-    
     notebook = models.ForeignKey(Notebook, null = True, blank = True)
+    shne = models.ForeignKey('StoreHasNotebookEntity', null = True, blank = True)
     store = models.ForeignKey(Store)
     
     def __unicode__(self):
-        return unicode(self.store) + ' - ' + self.custom_name
+        return unicode(self.store) + ' - ' + unicode(self.notebook)
         
     def pretty_price(self):
         return prettyPrice(self.latest_price)

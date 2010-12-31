@@ -71,7 +71,7 @@
         {% ifnotequal page_number page_count %}
             <a href="/search/?search_keywords={{query}}&page_number={{ post_page }}" title="Siguiente">Siguiente &raquo;</a>
         {% endifnotequal %}
-    {% ifnotequal page_count 0 %}
+    {% endifnotequal %}
 </div> <!-- end pagination -->
 
 {% endblock %}
