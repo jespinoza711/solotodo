@@ -1,15 +1,16 @@
 {% extends "base_generic.html" %}
 
 {% block title %}
-{% ifequal processor None %}
-    Procesadores {{ processor_line_family }} - SoloNotebooks
-{% else %}
-    Procesador {{ processor }} - SoloNotebooks
-{% endifequal %}
-
+    {% ifequal processor None %}
+        Procesadores {{ processor_line_family }} - SoloNotebooks
+    {% else %}
+        Procesador {{ processor }} - SoloNotebooks
+    {% endifequal %}
 {% endblock %}
 
 {% block content %}
+
+{% load mytags %}
 
 {% ifequal processor None %}
     <h1>Procesadores {{ processor_line_family }}</h1>
@@ -76,34 +77,8 @@
     <h2 class="subheader">Algunos equipos con el procesador {{ processor }}</h2>
 {% endifequal %}
 
-{% for notebook in ntbks %}
-
-    <div class="producto-li">
-		    <div class="{{ notebook.ntype.css_name }}">
-			    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
-				    {{ notebook.picture.thumbnail_tag }}<br />
-			    </a>
-			    <p>{{ notebook.ntype.name }}</p>	
-		    </div>
-		    <div class="content-producto">
-			    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">{{ notebook }}</a>
-			    <ul class="info-producto left">
-				    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
-				    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
-				    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
-				    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
-			    </ul>
-			    <ul class="precio-producto right">
-				    <li><a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.pretty_min_price }}</a></li>
-				    {% if notebook.week_discount >= 10 %}
-				    <li class="mas-barato"><strong>{{ notebook.week_discount }}</strong>% de Descuento</li>
-				    {% endif %}
-			    </ul>
-		    <br class="clear" />
-		    </div>
-	    <br class="clear" />
-	    </div> <!-- end producto li -->
-
+{% for notebook in notebooks %}
+    {% display_notebook notebook %}
 {% endfor %}
 
 {% endblock %}

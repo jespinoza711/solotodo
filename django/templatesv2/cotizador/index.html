@@ -1,6 +1,8 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+
+{% load mytags %}
 <div id="left">
     <div id="top-left">
 	    <img src="/media/cssv2/img/fake-h1.png" class="left" />
@@ -16,36 +18,7 @@
 	</div> <!-- !end top left -->
 	<div id="cat-index">
 		{% for notebook in notebooks %}
-		    <div class="producto-li">
-			    <div class="{{ notebook.ntype.css_name }}">
-				    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
-					    {{ notebook.picture.thumbnail_tag }}<br />
-				    </a>
-				    <p>{{ notebook.ntype.name }}</p>	
-			    </div>
-			    <div class="content-producto">
-				    <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook }}</a>
-				    <ul class="info-producto left">
-					    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
-					    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
-					    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
-					    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
-				    </ul>
-				    <ul class="precio-producto right">
-					    <li>
-					        <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.pretty_min_price }}</a>
-				        </li>
-					    {% if notebook.week_discount >= 10 %}
-					        <li class="mas-barato">
-					            <strong>{{ notebook.week_discount }}</strong>% de Descuento
-			                </li>
-					    {% endif %}
-				    </ul>
-    			    <br class="clear" />
-				    <a href="#" class="right findex" title="Agregar a Favoritos">agregar</a>
-			    </div>
-		    <br class="clear" />
-		    </div> <!-- end producto li -->
+		    {% display_notebook notebook %}
         {% endfor %}
 		<a href="#" title="Ver Listado Completo" class="more-index">Ver Listado Completo</a>
 		

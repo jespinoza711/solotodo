@@ -1,0 +1,37 @@
+<div class="producto-li">
+    <div class="{{ notebook.ntype.css_name }}">
+	    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
+		    {{ notebook.picture.thumbnail_tag }}<br />
+	    </a>
+	    <p>{{ notebook.ntype.name }}</p>	
+    </div>
+    <div class="content-producto">
+	    <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook }}</a>
+	    <ul class="info-producto left">
+		    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
+		    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
+		    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
+		    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
+	    </ul>
+	    <ul class="precio-producto right">
+		    <li>
+		        <a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.pretty_min_price }}</a>
+	        </li>
+		    {% if notebook.week_discount >= 10 %}
+		        <li class="mas-barato">
+		            <strong>{{ notebook.week_discount }}</strong>% de Descuento
+                </li>
+		    {% endif %}
+	    </ul>
+	    <br class="clear" />
+	    <a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> 
+        <div>
+            {% if notebook.in_comparison_list %}
+        	    <a href="#" class="remove_from_comparison_list_link" ntbk_id="{{ notebook.id }}">Quitar de la lista</a>
+            {% else %}
+        	    <a href="#" class="add_to_comparison_list_link" ntbk_id="{{ notebook.id }}">Agregar a la lista</a>
+    	    {% endif %}
+	    </div>
+    </div>
+    <br class="clear" />
+</div> <!-- end producto li -->

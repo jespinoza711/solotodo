@@ -3,22 +3,16 @@ from django import template
 from solonotebooks import settings
 
 register = template.Library()
-
-@register.inclusion_tag('templatetags/gravatar.html')
-def show_gravatar(user, size = 48):
-    default = settings.SERVER_NAME + 'media/assets/no-avatar.gif'
-
-    email = ''
-    if user and user.is_active:
-        email = user.email
-
-    url = "http://www.gravatar.com/avatar.php?"
-    url += urllib.urlencode({
-        'gravatar_id': hashlib.md5(email).hexdigest(), 
-        'default': default, 
-        'size': str(size)
-    })
-
-    return {'gravatar': {'url': url, 'size': size}}
     
+@register.inclusion_tag('templatetags/display_notebook.html')
+def display_notebook(notebook, show_options = True):
+    return {
+        'notebook': notebook, 
+        'show_options': show_options
+    }
     
+@register.inclusion_tag('templatetags/display_notebook_as_table.html')
+def display_notebook_as_table(notebook):
+    return {
+        'notebook': notebook, 
+    }

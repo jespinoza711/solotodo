@@ -166,14 +166,6 @@ def notebook_details(request, notebook_id):
         'notebook_subscription': notebook_subscription,
         })    
     
-def latest_notebooks(request):
-    ntbks = Notebook.objects.filter(is_available = True).order_by('-date_added')[:10]
-    
-    response = dict([[str(ntbk.id), str(ntbk)] for ntbk in ntbks])
-        
-    data = simplejson.dumps(response, indent=4)    
-    return HttpResponse(data, mimetype='application/javascript')     
-    
 # View for showing a particular store with the notebooks it offers    
 def store_details(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
@@ -238,7 +230,7 @@ def search(request):
     return append_ads_to_response(request, 'cotizador/search.html', {
         'form': search_form,
         'query': query,
-        'ntbk_results': result_notebooks,
+        'notebooks': result_notebooks,
         'page_number': search_form.page_number,
         'prev_page': search_form.page_number - 1,
         'post_page': search_form.page_number + 1,
@@ -284,16 +276,24 @@ def append_user_to_response(request, template, args):
     
     args['ntype_comparison_key'] = ntype_comparison_key
     args['signup_key'] = request.session['signup_key']
+    
+    if not 'comparison_list' in request.session:
+        request.session['comparison_list'] = NotebookComparisonList()
+        request.session['comparison_list'].save()
+        
+    comparison_list = request.session['comparison_list'].notebooks.all()
+    
+    if 'notebooks' in args:
+        notebooks = args['notebooks']
+        for notebook in notebooks:
+            if notebook in comparison_list:
+                notebook.in_comparison_list = True
+            else:
+                notebook.in_comparison_list = False
+    
+    args['comparison_list'] = comparison_list
+    
     return render_to_response(template, args)
-       
-    return append_ads_to_response(request, 'cotizador/index.html', {
-        'form': search_form,
-        'remove_filter_links': search_form.generateRemoveFilterLinks(),
-        'result_notebooks': result_notebooks,
-        'produt_link_args': product_link_args,
-        'ordering_direction_url': search_form.generateUrlWithoutOrderingDirection(),
-        'ordering_direction': {'': 0, '-': 1}[ordering_direction],
-    })
     
 # View for displaying every single notebook in the DB
 def all_notebooks(request):
@@ -382,7 +382,7 @@ def notebook_details(request, notebook_id):
         'notebook_prices': stores_with_notebook_available,
         'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('id'),
         'posted_comment': posted_comment,
-        'similar_notebooks': similar_notebooks,
+        'notebooks': similar_notebooks,
         'notebook_subscription': notebook_subscription,
         })
             
@@ -417,7 +417,7 @@ def processor_line_details(request, processor_line_id):
     return append_ads_to_response(request, 'cotizador/processor_line_details.html', {
                 'processor_line_family': processor_line_family,
                 'processors': processors,
-                'ntbks': ntbks,
+                'notebooks': ntbks,
                 'processor_id': processor_id,
                 'processor': processor,
                 'other_processor_line_families': other_processor_line_families,
@@ -447,7 +447,7 @@ def video_card_line_details(request, video_card_line_id):
     return append_ads_to_response(request, 'cotizador/video_card_line_details.html', {
                 'video_card_line': video_card_line,
                 'video_cards': video_cards,
-                'ntbks': ntbks,
+                'notebooks': ntbks,
                 'video_card_id': video_card_id,
                 'video_card': video_card,
                 'other_video_card_lines': other_video_card_lines,
@@ -471,4 +471,60 @@ def video_card_line(request):
     return append_ads_to_response(request, 'cotizador/all_video_card_lines.html', {
                 'video_card_lines': video_card_lines,
                 'video_cards': video_cards
-            })
+    })
+    
+def add_item_notebook_comparison(request):
+    try:
+        if not 'comparison_list' in request.session:
+            request.session['comparison_list'] = NotebookComparisonList()
+            request.session['comparison_list'].save()
+        
+        ntbk = Notebook.objects.get(pk = request.POST['ntbk_id'])
+        request.session['comparison_list'].notebooks.add(ntbk)
+        request.session['comparison_list'].save()
+        
+        response = {'code': 'OK'}
+    except:
+        response = {'code': 'Error'}
+    
+    request.session.modified = True
+    
+    data = simplejson.dumps(response, indent = 4)
+    return HttpResponse(data, mimetype='application/javascript') 
+    
+def remove_item_notebook_comparison(request):
+    try:
+        if not 'comparison_list' in request.session:
+            request.session['comparison_list'] = NotebookComparisonList()
+            request.session['comparison_list'].save()
+        
+        ntbk = Notebook.objects.get(pk = request.POST['ntbk_id'])
+        request.session['comparison_list'].notebooks.remove(ntbk)
+        request.session['comparison_list'].save()
+        
+        response = {'code': 'OK'}
+    except:
+        response = {'code': 'Error'}
+    
+    request.session.modified = True
+    
+    data = simplejson.dumps(response, indent = 4)
+    return HttpResponse(data, mimetype='application/javascript') 
+    
+def notebook_comparison(request):
+
+    if request.method == 'POST' or not 'comparison_list' in request.session:
+        request.session['comparison_list'] = NotebookComparisonList()
+        request.session['comparison_list'].save()        
+        
+    return append_ads_to_response(request, 'cotizador/notebook_comparison.html', {
+        'notebooks': request.session['comparison_list'].notebooks.all(),
+        'comparison_list_id': request.session['comparison_list'].id,
+        'server_name': settings.SERVER_NAME
+    })
+    
+def notebook_comparison_details(request, comparison_id):
+    comparison = get_object_or_404(NotebookComparisonList, pk = comparison_id)
+    return append_ads_to_response(request, 'cotizador/comparison_details.html', {
+        'notebooks': comparison.notebooks.all(),
+    })
