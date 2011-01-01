@@ -5,6 +5,8 @@
 
 {% block content %}
 
+{% load mytags %}
+
 <div id="notebook_picture_container">
     {{ notebook.picture.extra_thumbnails_tag.large }}
 </div>
@@ -31,7 +33,7 @@
     <br />
     <strong>Tarjeta de video: </strong>
     {% ifequal notebook.video_card.all.count 1 %}
-        <a href="/video_card_line/{{notebook.video_card.all.0.line.id}}/?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
+        <a href="{% url cotizador.views.video_card_line_details notebook.video_card.all.0.line.id %}?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
     {% else %}
         <ul>
             {% for video_card in notebook.video_card.all %}
@@ -153,32 +155,8 @@
 
 <div class="similar_notebooks">
     <h2>Notebooks similares</h2>
-    {% for notebook in similar_notebooks %}
-        <div class="producto-li">
-		    <div class="{{ notebook.ntype.css_name }}">
-			    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
-				    {{ notebook.picture.thumbnail_tag }}<br />
-			    </a>
-			    <p>{{ notebook.ntype.name }}</p>	
-		    </div>
-		    <div class="content-producto">
-			    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">{{ notebook }}</a>
-			    <ul class="info-producto left">
-				    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
-				    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
-				    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
-				    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
-			    </ul>
-			    <ul class="precio-producto right">
-				    <li><a href="{% url cotizador.views.notebook_details notebook.id %}">{{ notebook.pretty_min_price }}</a></li>
-				    {% if notebook.week_discount >= 10 %}
-				    <li class="mas-barato"><strong>{{ notebook.week_discount }}</strong>% de Descuento</li>
-				    {% endif %}
-			    </ul>
-		    <br class="clear" />
-		    </div>
-	    <br class="clear" />
-	    </div> <!-- end producto li -->
+    {% for notebook in notebooks %}
+        {% display_notebook notebook %}
     {% endfor %}
 </div>
     
@@ -191,7 +169,6 @@
         {% for comment in notebook_comments %}
             <div class="notebook_comment">
                 <table><tr><td valign="top">
-                    {% show_gravatar comment.user 48 %}
                     {% if user.is_staff %}
                         <br />
                         <small><a href="/manager/delete/{{ comment.id }}">Eliminar</a></small>

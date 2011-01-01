@@ -1,0 +1,32 @@
+{% extends "cotizador/base_catalog.html" %}
+
+{% block title %}SoloNotebooks - Comparación de notebooks{% endblock %}
+
+{% block catalog_content %}
+{% load mytags %}
+
+<div id="notebook_list_container" />
+<h1>Comparativa de notebooks</h1>
+
+{% if notebooks %}
+    <table>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Modelo</th>
+            <th>Procesador</th>
+            <th>RAM</th>
+            <th>Tarjeta de video</th>
+            <th>Disco duro</th>
+            <th>Pantalla</th>
+            <th>Precio</th>
+        </tr>
+        {% for notebook in notebooks %}
+            {% display_notebook_as_table notebook %}
+        {% endfor %}
+    </table>
+{% else %}
+    No hay notebooks en esta lista de comparación
+{% endif %}
+</div>
+
+{% endblock %}

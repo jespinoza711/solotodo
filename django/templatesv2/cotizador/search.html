@@ -17,7 +17,7 @@
 
 {% endifequal %}
 
-{% for notebook in ntbk_results %}
+{% for notebook in notebooks %}
     <div class="producto-li">
 	    <div class="{{ notebook.ntype.css_name }}">
 		    <a href="{% url cotizador.views.notebook_details notebook.id %}" title="{{ notebook }}">
