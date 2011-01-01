@@ -19,7 +19,7 @@ class HighlightedNotebooksForm(forms.Form):
         if ordering == '1':
             result_notebooks = notebooks.order_by('-date_added')
         elif ordering == '2':
-            result_notebooks = notebooks.order_by('-visitor_count')
+            result_notebooks = notebooks.order_by('-week_visitor_count')
         elif ordering == '3':
             result_notebooks = notebooks.order_by('-week_discount')
             
