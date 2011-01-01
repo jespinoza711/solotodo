@@ -170,6 +170,7 @@ def updateAvailabilityAndPrice():
             
         notebook.long_description = notebook.rawText()
         notebook.update_week_discount()
+        notebook.update_week_visits()
         
         #similar_notebooks = [str(ntbk.id) for ntbk in notebook.findSimilarNotebooks()]
         #notebook.similar_notebooks = ','.join(similar_notebooks)

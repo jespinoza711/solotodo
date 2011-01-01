@@ -28,7 +28,7 @@ class Notebook(models.Model):
     thickness = models.IntegerField()
     usb_port_count = models.IntegerField()
     min_price = models.IntegerField()
-    visitor_count = models.IntegerField()
+    week_visitor_count = models.IntegerField()
     week_discount = models.IntegerField()    
     webcam_mp = models.DecimalField(max_digits = 3, decimal_places = 1)
     
@@ -280,6 +280,11 @@ class Notebook(models.Model):
             self.week_discount = int(100 * (old_price - self.min_price) / old_price)
         except:
             self.week_discount = 0;
+            
+    def update_week_visits(self):
+        t = date.today()
+        d = timedelta(days = 7)
+        self.week_visitor_count = len(self.notebookvisit_set.filter(date__gte = t - d))
     
     class Meta:
         app_label = 'cotizador'

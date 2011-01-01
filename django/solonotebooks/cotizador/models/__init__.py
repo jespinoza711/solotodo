@@ -74,6 +74,7 @@ from solonotebooks.cotizador.models.mail_change_notebook_price import MailChange
 from solonotebooks.cotizador.models.mail_lost_notebook import MailLostNotebook
 from solonotebooks.cotizador.models.mail_revive_notebook import MailReviveNotebook
 from solonotebooks.cotizador.models.notebook_comparison_list import NotebookComparisonList
+from solonotebooks.cotizador.models.notebook_visit import NotebookVisit
 
 __all__ = [ 'ProcessorBrand', 
             'ProcessorLineFamily',
@@ -149,5 +150,6 @@ __all__ = [ 'ProcessorBrand',
             'MailLostNotebook', 
             'MailReviveNotebook', 
             'NotebookType',
-            'NotebookComparisonList',             
+            'NotebookComparisonList',
+            'NotebookVisit'       
             ]
