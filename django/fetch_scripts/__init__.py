@@ -28,6 +28,7 @@ from fetch_scripts.peta import Peta
 from fetch_scripts.hp_online import HPOnline
 from fetch_scripts.portatil_chile import PortatilChile
 from fetch_scripts.tecno_group import TecnoGroup
+from fetch_scripts.abcdin import AbcDin
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -58,4 +59,5 @@ __all__ = [ 'ProductData',
             'Peta',
             'HPOnline',
             'PortatilChile',
-            'TecnoGroup']
+            'TecnoGroup',
+            'AbcDin']
