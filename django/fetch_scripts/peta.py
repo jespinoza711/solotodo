@@ -9,37 +9,6 @@ from fetch_scripts import ProductData
 class Peta:
     name = 'Peta'
 
-    # Method that extracts the <a> tags to products given the URL of the catalog page
-    def extractLinks(self, pageUrl):
-	    br = mechanize.Browser()
-	    data = br.open(pageUrl).get_data()
-	    soup = BeautifulSoup(data)
-	    links = soup.findAll("a", { "class" : "linkProducto" })
-
-	    return links
-
-    # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
-        br = mechanize.Browser()
-        data = br.open(productUrl).get_data()
-        soup = BeautifulSoup(data)
-
-        productData = ProductData()
-
-        titleSpan = soup.find("span", { "class" : "style22" })
-        title = str(titleSpan.string).strip()
-
-        priceCell = soup.findAll("td", { "class" : "productoiva" })
-        price = int(str(priceCell[1].string).replace('.', ''))
-
-        productData.custom_name = titleSpan.string.strip()
-        productData.price = price
-        productData.url = productUrli
-        productData.comparison_field = productData.url
-
-        return productData
-
-
     # Main method
     def getNotebooks(self):
         print 'Getting Peta notebooks'
@@ -68,7 +37,11 @@ class Peta:
                 baseData = browser.open(completeWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
 
-                ntbkCells = baseSoup.find('table', { 'id': 'product-list-table'}).findAll('td')
+                ntbkCells = baseSoup.find('table', { 'id': 'product-list-table'})
+                if not ntbkCells:
+                    break
+                
+                ntbkCells = ntbkCells.findAll('td')
                 
 
                 trigger = False
