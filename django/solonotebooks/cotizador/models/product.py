@@ -9,51 +9,16 @@ from utils import prettyPrice
 class Product(models.Model):
     name = models.CharField(max_length = 255)
     date_added = models.DateField()
-    
-    is_ram_dual_channel = models.BooleanField()
-    has_bluetooth = models.BooleanField()
-    has_esata = models.BooleanField()
-    has_fingerprint_reader = models.BooleanField()
-    has_firewire = models.BooleanField()
     is_available = models.BooleanField()
     
     publicized_offer = models.ForeignKey('StoreHasProductEntity', null = True, blank = True, related_name = 'ntbk')
-    battery_mah = models.IntegerField()
-    battery_mwh = models.IntegerField()
-    battery_mv = models.IntegerField()
-    battery_cells = models.IntegerField()
-    weight = models.IntegerField()
-    width = models.IntegerField()
-    height = models.IntegerField()
-    thickness = models.IntegerField()
-    usb_port_count = models.IntegerField()
     min_price = models.IntegerField()
     week_visitor_count = models.IntegerField()
     week_discount = models.IntegerField()    
-    webcam_mp = models.DecimalField(max_digits = 3, decimal_places = 1)
     
     other = models.TextField()
     long_description = models.TextField()
 
-    ntype = models.ForeignKey(NotebookType)
-    line = models.ForeignKey(NotebookLine)
-    processor = models.ForeignKey(Processor)
-    lan = models.ForeignKey(Lan)
-    screen = models.ForeignKey(Screen)
-    operating_system = models.ForeignKey(OperatingSystem)
-    ram_quantity = models.ForeignKey(RamQuantity)
-    ram_type = models.ForeignKey(RamType)
-    ram_frequency = models.ForeignKey(RamFrequency)
-    chipset = models.ForeignKey(Chipset)
-    optical_drive = models.ForeignKey(OpticalDrive)
-    wifi_card = models.ForeignKey(WifiCard)
-    power_adapter = models.ForeignKey(PowerAdapter)
-    card_reader = models.ForeignKey(NotebookCardReader)
-    
-    video_card = models.ManyToManyField(VideoCard)
-    video_port = models.ManyToManyField(VideoPort)
-    storage_drive = models.ManyToManyField(StorageDrive)    
-    
     similar_notebooks = models.CommaSeparatedIntegerField(max_length = 30)
     
     picture = ImageWithThumbnailsField(
@@ -98,7 +63,7 @@ class Product(models.Model):
         return result
         
     def __unicode__(self):
-        return unicode(self.line) + ' ' + self.name
+        return self.name
         
     def pretty_min_price(self):
         return prettyPrice(self.min_price)
@@ -289,5 +254,5 @@ class Product(models.Model):
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Product'
-        ordering = ['line', 'name']       
+        ordering = ['name']       
         
