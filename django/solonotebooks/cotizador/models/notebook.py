@@ -17,7 +17,7 @@ class Notebook(models.Model):
     has_firewire = models.BooleanField()
     is_available = models.BooleanField()
     
-    publicized_offer = models.ForeignKey('StoreHasNotebookEntity', null = True, blank = True, related_name = 'ntbk')
+    publicized_offer = models.ForeignKey('StoreHasProductEntity', null = True, blank = True, related_name = 'ntbk')
     battery_mah = models.IntegerField()
     battery_mwh = models.IntegerField()
     battery_mv = models.IntegerField()
@@ -187,7 +187,7 @@ class Notebook(models.Model):
         return ntbks
         
     def normalize(self):
-        new_price = self.storehasnotebook_set.all().filter(is_available = True).filter(is_hidden = False).aggregate(Min('latest_price'))['latest_price__min']
+        new_price = self.storehasproduct_set.all().filter(is_available = True).filter(is_hidden = False).aggregate(Min('latest_price'))['latest_price__min']
         
         if new_price:
             print 'El notebook tiene registros de disponibilidad'
@@ -224,7 +224,7 @@ class Notebook(models.Model):
             npc.save()
             
         try:     
-            self.publicized_offer = self.storehasnotebook_set.filter(is_publicized = True, is_available = True).order_by('latest_price')[0]
+            self.publicized_offer = self.storehasproduct_set.filter(is_publicized = True, is_available = True).order_by('latest_price')[0]
         except IndexError:
             self.publicized_offer = None
             

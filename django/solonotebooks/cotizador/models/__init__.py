@@ -46,8 +46,8 @@ from solonotebooks.cotizador.models.city import City
 from solonotebooks.cotizador.models.store import Store
 from solonotebooks.cotizador.models.notebook_type import NotebookType
 from solonotebooks.cotizador.models.notebook import Notebook
-from solonotebooks.cotizador.models.store_has_notebook import StoreHasNotebook
-from solonotebooks.cotizador.models.store_has_notebook_entity import StoreHasNotebookEntity
+from solonotebooks.cotizador.models.store_has_product import StoreHasProduct
+from solonotebooks.cotizador.models.store_has_product_entity import StoreHasProductEntity
 from solonotebooks.cotizador.models.notebook_price_change import NotebookPriceChange
 from solonotebooks.cotizador.models.notebook_review import NotebookReview
 from solonotebooks.cotizador.models.notebook_comment import NotebookComment
@@ -125,8 +125,8 @@ __all__ = [ 'ProcessorBrand',
             'City',
             'Store',
             'Sucursal',
-            'StoreHasNotebook',
-            'StoreHasNotebookEntity',
+            'StoreHasProduct',
+            'StoreHasProductEntity',
             'StoreNotebookHistory',
             'LogEntry',
             'LogEntryMessage',

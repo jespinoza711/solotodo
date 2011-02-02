@@ -29,11 +29,11 @@ def saveNotebooks(ntbks, s):
         print 'Guardando ' + str(ntbk)
         print 'Buscando si tiene un registro existente'
         try:
-            current_shne = StoreHasNotebookEntity.objects.filter(shn__store = s).get(comparison_field = ntbk.comparison_field)
+            current_shne = StoreHasProductEntity.objects.filter(shn__store = s).get(comparison_field = ntbk.comparison_field)
             print 'Si tiene registro existente, usandolo'
-        except StoreHasNotebookEntity.DoesNotExist:
+        except StoreHasProductEntity.DoesNotExist:
             print 'No tiene registro existente, creandolo'
-            current_shne = StoreHasNotebookEntity()
+            current_shne = StoreHasProductEntity()
             current_shne.url = ntbk.url
             current_shne.custom_name = ntbk.custom_name
             current_shne.comparison_field = ntbk.comparison_field
@@ -79,8 +79,8 @@ the notebooks to the minimum among the stores that carry it, etc)'''
 def updateAvailabilityAndPrice():
     print 'Actualizando status de disponibilidad de las tiendas'
     
-    print 'Paso 1: Actualizando StoreHasNotebookEntities'
-    shnes = StoreHasNotebookEntity.objects.all()
+    print 'Paso 1: Actualizando StoreHasProductEntities'
+    shnes = StoreHasProductEntity.objects.all()
     for shne in shnes:
         print ''
         print str(shne)
@@ -114,11 +114,11 @@ def updateAvailabilityAndPrice():
                 pass
         shne.save()
         
-    print 'Paso 2: Actualizando StoreHasNotebook'
-    shns = StoreHasNotebook.objects.all()
+    print 'Paso 2: Actualizando StoreHasProduct'
+    shns = StoreHasProduct.objects.all()
     for shn in shns:
         print shn
-        shnes = shn.storehasnotebookentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
+        shnes = shn.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
         if shnes:
             shn.shne = shnes[0]
         else:
@@ -131,7 +131,7 @@ def updateAvailabilityAndPrice():
     for notebook in Notebook.objects.all():
         print notebook
         
-        new_price = notebook.storehasnotebook_set.filter(shne__isnull = False).aggregate(Min('shne__latest_price'))['shne__latest_price__min']
+        new_price = notebook.storehasproduct_set.filter(shne__isnull = False).aggregate(Min('shne__latest_price'))['shne__latest_price__min']
         
         if new_price:
             print 'El notebook tiene registros de disponibilidad'
@@ -192,7 +192,7 @@ def getStoreNotebooks(fetch_store):
     except Exception, e:
         print('Error al obtener los notebooks de ' + store.name)
         logMessage('Error al obtener los notebooks de ' + store.name + ': ' + str(e))
-        shns = StoreHasNotebook.objects.filter(store = store)
+        shns = StoreHasProduct.objects.filter(store = store)
         for shn in shns:
             shn.prevent_availability_change = True
             shn.save()
