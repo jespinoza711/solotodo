@@ -218,10 +218,11 @@ def append_user_to_response(request, template, args):
     args['ntype_comparison_key'] = ntype_comparison_key
     args['signup_key'] = request.session['signup_key']
     
-    if not 'comparison_list' in request.session:
-        request.session['comparison_list'] = NotebookComparisonList()
-        request.session['comparison_list'].save()
-        
+    if not 'comparison_list' in request.session or not request.session['comparison_list'].id:
+        ncl = NotebookComparisonList()
+        ncl.save()
+        request.session['comparison_list'] = ncl
+
     comparison_list = request.session['comparison_list'].notebooks.all()
     
     if 'notebooks' in args:
