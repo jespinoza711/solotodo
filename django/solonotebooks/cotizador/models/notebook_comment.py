@@ -1,7 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from solonotebooks.cotizador.models import Notebook
+from solonotebooks.cotizador.models import Product
 
 class NotebookComment(models.Model):
     validated = models.BooleanField()
@@ -10,7 +10,7 @@ class NotebookComment(models.Model):
     nickname = models.CharField(max_length = 255, null = True, blank = True)
     user = models.ForeignKey(User, null = True, blank = True)
     
-    notebook = models.ForeignKey(Notebook)
+    notebook = models.ForeignKey(Product)
     
     def __unicode__(self):
         return 'Comentario de ' + unicode(self.notebook)

@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import Notebook
+from solonotebooks.cotizador.models import Product
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 
 class NotebookPicture(models.Model):
@@ -10,7 +10,7 @@ class NotebookPicture(models.Model):
         },                                          
         upload_to = '.',
         generate_on_save = True,)
-    notebook = models.ForeignKey(Notebook)
+    notebook = models.ForeignKey(Product)
     
     def __unicode__(self):
         return 'Foto de ' + unicode(self.notebook)

@@ -45,6 +45,7 @@ from solonotebooks.cotizador.models.notebook_card_reader import NotebookCardRead
 from solonotebooks.cotizador.models.city import City
 from solonotebooks.cotizador.models.store import Store
 from solonotebooks.cotizador.models.notebook_type import NotebookType
+from solonotebooks.cotizador.models.product import Product
 from solonotebooks.cotizador.models.notebook import Notebook
 from solonotebooks.cotizador.models.store_has_product import StoreHasProduct
 from solonotebooks.cotizador.models.store_has_product_entity import StoreHasProductEntity
@@ -117,6 +118,7 @@ __all__ = [ 'ProcessorBrand',
             'RamType',
             'RamFrequency',
             'NotebookCardReader',
+            'Product',
             'Notebook',
             'NotebookReview',
             'NotebookComment',

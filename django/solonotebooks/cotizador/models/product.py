@@ -6,42 +6,65 @@ from sorl.thumbnail.fields import ImageWithThumbnailsField
 from solonotebooks.cotizador.models import *
 from utils import prettyPrice
 
-class Notebook(Product):
-    is_ram_dual_channel_2 = models.BooleanField()
-    has_bluetooth_2 = models.BooleanField()
-    has_esata_2 = models.BooleanField()
-    has_fingerprint_reader_2 = models.BooleanField()
-    has_firewire_2 = models.BooleanField()
-
-    battery_mah_2 = models.IntegerField()
-    battery_mwh_2 = models.IntegerField()
-    battery_mv_2 = models.IntegerField()
-    battery_cells_2 = models.IntegerField()
-    weight_2 = models.IntegerField()
-    width_2 = models.IntegerField()
-    height_2 = models.IntegerField()
-    thickness_2 = models.IntegerField()
-    usb_port_count_2 = models.IntegerField()
-    webcam_mp_2 = models.DecimalField(max_digits = 3, decimal_places = 1)
-
-    ntype_2 = models.ForeignKey(NotebookType)
-    line_2 = models.ForeignKey(NotebookLine)
-    processor_2 = models.ForeignKey(Processor)
-    lan_2 = models.ForeignKey(Lan)
-    screen_2 = models.ForeignKey(Screen)
-    operating_system_2 = models.ForeignKey(OperatingSystem)
-    ram_quantity_2 = models.ForeignKey(RamQuantity)
-    ram_type_2 = models.ForeignKey(RamType)
-    ram_frequency_2 = models.ForeignKey(RamFrequency)
-    chipset_2 = models.ForeignKey(Chipset)
-    optical_drive_2 = models.ForeignKey(OpticalDrive)
-    wifi_card_2 = models.ForeignKey(WifiCard)
-    power_adapter_2 = models.ForeignKey(PowerAdapter)
-    card_reader_2 = models.ForeignKey(NotebookCardReader)
+class Product(models.Model):
+    name = models.CharField(max_length = 255)
+    date_added = models.DateField()
     
-    video_card_2 = models.ManyToManyField(VideoCard)
-    video_port_2 = models.ManyToManyField(VideoPort)
-    storage_drive_2 = models.ManyToManyField(StorageDrive)
+    is_ram_dual_channel = models.BooleanField()
+    has_bluetooth = models.BooleanField()
+    has_esata = models.BooleanField()
+    has_fingerprint_reader = models.BooleanField()
+    has_firewire = models.BooleanField()
+    is_available = models.BooleanField()
+    
+    publicized_offer = models.ForeignKey('StoreHasProductEntity', null = True, blank = True, related_name = 'ntbk')
+    battery_mah = models.IntegerField()
+    battery_mwh = models.IntegerField()
+    battery_mv = models.IntegerField()
+    battery_cells = models.IntegerField()
+    weight = models.IntegerField()
+    width = models.IntegerField()
+    height = models.IntegerField()
+    thickness = models.IntegerField()
+    usb_port_count = models.IntegerField()
+    min_price = models.IntegerField()
+    week_visitor_count = models.IntegerField()
+    week_discount = models.IntegerField()    
+    webcam_mp = models.DecimalField(max_digits = 3, decimal_places = 1)
+    
+    other = models.TextField()
+    long_description = models.TextField()
+
+    ntype = models.ForeignKey(NotebookType)
+    line = models.ForeignKey(NotebookLine)
+    processor = models.ForeignKey(Processor)
+    lan = models.ForeignKey(Lan)
+    screen = models.ForeignKey(Screen)
+    operating_system = models.ForeignKey(OperatingSystem)
+    ram_quantity = models.ForeignKey(RamQuantity)
+    ram_type = models.ForeignKey(RamType)
+    ram_frequency = models.ForeignKey(RamFrequency)
+    chipset = models.ForeignKey(Chipset)
+    optical_drive = models.ForeignKey(OpticalDrive)
+    wifi_card = models.ForeignKey(WifiCard)
+    power_adapter = models.ForeignKey(PowerAdapter)
+    card_reader = models.ForeignKey(NotebookCardReader)
+    
+    video_card = models.ManyToManyField(VideoCard)
+    video_port = models.ManyToManyField(VideoPort)
+    storage_drive = models.ManyToManyField(StorageDrive)    
+    
+    similar_notebooks = models.CommaSeparatedIntegerField(max_length = 30)
+    
+    picture = ImageWithThumbnailsField(
+        thumbnail = { 'size': (88, 88), },
+        extra_thumbnails = {
+            'large': {'size': (300, 300)},
+            'gallery_thumb': {'size': (90, 90)},
+        },                                          
+        upload_to = 'notebook_pics',
+        generate_on_save = True,)
+
         
     def rawText(self):
         result = ''
@@ -265,6 +288,6 @@ class Notebook(Product):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Notebook'
+        verbose_name = 'Product'
         ordering = ['line', 'name']       
         

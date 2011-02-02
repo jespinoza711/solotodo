@@ -1,13 +1,13 @@
 from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
-from solonotebooks.cotizador.models import Notebook, Store
+from solonotebooks.cotizador.models import Product, Store
 from utils import prettyPrice
 
 class StoreHasProduct(models.Model):
     # comment next line before script    
     prevent_availability_change = models.BooleanField()
-    notebook = models.ForeignKey(Notebook, null = True, blank = True)
+    notebook = models.ForeignKey(Product, null = True, blank = True)
     shne = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
     store = models.ForeignKey(Store)
     

@@ -1,11 +1,11 @@
 from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from solonotebooks.cotizador.models import Notebook
+from solonotebooks.cotizador.models import Product
 
 class NotebookVisit(models.Model):
     date = models.DateTimeField(auto_now_add = True)
-    notebook = models.ForeignKey(Notebook)
+    notebook = models.ForeignKey(Product)
     
     def __unicode__(self):
         return 'Visita a ' + unicode(self.notebook)

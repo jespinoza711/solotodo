@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
-from solonotebooks.cotizador.models import Notebook, Store, StoreHasProduct
+from solonotebooks.cotizador.models import Product, Store, StoreHasProduct
 from utils import prettyPrice
 
 class StoreHasProductEntity(models.Model):
