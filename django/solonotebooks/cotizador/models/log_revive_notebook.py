@@ -1,10 +1,10 @@
 from datetime import date
 from django.db import models
 from utils import prettyPrice
-from solonotebooks.cotizador.models import LogEntry, Notebook, NotebookSubscription
+from solonotebooks.cotizador.models import LogEntry, Product, NotebookSubscription
 
 class LogReviveNotebook(models.Model):
-    notebook = models.ForeignKey(Notebook)
+    notebook = models.ForeignKey(Product)
     log_entry = models.ForeignKey(LogEntry)
     
     @staticmethod    

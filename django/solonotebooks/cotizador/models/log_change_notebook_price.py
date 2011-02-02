@@ -1,10 +1,10 @@
 from datetime import date
 from django.db import models
 from utils import prettyPrice
-from solonotebooks.cotizador.models import LogEntry, Notebook, NotebookSubscription
+from solonotebooks.cotizador.models import LogEntry, Product, NotebookSubscription
 
 class LogChangeNotebookPrice(models.Model):
-    notebook = models.ForeignKey(Notebook)
+    notebook = models.ForeignKey(Product)
     log_entry = models.ForeignKey(LogEntry) 
     old_price = models.IntegerField()
     new_price = models.IntegerField()

@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import Notebook
+from solonotebooks.cotizador.models import Product
 
 class NotebookReview(models.Model):
     SCORE_CHOICES = (
@@ -19,7 +19,7 @@ class NotebookReview(models.Model):
     date = models.DateField()
     nickname = models.CharField(max_length = 255)
     
-    notebook = models.ForeignKey(Notebook)
+    notebook = models.ForeignKey(Product)
     
     def __unicode__(self):
         return 'Review de ' + unicode(self.notebook)

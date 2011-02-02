@@ -1,12 +1,12 @@
 from django.db import models
-from solonotebooks.cotizador.models import Notebook
+from solonotebooks.cotizador.models import Product
 from utils import prettyPrice
 
 class NotebookPriceChange(models.Model):
     price = models.IntegerField()
     date = models.DateField()
     
-    notebook = models.ForeignKey(Notebook)
+    notebook = models.ForeignKey(Product)
     
     def __unicode__(self):
         return unicode(self.notebook) + ' - ' + unicode(self.date) + ' - ' + unicode(self.price)
