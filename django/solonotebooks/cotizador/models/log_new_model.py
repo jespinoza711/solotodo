@@ -1,9 +1,9 @@
 from datetime import date
 from django.db import models
-from solonotebooks.cotizador.models import LogEntry, StoreHasNotebookEntity
+from solonotebooks.cotizador.models import LogEntry, StoreHasProductEntity
 
 class LogNewModel(models.Model):
-    shn = models.ForeignKey(StoreHasNotebookEntity)
+    shn = models.ForeignKey(StoreHasProductEntity)
     log_entry = models.ForeignKey(LogEntry)
     
     @staticmethod
@@ -17,7 +17,7 @@ class LogNewModel(models.Model):
         return str(self.log_entry.date) + ' - ' + str(self.shn)
         
     def message(self):
-        return str(self.shn) + ' (<a href="' + self.shn.url + '">Link</a> / <a href="/admin/cotizador/storehasnotebookentity/' + str(self.shn.id) + '/">Editar</a>)'
+        return str(self.shn) + ' (<a href="' + self.shn.url + '">Link</a> / <a href="/admin/cotizador/storehasproductentity/' + str(self.shn.id) + '/">Editar</a>)'
     
     class Meta:
         app_label = 'cotizador'

@@ -7,7 +7,7 @@
 <h2>Notebooks por ingresar</h2>
 
 {% for notebook in new_notebooks %}
-    <li>{{ notebook.custom_name }} (<a href="/admin/cotizador/storehasnotebook/{{ notebook.id }}/">Editar</a> | <a href="/manager/hide_notebook/{{ notebook.id }}">Esconder</a>)</li>
+    <li>{{ notebook.custom_name }} (<a href="/admin/cotizador/storehasproduct/{{ notebook.id }}/">Editar</a> | <a href="/manager/hide_notebook/{{ notebook.id }}">Esconder</a>)</li>
 {% endfor %}
 
 {% endblock %}

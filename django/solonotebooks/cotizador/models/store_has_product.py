@@ -4,11 +4,11 @@ from sorl.thumbnail.fields import ImageWithThumbnailsField
 from solonotebooks.cotizador.models import Notebook, Store
 from utils import prettyPrice
 
-class StoreHasNotebook(models.Model):
+class StoreHasProduct(models.Model):
     # comment next line before script    
     prevent_availability_change = models.BooleanField()
     notebook = models.ForeignKey(Notebook, null = True, blank = True)
-    shne = models.ForeignKey('StoreHasNotebookEntity', null = True, blank = True)
+    shne = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
     store = models.ForeignKey(Store)
     
     def __unicode__(self):
@@ -19,4 +19,4 @@ class StoreHasNotebook(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Store has notebook' 
+        verbose_name = 'Store has product' 

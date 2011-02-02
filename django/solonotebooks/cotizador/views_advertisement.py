@@ -27,7 +27,7 @@ def manage(request, store):
 
 @user_store_required
 def get_advertisement_options(request, store):
-    ntbks = set([shn.notebook for shn in StoreHasNotebook.objects.filter(store = store).filter(is_available = True).filter(is_hidden = False) if shn.notebook])
+    ntbks = set([shn.notebook for shn in StoreHasProduct.objects.filter(store = store).filter(is_available = True).filter(is_hidden = False) if shn.notebook])
     
     available_ntbks = []
     publicized_ntbks = []
@@ -35,7 +35,7 @@ def get_advertisement_options(request, store):
    
     for ntbk in ntbks:
         mini = ntbk.create_miniature()
-        shn = ntbk.storehasnotebook_set.filter(store = store).filter(is_available = True).filter(is_hidden = False).order_by('latest_price')[0]
+        shn = ntbk.storehasproduct_set.filter(store = store).filter(is_available = True).filter(is_hidden = False).order_by('latest_price')[0]
         mini['id'] = shn.id
         mini['store_price'] = shn.latest_price
         mini['external_url'] = shn.url
@@ -55,7 +55,7 @@ def get_advertisement_options(request, store):
 def submit(request, store):
     result = {'code': 'ERROR'}
     try:
-        shn = StoreHasNotebook.objects.get(pk = request.POST['id'])
+        shn = StoreHasProduct.objects.get(pk = request.POST['id'])
         if shn.store != store:
             raise Exception
             
@@ -75,7 +75,7 @@ def submit(request, store):
 def remove(request, store):
     result = {'code': 'ERROR'}
     try:
-        shn = StoreHasNotebook.objects.get(pk = request.POST['id'])
+        shn = StoreHasProduct.objects.get(pk = request.POST['id'])
         if shn.store != store:
             raise Exception
             

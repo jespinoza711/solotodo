@@ -57,26 +57,26 @@ def comments(request):
 @manager_login_required    
 def new_notebooks(request):
     # Shows the models that don't have an associated notebook in the DB (i.e.: pending)
-    new_notebooks = StoreHasNotebookEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shn__isnull = True)
+    new_notebooks = StoreHasProductEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shn__isnull = True)
     return append_ads_to_response(request, 'manager/new_notebooks.html', {
             'new_notebooks': new_notebooks,
         })
         
 @manager_login_required
-def storehasnotebookentity_edit(request, store_has_notebook_entity_id):
-    shne = get_object_or_404(StoreHasNotebookEntity, pk = store_has_notebook_entity_id)
+def storehasproductentity_edit(request, store_has_product_entity_id):
+    shne = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
 
     if request.method == 'POST':
-        form = StoreHasNotebookEntityEditForm(request.POST)
+        form = StoreHasProductEntityEditForm(request.POST)
         if form.is_valid():
             notebook = form.cleaned_data['notebook']
             store = form.cleaned_data['store']
             
-            shns = StoreHasNotebook.objects.filter(store = store).filter(notebook = notebook)
+            shns = StoreHasProduct.objects.filter(store = store).filter(notebook = notebook)
             if shns:
                 shn = shns[0]
             else:
-                shn = StoreHasNotebook()
+                shn = StoreHasProduct()
                 shn.notebook = notebook
                 shn.store = store
                 shn.save()
@@ -86,7 +86,7 @@ def storehasnotebookentity_edit(request, store_has_notebook_entity_id):
             shne.save()
             return HttpResponseRedirect('/manager/new_notebooks')
     else:
-        form = StoreHasNotebookEntityEditForm()
+        form = StoreHasProductEntityEditForm()
         
     return append_ads_to_response(request, 'manager/store_has_notebook_entity_edit.html', {
         'shne_form': form,
@@ -97,7 +97,7 @@ def storehasnotebookentity_edit(request, store_has_notebook_entity_id):
 def hide_notebook(request, store_has_notebook_id):
     # Makes a model invisible to the "pending" page if it is stupid (e.g. iPad)
     # or doesn't apply (combos of notebooks + printers, notebook sleeves, etc)
-    shn = get_object_or_404(StoreHasNotebookEntity, pk = store_has_notebook_id)
+    shn = get_object_or_404(StoreHasProductEntity, pk = store_has_notebook_id)
     shn.is_hidden = True
     shn.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER']);

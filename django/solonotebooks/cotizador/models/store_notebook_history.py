@@ -1,12 +1,12 @@
 import utils
 from django.db import models
-from store_has_notebook_entity import StoreHasNotebookEntity
+from solonotebooks.cotizador.models import StoreHasProductEntity
 
 class StoreNotebookHistory(models.Model):
     price = models.IntegerField()
     date = models.DateField()
     
-    registry = models.ForeignKey(StoreHasNotebookEntity)
+    registry = models.ForeignKey(StoreHasProductEntity)
     
     def __unicode__(self):
         return unicode(self.registry) + ' - ' + unicode(self.date)

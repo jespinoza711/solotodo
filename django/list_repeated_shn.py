@@ -11,10 +11,10 @@ try:
 except:
     stores = Store.objects.all()
     
-shns = StoreHasNotebook.objects.all()
+shns = StoreHasProduct.objects.all()
 
 for shn in shns:
-    shnes = shn.storehasnotebookentity_set.filter(is_available = True).filter(is_hidden = False)
+    shnes = shn.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False)
     
     if len(shnes) > 1 and shn.store in stores:
         print str(shn.notebook.id) + ' - ' + unicode(shn)

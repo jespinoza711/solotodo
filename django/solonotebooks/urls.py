@@ -60,7 +60,7 @@ urlpatterns += patterns('cotizador.views_manager',
     (r'^manager/new_notebooks/$', 'new_notebooks'),
     (r'^manager/delete/(?P<comment_id>\d+)$', 'delete_comment'),
     (r'^manager/hide_notebook/(?P<store_has_notebook_id>\d+)$', 'hide_notebook'),
-    (r'^manager/storehasnotebookentity/(?P<store_has_notebook_entity_id>\d+)/edit$', 'storehasnotebookentity_edit'),
+    (r'^manager/storehasproductentity/(?P<store_has_product_entity_id>\d+)/edit$', 'storehasproductentity_edit'),
     (r'^manager/validate_all$', 'validate_all'),
     (r'^manager/analyze_searches$', 'analyze_searches'), 
 )
