@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import NotebookBrand
+from . import NotebookBrand
 
 class NotebookLine(models.Model):
     name = models.CharField(max_length = 255)

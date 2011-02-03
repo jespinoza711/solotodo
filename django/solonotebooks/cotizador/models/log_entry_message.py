@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import LogEntry
+from . import LogEntry
 
 class LogEntryMessage(models.Model):
     message = models.TextField()

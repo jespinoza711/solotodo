@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
-from solonotebooks.cotizador.models import *
+from . import *
 from utils import prettyPrice
 
 class Notebook(Product):
@@ -26,22 +26,22 @@ class Notebook(Product):
 
     ntype = models.ForeignKey(NotebookType)
     line = models.ForeignKey(NotebookLine)
-    processor = models.ForeignKey(Processor)
-    lan = models.ForeignKey(Lan)
-    screen = models.ForeignKey(Screen)
-    operating_system = models.ForeignKey(OperatingSystem)
-    ram_quantity = models.ForeignKey(RamQuantity)
-    ram_type = models.ForeignKey(RamType)
-    ram_frequency = models.ForeignKey(RamFrequency)
-    chipset = models.ForeignKey(Chipset)
-    optical_drive = models.ForeignKey(OpticalDrive)
-    wifi_card = models.ForeignKey(WifiCard)
-    power_adapter = models.ForeignKey(PowerAdapter)
+    processor = models.ForeignKey(NotebookProcessor)
+    lan = models.ForeignKey(NotebookLan)
+    screen = models.ForeignKey(NotebookScreen)
+    operating_system = models.ForeignKey(NotebookOperatingSystem)
+    ram_quantity = models.ForeignKey(NotebookRamQuantity)
+    ram_type = models.ForeignKey(NotebookRamType)
+    ram_frequency = models.ForeignKey(NotebookRamFrequency)
+    chipset = models.ForeignKey(NotebookChipset)
+    optical_drive = models.ForeignKey(NotebookOpticalDrive)
+    wifi_card = models.ForeignKey(NotebookWifiCard)
+    power_adapter = models.ForeignKey(NotebookPowerAdapter)
     card_reader = models.ForeignKey(NotebookCardReader)
     
-    video_card = models.ManyToManyField(VideoCard)
-    video_port = models.ManyToManyField(VideoPort)
-    storage_drive = models.ManyToManyField(StorageDrive)
+    video_card = models.ManyToManyField(NotebookVideoCard)
+    video_port = models.ManyToManyField(NotebookVideoPort)
+    storage_drive = models.ManyToManyField(NotebookStorageDrive)
         
     def rawText(self):
         result = ''
@@ -76,12 +76,6 @@ class Notebook(Product):
         
     def __unicode__(self):
         return unicode(self.line) + ' ' + self.name
-        
-    def pretty_min_price(self):
-        return prettyPrice(self.min_price)
-        
-    def prettyMaxPrice(self):
-        return prettyPrice(self.max_price)
         
     def prettyBattery(self):
         if (self.battery_cells == 0 and self.battery_mwh == 0 and self.battery_mv == 0 and self.battery_mah == 0):
@@ -162,71 +156,6 @@ class Notebook(Product):
         ntbks = [result_notebook[0] for result_notebook in sorted_result_notebooks]
 
         return ntbks
-        
-    def normalize(self):
-        new_price = self.storehasproduct_set.all().filter(is_available = True).filter(is_hidden = False).aggregate(Min('latest_price'))['latest_price__min']
-        
-        if new_price:
-            print 'El notebook tiene registros de disponibilidad'
-            
-            log_price_change = True
-            if not self.is_available:
-                LogReviveNotebook.new(notebook).send_notification_mails()
-                log_price_change = False
-            
-            if new_price != self.min_price:
-                if log_price_change:
-                    LogChangeNotebookPrice.new(notebook, self.min_price, new_price).send_notification_mails()
-                npc = NotebookPriceChange()
-                npc.notebook = notebook
-                npc.price = new_price
-                npc.date = date.today()
-                npc.save()
-                self.min_price = new_price
-
-            self.is_available = True
-        else:
-            print 'El notebook no tiene registros de disponibilidad'
-
-            if self.is_available:
-                LogLostNotebook.new(notebook).send_notification_mails()
-                self.is_available = False
-            
-        npcs = self.notebookpricechange_set.all()
-        if len(npcs) == 0:
-            npc = NotebookPriceChange()
-            npc.notebook = notebook
-            npc.price = self.min_price
-            npc.date = date.today()
-            npc.save()
-            
-        try:     
-            self.publicized_offer = self.storehasproduct_set.filter(is_publicized = True, is_available = True).order_by('latest_price')[0]
-        except IndexError:
-            self.publicized_offer = None
-            
-        self.long_description = self.rawText()
-        self.save()
-        
-        
-        #similar_notebooks = [str(ntbk.id) for ntbk in self.findSimilarNotebooks()]
-        #self.similar_notebooks = ','.join(similar_notebooks)
-        
-    def create_miniature(self):
-        return { 
-            'name': str(self),
-            'min_price': self.min_price,
-            'url': '/notebooks/' + str(self.id)
-        }
-        
-    def price_at(self, date):
-        from solonotebooks.cotizador.models import NotebookPriceChange
-    
-        npc = NotebookPriceChange.objects.filter(notebook = self).filter(date__lte = date).order_by('-date')
-        if npc:
-            return npc[0].price
-        else:
-            return self.min_price
             
     def determine_type(self):
         types = NotebookType.objects.all()
@@ -239,29 +168,10 @@ class Notebook(Product):
                 base_score = score
                 
         self.ntype = current_type
-        
-    def print_scores(self):
-        types = NotebookType.objects.all()
-        for ntype in types:
-            print ntype.name + ' ' + str(ntype.evaluate(self))
 
     @staticmethod
     def get_valid():
         return Notebook.objects.filter(is_available = True)
-        
-    def update_week_discount(self):
-        t = date.today()
-        d = timedelta(days = 7)
-        old_price = self.price_at(t - d)
-        try:
-            self.week_discount = int(100 * (old_price - self.min_price) / old_price)
-        except:
-            self.week_discount = 0;
-            
-    def update_week_visits(self):
-        t = date.today()
-        d = timedelta(days = 7)
-        self.week_visitor_count = len(self.notebookvisit_set.filter(date__gte = t - d))
     
     class Meta:
         app_label = 'cotizador'

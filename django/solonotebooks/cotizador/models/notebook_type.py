@@ -14,7 +14,7 @@ class NotebookType(models.Model):
     ram_quantity = models.IntegerField()
     
     def evaluate(self, ntbk):
-        from solonotebooks.cotizador.models import Notebook
+        from . import Notebook
         from math import fabs
         total_score = 0
         total_score += fabs(self.screen_size - ntbk.screen.size.size) * 2.0

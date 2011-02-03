@@ -219,11 +219,12 @@ def append_user_to_response(request, template, args):
     args['signup_key'] = request.session['signup_key']
     
     if not 'comparison_list' in request.session or not request.session['comparison_list'].id:
-        ncl = NotebookComparisonList()
+        ncl = ProductComparisonList()
         ncl.save()
         request.session['comparison_list'] = ncl
 
-    comparison_list = request.session['comparison_list'].notebooks.all()
+
+    comparison_list = request.session['comparison_list'].products.all()
     
     if 'notebooks' in args:
         notebooks = args['notebooks']
@@ -293,7 +294,7 @@ def notebook_details(request, notebook_id):
             notebook_comment.save()
             return HttpResponseRedirect(request.META['HTTP_REFERER']);
     else:
-        nv = NotebookVisit()
+        nv = ProductVisit()
         nv.notebook = notebook
         nv.save()
         commentForm = NotebookCommentForm()
@@ -310,7 +311,7 @@ def notebook_details(request, notebook_id):
     
     
     # Find the stores with this notebook available
-    stores_with_notebook_available = notebook.storehasproduct_set.filter(shne__isnull = False).order_by('shne__latest_price')
+    stores_with_notebook_available = notebook.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')
         
     max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
     similar_notebooks_ids = notebook.similar_notebooks.split(',')
@@ -325,7 +326,7 @@ def notebook_details(request, notebook_id):
         'notebook': notebook,
         'comment_form': commentForm,
         'notebook_prices': stores_with_notebook_available,
-        'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('id'),
+        'notebook_comments': notebook.productcomment_set.filter(validated = True).order_by('id'),
         'posted_comment': posted_comment,
         'notebooks': similar_notebooks,
         'notebook_subscription': notebook_subscription,

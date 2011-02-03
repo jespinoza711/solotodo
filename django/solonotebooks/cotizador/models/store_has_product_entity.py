@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
-from solonotebooks.cotizador.models import Product, Store, StoreHasProduct
+from . import Product, Store, StoreHasProduct
 from utils import prettyPrice
 
 class StoreHasProductEntity(models.Model):
@@ -12,7 +12,7 @@ class StoreHasProductEntity(models.Model):
     latest_price = models.IntegerField()
     comparison_field = models.TextField()    
 
-    shn = models.ForeignKey(StoreHasProduct, null = True, blank = True)
+    shp = models.ForeignKey(StoreHasProduct, null = True, blank = True)
     
     # uncomment before script
     # prevent_availability_change = models.BooleanField()
@@ -21,7 +21,7 @@ class StoreHasProductEntity(models.Model):
     
     def __unicode__(self):
         try:
-            return unicode(self.shn.store) + ' - ' + self.custom_name
+            return unicode(self.shp.store) + ' - ' + self.custom_name
         except:
             return self.custom_name
         

@@ -4,7 +4,6 @@ from store_has_product_entity import StoreHasProductEntity
 
 class ExternalVisit(models.Model):
     date = models.DateField()
-    
     shn = models.ForeignKey(StoreHasProductEntity)
     
     def __unicode__(self):
