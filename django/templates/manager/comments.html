@@ -20,6 +20,10 @@
     <form method="POST" action="/manager/delete/{{ comment.id }}">
         <input type="submit" value="Eliminar comentario" />
     </form>
+    &nbsp;
+    <form method="POST" action="/manager/validate/{{ comment.id }}">
+        <input type="submit" value="Validar comentario" />
+    </form>
     <hr />
 
 {% endfor %}
@@ -27,6 +31,10 @@
 
 <form method="POST" action="/manager/validate_all">
     <input type="submit" value="Validar todos los mensajes" />
+</form>
+&nbsp;
+<form method="POST" action="/manager/delete_all">
+    <input type="submit" value="Eliminar todos los mensajes" />
 </form>
 
 <h2>Últimos comentarios</h2>

@@ -14,7 +14,7 @@ class Ripley:
         print 'Getting Ripley notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.ripley.cl'
-        urlBuscarProductos = '/webapp/wcs/stores/servlet/CategoryDisplay?catalogId=10051&storeId=10051&categoryId=57103&langId=-1&curPg='
+        urlBuscarProductos = '/webapp/wcs/stores/servlet/categoria-TVRipley-10051-001772-130000-ESP-N--?curPg='
         
         # Browser initialization
         browser = mechanize.Browser()

@@ -33,14 +33,19 @@ class Racle:
             baseSoup = BeautifulSoup(baseData)
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
-            productNames = baseSoup.findAll("a", { "class" : "producto_titulo" })
-            productPrices = baseSoup.findAll("span", { "class" : "productPrice" })
+            productDetailsCells = baseSoup.findAll('td', { 'class' : 'producto_fondo_tabla_M' })
             
-            for i in range(len(productNames)):
+            for productDetailCell in productDetailsCells:
+                productLink = productDetailCell.find('a', { 'class' : 'producto_titulo' })
+                productPriceSpan = productDetailCell.find('span', { 'class' : 'productPrice' })
+                
+                if not productPriceSpan:
+                    continue
+            
                 productData = ProductData()
-                productData.custom_name = ' '.join(productNames[i].string.split())
-                productData.url = urlBase + productNames[i]['href'].split('?')[0]
-                productData.price = int(productPrices[i].string.replace('$', '').replace(' ', ''))
+                productData.custom_name = ' '.join(productLink.string.split())
+                productData.url = urlBase + productLink['href'].split('?')[0]
+                productData.price = int(productPriceSpan.string.replace('$', '').replace(' ', ''))
                 productData.comparison_field = productData.url
                 print productData
                 productsData.append(productData)        
