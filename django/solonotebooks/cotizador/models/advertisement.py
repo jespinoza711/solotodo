@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import AdvertisementPosition
+from . import AdvertisementPosition
 
 class Advertisement(models.Model):
     name = models.CharField(max_length = 255)

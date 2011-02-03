@@ -97,10 +97,10 @@
           {% for notebook_price in notebook_prices %}
               <tr class="store_row">
                   <td>
-                      <a href="/store_notebook/{{notebook_price.shne.id}}">{{ notebook_price.store.picture.thumbnail_tag }}</a>
+                      <a href="/store_notebook/{{notebook_price.shpe.id}}">{{ notebook_price.store.picture.thumbnail_tag }}</a>
                   </td>
                   <td>
-                      <a href="/store_notebook/{{notebook_price.shne.id}}">{{ notebook_price.shne.pretty_price }}</a>
+                      <a href="/store_notebook/{{notebook_price.shpe.id}}">{{ notebook_price.shpe.pretty_price }}</a>
                   </td>
               </tr>
           {% endfor %}

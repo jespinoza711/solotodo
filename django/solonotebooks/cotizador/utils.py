@@ -112,10 +112,10 @@ def filter_notebooks(notebooks, search_form):
         notebooks = notebooks.filter(processor__line__family__id = search_form.processor_line_family)
         
     if search_form.ram_quantity:
-        notebooks = notebooks.filter(ram_quantity__value__gte = RamQuantity.objects.get(pk = search_form.ram_quantity).value)
+        notebooks = notebooks.filter(ram_quantity__value__gte = NotebookRamQuantity.objects.get(pk = search_form.ram_quantity).value)
         
     if search_form.storage_capacity:
-        notebooks = notebooks.filter(storage_drive__capacity__value__gte = StorageDriveCapacity.objects.get(pk = search_form.storage_capacity).value).distinct()
+        notebooks = notebooks.filter(storage_drive__capacity__value__gte = NotebookStorageDriveCapacity.objects.get(pk = search_form.storage_capacity).value).distinct()
         
     if search_form.screen_size_family:
         notebooks = notebooks.filter(screen__size__family__id = search_form.screen_size_family)

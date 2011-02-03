@@ -10,20 +10,20 @@ from datetime import date
 class SearchForm(forms.Form):
     notebook_brand = ClassChoiceField(NotebookBrand, 'Marca')
     notebook_line = ClassChoiceField(NotebookLine, 'Línea')
-    processor_brand = ClassChoiceField(ProcessorBrand, 'Marca procesador')
-    processor_line_family = ClassChoiceField(ProcessorLineFamily, 'Línea procesador')
-    processor = ClassChoiceField(Processor, 'Procesador')
-    ram_quantity = ClassChoiceField(RamQuantity, 'Cantidad RAM')
-    ram_type = ClassChoiceField(RamType, 'Tipo RAM')
-    storage_type = ClassChoiceField(StorageDriveType, 'Tipo almacenamiento')
-    storage_capacity = ClassChoiceField(StorageDriveCapacity, 'Cantidad almacenamiento')
-    screen_size_family = ClassChoiceField(ScreenSizeFamily, 'Tamaño pantalla')
-    screen_resolution = ClassChoiceField(ScreenResolution, 'Resolución pantalla')
-    operating_system = ClassChoiceField(OperatingSystemFamily, 'Sistema operativo')
-    video_card_brand = ClassChoiceField(VideoCardBrand, 'Marca tarjeta de video')
-    video_card_line = ClassChoiceField(VideoCardLine, 'Línea tarjeta de video')
-    video_card_type = ClassChoiceField(VideoCardType, 'Tipo tarjeta de video')
-    video_card = ClassChoiceField(VideoCard, 'Tarjeta de video')
+    processor_brand = ClassChoiceField(NotebookProcessorBrand, 'Marca procesador')
+    processor_line_family = ClassChoiceField(NotebookProcessorLineFamily, 'Línea procesador')
+    processor = ClassChoiceField(NotebookProcessor, 'Procesador')
+    ram_quantity = ClassChoiceField(NotebookRamQuantity, 'Cantidad RAM')
+    ram_type = ClassChoiceField(NotebookRamType, 'Tipo RAM')
+    storage_type = ClassChoiceField(NotebookStorageDriveType, 'Tipo almacenamiento')
+    storage_capacity = ClassChoiceField(NotebookStorageDriveCapacity, 'Cantidad almacenamiento')
+    screen_size_family = ClassChoiceField(NotebookScreenSizeFamily, 'Tamaño pantalla')
+    screen_resolution = ClassChoiceField(NotebookScreenResolution, 'Resolución pantalla')
+    operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Sistema operativo')
+    video_card_brand = ClassChoiceField(NotebookVideoCardBrand, 'Marca tarjeta de video')
+    video_card_line = ClassChoiceField(NotebookVideoCardLine, 'Línea tarjeta de video')
+    video_card_type = ClassChoiceField(NotebookVideoCardType, 'Tipo tarjeta de video')
+    video_card = ClassChoiceField(NotebookVideoCard, 'Tarjeta de video')
     
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Capacidad para juegos'), ('4', 'Cantidad de RAM'),
     ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'))
@@ -231,33 +231,33 @@ class SearchForm(forms.Form):
         if key == 'notebook_line':
             value = unicode(NotebookLine.objects.get(pk = pk_value))
         if key == 'processor_brand':
-            value = 'Procesador ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
+            value = 'Procesador ' + unicode(NotebookProcessorBrand.objects.get(pk = pk_value))
         if key == 'processor_line_family':
-            value = 'Procesador: ' + unicode(ProcessorLineFamily.objects.get(pk = pk_value))
+            value = 'Procesador: ' + unicode(NotebookProcessorLineFamily.objects.get(pk = pk_value))
         if key == 'processor':
-            value = 'Procesador: ' + unicode(Processor.objects.get(pk = pk_value))
+            value = 'Procesador: ' + unicode(NotebookProcessor.objects.get(pk = pk_value))
         if key == 'ram_quantity':
-            value = unicode(RamQuantity.objects.get(pk = pk_value)) + ' de RAM'
+            value = unicode(NotebookRamQuantity.objects.get(pk = pk_value)) + ' de RAM'
         if key == 'ram_type':
-            value = 'RAM ' + unicode(RamType.objects.get(pk = pk_value))
+            value = 'RAM ' + unicode(NotebookRamType.objects.get(pk = pk_value))
         if key == 'storage_type':
-            value = 'Almacenamiento ' + unicode(StorageDriveType.objects.get(pk = pk_value))
+            value = 'Almacenamiento ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
-            value = unicode(StorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
+            value = unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
         if key == 'screen_size_family':
-            value = 'Pantalla de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))                
+            value = 'Pantalla de ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))                
         if key == 'screen_resolution':
-            value = 'Resolución de ' + unicode(ScreenResolution.objects.get(pk = pk_value))
+            value = 'Resolucion de ' + unicode(NotebookScreenResolution.objects.get(pk = pk_value))
         if key == 'operating_system':
-            value = unicode(OperatingSystemFamily.objects.get(pk = pk_value))
+            value = unicode(NotebookOperatingSystemFamily.objects.get(pk = pk_value))
         if key == 'video_card_brand':
-            value = 'Tarjeta de video ' + unicode(VideoCardBrand.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(NotebookVideoCardBrand.objects.get(pk = pk_value))
         if key == 'video_card_line':
-            value = 'Tarjeta de video ' + unicode(VideoCardLine.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(NotebookVideoCardLine.objects.get(pk = pk_value))
         if key == 'video_card_type':
-            value = 'Tarjeta de video ' + unicode(VideoCardType.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(NotebookVideoCardType.objects.get(pk = pk_value))
         if key == 'video_card':
-            value = 'Tarjeta de video ' + unicode(VideoCard.objects.get(pk = pk_value))
+            value = 'Tarjeta de video ' + unicode(NotebookVideoCard.objects.get(pk = pk_value))
         if key == 'screen_touch':
             value = ['Sin', 'Con'][pk_value - 1] + ' pantalla táctil'
         if key == 'ntype':
@@ -278,33 +278,33 @@ class SearchForm(forms.Form):
         if key == 'notebook_line':
             value = 'Notebooks ' + unicode(NotebookLine.objects.get(pk = pk_value))
         if key == 'processor_brand':
-            value = 'Notebooks con procesadores ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
+            value = 'Notebooks con procesadores ' + unicode(NotebookProcessorBrand.objects.get(pk = pk_value))
         if key == 'processor_line_family':
-            value = 'Notebooks con procesadores ' + unicode(ProcessorLineFamily.objects.get(pk = pk_value))
+            value = 'Notebooks con procesadores ' + unicode(NotebookProcessorLineFamily.objects.get(pk = pk_value))
         if key == 'processor':
-            value = 'Notebooks con procesadores ' + unicode(Processor.objects.get(pk = pk_value))
+            value = 'Notebooks con procesadores ' + unicode(NotebookProcessor.objects.get(pk = pk_value))
         if key == 'ram_quantity':
-            value = 'Notebooks con ' + unicode(RamQuantity.objects.get(pk = pk_value)) + ' de RAM'
+            value = 'Notebooks con ' + unicode(NotebookRamQuantity.objects.get(pk = pk_value)) + ' de RAM'
         if key == 'ram_type':
-            value = 'Notebooks con memoria RAM ' + unicode(RamType.objects.get(pk = pk_value))
+            value = 'Notebooks con memoria RAM ' + unicode(NotebookRamType.objects.get(pk = pk_value))
         if key == 'storage_type':
-            value = 'Notebooks con almacenamiento de tipo ' + unicode(StorageDriveType.objects.get(pk = pk_value))
+            value = 'Notebooks con almacenamiento de tipo ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
-            value = 'Notebooks con ' + unicode(StorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
+            value = 'Notebooks con ' + unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
         if key == 'screen_size_family':
-            value = 'Notebooks con pantallas de ' + ScreenSizeFamily.objects.get(pk = pk_value).titleText()
+            value = 'Notebooks con pantallas de ' + NotebookScreenSizeFamily.objects.get(pk = pk_value).titleText()
         if key == 'screen_resolution':
-            value = 'Notebooks con resolucion de ' + unicode(ScreenResolution.objects.get(pk = pk_value))
+            value = 'Notebooks con resolucion de ' + unicode(NotebookScreenResolution.objects.get(pk = pk_value))
         if key == 'operating_system':
-            value = 'Notebooks con ' + unicode(OperatingSystemFamily.objects.get(pk = pk_value))
+            value = 'Notebooks con ' + unicode(NotebookOperatingSystemFamily.objects.get(pk = pk_value))
         if key == 'video_card_brand':
-            value = 'Notebooks con tarjetas de video ' + unicode(VideoCardBrand.objects.get(pk = pk_value))
+            value = 'Notebooks con tarjetas de video ' + unicode(NotebookVideoCardBrand.objects.get(pk = pk_value))
         if key == 'video_card_line':
-            value = 'Notebooks con tarjetas de video ' + unicode(VideoCardLine.objects.get(pk = pk_value))
+            value = 'Notebooks con tarjetas de video ' + unicode(NotebookVideoCardLine.objects.get(pk = pk_value))
         if key == 'video_card_type':
-            value = 'Notebooks con tarjetas de video ' + unicode(VideoCardType.objects.get(pk = pk_value)).lower()
+            value = 'Notebooks con tarjetas de video ' + unicode(NotebookVideoCardType.objects.get(pk = pk_value)).lower()
         if key == 'video_card':
-            value = 'Notebooks con tarjetas de video ' + unicode(VideoCard.objects.get(pk = pk_value))
+            value = 'Notebooks con tarjetas de video ' + unicode(NotebookVideoCard.objects.get(pk = pk_value))
         if key == 'screen_touch':
             value = 'Notebooks ' + ['sin', 'con'][pk_value - 1] + ' pantalla táctil'
         if key == 'ntype':
