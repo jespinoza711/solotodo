@@ -19,7 +19,7 @@ def main():
     stores = [NotebookCenter(), PackardBell(), LaPolar(), Bym(), Clie(), Falabella(), ENotebook(), FullNotebook(), Paris(), PCFactory(), Sym(), TecnoCl(), Wei(), Sistemax(), Dell(), Webco(), Racle(), Magens(), GlobalMac(), Syd(), MacOnline(), Impulso(), Peta(), HPOnline(), PortatilChile(), TecnoGroup(), Ripley()]
     
     for store in stores:
-        getStoreNotebooks(store)
+        getStoreProducts(store)
                 
     updateAvailabilityAndPrice()
                 

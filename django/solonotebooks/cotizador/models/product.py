@@ -1,3 +1,4 @@
+#-*- coding: UTF-8 -*-
 import operator
 from datetime import date, timedelta
 from django.db import models
@@ -5,14 +6,16 @@ from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 from . import *
 from utils import prettyPrice
+from solonotebooks import settings
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
-    display_name = models.CharField(max_length = 255)
     date_added = models.DateField()
     is_available = models.BooleanField()
     
     publicized_offer = models.ForeignKey('StoreHasProductEntity', null = True, blank = True, related_name = 'ntbk')
+    ptype = models.ForeignKey(ProductType)
+    
     min_price = models.IntegerField()
     week_visitor_count = models.IntegerField()
     week_discount = models.IntegerField()    
@@ -30,9 +33,19 @@ class Product(models.Model):
         },                                          
         upload_to = 'notebook_pics',
         generate_on_save = True,)
+    
+    def get_polymorphic_instance(self):
+        from solonotebooks.cotizador.models import *
+        c = eval(self.ptype.classname)
+        return c.objects.get(pk = self.id) 
         
     def __unicode__(self):
-        return self.display_name
+        entity = self.get_polymorphic_instance()
+        return self.ptype.classname + ' - ' + unicode(entity)
+        
+    def raw_text(self):
+        entity = self.get_polymorphic_instance()
+        return entity.raw_text()
         
     def pretty_min_price(self):
         return prettyPrice(self.min_price)
@@ -94,11 +107,11 @@ class Product(models.Model):
         }
         
     def price_at(self, date):
-        from . import NotebookPriceChange
+        from . import ProductPriceChange
     
-        npc = NotebookPriceChange.objects.filter(notebook = self).filter(date__lte = date).order_by('-date')
-        if npc:
-            return npc[0].price
+        ppc = ProductPriceChange.objects.filter(notebook = self).filter(date__lte = date).order_by('-date')
+        if ppc:
+            return ppc[0].price
         else:
             return self.min_price
         
@@ -114,7 +127,68 @@ class Product(models.Model):
     def update_week_visits(self):
         t = date.today()
         d = timedelta(days = 7)
-        self.week_visitor_count = len(self.notebookvisit_set.filter(date__gte = t - d))
+        self.week_visitor_count = len(self.productvisit_set.filter(date__gte = t - d))
+        
+    def generate_chart(self):
+        import cairo
+        import pycha.line
+        from copy import deepcopy
+        from . import ProductPriceChange
+
+        ppcs = ProductPriceChange.objects.filter(notebook = self).order_by('date')
+        min_price = ppcs.aggregate(Min('price'))['price__min']
+        max_price = ppcs.aggregate(Max('price'))['price__max'] 
+        indexed_ppcs = [[i, ppcs[i]] for i in range(len(ppcs))]
+        
+        last_ppc = indexed_ppcs[len(indexed_ppcs) - 1][1]
+        new_ppc = deepcopy(last_ppc)
+        new_ppc.date = date.today()
+        indexed_ppcs += [[len(indexed_ppcs), new_ppc]]
+
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 300, 300)
+        lines = [[ippc[0], ippc[1].price] for ippc in indexed_ppcs]
+            
+        dataSet = (
+            ('lines', [(k, v) for k, v in lines]),
+            )
+
+        options = {
+            'axis': {
+                'x': {
+                    #'ticks': ['' for inpc in indexed_npcs],
+                },
+                'y': {
+                    'tickCount': 4,
+                    'range': (min_price / 1.3, max_price * 1.2)
+                }
+            },
+            'background': {
+                'color': '#eeeeff',
+                'lineColor': '#444444',
+                'baseColor': '#FFFFFF',
+            },
+            'colorScheme': {
+                'name': 'gradient',
+                'args': {
+                    'initialColor': 'blue',
+                },
+            },
+            'legend': {
+                'hide': True,
+            },
+            'padding': {
+                'left': 60,
+                'bottom': 20,
+                'right': 10,
+            },
+            'title': 'Cambios de precio a la fecha'
+        }
+        chart = pycha.line.LineChart(surface, options)
+
+        chart.addDataset(dataSet)
+        chart.render()
+
+        surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + str(self.id) + '.png')
     
     class Meta:
         app_label = 'cotizador'

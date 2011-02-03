@@ -11,12 +11,12 @@ try:
 except:
     stores = Store.objects.all()
     
-shns = StoreHasProduct.objects.all()
+shps = StoreHasProduct.objects.all()
 
-for shn in shns:
-    shnes = shn.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False)
+for shp in shps:
+    shpes = shp.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False)
     
-    if len(shnes) > 1 and shn.store in stores:
-        print str(shn.notebook.id) + ' - ' + unicode(shn)
-        for shne in shnes:
-            print '* ' + str(shne.id)
+    if len(shpes) > 1 and shp.store in stores:
+        print str(shp.product.id) + ' - ' + unicode(shp)
+        for shpe in shpes:
+            print '* ' + str(shpe.id)
