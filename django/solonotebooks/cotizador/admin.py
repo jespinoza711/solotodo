@@ -10,6 +10,7 @@ admin.site.register(ExternalVisit)
 admin.site.register(Store)
 
 admin.site.register(Product)
+admin.site.register(ProductType)
 admin.site.register(ProductComment)
 admin.site.register(ProductPicture)
 admin.site.register(ProductPriceChange)

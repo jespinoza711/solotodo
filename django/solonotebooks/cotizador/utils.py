@@ -197,65 +197,6 @@ def filter_notebooks(notebooks, search_form):
         
     return [notebooks, ordering_direction]
     
-def generateChart(ntbk):
-    import cairo
-    import pycha.line
-
-    npcs = NotebookPriceChange.objects.filter(notebook = ntbk).order_by('date')
-    min_price = npcs.aggregate(Min('price'))['price__min']
-    max_price = npcs.aggregate(Max('price'))['price__max'] 
-    indexed_npcs = [[i, npcs[i]] for i in range(len(npcs))]
-    
-    last_npc = indexed_npcs[len(indexed_npcs) - 1][1]
-    new_npc = deepcopy(last_npc)
-    new_npc.date = date.today()
-    indexed_npcs += [[len(indexed_npcs), new_npc]]
-
-    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 300, 300)
-    lines = [[inpc[0], inpc[1].price] for inpc in indexed_npcs]
-        
-    dataSet = (
-        ('lines', [(k, v) for k, v in lines]),
-        )
-
-    options = {
-        'axis': {
-            'x': {
-                #'ticks': ['' for inpc in indexed_npcs],
-            },
-            'y': {
-                'tickCount': 4,
-                'range': (min_price / 1.3, max_price * 1.2)
-            }
-        },
-        'background': {
-            'color': '#eeeeff',
-            'lineColor': '#444444',
-            'baseColor': '#FFFFFF',
-        },
-        'colorScheme': {
-            'name': 'gradient',
-            'args': {
-                'initialColor': 'blue',
-            },
-        },
-        'legend': {
-            'hide': True,
-        },
-        'padding': {
-            'left': 60,
-            'bottom': 20,
-            'right': 10,
-        },
-        'title': 'Cambios de precio a la fecha'
-    }
-    chart = pycha.line.LineChart(surface, options)
-
-    chart.addDataset(dataSet)
-    chart.render()
-
-    surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + str(ntbk.id) + '.png')    
-    
 def set_subscription_mail_notifications(request, subscription_id, new_mail_notification_status):
     try:
         subscription = NotebookSubscription.objects.get(pk = subscription_id)

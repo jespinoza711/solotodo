@@ -1,3 +1,4 @@
+#-*- coding: UTF-8 -*-
 import operator
 from datetime import date, timedelta
 from django.db import models
@@ -43,7 +44,7 @@ class Notebook(Product):
     video_port = models.ManyToManyField(NotebookVideoPort)
     storage_drive = models.ManyToManyField(NotebookStorageDrive)
         
-    def rawText(self):
+    def raw_text(self):
         result = ''
         if (self.is_ram_dual_channel):
             result += ' ram dual channel'

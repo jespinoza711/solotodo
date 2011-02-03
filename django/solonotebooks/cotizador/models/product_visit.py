@@ -12,4 +12,4 @@ class ProductVisit(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Notebook visit'
+        verbose_name = 'Product visit'

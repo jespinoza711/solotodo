@@ -59,7 +59,7 @@ def main():
         
         rootElem.appendChild(ntbkElem)
         
-    video_card_lines = VideoCardLine.objects.order_by('id')
+    video_card_lines = NotebookVideoCardLine.objects.order_by('id')
     for video_card_line in video_card_lines:
         vclElem = xml.createElement('url')
         
@@ -80,7 +80,7 @@ def main():
         
         rootElem.appendChild(vclElem)
         
-    processor_line_families = ProcessorLineFamily.objects.order_by('id')
+    processor_line_families = NotebookProcessorLineFamily.objects.order_by('id')
     for processor_line_family in processor_line_families:
         procElem = xml.createElement('url')
         
