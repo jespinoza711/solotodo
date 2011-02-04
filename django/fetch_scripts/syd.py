@@ -10,7 +10,7 @@ class Syd:
     name = 'Syd'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Syd notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.syd.cl'

@@ -10,7 +10,7 @@ class Falabella:
     name = 'Falabella'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Falabella notebooks'
         # Basic data of the target webpage and the specific catalog
         

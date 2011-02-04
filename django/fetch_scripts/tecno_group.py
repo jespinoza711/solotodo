@@ -10,7 +10,7 @@ class TecnoGroup:
     name = 'TecnoGroup'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting TecnoGroup notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.tecnogroup.cl/'

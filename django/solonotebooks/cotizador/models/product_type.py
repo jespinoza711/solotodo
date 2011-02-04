@@ -6,6 +6,7 @@ class ProductType(models.Model):
     classname = models.CharField(max_length = 255)
     urlname = models.CharField(max_length = 255)
     displayname = models.CharField(max_length = 255)
+    adminurlname = models.CharField(max_length = 255)
     
     def __unicode__(self):
         return unicode(self.classname)

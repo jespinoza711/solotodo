@@ -1,0 +1,19 @@
+{% extends "manager/base.html" %}
+
+{% block title %}SoloNotebooks - Manager{% endblock %}
+
+{% block manager_content %}
+
+<h2>Entidades por ingresar</h2>
+
+{% if new_entities %}
+
+    {% for entity in new_entities %}
+        <li>{{ entity.custom_name }} (<a href="/manager/storehasproductentity/{{ entity.id }}/edit">Editar</a> | <a href="/manager/hide_entity/{{ entity.id }}">Esconder</a>)</li>
+    {% endfor %}
+    
+{% else %}
+    <p>No hay entidades por ingresar</p>
+{% endif %}
+
+{% endblock %}

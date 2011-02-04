@@ -22,7 +22,7 @@ class AbcDin:
     name = 'AbcDin'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting AbcDin notebooks'
         
         cookies = mechanize.CookieJar()

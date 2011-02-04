@@ -10,7 +10,7 @@ class Paris:
     name = 'Paris'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Paris notebooks'
         # Basic data of the target webpage and the specific catalog
         

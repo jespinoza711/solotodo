@@ -126,7 +126,7 @@ class Dell:
         return productsData
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Dell notebooks'
         
         cookies = mechanize.CookieJar()

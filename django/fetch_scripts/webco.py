@@ -10,7 +10,7 @@ class Webco:
     name = 'Webco'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Webco notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www1.webco.cl/'

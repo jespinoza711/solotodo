@@ -10,7 +10,7 @@ class LaPolar:
     name = 'La Polar'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting La Polar notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.lapolar.cl'

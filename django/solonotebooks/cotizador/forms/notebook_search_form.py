@@ -7,7 +7,7 @@ from solonotebooks.cotizador.models import utils
 from solonotebooks.cotizador.fields import ClassChoiceField, CustomChoiceField
 from datetime import date
 
-class SearchForm(forms.Form):
+class NotebookSearchForm(forms.Form):
     notebook_brand = ClassChoiceField(NotebookBrand, 'Marca')
     notebook_line = ClassChoiceField(NotebookLine, 'Línea')
     processor_brand = ClassChoiceField(NotebookProcessorBrand, 'Marca procesador')

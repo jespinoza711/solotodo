@@ -11,7 +11,7 @@
     <br />
     <strong>Nickname: </strong> {{ comment.nickname }}
     <br />
-    <strong>Notebook: </strong> <a href="/notebooks/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="/{{ comment.notebook.ptype.urlname }}/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
@@ -41,7 +41,7 @@
         {{ comment.nickname }}
     {% endif %}
     <br />
-    <strong>Notebook: </strong> <a href="/notebooks/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="/{{ comment.notebook.ptype.urlname }}/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
