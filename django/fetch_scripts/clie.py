@@ -10,7 +10,7 @@ class Clie:
     name = 'Clie'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Clie notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.clie.cl/'

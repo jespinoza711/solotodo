@@ -92,7 +92,7 @@ def initialize_search_form(data):
         qd['min_price'] = '0'
     if 'ordering' not in qd:
         qd['ordering'] = '1'
-    search_form = SearchForm(qd)
+    search_form = NotebookSearchForm(qd)
     search_form.validate()
     search_form.is_valid()
     

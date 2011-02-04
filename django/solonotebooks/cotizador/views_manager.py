@@ -47,71 +47,71 @@ def news(request):
 @manager_login_required    
 def comments(request):
     # Shows the comments pending for aproval
-    due_comments = NotebookComment.objects.filter(validated = False)
-    app_comments = NotebookComment.objects.filter(validated = True).filter(date__gte = date.today() - timedelta(days = 2)).order_by('-date').all()
+    due_comments = ProductComment.objects.filter(validated = False)
+    app_comments = ProductComment.objects.filter(validated = True).filter(date__gte = date.today() - timedelta(days = 2)).order_by('-date').all()
     return append_ads_to_response(request, 'manager/comments.html', {
             'due_comments': due_comments,
             'app_comments': app_comments,            
         })
         
 @manager_login_required    
-def new_notebooks(request):
-    # Shows the models that don't have an associated notebook in the DB (i.e.: pending)
-    new_notebooks = StoreHasProductEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shn__isnull = True)
-    return append_ads_to_response(request, 'manager/new_notebooks.html', {
-            'new_notebooks': new_notebooks,
+def new_entities(request):
+    # Shows the models that don't have an associated product in the DB (i.e.: pending)
+    new_entities = StoreHasProductEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shp__isnull = True)
+    return append_ads_to_response(request, 'manager/new_entities.html', {
+            'new_entities': new_entities,
         })
         
 @manager_login_required
 def storehasproductentity_edit(request, store_has_product_entity_id):
-    shne = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
+    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
 
     if request.method == 'POST':
         form = StoreHasProductEntityEditForm(request.POST)
         if form.is_valid():
-            notebook = form.cleaned_data['notebook']
+            product = form.cleaned_data['product']
             store = form.cleaned_data['store']
             
-            shns = StoreHasProduct.objects.filter(store = store).filter(notebook = notebook)
-            if shns:
-                shn = shns[0]
+            shps = StoreHasProduct.objects.filter(store = store).filter(product = product)
+            if shps:
+                shp = shps[0]
             else:
-                shn = StoreHasProduct()
-                shn.notebook = notebook
-                shn.store = store
-                shn.save()
+                shp = StoreHasProduct()
+                shp.product = product
+                shp.store = store
+                shp.save()
                
-            print shn.id 
-            shne.shn = shn
-            shne.save()
-            return HttpResponseRedirect('/manager/new_notebooks')
+            print shp.id 
+            shpe.shp = shp
+            shpe.save()
+            return HttpResponseRedirect('/manager/new_products')
     else:
         form = StoreHasProductEntityEditForm()
         
-    return append_ads_to_response(request, 'manager/store_has_notebook_entity_edit.html', {
-        'shne_form': form,
-        'shne': shne
+    return append_ads_to_response(request, 'manager/store_has_product_entity_edit.html', {
+        'shpe_form': form,
+        'shpe': shpe
     })
         
 @manager_login_required
-def hide_notebook(request, store_has_notebook_id):
+def hide_entity(request, store_has_product_entity_id):
     # Makes a model invisible to the "pending" page if it is stupid (e.g. iPad)
-    # or doesn't apply (combos of notebooks + printers, notebook sleeves, etc)
-    shn = get_object_or_404(StoreHasProductEntity, pk = store_has_notebook_id)
-    shn.is_hidden = True
-    shn.save()
+    # or doesn't apply (combos of products + printers, accesories, etc)
+    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
+    shpe.is_hidden = True
+    shpe.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER']);
 
 @manager_login_required
 def delete_comment(request, comment_id):
     # Deletes a comment
-    comment = get_object_or_404(NotebookComment, pk = comment_id)
+    comment = get_object_or_404(ProductComment, pk = comment_id)
     comment.delete()
     return HttpResponseRedirect(request.META['HTTP_REFERER']);
                        
 @manager_login_required                        
 def validate_all(request):
-    comments = NotebookComment.objects.filter(validated = False)
+    comments = ProductComment.objects.filter(validated = False)
     for comment in comments:
         comment.validated = True
         comment.save()

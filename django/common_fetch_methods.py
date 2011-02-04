@@ -42,12 +42,12 @@ def saveProducts(ntbks, s):
             current_shpe.is_hidden = False
             current_shpe.latest_price = ntbk.price
             current_shpe.save()
-            LogNewModel.new(current_shpe).save()
+            LogNewEntity.new(current_shpe).save()
         
         print 'Viendo si esta registrado como desaparecido'
         if not current_shpe.is_available:
             print 'Estaba desaparecido, registrando resucitacion'
-            LogReviveModel.new(current_shpe).save()
+            LogReviveEntity.new(current_shpe).save()
             current_shpe.is_available = True
             
         print 'Guardando estado del producto en tienda'
@@ -105,7 +105,7 @@ def updateAvailabilityAndPrice():
                             print 'Hubieron cambios de precio, registrando'
                             shpe.latest_price = last_log.price
                             shpe.save()
-                            LogChangeModelPrice.new(shpe, yesterday_log.price, last_log.price).save()
+                            LogChangeEntityPrice.new(shpe, yesterday_log.price, last_log.price).save()
                         else:
                             print 'No hay cambios'
                     except IndexError:
@@ -187,9 +187,10 @@ def getStoreProducts(fetch_store):
         store.name = fetch_store.name
         store.save()
     try:
-        ntbks = fetch_store.getProducts()
+        ntbks = fetch_store.get_products()
         saveProducts(ntbks, store)
     except Exception, e:
+        print e
         print('Error al obtener los productos de ' + store.name)
         logMessage('Error al obtener los productos de ' + store.name + ': ' + str(e))
         shps = StoreHasProduct.objects.filter(store = store)

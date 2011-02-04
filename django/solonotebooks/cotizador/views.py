@@ -28,11 +28,11 @@ def index(request):
     # Initialize the "form" that defines what special notebooks to 
     # display (by New, Price or Popularity) and get the corresponding
     # notebooks
-    highlighted_notebooks_form = HighlightedNotebooksForm.initialize(request.GET)
-    result_notebooks = highlighted_notebooks_form.apply_filter(Notebook.get_valid())[:10]
+    highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
+    result_notebooks = highlighted_products_form.apply_filter(Notebook.get_valid())[:10]
     
     return append_ads_to_response(request, 'cotizador/index.html', {
-        'hnf': highlighted_notebooks_form,
+        'hnf': highlighted_products_form,
         'notebooks': result_notebooks
     })    
     
@@ -84,7 +84,7 @@ def catalog(request):
             if counter == len(insert_positions):
                 break
     '''
-    d = dict(SearchForm.price_choices)
+    d = dict(NotebookSearchForm.price_choices)
     
     return append_ads_to_response(request, 'cotizador/catalog.html', {
         'form': search_form,
@@ -297,7 +297,7 @@ def notebook_details(request, notebook_id):
         nv = ProductVisit()
         nv.notebook = notebook
         nv.save()
-        commentForm = NotebookCommentForm()
+        commentForm = ProductCommentForm()
         
         
     # Check if this is the redirect response generated after submitting an anonymous comment
@@ -339,8 +339,8 @@ def redirect_processor_line_family_details(request, processor_line_family_id):
     return HttpResponseRedirect(url)
             
 def processor_line_details(request, processor_line_id):
-    processor_line_family = get_object_or_404(ProcessorLineFamily, pk = processor_line_id)
-    other_processor_line_families = ProcessorLineFamily.objects.filter(~Q(id = processor_line_family.id))
+    processor_line_family = get_object_or_404(NotebookProcessorLineFamily, pk = processor_line_id)
+    other_processor_line_families = NotebookProcessorLineFamily.objects.filter(~Q(id = processor_line_family.id))
     
     processor_id = 0
     if 'processor' in request.GET:
@@ -350,7 +350,7 @@ def processor_line_details(request, processor_line_id):
             processor_id = 0
             
         try:
-            processor = Processor.objects.filter(line__family = processor_line_family).get(pk = processor_id)
+            processor = NotebookProcessor.objects.filter(line__family = processor_line_family).get(pk = processor_id)
             ntbks = Notebook.get_valid().filter(processor = processor).order_by('?')[0:5]
         except:
             processor = None
@@ -359,7 +359,7 @@ def processor_line_details(request, processor_line_id):
         processor = None
         ntbks = Notebook.get_valid().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
         
-    processors = Processor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
+    processors = NotebookProcessor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/processor_line_details.html', {
                 'processor_line_family': processor_line_family,
                 'processors': processors,
@@ -370,8 +370,8 @@ def processor_line_details(request, processor_line_id):
             })
             
 def video_card_line_details(request, video_card_line_id):
-    video_card_line = get_object_or_404(VideoCardLine, pk = video_card_line_id)
-    other_video_card_lines = VideoCardLine.objects.filter(~Q(id = video_card_line.id))
+    video_card_line = get_object_or_404(NotebookVideoCardLine, pk = video_card_line_id)
+    other_video_card_lines = NotebookVideoCardLine.objects.filter(~Q(id = video_card_line.id))
     video_card_id = 0
     if 'video_card' in request.GET:
         try:
@@ -389,7 +389,7 @@ def video_card_line_details(request, video_card_line_id):
         video_card = None    
         ntbks = Notebook.get_valid().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
     
-    video_cards = VideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
+    video_cards = NotebookVideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/video_card_line_details.html', {
                 'video_card_line': video_card_line,
                 'video_cards': video_cards,
@@ -404,16 +404,16 @@ def redirect_all_processor_line_families(request):
     return HttpResponseRedirect(url)
             
 def processor_line(request):
-    processor_line_families = ProcessorLineFamily.objects.all()
-    processors = Processor.objects.order_by('-speed_score')
+    processor_line_families = NotebookProcessorLineFamily.objects.all()
+    processors = NotebookProcessor.objects.order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/all_processor_lines.html', {
         'processor_line_families': processor_line_families,
         'processors': processors
     })            
             
 def video_card_line(request):
-    video_card_lines = VideoCardLine.objects.all()
-    video_cards = VideoCard.objects.order_by('-speed_score')
+    video_card_lines = NotebookVideoCardLine.objects.all()
+    video_cards = NotebookVideoCard.objects.order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/all_video_card_lines.html', {
                 'video_card_lines': video_card_lines,
                 'video_cards': video_cards

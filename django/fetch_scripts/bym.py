@@ -10,7 +10,7 @@ class Bym:
     name = 'Bym'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Bym notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.ttchile.cl/'

@@ -19,7 +19,7 @@ class LogLostProduct(models.Model):
         return str(self.log_entry.date) + ' - ' + str(self.product)
         
     def message(self):
-        return str(self.product)
+        return str(self.product) + ' (<a href="/' + self.product.ptype.urlname + '/' + str(self.product.id) + '/">Link</a> / <a href="/admin/cotizador/' + self.product.ptype.adminurlname + '/' + str(self.product.id) + '/">Editar</a>)'
         
     def send_notification_mails(self):
             from . import MailLostProduct

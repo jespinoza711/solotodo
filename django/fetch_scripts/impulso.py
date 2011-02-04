@@ -10,7 +10,7 @@ class Impulso:
     name = 'Impulso'
 
 
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Impulso notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://impulso.cl'
