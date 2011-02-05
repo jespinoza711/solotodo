@@ -1,11 +1,8 @@
 {% extends "base_generic.html" %}
-{% load mytags %}
 
 {% block title %}SoloNotebooks - {{ notebook }}{% endblock %}
 
 {% block content %}
-
-{% load mytags %}
 
 <div id="notebook_picture_container">
     {{ notebook.picture.extra_thumbnails_tag.large }}
@@ -14,7 +11,7 @@
 <div class="notebook_details_specs">
     <h1>{{ notebook }}</h1>
     <h2>Especificaciones esenciales</h2>
-    <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
+    <strong>Procesador: </strong> <a href="{% url cotizador.views_notebooks.processor_line_details notebook.processor.line.family.id %}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
     <br />
     <strong>Pantalla: </strong> {{ notebook.screen.pretty_display }}
     <br />
@@ -33,11 +30,11 @@
     <br />
     <strong>Tarjeta de video: </strong>
     {% ifequal notebook.video_card.all.count 1 %}
-        <a href="{% url cotizador.views.video_card_line_details notebook.video_card.all.0.line.id %}?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
+        <a href="{% url cotizador.views_notebooks.video_card_line_details notebook.video_card.all.0.line.id %}?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
     {% else %}
         <ul>
             {% for video_card in notebook.video_card.all %}
-            <li><a href="/video_card_line/{{video_card.line.id}}/?video_card={{video_card.id}}">{{ video_card }}</a></li>
+            <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card.id %}?video_card={{video_card.id}}">{{ video_card }}</a></li>
         {% endfor %}
     </ul>
     {% endifequal %}
@@ -87,32 +84,32 @@
             <th>Tienda</th>
             <th>Precio</th>
         </tr>
-        {% ifequal notebook_prices|length 0 %}
+        {% if product_prices %}
+          {% for product_price in product_prices %}
+              <tr class="store_row">
+                  <td>
+                      <a href="{% url cotizador.views.store_product_redirect product_price.shpe.id %}">{{ product_price.store.picture.thumbnail_tag }}</a>
+                  </td>
+                  <td>
+                      <a href="/store_notebook/{{ product_price.shpe.id }}">{{ product_price.shpe.pretty_price }}</a>
+                  </td>
+              </tr>
+          {% endfor %}
+        {% else %}
           <tr>
             <td colspan="2" class="notebook_availability_message">
               Este notebook no está disponible actualmente
             </td>
           </tr>
-        {% else %}
-          {% for notebook_price in notebook_prices %}
-              <tr class="store_row">
-                  <td>
-                      <a href="/store_notebook/{{notebook_price.shpe.id}}">{{ notebook_price.store.picture.thumbnail_tag }}</a>
-                  </td>
-                  <td>
-                      <a href="/store_notebook/{{notebook_price.shpe.id}}">{{ notebook_price.shpe.pretty_price }}</a>
-                  </td>
-              </tr>
-          {% endfor %}
-        {% endifequal %}
+        {% endif %}
     </table>
 </div>
     
 <div id="price_suggestion_box">
-    {% if not notebook_subscription %}
+    {% if not subscription %}
         <p>
             <a href="" class="subscribe_link">
-                {% if notebook.is_available %}
+                {% if subscription.product.is_available %}
                     Enviarme cambios de precio
                 {% else %}
                     Avisarme cuando esté disponible
@@ -125,21 +122,21 @@
             </a>
         </p>
     {% else %}
-        {% if notebook_subscription.email_notifications %}
+        {% if subscription.email_notifications %}
             <p>        
-                {% if notebook.is_available %}
+                {% if subscription.product.is_available %}
                     Estás recibiendo los cambios de precio
                 {% else %}
                     Te avisaremos cuando esté disponible
                 {% endif %}
             </p>
             <p>
-                Este notebook está en tus favoritos
+                Este producto está en tus favoritos
             </p>
         {% else %}
             <p>
                 <a href="" class="subscribe_link">
-                    {% if notebook.is_available %}
+                    {% if subscription.product.is_available %}
                         Enviarme cambios de precio
                     {% else %}
                         Avisarme cuando esté disponible
@@ -147,26 +144,24 @@
                 </a>
             </p>
             <p>
-                Este notebook está en tus favoritos
+                Este producto está en tus favoritos
             </p>
         {% endif %}
     {% endif %}
 </div>
 
-<div class="similar_notebooks">
-    <h2>Notebooks similares</h2>
-    {% for notebook in notebooks %}
-        {% display_notebook notebook %}
+<div class="similar_products">
+    <h2>{{ notebook.ptype.displayname }} similares</h2>
+    {% for product in similar_products %}
+        {{ product.render_div }}
     {% endfor %}
 </div>
     
     <hr />
-    <div id="notebook_comments">
+    <div id="product_comments">
     <h2>Comentarios</h2>
-    {% ifequal notebook_comments.count 0 %}
-        No hay comentarios para este notebook
-    {% else %}
-        {% for comment in notebook_comments %}
+    {% if product_comments %}
+        {% for comment in product_comments %}
             <div class="notebook_comment">
                 <table><tr><td valign="top">
                     {% if user.is_staff %}
@@ -192,7 +187,9 @@
             </div>
             <hr class="comment_separator" />
         {% endfor %}
-    {% endifequal %}
+    {% else %}
+        No hay comentarios para este notebook
+    {% endif %}
     </div>
     <div id="notebook_comment_add">
     {% if posted_comment %}

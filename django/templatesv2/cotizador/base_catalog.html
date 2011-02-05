@@ -19,114 +19,37 @@
 				
 	<form id="search_form" action="{% url cotizador.views.catalog %}" method="get">
 		<!-- Filtros generales -->
-		<h2>Datos generales</h2>	
+		<h2>Precio</h2>
 		<div class="filter_item">
-			<label for="id_notebook_brand">Marca</label>
-			{{ form.notebook_brand }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_notebook_line">Línea</label>
-			{{ form.notebook_line }}
-		</div>
-
-		<div class="filter_item">
-			<input id="abs_min_price" type="hidden" value="{{ form.abs_min_price }}" />
-			<input id="abs_max_price" type="hidden" value="{{ form.abs_max_price }}" />
 		    <div id="price_slider">
-				{{ form.min_price }} {{ form.max_price }}
+		        {{ form.min_price }} {{ form.max_price }}
 			</div>
 			<br />
 		</div>
-	
-		<!-- Filtros de procesador -->    
-		<h2>Procesador</h2>
-		<div class="filter_item">
-			<label for="id_processor_brand">Marca</label>
-			{{ form.processor_brand }}
-		</div>
-		<div class="filter_item">
-			<label for="id_processor_line_family">Línea</label>
-			{{ form.processor_line_family }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_processor">Modelo</label>    
-			{{ form.processor }}
-		</div>
-
-		<!-- Filtros de RAM -->    
-		<h2>RAM</h2>
-		<div class="filter_item">
-			<label for="id_ram_quantity">Cant. min.</label>
-			{{ form.ram_quantity }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_ram_type">Tipo</label>
-			{{ form.ram_type }}
-		</div>
-
-		<!-- Filtros de almacenamiento -->    
-		<h2>Disco Duro</h2>
-		<div class="filter_item">
-			<label for="id_storage_capacity">Cant. min.</label>
-			{{ form.storage_capacity }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_storage_type">Tipo</label>
-			{{ form.storage_type }}
-		</div>
-
-		<!-- Filtros de pantalla -->    
-		<h2>Pantalla</h2>
-		<div class="filter_item">
-			<label for="id_screen_size_family">Tamaño</label>
-			{{ form.screen_size_family }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_screen_resolution">Resolución</label>
-			{{ form.screen_resolution }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_screen_touch">Táctil</label>
-			{{ form.screen_touch }}
-		</div>
-		<!-- Filtros de tarjeta de video -->    
-		<h2>Tarjeta de video</h2>
-		<div class="filter_item">
-			<label for="id_video_card_type">Tipo</label>
-			{{ form.video_card_type }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_video_card_brand">Marca</label>
-			{{ form.video_card_brand }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_video_card_line">Línea</label>
-			{{ form.video_card_line }}
-		</div>
-		<div class="hidden_filter_item">
-			<label for="id_video_card">Modelo</label>
-			{{ form.video_card }}
-		</div>
-
-		<!-- Filtros de sistema operativo -->    
-		<h2>Sistema Operativo</h2>
-		<div class="filter_item">
-			<label for="id_operating_system">Nombre</label>
-			{{ form.operating_system }}
-		</div>
+		
+		{% for section in form.generate_interface_model %}
+			<h2>{{ section.0 }}</h2>
+			{% for field in section.1 %}
+			    {% if field.0.requires_advanced_controls %}
+    			    <div class="hidden_filter_item">
+			    {% else %}
+			        <div class="filter_item">
+			    {% endif %}
+			        <label>{{ field.0.name }}</label>
+			        {{ field.1 }}
+		        </div>
+			{% endfor %}
+		{% endfor %}
 
 		<a id="toggle_hidden_link" href="">Búsqueda avanzada</a>
 		<div>
 			<input type="hidden" value="1" name="page_number"/>
 		</div>
-		<div class="always_hidden_filter_item">    
-			{{ form.ordering }}
-			{{ form.ntype }}
-            {{ form.advanced_controls }}
-		</div>
-		<div>
-			{{ form.ordering_direction }}
-		</div>
+		
+	    {{ form.ordering }}
+	    {{ form.ntype }}
+        {{ form.advanced_controls }}
+		{{ form.ordering_direction }}
 		<hr />
 		<!-- Botón de envío -->
 		<div id="submit_container">

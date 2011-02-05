@@ -5,8 +5,10 @@ from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 from . import *
+from copy import deepcopy
 from utils import prettyPrice
 from solonotebooks import settings
+from django.template.loader import render_to_string
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
@@ -23,7 +25,7 @@ class Product(models.Model):
     other = models.TextField()
     long_description = models.TextField()
 
-    similar_notebooks = models.CommaSeparatedIntegerField(max_length = 30)
+    similar_products = models.CommaSeparatedIntegerField(max_length = 30)
     
     picture = ImageWithThumbnailsField(
         thumbnail = { 'size': (88, 88), },
@@ -49,55 +51,6 @@ class Product(models.Model):
         
     def pretty_min_price(self):
         return prettyPrice(self.min_price)
-
-    def normalize(self):
-        new_price = self.storehasproduct_set.all().filter(is_available = True).filter(is_hidden = False).aggregate(Min('latest_price'))['latest_price__min']
-        
-        if new_price:
-            print 'El notebook tiene registros de disponibilidad'
-            
-            log_price_change = True
-            if not self.is_available:
-                LogReviveNotebook.new(notebook).send_notification_mails()
-                log_price_change = False
-            
-            if new_price != self.min_price:
-                if log_price_change:
-                    LogChangeNotebookPrice.new(notebook, self.min_price, new_price).send_notification_mails()
-                npc = NotebookPriceChange()
-                npc.notebook = notebook
-                npc.price = new_price
-                npc.date = date.today()
-                npc.save()
-                self.min_price = new_price
-
-            self.is_available = True
-        else:
-            print 'El notebook no tiene registros de disponibilidad'
-
-            if self.is_available:
-                LogLostNotebook.new(notebook).send_notification_mails()
-                self.is_available = False
-            
-        npcs = self.notebookpricechange_set.all()
-        if len(npcs) == 0:
-            npc = NotebookPriceChange()
-            npc.notebook = notebook
-            npc.price = self.min_price
-            npc.date = date.today()
-            npc.save()
-            
-        try:     
-            self.publicized_offer = self.storehasproduct_set.filter(is_publicized = True, is_available = True).order_by('latest_price')[0]
-        except IndexError:
-            self.publicized_offer = None
-            
-        self.long_description = self.rawText()
-        self.save()
-        
-        
-        #similar_notebooks = [str(ntbk.id) for ntbk in self.findSimilarNotebooks()]
-        #self.similar_notebooks = ','.join(similar_notebooks)
         
     def create_miniature(self):
         return { 
@@ -189,6 +142,24 @@ class Product(models.Model):
         chart.render()
 
         surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + str(self.id) + '.png')
+        
+    def render_div(self):
+        template_file = 'templatetags/div_' + self.ptype.adminurlname + '.html'
+        return render_to_string(template_file, { self.ptype.adminurlname: self.get_polymorphic_instance() })
+        
+    def find_similar_products(self):
+        return []
+        
+    def clone_product(self):
+        clone_prod = deepcopy(self)
+        clone_prod.id = None
+        clone_prod.product_ptr.id = None
+        clone_prod.product_ptr_id = None
+        clone_prod.date_added = date.today()
+        clone_prod.is_available = False
+        clone_prod.name += ' (clone)'
+        clone_prod.save()
+        return clone_prod
     
     class Meta:
         app_label = 'cotizador'

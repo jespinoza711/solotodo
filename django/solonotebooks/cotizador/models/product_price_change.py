@@ -8,6 +8,14 @@ class ProductPriceChange(models.Model):
     
     notebook = models.ForeignKey(Product)
     
+    def get_product(self):
+        return self.notebook
+        
+    def set_product(self, product):
+        self.notebook = product
+    
+    product = property(get_product, set_product)
+    
     def __unicode__(self):
         return unicode(self.product) + ' - ' + unicode(self.date) + ' - ' + unicode(self.price)
         

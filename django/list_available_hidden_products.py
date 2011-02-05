@@ -6,11 +6,11 @@ from solonotebooks.cotizador.models import *
 from datetime import date
 
 def main():
-    shns = StoreHasNotebook.objects.filter(is_available = True, is_hidden = True, store__name = sys.argv[1])
-    for shn in shns:
-        print shn.id
-        print shn.custom_name
-        print shn.url
+    shpes = StoreHasProductEntity.objects.filter(is_available = True, is_hidden = True, shp__store__name = sys.argv[1])
+    for shpe in shpes:
+        print shpe.id
+        print shpe.custom_name
+        print shpe.url
         print ''
     
 

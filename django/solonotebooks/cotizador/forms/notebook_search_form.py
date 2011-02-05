@@ -6,35 +6,36 @@ from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.models import utils
 from solonotebooks.cotizador.fields import ClassChoiceField, CustomChoiceField
 from datetime import date
+from . import SearchForm
 
-class NotebookSearchForm(forms.Form):
-    notebook_brand = ClassChoiceField(NotebookBrand, 'Marca')
-    notebook_line = ClassChoiceField(NotebookLine, 'Línea')
-    processor_brand = ClassChoiceField(NotebookProcessorBrand, 'Marca procesador')
-    processor_line_family = ClassChoiceField(NotebookProcessorLineFamily, 'Línea procesador')
-    processor = ClassChoiceField(NotebookProcessor, 'Procesador')
-    ram_quantity = ClassChoiceField(NotebookRamQuantity, 'Cantidad RAM')
-    ram_type = ClassChoiceField(NotebookRamType, 'Tipo RAM')
-    storage_type = ClassChoiceField(NotebookStorageDriveType, 'Tipo almacenamiento')
-    storage_capacity = ClassChoiceField(NotebookStorageDriveCapacity, 'Cantidad almacenamiento')
-    screen_size_family = ClassChoiceField(NotebookScreenSizeFamily, 'Tamaño pantalla')
-    screen_resolution = ClassChoiceField(NotebookScreenResolution, 'Resolución pantalla')
-    operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Sistema operativo')
-    video_card_brand = ClassChoiceField(NotebookVideoCardBrand, 'Marca tarjeta de video')
-    video_card_line = ClassChoiceField(NotebookVideoCardLine, 'Línea tarjeta de video')
-    video_card_type = ClassChoiceField(NotebookVideoCardType, 'Tipo tarjeta de video')
-    video_card = ClassChoiceField(NotebookVideoCard, 'Tarjeta de video')
+class NotebookSearchForm(SearchForm):
+    notebook_brand = ClassChoiceField(NotebookBrand, 'Marca', in_quick_search = True)
+    notebook_line = ClassChoiceField(NotebookLine, 'Línea', requires_advanced_controls = True)
+    processor_brand = ClassChoiceField(NotebookProcessorBrand, 'Marca')
+    processor_line_family = ClassChoiceField(NotebookProcessorLineFamily, 'Línea', in_quick_search = True)
+    processor = ClassChoiceField(NotebookProcessor, 'Modelo', requires_advanced_controls = True)
+    ram_quantity = ClassChoiceField(NotebookRamQuantity, 'Cant. min.', in_quick_search = True)
+    ram_type = ClassChoiceField(NotebookRamType, 'Tipo', requires_advanced_controls = True)
+    storage_type = ClassChoiceField(NotebookStorageDriveType, 'Tipo', requires_advanced_controls = True)
+    storage_capacity = ClassChoiceField(NotebookStorageDriveCapacity, 'Cant. min.')
+    screen_size_family = ClassChoiceField(NotebookScreenSizeFamily, 'Tamaño')
+    screen_resolution = ClassChoiceField(NotebookScreenResolution, 'Resolución', requires_advanced_controls = True)
+    operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Nombre')
+    video_card_brand = ClassChoiceField(NotebookVideoCardBrand, 'Marca', requires_advanced_controls = True)
+    video_card_line = ClassChoiceField(NotebookVideoCardLine, 'Línea', requires_advanced_controls = True)
+    video_card_type = ClassChoiceField(NotebookVideoCardType, 'Tipo', in_quick_search = True)
+    video_card = ClassChoiceField(NotebookVideoCard, 'Modelo', requires_advanced_controls = True)
     
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Capacidad para juegos'), ('4', 'Cantidad de RAM'),
     ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'))
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     
-    ordering = CustomChoiceField(choices = ordering_choices).set_name('Ordenamiento')
-    screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Pantalla Táctil')
-    ntype = ClassChoiceField(NotebookType, 'Uso', 'Todos')
+    ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
+    screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil').requires_advanced_controls()
+    ntype = ClassChoiceField(NotebookType, 'Uso', widget = forms.HiddenInput())
     
     ordering_direction = forms.IntegerField(widget = forms.HiddenInput())
-    advanced_controls = forms.IntegerField()
+    advanced_controls = forms.IntegerField(widget = forms.HiddenInput())
         
     price_choices = (('0', '0'),
                     ('100000', '100.000'),
@@ -63,11 +64,51 @@ class NotebookSearchForm(forms.Form):
     page_number = forms.IntegerField()
     
     # These attributes are used only when querying with advanced filters
-    attribute_requiring_advanced_controls = ['notebook_line',
+    attribute_requiring_advanced_controls = [
+        'notebook_line',
         'processor',
-        'ram_type', 'storage_type',
-        'screen_resolution', 'screen_touch', 'video_card_brand',
-        'video_card_line', 'video_card']
+        'ram_type', 
+        'storage_type',
+        'screen_resolution', 
+        'screen_touch', 
+        'video_card_brand',
+        'video_card_line', 
+        'video_card']
+        
+    def generate_interface_model(self):
+        model = [['Datos generales',
+                    ['notebook_brand',
+                     'notebook_line']],
+                 ['Procesador',
+                    ['processor_brand',
+                     'processor_line_family',
+                     'processor']],
+                 ['RAM',
+                    ['ram_quantity',
+                     'ram_type']],
+                 ['Disco Duro',
+                    ['storage_capacity',
+                     'storage_type']],
+                 ['Pantalla',
+                    ['screen_size_family',
+                     'screen_resolution',
+                     'screen_touch']],
+                 ['Tarjeta de video',
+                    ['video_card_type',
+                     'video_card_brand',
+                     'video_card_line',
+                     'video_card']],
+                 ['Sistema operativo',
+                    ['operating_system'],
+                     ]]
+                     
+        return self.parse_model(model)
+        
+    def main_category(self):
+        return self.fields['ntype']
+        
+    def main_category_string(self):
+        return 'ntype'
         
     def generateTitle(self):
         # We are going to skip the special "filters" as they don't apply

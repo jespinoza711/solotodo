@@ -10,8 +10,6 @@
 
 {% block content %}
 
-{% load mytags %}
-
 {% ifequal processor None %}
     <h1>Procesadores {{ processor_line_family }}</h1>
 {% else %}
@@ -30,9 +28,9 @@
 <div style="clear: both;">
     <h2>Ver otras líneas</h2>
     <ul>
-        <li><a href="{% url solonotebooks.cotizador.views.processor_line %}">Comparar todas las líneas</a></li>
+        <li><a href="{% url cotizador.views_notebooks.processor_line %}">Comparar todas las líneas</a></li>
     {% for processor_line_family in other_processor_line_families %}
-        <li><a href="{% url solonotebooks.cotizador.views.processor_line_details processor_line_family.id %}">{{ processor_line_family }}</a></li>
+        <li><a href="{% url cotizador.views_notebooks.processor_line_details processor_line_family.id %}">{{ processor_line_family }}</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -56,7 +54,7 @@
         {% else %}
             <tr>
         {% endifequal %}
-            <td><a href="{% url solonotebooks.cotizador.views.catalog %}?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
+            <td><a href="{% url cotizador.views.catalog %}?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
             <td>{{ processor.core_number }}</td>
             <td>{{ processor.frequency }}</td>
             <td>{{ processor.speed_score }}</td>                
@@ -78,7 +76,7 @@
 {% endifequal %}
 
 {% for notebook in notebooks %}
-    {% display_notebook notebook %}
+    {{ notebook.render_div }}
 {% endfor %}
 
 {% endblock %}

@@ -11,17 +11,17 @@ them into the database, logging price changes, new models and disappearing
 models'''
 def main():
 
-    for shn in StoreHasProduct.objects.all():
-        print shn
-        shn.prevent_availability_change = False
-        shn.save()
+    for shp in StoreHasProduct.objects.all():
+        print shp
+        shp.prevent_availability_change = False
+        shp.save()
 
     stores = [NotebookCenter(), PackardBell(), LaPolar(), Bym(), Clie(), Falabella(), ENotebook(), FullNotebook(), Paris(), PCFactory(), Sym(), TecnoCl(), Wei(), Sistemax(), Dell(), Webco(), Racle(), Magens(), GlobalMac(), Syd(), MacOnline(), Impulso(), Peta(), HPOnline(), PortatilChile(), TecnoGroup(), Ripley(), AbcDin(), Cintegral()]
     
     for store in stores:
-        getStoreProducts(store)
+        get_store_products(store)
                 
-    updateAvailabilityAndPrice()
+    update_availability_and_price()
                 
 if __name__ == '__main__':
     print datetime.now()
