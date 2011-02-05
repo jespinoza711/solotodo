@@ -53,7 +53,7 @@ def product_type_catalog(request, product_type_urlname):
     ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
     product_type_class = ptype.get_class()
 
-    search_form = initialize_search_form(request.GET)
+    search_form = initialize_search_form(request.GET, ptype)
     search_form.save()
     
     # Grab all the candidates (those currently available)
@@ -80,24 +80,7 @@ def product_type_catalog(request, product_type_urlname):
     result_products = result_products[first_result_index - 1 : last_result_index]
     
     product_link_args = search_form.generateProdutLinkArgs()
-    '''
-    publicized_notebooks = Notebook.objects.filter(is_available = True).filter(~Q(publicized_offer = None))
-    
-    result_publicized_notebooks, ordering_direction =  filter_notebooks(publicized_notebooks, search_form)
-    
-    chosen_publicized_notebooks = []
-    
-    insert_positions = [2, 7]
-    counter = 0
-    for publicized_notebook in result_publicized_notebooks:
-        if publicized_notebook not in result_notebooks:
-            publicized_notebook.is_publicized = True
-            publicized_notebook.url = '/store_notebook/' + str(publicized_notebook.publicized_offer.id)
-            result_notebooks.insert(insert_positions[counter], publicized_notebook)
-            counter += 1
-            if counter == len(insert_positions):
-                break
-    '''
+
     d = dict(NotebookSearchForm.price_choices)
     
     return append_ads_to_response(request, 'cotizador/catalog.html', {
@@ -134,7 +117,7 @@ def store_details(request, store_id):
     return append_ads_to_response(request, 'cotizador/store_details.html', {
         'store': store,
         'shps': shps,
-        'ptype': ProductType.objects.get(urlname = 'notebooks')
+        'ptype': ProductType.default()
     })
     
 # View for showing all of the stores currently in the DB    
@@ -142,7 +125,7 @@ def store_index(request):
     stores = Store.objects.all()
     return append_ads_to_response(request, 'cotizador/store_index.html', {
         'stores': stores,
-        'ptype': ProductType.objects.get(urlname = 'notebooks')
+        'ptype': ProductType.default()
     })  
     
 def product_type_search(request, product_type_urlname):
@@ -170,7 +153,7 @@ def product_type_search(request, product_type_urlname):
     result_products = sorted(result_products, key = operator.itemgetter(1), reverse = True)
     
     # Boilerplate code for setting up the links to each page of the results
-    search_form = initialize_search_form(request.GET)
+    search_form = initialize_search_form(request.GET, ptype)
     
     page_count = ceil(len(result_products) / 10.0);
         
@@ -271,7 +254,7 @@ def all_products(request):
     return append_ads_to_response(request, 'cotizador/all_products.html',
         {
             'product_types': result,
-            'ptype': ProductType.objects.get(urlname = 'notebooks')
+            'ptype': ProductType.default()
         })
     
 # View that gets called when a user clicks an external link to a store
@@ -353,61 +336,3 @@ def product_details(request, product_id):
         'subscription': product_subscription,
         'ptype': product.ptype
         })
-
-'''    
-def add_item_notebook_comparison(request):
-    try:
-        if not 'comparison_list' in request.session:
-            request.session['comparison_list'] = NotebookComparisonList()
-            request.session['comparison_list'].save()
-        
-        ntbk = Notebook.objects.get(pk = request.POST['ntbk_id'])
-        request.session['comparison_list'].notebooks.add(ntbk)
-        request.session['comparison_list'].save()
-        
-        response = {'code': 'OK'}
-    except:
-        response = {'code': 'Error'}
-    
-    request.session.modified = True
-    
-    data = simplejson.dumps(response, indent = 4)
-    return HttpResponse(data, mimetype='application/javascript') 
-
-
-def remove_item_notebook_comparison(request):
-    try:
-        if not 'comparison_list' in request.session:
-            request.session['comparison_list'] = NotebookComparisonList()
-            request.session['comparison_list'].save()
-        
-        ntbk = Notebook.objects.get(pk = request.POST['ntbk_id'])
-        request.session['comparison_list'].notebooks.remove(ntbk)
-        request.session['comparison_list'].save()
-        
-        response = {'code': 'OK'}
-    except:
-        response = {'code': 'Error'}
-    
-    request.session.modified = True
-    
-    data = simplejson.dumps(response, indent = 4)
-    return HttpResponse(data, mimetype='application/javascript') 
-    
-def notebook_comparison(request):
-    if request.method == 'POST' or not 'comparison_list' in request.session:
-        request.session['comparison_list'] = NotebookComparisonList()
-        request.session['comparison_list'].save()        
-        
-    return append_ads_to_response(request, 'cotizador/notebook_comparison.html', {
-        'notebooks': request.session['comparison_list'].notebooks.all(),
-        'comparison_list_id': request.session['comparison_list'].id,
-        'server_name': settings.SERVER_NAME
-    })
-    
-def notebook_comparison_details(request, comparison_id):
-    comparison = get_object_or_404(NotebookComparisonList, pk = comparison_id)
-    return append_ads_to_response(request, 'cotizador/comparison_details.html', {
-        'notebooks': comparison.notebooks.all(),
-    })
-'''

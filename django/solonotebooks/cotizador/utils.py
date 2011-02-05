@@ -38,6 +38,7 @@ def load_advertisement(position):
     
 def send_email(user, subject, template, args):
     args['server_name'] = settings.SERVER_NAME
+    args['site_name'] = settings.SITE_NAME
     args['user'] = user
     body = template.render(Context(args))
     send_mail(subject, body, settings.EMAIL_FULL_ADDRESS, [ user.username + '<' + user.email + '>' ])
@@ -84,7 +85,7 @@ def send_new_password_mail(user, new_password):
     send_email(user, subject, t, args)    
     
 # Helper method to set the search_form for almost all of the views            
-def initialize_search_form(data):
+def initialize_search_form(data, ptype = ProductType.default()):
     qd = data.copy()
     if 'max_price' not in qd:
         qd['max_price'] = '1000000'
@@ -92,7 +93,8 @@ def initialize_search_form(data):
         qd['min_price'] = '0'
     if 'ordering' not in qd:
         qd['ordering'] = '1'
-    search_form = NotebookSearchForm(qd)
+    search_form_class = eval(ptype.classname + 'SearchForm')
+    search_form = search_form_class(qd)
     search_form.validate()
     search_form.is_valid()
     

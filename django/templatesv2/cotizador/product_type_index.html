@@ -54,7 +54,7 @@
 	
 	<div id="arbol-site">
 		<ul>
-			<li><span>{{ product_type_class.index_name }}</span></li>
+			<li><span>{{ ptype.indexname }}</span></li>
 			{% for category in form.main_category.choices %}
             <li><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?{{ form.main_category_string }}={{ category.0 }}" title="{{ category.1 }}">{{ category.1 }}</a></li>						
             {% endfor %}

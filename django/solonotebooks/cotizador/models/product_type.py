@@ -7,6 +7,7 @@ class ProductType(models.Model):
     urlname = models.CharField(max_length = 255)
     displayname = models.CharField(max_length = 255)
     adminurlname = models.CharField(max_length = 255)
+    indexname = models.CharField(max_length = 255)
     
     def get_class(self):
         from . import *
@@ -14,6 +15,10 @@ class ProductType(models.Model):
     
     def __unicode__(self):
         return unicode(self.classname)
+        
+    @staticmethod
+    def default():
+        return ProductType.objects.get(urlname = 'notebooks')
     
     class Meta:
         app_label = 'cotizador'
