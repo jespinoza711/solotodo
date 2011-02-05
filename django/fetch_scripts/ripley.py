@@ -35,7 +35,6 @@ class Ripley:
             # Obtain the links to the other pages of the catalog (2, 3, ...)
             productParagraphs = baseSoup.findAll("td", { "class" : "grisCatalogo" })
             productParagraphs = productParagraphs[1::3]
-            productParagraphs = productParagraphs[:len(productParagraphs)/2]
             productParagraphs = [pp.parent.parent for pp in productParagraphs]
             
             if not productParagraphs:
