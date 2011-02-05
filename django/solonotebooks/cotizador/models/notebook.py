@@ -8,8 +8,6 @@ from . import *
 from utils import prettyPrice
 
 class Notebook(Product):
-    index_name = 'NOTEBOOKS'
-
     is_ram_dual_channel = models.BooleanField()
     has_bluetooth = models.BooleanField()
     has_esata = models.BooleanField()
