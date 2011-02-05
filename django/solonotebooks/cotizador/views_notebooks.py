@@ -3,6 +3,12 @@ from models import *
 from views import append_ads_to_response
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+
+def append_notebook_ptype_to_response(request, template, args):
+    ptype = ProductType.objects.get(classname = 'Notebook')
+    args['ptype'] = ptype
+    return append_ads_to_response(request, template, args)
+    
          
 def processor_line_details(request, processor_line_id):
     processor_line_family = get_object_or_404(NotebookProcessorLineFamily, pk = processor_line_id)
@@ -26,7 +32,7 @@ def processor_line_details(request, processor_line_id):
         ntbks = Notebook.get_valid().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
         
     processors = NotebookProcessor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/processor_line_details.html', {
+    return append_notebook_ptype_to_response(request, 'cotizador/notebook_processor_line_details.html', {
                 'processor_line_family': processor_line_family,
                 'processors': processors,
                 'notebooks': ntbks,
@@ -56,7 +62,7 @@ def video_card_line_details(request, video_card_line_id):
         ntbks = Notebook.get_valid().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
     
     video_cards = NotebookVideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/video_card_line_details.html', {
+    return append_notebook_ptype_to_response(request, 'cotizador/notebook_video_card_line_details.html', {
                 'video_card_line': video_card_line,
                 'video_cards': video_cards,
                 'notebooks': ntbks,
@@ -68,7 +74,7 @@ def video_card_line_details(request, video_card_line_id):
 def processor_line(request):
     processor_line_families = NotebookProcessorLineFamily.objects.all()
     processors = NotebookProcessor.objects.order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/all_processor_lines.html', {
+    return append_notebook_ptype_to_response(request, 'cotizador/notebook_all_processor_lines.html', {
         'processor_line_families': processor_line_families,
         'processors': processors
     })            
@@ -76,7 +82,7 @@ def processor_line(request):
 def video_card_line(request):
     video_card_lines = NotebookVideoCardLine.objects.all()
     video_cards = NotebookVideoCard.objects.order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/all_video_card_lines.html', {
+    return append_notebook_ptype_to_response(request, 'cotizador/notebook_all_video_card_lines.html', {
                 'video_card_lines': video_card_lines,
                 'video_cards': video_cards
     })

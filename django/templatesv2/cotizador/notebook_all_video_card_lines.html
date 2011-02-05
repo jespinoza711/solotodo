@@ -1,10 +1,10 @@
 {% extends "base_generic.html" %}
 
-{% block title %}Todas las tarjetas de video - SoloNotebooks{% endblock %}
+{% block title %}Tarjetas de video de notebooks - {{ site_name }}{% endblock %}
 
 {% block content %}
 
-<h1>Todas las tarjetas de video</h1>
+<h1>Tarjetas de video de notebooks</h1>
 
 <div>
     <h2>Ver línea específica</h2>
@@ -26,7 +26,7 @@
     </tr>
     {% for video_card in video_cards %}
         <tr>
-            <td><a href="{% url cotizador.views.catalog %}?video_card={{ video_card.id }}&advanced_controls=1">{{ video_card }}</a></td>
+            <td><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?video_card={{ video_card.id }}&advanced_controls=1">{{ video_card }}</a></td>
             <td>{{ video_card.card_type }}</td>
             <td>{{ video_card.speed_score }}</td>
             <td>{{ video_card.memory }}</td>                

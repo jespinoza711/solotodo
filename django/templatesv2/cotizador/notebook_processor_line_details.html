@@ -2,9 +2,9 @@
 
 {% block title %}
     {% ifequal processor None %}
-        Procesadores {{ processor_line_family }} - SoloNotebooks
+        Procesadores {{ processor_line_family }} - {{ site_name }}
     {% else %}
-        Procesador {{ processor }} - SoloNotebooks
+        Procesador {{ processor }} - {{ site_name }}
     {% endifequal %}
 {% endblock %}
 
@@ -54,7 +54,7 @@
         {% else %}
             <tr>
         {% endifequal %}
-            <td><a href="{% url cotizador.views.catalog %}?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
+            <td><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
             <td>{{ processor.core_number }}</td>
             <td>{{ processor.frequency }}</td>
             <td>{{ processor.speed_score }}</td>                

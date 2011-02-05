@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<title>
 		    {% block title %}
-		        SoloNotebooks - Todo sobre notebooks
+		        {{ site_name }}
 	        {% endblock %}
 	    </title>
 		<link rel="stylesheet" href="/media/cssv2/screen.css" type="text/css" media="screen, projection" />
@@ -56,7 +56,7 @@
                         <div id="logout">
                             <div>
                                 <span id="logout_links">
-                                {{ username }} | <a href="{% url cotizador.views_account.subscriptions %}">Mis Notebooks</a> | <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}">Logout</a>
+                                {{ username }} | <a href="{% url cotizador.views_account.subscriptions %}">Mis Productos</a> | <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}">Logout</a>
                                 </span>
                             </div>
                         </div>            
@@ -81,9 +81,9 @@
 					
 				<div id="menu">
 					<div id="combo-search" class="left">
-						<a href="{% url cotizador.views.index %}" title="Inicio" title="Solo Notebooks" class="left"><img src="/media/cssv2/img/logo.png" /></a>
+						<a href="{% url cotizador.views.index %}" title="Inicio" title="{{ site_name }}" class="left"><img src="/media/cssv2/img/logo.png" /></a>
 						<ol id="search" class="left">
-						    <form method="get" action="/search">
+						    <form method="get" action="{% url cotizador.views.product_type_search ptype.urlname %}">
 							<li>
     							    <input name="search_keywords" type="text" class="input-search" />
     							    </li>
@@ -96,7 +96,7 @@
 					<div id="areas-site" class="right">
 						<ul>
 							<li class="sprite-inicio-active"><a href="{% url cotizador.views.index %}" title="Inicio">Inicio</a></li>
-							<li class="sprite-catalogo"><a href="{% url cotizador.views.catalog %}" title="Catálogo">Catálogo</a></li>
+							<li class="sprite-catalogo"><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}" title="Catálogo">Catálogo</a></li>
 							<li class="sprite-blog"><a href="/blog" title="Blog">Blog</a></li>
 						</ul>
 					</div> <!-- end areas -->
@@ -105,11 +105,11 @@
 				
 				<div id="tabs">
 					<ul class="catalogo left">
-						<li class="intro-catalogo">Tipos de Notebooks</li>
-					    {% for notebook_type in form.fields.ntype.choices %}
-                            <li {% ifequal notebook_type.0|add:"0" ntype_comparison_key|add:"0" %}class="active-menu"{% endifequal %}>
-                                <a href="{% url cotizador.views.catalog %}?{{change_ntype_url}}ntype={{notebook_type.0}}" title="{{ notebook_type.1 }}">
-                                    {{notebook_type.1}}
+						<li class="intro-catalogo">Tipos de {{ ptype.displayname }}</li>
+					    {% for category_choice in main_category_choices %}
+                            <li {% ifequal category_choice.id main_category_comparison_key %}class="active-menu"{% endifequal %}>
+                                <a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?{{change_ntype_url}}ntype={{ category_choice.id }}" title="{{ category_choice }}">
+                                    {{ category_choice }}
                                 </a>
                             </li>
                         {% endfor %}

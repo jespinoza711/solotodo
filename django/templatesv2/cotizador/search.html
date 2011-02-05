@@ -1,6 +1,6 @@
 {% extends "cotizador/base_catalog.html" %}
 
-{% block title %}SoloNotebooks - Resultados de la búsqueda{% endblock %}
+{% block title %}Resultados de la búsqueda - {{ site_name }}{% endblock %}
 
 {% block header %}
 {% endblock %}
@@ -11,14 +11,14 @@
 
 <p><b>Términos utilizados:</b> {{ query }}</p>
 
-{% ifequal result_notebooks.count 0 %}
+{% ifequal result_products.count 0 %}
 
 <h2>No se han encontrado equipos con esas características</h2>
 
 {% endifequal %}
 
-{% for notebook in notebooks %}
-    {{ notebook.render_div }}
+{% for product in products %}
+    {{ product.render_div }}
 {% endfor %}
 
 <div id="pagination">
