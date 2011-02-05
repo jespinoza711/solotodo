@@ -1,5 +1,9 @@
 {% extends "base_generic.html" %}
 
+{% block title %}
+    {{ ptype.displayname }} - {{ site_name }}
+{% endblock %}
+
 {% block content %}
 
 <div id="left">
@@ -32,7 +36,7 @@
 		<h3>Búsqueda Rápida</h3>
 			
 			<div class="spacer-search">
-			    <form method="get" action="/catalog">
+			    <form method="get" action="{% url cotizador.views.product_type_catalog ptype.urlname %}">
 			        {% for field_combo in form.get_quick_search_fields %}
 			            <span>{{ field_combo.0 }}</span><br />
 			            {{ field_combo.1 }}
@@ -52,12 +56,12 @@
 		<ul>
 			<li><span>{{ product_type_class.index_name }}</span></li>
 			{% for category in form.main_category.choices %}
-            <li><a href="{% url cotizador.views.catalog %}?{{ form.main_category_string }}={{ category.0 }}" title="{{ category.1 }}">{{ category.1 }}</a></li>						
+            <li><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?{{ form.main_category_string }}={{ category.0 }}" title="{{ category.1 }}">{{ category.1 }}</a></li>						
             {% endfor %}
 		</ul>
 		<ul>
 			<li><span>CATEGORIAS</span></li>
-			<li><a href="{% url cotizador.views.catalog %}" title="Catálogo">Catálogo</a></li>
+			<li><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}" title="Catálogo">Catálogo</a></li>
 			<li><a href="/blog" title="Blog">Blog</a></li>
 			<li><a href="/blog/about" title="Nosotros">Nosotros</a></li>
 			<li><a href="/blog/contacto" title="Contacto">Contacto</a></li>

@@ -1,6 +1,6 @@
 {% extends "manager/base.html" %}
 
-{% block title %}SoloNotebooks - Manager{% endblock %}
+{% block title %}Comentarios - {{ site_name }}{% endblock %}
 
 {% block manager_content %}
 
@@ -11,13 +11,13 @@
     <br />
     <strong>Nickname: </strong> {{ comment.nickname }}
     <br />
-    <strong>Producto: </strong> <a href="/{{ comment.notebook.ptype.urlname }}/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.id %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
     {{ comment.comments }}
     <br />
-    <form method="POST" action="/manager/delete/{{ comment.id }}">
+    <form method="POST" action="{% cotizador.views_manager.delete_comment comment.id %}">
         <input type="submit" value="Eliminar comentario" />
     </form>
     <hr />
@@ -25,7 +25,7 @@
 {% endfor %}
 
 
-<form method="POST" action="/manager/validate_all">
+<form method="POST" action="{% cotizador.views_manager.validate_all %}">
     <input type="submit" value="Validar todos los mensajes" />
 </form>
 
@@ -41,13 +41,13 @@
         {{ comment.nickname }}
     {% endif %}
     <br />
-    <strong>Producto: </strong> <a href="/{{ comment.notebook.ptype.urlname }}/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.id %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
     {{ comment.comments }}
     <br />
-    <form method="POST" action="/manager/delete/{{ comment.id }}">
+    <form method="POST" action="{% cotizador.views_manager.delete_comment comment.id %}">
         <input type="submit" value="Eliminar comentario" />
     </form>
     <hr />

@@ -1,7 +1,7 @@
 {% extends "cotizador/base_catalog.html" %}
 
 {% block title %}
-    {{ form.generateTitle }} - SoloNotebooks
+    {{ form.generateTitle }} - {{ site_name }}
 {% endblock %}
 
 {% block catalog_content %}
@@ -41,11 +41,11 @@
 </div> <!-- end param cat -->
 
 <div id="cat-index">
-    {% if notebooks %}
+    {% if products %}
 	<p class="resultados-p">{{first_result_index}} - {{ last_result_index }} de {{ num_results }} Resultados</p>	
 	
-	{% for notebook in notebooks %}
-        {{ notebook.render_div }}
+	{% for product in products %}
+        {{ product.render_div }}
     {% endfor %}
     {% else %}
         No hay resultados para su busqueda

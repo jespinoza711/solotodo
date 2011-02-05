@@ -1,0 +1,20 @@
+{% extends "cotizador/base_catalog.html" %}
+
+{% block title %}Todos los productos - {{ site_name }}{% endblock %}
+
+{% block catalog_content %}
+
+<div id="product_list_container" />
+<h1>Lista de todos los productos</h1>
+{% for product_type in product_types %}
+    <h2>{{ product_type.0 }}</h2>
+    {% for product in product_type.1 %}
+        <a href="{% url cotizador.views.product_details product.id %}">
+            {{ product }}
+        </a>
+        <br />
+    {% endfor %}
+{% endfor %}
+</div>
+
+{% endblock %}

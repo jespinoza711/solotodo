@@ -110,6 +110,9 @@ class NotebookSearchForm(SearchForm):
     def main_category_string(self):
         return 'ntype'
         
+    def main_category_key(self):
+        return self.ntype
+        
     def generateTitle(self):
         # We are going to skip the special "filters" as they don't apply
         skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction', 'min_price', 'max_price']

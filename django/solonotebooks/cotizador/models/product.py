@@ -144,8 +144,12 @@ class Product(models.Model):
         surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + str(self.id) + '.png')
         
     def render_div(self):
+        entity = self
+        if entity.__class__.__name__ == 'Product':
+            entity = entity.get_polymorphic_instance()
+        
         template_file = 'templatetags/div_' + self.ptype.adminurlname + '.html'
-        return render_to_string(template_file, { self.ptype.adminurlname: self.get_polymorphic_instance() })
+        return render_to_string(template_file, { self.ptype.adminurlname: entity })
         
     def find_similar_products(self):
         return []

@@ -1,6 +1,6 @@
 {% extends "account/base.html" %}
 
-{% block title %}SoloNotebooks - Mis productos{% endblock %}
+{% block title %}Mis productos - {{ site_name }}{% endblock %}
 
 {% block header_content %}
 	<script type="text/javascript" src="/media/jsv2/subscriptions.js"></script>
@@ -24,7 +24,7 @@
     </tr>
     {% for ps in product_subscriptions %}
         <tr>
-            <td class="notebook_column">
+            <td class="product_column">
                 {{ ps.product.render_div }}
             </td>
             <td class="email_notification_choice_cell">

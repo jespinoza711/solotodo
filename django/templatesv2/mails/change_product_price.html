@@ -2,12 +2,12 @@ Hola {{ user.username }},
 
 El equipo {{ product }} acaba de cambiar de precio, para ver su nuevo valor entra a 
 
-{{ server_name }}/notebooks/{{ product.id }}
+{{ server_name }}{% url cotizador.views.product_details product.id %}
 
-Este correo fue enviado pues estás suscrito a los cambios de este equipo, para modificar tus preferencias sólo necesitas editarlas en tu lista de notebooks:
+Este correo fue enviado pues estás suscrito a los cambios de este equipo, para modificar tus preferencias sólo necesitas editarlas en tu lista de productos:
 
-{{ server_name }}/account
+{{ server_name }}{% url cotizador.views_account.subscriptions %}
 
 Atentamente,
 
-El staff de SoloNotebooks
+El staff de {{ site_name }}

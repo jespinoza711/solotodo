@@ -1,10 +1,10 @@
 {% extends "base_generic.html" %}
 
-{% block title %}Todos los procesadores - SoloNotebooks{% endblock %}
+{% block title %}Procesadores de notebooks - {{ site_name }}{% endblock %}
 
 {% block content %}
 
-<h1>Todos los procesadores</h1>
+<h1>Procesadores de notebooks</h1>
 
 <div>
     <h2>Ver línea específica</h2>
@@ -28,7 +28,7 @@
     </tr>
     {% for processor in processors %}
         <tr>
-            <td><a href="{% url cotizador.views.catalog %}?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
+            <td><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?processor={{processor.id}}&advanced_controls=1">{{ processor.tablePrint }}</a></td>
             <td>{{ processor.core_number }}</td>
             <td>{{ processor.frequency }}</td>
             <td>{{ processor.speed_score }}</td>                
