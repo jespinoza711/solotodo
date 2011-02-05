@@ -8,6 +8,10 @@ class ProductType(models.Model):
     displayname = models.CharField(max_length = 255)
     adminurlname = models.CharField(max_length = 255)
     
+    def get_class(self):
+        from . import *
+        return eval(self.classname)
+    
     def __unicode__(self):
         return unicode(self.classname)
     

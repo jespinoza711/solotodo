@@ -10,7 +10,7 @@
     <h2>Ver línea específica</h2>
     <ul>
     {% for video_card_line in video_card_lines %}
-        <li><a href="{% url cotizador.views.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
+        <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
     {% endfor %}
     </ul>
 </div>

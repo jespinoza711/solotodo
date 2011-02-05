@@ -25,16 +25,29 @@ from utils import *
     
 # Main landing page (/)    
 def index(request):
-    # Initialize the "form" that defines what special notebooks to 
+    # Initialize the "form" that defines what special products to 
     # display (by New, Price or Popularity) and get the corresponding
-    # notebooks
+    # products
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
-    result_notebooks = highlighted_products_form.apply_filter(Notebook.get_valid())[:10]
+    result_products = highlighted_products_form.apply_filter(Notebook.get_valid())[:10]
     
     return append_ads_to_response(request, 'cotizador/index.html', {
         'hnf': highlighted_products_form,
-        'notebooks': result_notebooks
-    })    
+        'notebooks': result_products
+    })
+    
+def product_type_index(request, product_type_urlname):
+    ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
+    product_type_class = ptype.get_class()
+    
+    highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
+    result_products = highlighted_products_form.apply_filter(product_type_class.get_valid())[:10]
+    
+    return append_ads_to_response(request, 'cotizador/product_type_index.html', {
+        'hnf': highlighted_products_form,
+        'products': result_products,
+        'product_type_class': product_type_class
+    })
     
 # View that handles the main catalog, applying filters and ordering
 # (/catalog)
@@ -249,14 +262,13 @@ def all_notebooks(request):
 # View that gets called when a user clicks an external link to a store
 # we log this for statistical purposes and... maybe build a business model
 # someday...
-def store_notebook_redirect(request, store_notebook_id):
-    store_notebook = get_object_or_404(StoreHasProductEntity, pk = store_notebook_id)
-    store_notebook.save()
+def store_product_redirect(request, store_product_id):
+    store_product = get_object_or_404(StoreHasProductEntity, pk = store_product_id)
     external_visit = ExternalVisit()
-    external_visit.shn = store_notebook
+    external_visit.shpe = store_product
     external_visit.date = date.today()
     external_visit.save()
-    return HttpResponseRedirect(store_notebook.url)
+    return HttpResponseRedirect(store_product.url)
     
 # View that gets called when a user clicks an ad
 def ad_visited(request, advertisement_id):
@@ -269,40 +281,35 @@ def ad_visited(request, advertisement_id):
     ad_visit.advertisement = advertisement
     ad_visit.save()
     return HttpResponseRedirect(advertisement.target_url)
-        
-# View in charge of showing the details of a notebook and handle commment submissions        
-def notebook_details(request, notebook_id):
-    notebook = get_object_or_404(Notebook, pk = notebook_id)
-    notebook = Notebook.objects.all().get(pk = notebook_id)
+    
+# View in charge of showing the details of a product and handle commment submissions        
+def product_details(request, product_id):
+    product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()
     
     # If this is a comment submission, validate and save
     if request.method == 'POST': 
-        commentForm = NotebookCommentForm(request.POST)
+        commentForm = ProductCommentForm(request.POST)
         if commentForm.is_valid():
-            notebook_comment = NotebookComment()
-            notebook_comment.date = date.today()        
+            product_comment = ProductComment()
+            product_comment.date = date.today()        
             rawComment = commentForm.cleaned_data['comments']
-            notebook_comment.comments = rawComment.replace('\n', '<br />')
-            notebook_comment.notebook = notebook
+            product_comment.comments = rawComment.replace('\n', '<br />')
+            product_comment.notebook = product
             if not request.user.is_anonymous():
-                notebook_comment.user = request.user
-                notebook_comment.validated = True
+                product_comment.user = request.user
+                product_comment.validated = True
             else:
-                notebook_comment.nickname = commentForm.cleaned_data['nickname']
+                product_comment.nickname = commentForm.cleaned_data['nickname']
                 request.session['posted_comment'] = True
                 
-            notebook_comment.save()
+            product_comment.save()
             return HttpResponseRedirect(request.META['HTTP_REFERER']);
     else:
         nv = ProductVisit()
-        nv.notebook = notebook
+        nv.notebook = product
         nv.save()
         commentForm = ProductCommentForm()
-        
-        
-    # Check if this is the redirect response generated after submitting an anonymous comment
-    # If it is, show a message that the comment needs to be validated and hide
-    # the form (to prevent users from posting again feeling that it didn't work)
+
     posted_comment = False
     
     if 'posted_comment' in request.session and request.session['posted_comment'] == True:
@@ -311,113 +318,25 @@ def notebook_details(request, notebook_id):
     
     
     # Find the stores with this notebook available
-    stores_with_notebook_available = notebook.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')
+    stores_with_product_available = product.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')
         
-    max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
-    similar_notebooks_ids = notebook.similar_notebooks.split(',')
-    similar_notebooks = [Notebook.objects.get(pk = ntbk_id) for ntbk_id in similar_notebooks_ids if ntbk_id]
+    similar_products_ids = product.similar_products.split(',')
+    similar_products = [Product.objects.get(pk = product_id) for product_id in similar_products_ids if product_id]
     
     try:
-        notebook_subscription = NotebookSubscription.objects.filter(user = request.user, notebook = notebook, is_active = True)[0]
+        product_subscription = ProductSubscription.objects.filter(user = request.user, product = product, is_active = True)[0]
     except:
-        notebook_subscription = None
+        product_subscription = None
     
-    return append_ads_to_response(request, 'cotizador/notebook_details.html', {
-        'notebook': notebook,
+    return append_ads_to_response(request, 'cotizador/' + product.ptype.adminurlname + '_details.html', {
+        product.ptype.adminurlname: product,
         'comment_form': commentForm,
-        'notebook_prices': stores_with_notebook_available,
-        'notebook_comments': notebook.productcomment_set.filter(validated = True).order_by('id'),
+        'product_prices': stores_with_product_available,
+        'product_comments': product.productcomment_set.filter(validated = True).order_by('id'),
         'posted_comment': posted_comment,
-        'notebooks': similar_notebooks,
-        'notebook_subscription': notebook_subscription,
+        'similar_products': similar_products,
+        'subscription': product_subscription,
         })
-            
-# View in charge of showing the processors of a particular line, nothing fancy            
-def redirect_processor_line_family_details(request, processor_line_family_id):
-    url = reverse('solonotebooks.cotizador.views.processor_line_details', args = [processor_line_family_id])
-    url += concat_dictionary(request.GET)
-    return HttpResponseRedirect(url)
-            
-def processor_line_details(request, processor_line_id):
-    processor_line_family = get_object_or_404(NotebookProcessorLineFamily, pk = processor_line_id)
-    other_processor_line_families = NotebookProcessorLineFamily.objects.filter(~Q(id = processor_line_family.id))
-    
-    processor_id = 0
-    if 'processor' in request.GET:
-        try:
-            processor_id = int(request.GET['processor'])
-        except:
-            processor_id = 0
-            
-        try:
-            processor = NotebookProcessor.objects.filter(line__family = processor_line_family).get(pk = processor_id)
-            ntbks = Notebook.get_valid().filter(processor = processor).order_by('?')[0:5]
-        except:
-            processor = None
-            ntbks = Notebook.get_valid().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
-    else:
-        processor = None
-        ntbks = Notebook.get_valid().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
-        
-    processors = NotebookProcessor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/processor_line_details.html', {
-                'processor_line_family': processor_line_family,
-                'processors': processors,
-                'notebooks': ntbks,
-                'processor_id': processor_id,
-                'processor': processor,
-                'other_processor_line_families': other_processor_line_families,
-            })
-            
-def video_card_line_details(request, video_card_line_id):
-    video_card_line = get_object_or_404(NotebookVideoCardLine, pk = video_card_line_id)
-    other_video_card_lines = NotebookVideoCardLine.objects.filter(~Q(id = video_card_line.id))
-    video_card_id = 0
-    if 'video_card' in request.GET:
-        try:
-            video_card_id = int(request.GET['video_card'])
-        except: 
-            video_card_id = 0
-            
-        try:
-            video_card = VideoCard.objects.filter(line = video_card_line).get(pk = video_card_id)
-            ntbks = Notebook.get_valid().filter(video_card = video_card).order_by('?').distinct()[0:5]
-        except:
-            video_card = None
-            ntbks = Notebook.get_valid().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
-    else:
-        video_card = None    
-        ntbks = Notebook.get_valid().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
-    
-    video_cards = NotebookVideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/video_card_line_details.html', {
-                'video_card_line': video_card_line,
-                'video_cards': video_cards,
-                'notebooks': ntbks,
-                'video_card_id': video_card_id,
-                'video_card': video_card,
-                'other_video_card_lines': other_video_card_lines,
-            })            
-            
-def redirect_all_processor_line_families(request):
-    url = reverse('solonotebooks.cotizador.views.processor_line')
-    return HttpResponseRedirect(url)
-            
-def processor_line(request):
-    processor_line_families = NotebookProcessorLineFamily.objects.all()
-    processors = NotebookProcessor.objects.order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/all_processor_lines.html', {
-        'processor_line_families': processor_line_families,
-        'processors': processors
-    })            
-            
-def video_card_line(request):
-    video_card_lines = NotebookVideoCardLine.objects.all()
-    video_cards = NotebookVideoCard.objects.order_by('-speed_score')
-    return append_ads_to_response(request, 'cotizador/all_video_card_lines.html', {
-                'video_card_lines': video_card_lines,
-                'video_cards': video_cards
-    })
     
 def add_item_notebook_comparison(request):
     try:
@@ -474,3 +393,8 @@ def notebook_comparison_details(request, comparison_id):
     return append_ads_to_response(request, 'cotizador/comparison_details.html', {
         'notebooks': comparison.notebooks.all(),
     })
+    
+# View in charge of showing the details of a notebook and handle commment submissions        
+def notebook_details(request, notebook_id):
+    url = reverse('cotizador.views.product_details', kwargs = {'product_id': notebook_id})
+    return HttpResponseRedirect(url)

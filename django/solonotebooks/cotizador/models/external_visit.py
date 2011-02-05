@@ -6,6 +6,14 @@ class ExternalVisit(models.Model):
     date = models.DateField()
     shn = models.ForeignKey(StoreHasProductEntity)
     
+    def set_shpe(self, shpe):
+        self.shn = shpe
+        
+    def get_shpe(self, shpe):
+        return shn
+        
+    shpe = property(get_shpe, set_shpe)
+    
     def __unicode__(self):
         return 'Visita a ' + unicode(self.shn)
     

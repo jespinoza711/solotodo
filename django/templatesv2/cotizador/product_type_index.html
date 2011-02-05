@@ -16,8 +16,8 @@
 		<br class="clear" />
 	</div> <!-- !end top left -->
 	<div id="cat-index">
-		{% for notebook in notebooks %}
-		    {{ notebook.render_div }}
+		{% for product in products %}
+		    {{ product.render_div }}
         {% endfor %}
 		<a href="#" title="Ver Listado Completo" class="more-index">Ver Listado Completo</a>
 		
@@ -33,17 +33,10 @@
 			
 			<div class="spacer-search">
 			    <form method="get" action="/catalog">
-				    <span>Marca</span><br />
-				    {{ form.notebook_brand }}
-				
-				    <span>Procesador</span><br />
-                    {{ form.processor_line_family }}
-				
-				    <span>Cantidad RAM</span><br />
-                    {{ form.ram_quantity }}
-				
-				    <span>Tipo tarjeta de video</span><br />
-                    {{ form.video_card_type }}
+			        {% for field_combo in form.get_quick_search_fields %}
+			            <span>{{ field_combo.0 }}</span><br />
+			            {{ field_combo.1 }}
+			        {% endfor %}
 				
 				    <input type="submit" class="right" value="Buscar" />
 		        </form>
@@ -57,9 +50,9 @@
 	
 	<div id="arbol-site">
 		<ul>
-			<li><span>NOTEBOOKS</span></li>
-			{% for notebook_type in form.fields.ntype.choices %}
-            <li><a href="{% url cotizador.views.catalog %}?ntype={{notebook_type.0}}" title="{{ notebook_type.1 }}">{{ notebook_type.1 }}</a></li>						
+			<li><span>{{ product_type_class.index_name }}</span></li>
+			{% for category in form.main_category.choices %}
+            <li><a href="{% url cotizador.views.catalog %}?{{ form.main_category_string }}={{ category.0 }}" title="{{ category.1 }}">{{ category.1 }}</a></li>						
             {% endfor %}
 		</ul>
 		<ul>

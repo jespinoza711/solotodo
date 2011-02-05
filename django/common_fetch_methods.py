@@ -6,16 +6,8 @@ from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.utils import *
 
-# Dynamically loads a class
-def import_store(name):
-    mod = __import__('fetch_scripts.' + name)
-    components = name.split('.')
-    for comp in components[1:]:
-        mod = getattr(mod, comp)
-    return mod
-
 # Method to write a raw string as a log message
-def logMessage(message):
+def log_message(message):
     log_message = LogEntryMessage()
     log_message.logEntry, created = LogEntry.objects.get_or_create(date = date.today())
     log_message.message = message
@@ -24,23 +16,23 @@ def logMessage(message):
 '''Method that takes a list of ProductData objects and the store they came from,
 checks whether they already exists, if they do, it checks for price differences,
 if not, it is added.  Everything is logged '''
-def saveProducts(ntbks, s):
-    for ntbk in ntbks:
-        print 'Guardando ' + str(ntbk)
+def save_products(products, s):
+    for product in products:
+        print 'Guardando ' + str(product)
         print 'Buscando si tiene un registro existente'
         try:
-            current_shpe = StoreHasProductEntity.objects.filter(shp__store = s).get(comparison_field = ntbk.comparison_field)
+            current_shpe = StoreHasProductEntity.objects.filter(shp__store = s).get(comparison_field = product.comparison_field)
             print 'Si tiene registro existente, usandolo'
         except StoreHasProductEntity.DoesNotExist:
             print 'No tiene registro existente, creandolo'
             current_shpe = StoreHasProductEntity()
-            current_shpe.url = ntbk.url
-            current_shpe.custom_name = ntbk.custom_name
-            current_shpe.comparison_field = ntbk.comparison_field
+            current_shpe.url = product.url
+            current_shpe.custom_name = product.custom_name
+            current_shpe.comparison_field = product.comparison_field
             current_shpe.shp = None
             current_shpe.is_available = True
             current_shpe.is_hidden = False
-            current_shpe.latest_price = ntbk.price
+            current_shpe.latest_price = product.price
             current_shpe.save()
             LogNewEntity.new(current_shpe).save()
         
@@ -59,24 +51,24 @@ def saveProducts(ntbks, s):
         if len(today_history) == 0:
             print 'No hay registro de hoy, creandolo'
             snh = StoreProductHistory()
-            snh.price = ntbk.price
+            snh.price = product.price
             snh.date = date.today()
             snh.registry = current_shpe
             snh.save()    
         else:
             print 'Hay un registro existente, viendo si hay cambios de precio'
             today_history = today_history[0]
-            if today_history.price != ntbk.price:
+            if today_history.price != product.price:
                 print 'Hubo un cambio de precio'
-                today_history.price = ntbk.price
+                today_history.price = product.price
                 today_history.save()
-                current_shpe.latest_price = ntbk.price
+                current_shpe.latest_price = product.price
                 current_shpe.save()
                 
     
 ''' Management method that keeps everything coherent (e.g. updating the price of
 the products to the minimum among the stores that carry it, etc)'''
-def updateAvailabilityAndPrice():
+def update_availability_and_price():
     print 'Actualizando status de disponibilidad de las tiendas'
     
     print 'Paso 1: Actualizando StoreHasProductEntities'
@@ -144,11 +136,11 @@ def updateAvailabilityAndPrice():
             if new_price != product.min_price:
                 if log_price_change:
                     LogChangeProductPrice.new(product, product.min_price, new_price).send_notification_mails()
-                npc = ProductPriceChange()
-                npc.notebook = product
-                npc.price = new_price
-                npc.date = date.today()
-                npc.save()
+                ppc = ProductPriceChange()
+                ppc.product = product
+                ppc.price = new_price
+                ppc.date = date.today()
+                ppc.save()
                 product.min_price = new_price
 
             product.is_available = True
@@ -160,26 +152,22 @@ def updateAvailabilityAndPrice():
 
             product.is_available = False
             
-        npcs = ProductPriceChange.objects.filter(notebook = product)
-        if len(npcs) == 0:
-            npc = ProductPriceChange()
-            npc.notebook = product
-            npc.price = product.min_price
-            npc.date = date.today()
-            npc.save()  
+        ppcs = product.productpricechange_set.all()
+        if len(ppcs) == 0:
+            ppc = ProductPriceChange()
+            ppc.product = product
+            ppc.price = product.min_price
+            ppc.date = date.today()
+            ppc.save()  
             
         product.long_description = product.raw_text()
         product.update_week_discount()
         product.update_week_visits()
         
-        #similar_products = [str(ntbk.id) for ntbk in product.findSimilarProducts()]
-        #product.similar_products = ','.join(similar_products)
-        
-        
         product.save()
         product.generate_chart()
         
-def getStoreProducts(fetch_store):
+def get_store_products(fetch_store):
     try:
         store = Store.objects.get(name = fetch_store.name)
     except Store.DoesNotExist:
@@ -187,12 +175,12 @@ def getStoreProducts(fetch_store):
         store.name = fetch_store.name
         store.save()
     try:
-        ntbks = fetch_store.get_products()
-        saveProducts(ntbks, store)
+        products = fetch_store.get_products()
+        save_products(products, store)
     except Exception, e:
         print e
         print('Error al obtener los productos de ' + store.name)
-        logMessage('Error al obtener los productos de ' + store.name + ': ' + str(e))
+        log_message('Error al obtener los productos de ' + store.name + ': ' + str(e))
         shps = StoreHasProduct.objects.filter(store = store)
         for shp in shps:
             shp.prevent_availability_change = True

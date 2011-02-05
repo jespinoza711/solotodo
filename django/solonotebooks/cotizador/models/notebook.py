@@ -8,6 +8,8 @@ from . import *
 from utils import prettyPrice
 
 class Notebook(Product):
+    index_name = 'NOTEBOOKS'
+
     is_ram_dual_channel = models.BooleanField()
     has_bluetooth = models.BooleanField()
     has_esata = models.BooleanField()
@@ -121,7 +123,7 @@ class Notebook(Product):
             return ' | '.join(videoPorts)
 
             
-    def findSimilarNotebooks(self):
+    def find_similar_products(self):
         threshold = 4
         ntbks = Notebook.objects.filter(is_available = True).filter(~Q(id = self.id))
         
@@ -173,6 +175,21 @@ class Notebook(Product):
     @staticmethod
     def get_valid():
         return Notebook.objects.filter(is_available = True)
+    
+    def clone_product(self):
+        clone_prod = super(Notebook, self).clone_product()
+
+        for video_card in self.video_card.all():
+            clone_prod.video_card.add(video_card)
+
+        for video_port in self.video_port.all():
+            clone_prod.video_port.add(video_port)
+
+        for storage_drive in self.storage_drive.all():
+            clone_prod.storage_drive.add(storage_drive)
+
+        clone_prod.save()
+        return clone_prod
     
     class Meta:
         app_label = 'cotizador'

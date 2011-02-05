@@ -104,9 +104,9 @@ def regenerate_password(request):
     
 @login_required    
 def subscriptions(request):
-    notebook_subscriptions = NotebookSubscription.objects.filter(user = request.user, is_active = True)
+    product_subscriptions = ProductSubscription.objects.filter(user = request.user, is_active = True)
     return append_ads_to_response(request, 'account/subscriptions.html', {
-        'notebook_subscriptions': notebook_subscriptions,
+        'product_subscriptions': product_subscriptions,
     })
     
 @login_required    
