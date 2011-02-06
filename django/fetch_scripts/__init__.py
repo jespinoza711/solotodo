@@ -31,6 +31,7 @@ from fetch_scripts.tecno_group import TecnoGroup
 from fetch_scripts.abcdin import AbcDin
 from fetch_scripts.cintegral import Cintegral
 from fetch_scripts.rigam import Rigam
+from fetch_scripts.pc_ofertas import PCOfertas
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -64,4 +65,5 @@ __all__ = [ 'ProductData',
             'TecnoGroup',
             'AbcDin',
             'Cintegral',
-            'Rigam']
+            'Rigam',
+            'PCOfertas']
