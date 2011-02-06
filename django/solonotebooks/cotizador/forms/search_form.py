@@ -1,5 +1,5 @@
 from django import forms
-from cotizador.fields import *
+from solonotebooks.cotizador.fields import *
 
 class SearchForm(forms.Form):
     def get_quick_search_fields(self):
