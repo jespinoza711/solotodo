@@ -9,31 +9,6 @@ from fetch_scripts import ProductData
 class Cintegral:
     name = 'Cintegral'
 
-    # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
-        br = mechanize.Browser()
-        data = br.open(productUrl).get_data()
-        soup = BeautifulSoup(data)
-
-        productData = ProductData()
-
-        titleSpan = soup.find("h1")
-        title = str(titleSpan.string).strip()
-        try:
-            priceCell = soup.find("div", { "id" : "product-info" }).find("ul").findAll("li")[1].contents[1]
-            price = int(str(priceCell.replace('.', '').replace('$', '')))
-        except:
-            priceCell = soup.find("div", { "id" : "product-info" }).find("ul").findAll("li")[2].contents[1]
-            price = int(str(priceCell.replace('.', '').replace('$', '')))
-
-        productData.custom_name = title
-        productData.price = price
-        productData.url = productUrl
-        productData.comparison_field = productData.url
-
-        return productData
-
-
     # Main method
     def getNotebooks(self):
         print 'Getting Cintegral notebooks'
@@ -48,7 +23,7 @@ class Cintegral:
         final_links = []
         
         url_extensions = [  'index.php?op=cat&id=84',
-                            'index.php?op=cat&id=9'
+                            'index.php?op=cat&id=9',
                             ]
                             
         for url_extension in url_extensions:

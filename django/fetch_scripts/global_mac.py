@@ -14,7 +14,7 @@ class GlobalMac:
         print 'Getting GlobalMac notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.globalmac.cl/'
-        urlBuscarProductos = 'ver=Apple/'
+        urlBuscarProductos = 'ver='
         
         # Browser initialization
         browser = mechanize.Browser()
@@ -22,12 +22,13 @@ class GlobalMac:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  'MacBook',
-                            'MacBook%20Pro',
+        url_extensions = [  'Apple/MacBook',
+                            'Apple/MacBook%20Pro',
                             ]
                             
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
+            print urlWebpage
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
