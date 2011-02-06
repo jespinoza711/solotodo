@@ -10,7 +10,7 @@ class Rigam:
     name = 'Rigam'
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Rigam notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.rigam.cl/catalogo/'
