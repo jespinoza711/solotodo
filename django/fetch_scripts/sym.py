@@ -14,6 +14,11 @@ class Sym:
         br = mechanize.Browser()
         data = br.open(productUrl).get_data()
         soup = BeautifulSoup(data)
+        
+        stock_status = soup.find('li', { 'class' : 'stocks' }).findAll('span')[1].contents[0]
+        
+        if 'pedido' not in stock_status and 'stock' not in stock_status:
+            return None
 
         productData = ProductData()
 
@@ -49,25 +54,45 @@ class Sym:
         url_extensions = [  '?cat=104',
                             ]
                             
+        productLinks = []
+                            
         for url_extension in url_extensions:
-            urlWebpage = urlBase + url_extension
-
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
-
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            rawLinks = baseSoup.findAll("div", { "class" : "listadoindiv" })
+            page_number = 1
             
-            productLinks = []
-            for rawLink in rawLinks:
-                productLinks.append(rawLink.find("h2").find("a")['href'])
+            while True:
+                urlWebpage = urlBase + url_extension + '&page=' + str(page_number)
+
+                # Obtain and parse HTML information of the base webpage
+                baseData = browser.open(urlWebpage).get_data()
+                baseSoup = BeautifulSoup(baseData)
+
+                # Obtain the links to the other pages of the catalog (2, 3, ...)
+                rawLinks = baseSoup.findAll("div", { "class" : "listadoindiv" })
                 
+                if not rawLinks:
+                    break
                 
+                break_flag = False
+                
+                for rawLink in rawLinks:
+                    link = rawLink.find("h2").find("a")['href']
+                    if link in productLinks:
+                        break_flag = True
+                        break 
+                    productLinks.append(link)
+                    
+                if break_flag:
+                    break
+                    
+                page_number += 1
+                    
             for productLink in productLinks:
                 prod = self.retrieveProductData(productLink)
+                if not prod:
+                    continue
                 print prod
                 productsData.append(prod)
+                    
 
         return productsData
 
