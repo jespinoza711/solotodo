@@ -30,6 +30,7 @@ class HPOnline:
         pageLinks = []                            
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
+            print urlWebpage
 
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)

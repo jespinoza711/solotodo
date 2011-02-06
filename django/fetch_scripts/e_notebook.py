@@ -64,29 +64,37 @@ class ENotebook:
         # Array containing the data for each product
         productsData = []
         
-        urlWebpage = urlBase + urlBuscarProductos + 'it-index-n-notebooks-cP-1.html'
-
-        # Obtain and parse HTML information of the base webpage
-        baseData = browser.open(urlWebpage).get_data()
-        baseSoup = BeautifulSoup(baseData)
-        
-        # Array containing the catalog pages, beginning with the original one
+        url_extensions = [
+                            'it-index-n-notebooks-cP-1.html',
+                        ]
+                        
+        extra_pagelinks = [ ]
+                        
         pageLinks = []
+        for url_extension in url_extensions:
+            urlWebpage = urlBase + urlBuscarProductos + url_extension
 
-        # Obtain the links to the other pages of the catalog (2, 3, ...)
-        pageNavigator = baseSoup.findAll("td", { "class" : "smallText" })
-        pageNavigator = pageNavigator[:8]
-        for pn in pageNavigator:
-            link = pn.find("a")
-            pageLinks.append(link['href'])
+            # Obtain and parse HTML information of the base webpage
+            baseData = browser.open(urlWebpage).get_data()
+            baseSoup = BeautifulSoup(baseData)
+            
 
-        # Array containing the links to the specific products
-        productLinks = []
-
+            # Obtain the links to the other pages of the catalog (2, 3, ...)
+            table_navigator = baseSoup.findAll('table', { "cellpadding" : "2" })[1]
+            
+            pageNavigator = table_navigator.findAll("td", { "class" : "smallText" })
+            for pn in pageNavigator:
+                link = pn.find("a")
+                pageLinks.append(link['href'])
+        
+        for page_link in extra_pagelinks:
+            pageLinks.append(urlBase + urlBuscarProductos + page_link)
+            
         # For each of the pages, retrieve the data of the products
         for pageLink in pageLinks:
             products = self.extractLinks(pageLink)
             for product in products:
                 productsData.append(product)
+                
         return productsData
 

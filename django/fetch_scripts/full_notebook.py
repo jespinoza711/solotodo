@@ -22,23 +22,20 @@ class FullNotebook:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  'mini-notebooks/page/',
-                    'notebooks/page/',
-                    'netbook/page/',
+        url_extensions = [  
+                    'notebooks',
                     ]
         
         for url_extension in url_extensions:
-        
             # Primero necesitamos el numero de paginas
-            firstUrl = urlBase + urlBuscarProductos + url_extension + '1'
+            firstUrl = urlBase + urlBuscarProductos + url_extension + '/page/1'
             baseData = browser.open(firstUrl).get_data()
             baseSoup = BeautifulSoup(baseData)
             listaPags = baseSoup.find("span", {'class': 'pages'})
             last_page = int(listaPags.contents[0][-1])
             
             for i in range(last_page):
-                pageUrl = urlBase + urlBuscarProductos + url_extension + str(i + 1)            
-
+                pageUrl = urlBase + urlBuscarProductos + url_extension + '/page/' + str(i + 1)            
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(pageUrl).get_data()
                 baseSoup = BeautifulSoup(baseData)

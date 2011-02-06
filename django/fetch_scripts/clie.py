@@ -22,7 +22,8 @@ class Clie:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  '561',
+        url_extensions = [  
+                            '561',
                             '542',
                             '580',
                             '564',
@@ -30,17 +31,15 @@ class Clie:
                             '562',
                             '579',
                             '575',
-                            '576',
                             '612',
-                            '598',                                                        
-                            '243',                            
-                            '596',                                                        
-                            '595',                                                        
+                            '598',
+                            '596',          
+                            '595',
                             '178',
                             '500',
                             '158',
                             '307',
-                            '308',                            
+                            '308',                          
                             ]
                             
         for url_extension in url_extensions:
