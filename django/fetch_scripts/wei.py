@@ -13,6 +13,12 @@ class Wei:
         br = mechanize.Browser()
         data = br.open(product_link).get_data()
         soup = BeautifulSoup(data)
+        
+        availabilities = soup.findAll("div", { "class" : "TXTSM" })[1].contents[2::4]
+        
+        for availability in availabilities:
+            if 'agotado' in availability:
+                return None
 
         productData = ProductData()
 
