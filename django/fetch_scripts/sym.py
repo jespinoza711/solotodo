@@ -31,7 +31,7 @@ class Sym:
         productData.price = price
         productData.url = productUrl
         productData.comparison_field = productData.url
-
+        print productData
         return productData
 
 
@@ -84,10 +84,8 @@ class Sym:
                     
             for productLink in productLinks:
                 prod = self.retrieve_product_data(productLink)
-                if not prod:
-                    continue
-                print prod
-                productsData.append(prod)
+                if prod:
+                    productsData.append(prod)
                     
 
         return productsData

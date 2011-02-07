@@ -86,7 +86,8 @@ class PCFactory:
 
         for link in pageLinks:
             product = self.retrieve_product_data(link)
-            productsData.append(product)
+            if product:
+                productsData.append(product)
 
         return productsData
 
