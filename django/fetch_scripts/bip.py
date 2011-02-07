@@ -10,7 +10,7 @@ class Bip:
     name = 'Bip'
 
     # Method that extracts the <a> tags to products given the URL of the catalog page
-    def extractLinks(self, pageUrl):
+    def extract_links(self, pageUrl):
         br = mechanize.Browser()
         data = br.open(pageUrl).get_data()
         soup = BeautifulSoup(data)
@@ -19,7 +19,7 @@ class Bip:
         return links
 
     # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
+    def retrieve_product_data(self, productUrl):
         br = mechanize.Browser()
         data = br.open(productUrl).get_data()
         soup = BeautifulSoup(data)
@@ -59,8 +59,8 @@ class Bip:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  'categoria=191',
-                            'categoria=166',
+        url_extensions = [  'categoria=191',    # Netbooks
+                            'categoria=166',    # Notebooks
                             ]
                             
         productLinks = []
@@ -71,7 +71,7 @@ class Bip:
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '&pagina=' + str(page_number)
                 
-                rawLinks = self.extractLinks(urlWebpage)
+                rawLinks = self.extract_links(urlWebpage)
                 if not rawLinks:
                     break
                 for rawLink in rawLinks:
@@ -81,7 +81,7 @@ class Bip:
         
                 
         for productLink in productLinks:
-            prod = self.retrieveProductData(productLink)
+            prod = self.retrieve_product_data(productLink)
             if prod:
                 productsData.append(prod)
         

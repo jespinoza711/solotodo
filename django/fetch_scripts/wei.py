@@ -7,55 +7,64 @@ from fetch_scripts import ProductData
 class Wei:
     name = 'Wei'
 
+
     # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
-	    br = mechanize.Browser()
-	    data = br.open(productUrl).get_data()
-	    soup = BeautifulSoup(data)
+    def retrieve_product_data(self, product_link):
+        br = mechanize.Browser()
+        data = br.open(product_link).get_data()
+        soup = BeautifulSoup(data)
 
-	    productData = ProductData()
+        productData = ProductData()
 
-	    titleSpans = soup.findAll("div", { "class" : "TXTSM" })
-	    title = titleSpans[0].string.strip()
+        titleSpans = soup.findAll("div", { "class" : "TXTSM" })
+        title = titleSpans[0].string.strip()
 
-	    priceCells = soup.findAll("td", { "class" : "TXTB" })
-	    price = int(priceCells[1].string.strip().replace(',', ''))
-	    productData.custom_name = title.encode('ascii','ignore')
-	    productData.price = price
-	    productData.url = productUrl
-	    productData.comparison_field = productData.url
-	    
-	    print productData
+        priceCells = soup.findAll("td", { "class" : "TXTB" })
+        price = int(priceCells[1].string.strip().replace(',', ''))
+        productData.custom_name = title.encode('ascii','ignore')
+        productData.price = price
+        productData.url = product_link
+        productData.comparison_field = productData.url
 
-	    return productData
+        print productData
+
+        return productData
 
 
     # Main method
     def getNotebooks(self):
         print 'Getting Wei notebooks'
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.wei.cl'
-        urlBuscarProductos = '/catalogue/'
+        urlBase = 'http://www.wei.cl/catalogue/category.htm?action=subcategory&ccode='
         
         # Browser initialization
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
-                            
-        urlWebpage = urlBase + urlBuscarProductos + 'category.htm?action=subcategory&ccode=NB&sccode=79#sub'
-
-        # Obtain and parse HTML information of the base webpage
-        print urlWebpage
-        baseData = browser.open(urlWebpage).get_data()
-        baseSoup = BeautifulSoup(baseData)
-
-        # Obtain the links to the other pages of the catalog (2, 3, ...)
-        productLinks = baseSoup.findAll("a", { "class" : "TXTSMNU" })
-        productLinks = productLinks[:-10]
+        products_data = []
+        product_links = []
         
-        for productLink in productLinks:
-            productsData.append(self.retrieveProductData(productLink['href']))
+        category_urls = [
+                    'NB&sccode=79'
+                        ]
+                            
+        for category_url in category_urls:
+            urlWebpage = urlBase + category_url
 
-        return productsData
+            # Obtain and parse HTML information of the base webpage
+            baseData = browser.open(urlWebpage).get_data()
+            baseSoup = BeautifulSoup(baseData)
+
+            # Obtain the links to the other pages of the catalog (2, 3, ...)
+            productLinks = baseSoup.find('table', { 'cellpadding': '5'}).findAll("a", { "class" : "TXTSMNU" })
+            product_links.extend([link['href'] for link in productLinks])
+
+        product_links = list(set(product_links))
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
+
 

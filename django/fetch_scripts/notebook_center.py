@@ -8,6 +8,27 @@ from fetch_scripts import ProductData
 
 class NotebookCenter:
     name = 'NotebookCenter'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_subnames = [unicode(str(subpart), errors = 'ignore').strip() for subpart in product_soup.find('td', { 'class': 'menus3' }).findAll('div')[-1].contents]
+        
+        product_name = ' '.join(product_subnames).strip()
+        
+        product_price = int(product_soup.find('td', { 'width': '258' }).find('div').findAll('div')[1].contents[0].split('$')[1].split('IVA')[0].replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+
 
     # Main method
     def getNotebooks(self):
@@ -20,7 +41,7 @@ class NotebookCenter:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
         url_extensions = [  '?id_categoria=308', # Macbook Air
                             '?id_categoria=307', # Macbook Pro
@@ -42,55 +63,34 @@ class NotebookCenter:
                             '?id_categoria=63',  # Notebook Toshiba
                             '?id_categoria=534', # Notebook Viewsonic
                             ]
-                            
+                          
+        product_links = []  
         for url_extension in url_extensions:
             index = 1
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '&indice=' + str(index)
 
-                # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
-                
-                prices = []
-                names = []
-                urls = []
 
-                # Obtain the links to the other pages of the catalog (2, 3, ...)
                 rawNames = baseSoup.findAll("span", { "class" : "subtit2" })[1::2]
                 
                 if not rawNames:
                     break
-                
-                
-                for rawName in rawNames:
-                    subNames = [str(subName) for subName in rawName.contents]
-                    name = ''.join(subNames).strip()
-                    names.append(name)
                     
                 rawLinks = baseSoup.findAll("a", { "target" : "ifrm_centro" })
                 
                 for rawLink in rawLinks:
                     link = urlBase + rawLink['href']
                     link = link.split('&id_categoria')[0]
-                    urls.append(link)
-                    
-                rawPrices = baseSoup.findAll("span", { "class" : "precionormal" })
-                
-                for rawPrice in rawPrices:
-                    price = rawPrice.contents[0].replace('$', '').replace('.', '').replace('&nbsp;', '')
-                    prices.append(int(price))
-                    
-                for i in range(len(names)):
-                    productData = ProductData()
-                    productData.custom_name = unicode(names[i], errors  = 'ignore').strip()
-                    productData.price = prices[i]
-                    productData.url = urls[i]
-                    productData.comparison_field = productData.url
-                    print productData
-                    productsData.append(productData)
-                    
+                    product_links.append(link)
+
                 index += 1
 
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
 

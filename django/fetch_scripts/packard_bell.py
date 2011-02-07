@@ -8,44 +8,62 @@ from fetch_scripts import ProductData
 
 class PackardBell:
     name = 'Packard Bell'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('div', { 'class': 'tit_prod_det' }).string.encode('ascii', 'ignore').strip()
+        try:
+            product_price = int(product_soup.find('div', { 'class': 'precio_det' }).contents[0].replace('.', ''))
+        except:
+            return None
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+
 
     # Main method
     def getNotebooks(self):
         print 'Getting Packard Bell notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.packardbell.cl'
-        urlCatalog = '/2010/'
+        urlCatalog = '/2010/catalogo/'
         
         # Browser initialization
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
-        url_extensions = [  'index.php?seccion=productos&idCategoria=112',
-                            'index.php?seccion=productos&idCategoria=116'
+        url_extensions = [  '116-Netbook.html',
+                            '112-Notebook.html',
                             ]
                             
+        product_links = []          
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlCatalog + url_extension
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
-
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            nameDivTags = baseSoup.findAll('div', { 'class' : 'nombre_prod' })
-            priceDivTags = baseSoup.findAll('div', { 'class' : 'precio_prod' })
             imgTags = baseSoup.findAll('div', { 'class' : 'img_prod' })            
             
-            for i in range(len(nameDivTags)):
-                productData = ProductData()
-                productData.url = imgTags[i]['onclick'].replace('javascript:location.href=\'', '').replace('\'', '')
-                productData.custom_name = nameDivTags[i].string
-                productData.price = int(priceDivTags[i].contents[0].replace('.', ''))
-                productData.comparison_field = productData.url
-                print productData
-                productsData.append(productData)
+            for i in range(len(imgTags)):
+                link = imgTags[i]['onclick'].replace('javascript:location.href=\'', '').replace('\'', '')
+                product_links.append(link)
                 
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
 

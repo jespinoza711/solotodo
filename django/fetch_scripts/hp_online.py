@@ -8,6 +8,23 @@ from fetch_scripts import ProductData
 
 class HPOnline:
     name = 'HP Online'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('span', { 'id': 'ctl00_templateContenido_detalle1_iuNombre' }).string.encode('ascii', 'ignore')
+        product_price = int(product_soup.find('div', { 'id': 'ctl00_templateContenido_detalle1_iuPanelML' }).string.split('$')[1].replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
     # Main method
     def getNotebooks(self):
@@ -20,17 +37,16 @@ class HPOnline:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
         url_extensions = [  'productos.aspx?cmd=Z2x4eA==',
                             'productos.aspx?cmd=ZWx4eA==',
                             'remates.aspx',
                             ]
                           
-        pageLinks = []                            
+        product_links = []                            
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
-            print urlWebpage
 
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
@@ -38,12 +54,12 @@ class HPOnline:
             ntbkCells = baseSoup.findAll('div', { 'class' : 'grid_item' })
             
             for ntbkCell in ntbkCells:
-                productData = ProductData()
-                link = urlBase + urlBuscarProductos + ntbkCell.find('a')['href']
-                productData.url = link
-                productData.comparison_field = link
-                productData.custom_name = ntbkCell.find('span', { 'class' : 'grid_title' }).string
-                productData.price = int(ntbkCell.findAll('div', { 'class' : 'grid_price' })[1].find('span').string.replace('Precio Oferta:', '').replace('$', '').replace('.', ''))
-                print productData
-                productsData.append(productData)
-        return productsData
+                product_links.append(urlBase + urlBuscarProductos + ntbkCell.find('a')['href'])
+                
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+                
+        return products_data

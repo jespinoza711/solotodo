@@ -8,6 +8,25 @@ from fetch_scripts import ProductData
 
 class TecnoGroup:
     name = 'TecnoGroup'
+    
+    def retrieve_product_data(self, product_link):
+        print product_link
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('h3').contents[0]
+        product_price = int(product_soup.find('h3').parent.findAll('div')[3].string.split('$')[1].split('IVA')[0].replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+
 
     # Main method
     def getNotebooks(self):
@@ -20,7 +39,7 @@ class TecnoGroup:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
         url_extensions = [  '2_35',
                             '2_81',
@@ -40,7 +59,8 @@ class TecnoGroup:
                             '4_45',
                             '4_46',
                             ]
-                          
+        
+        product_links = []                  
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
@@ -56,20 +76,15 @@ class TecnoGroup:
             for i in range(len(nameCells)):
                 nameLink = nameCells[i].find('a')
                 priceSpan = priceSpans[i]
+
+                url = nameLink['href'].split('&osCsid')[0]
+                product_links.append(url)
                 
-                productData = ProductData()
-                
-                url = nameLink['href']
-                i = url.find('&osCsid')
-                if i != -1:
-                    url = url[:i]
-                productData.custom_name = nameLink.string
-                productData.url = url
-                productData.comparison_field = productData.url
-                productData.price = int(priceSpan.string.replace('$', '').replace('.', ''))
-                print productData
-                
-                productsData.append(productData)
-                
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
+
 

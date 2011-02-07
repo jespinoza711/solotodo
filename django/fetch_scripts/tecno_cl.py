@@ -8,6 +8,24 @@ from fetch_scripts import ProductData
 
 class TecnoCl:
     name = 'Tecno.cl'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('strong').string.strip().encode('ascii', 'ignore')
+        product_price = int(product_soup.findAll('table', { 'bgcolor': '#f1f1f1' })[2].findAll('td')[4].string.strip().replace('$', '').replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+
 
     # Main method
     def getNotebooks(self):
@@ -20,12 +38,14 @@ class TecnoCl:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
         url_extensions = [  'productos.asp?cat=8',
                             'productos.asp?cat=259',
+                            'productos.asp?cat=85'
                             ]
-                            
+        
+        product_links = []                    
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
@@ -36,33 +56,17 @@ class TecnoCl:
             # Obtain the links to the other pages of the catalog (2, 3, ...)
             rawProductLinks = baseSoup.findAll("a", { "class" : "txtchico" })
             
-            productLinks = []
+            
             productNames = []
             
             for rawProductLink in rawProductLinks:
-                productLinks.append(urlBase + urlBuscarProductos + rawProductLink['href'])
-                rawComponents = rawProductLink.contents[0].contents
-                name_1 = rawComponents[1].contents[0]
-                name_2 = rawComponents[2].contents[0][2::].strip()
-                productNames.append(name_1 + ' ' + name_2)
-            
-            productPrices = []
-            rawProductPrices = baseSoup.findAll("span", { "class" : "vtrtit" })            
-            for rawProductPrice in rawProductPrices:
-                stringPrice = rawProductPrice.contents[0].replace('Normal', '').replace('$', '').replace('.', '').replace('iva Inc', '').strip()
-                if stringPrice == 'Contado':
-                    continue
-                else:
-                    productPrices.append(int(stringPrice))
-                    
-            for i in range(len(productNames)):
-                productData = ProductData()
-                productData.custom_name = productNames[i].encode('ascii','ignore').strip()
-                productData.url = productLinks[i]
-                productData.price = productPrices[i]
-                productData.comparison_field = productData.url
-                print productData
-                productsData.append(productData)
+                product_links.append(urlBase + urlBuscarProductos + rawProductLink['href'])
 
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
+
 

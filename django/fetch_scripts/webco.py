@@ -8,6 +8,24 @@ from fetch_scripts import ProductData
 
 class Webco:
     name = 'Webco'
+    
+    def retrieve_product_data(self, product_link):
+        print product_link
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('h1').contents[0].encode('ascii', 'ignore')
+        product_price = int(product_soup.find('h2').find('a').string.replace('.', '').replace('$', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
     # Main method
     def getNotebooks(self):
@@ -19,35 +37,33 @@ class Webco:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
         url_extensions = [  'n_new_productos.asp?CATEGORIA={761FD739-2D0F-4177-8AE0-C641D6F16502}',
                             'n_new_productos.asp?CATEGORIA={D70BBB30-F5E9-4246-B812-A939C8777429}',
                             ]
-                            
+        
+        product_links = []                    
         for url_extension in url_extensions:
             urlWebpage = urlBase + url_extension
-
-            # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
-            
             baseSoup = BeautifulSoup(baseData)
             print urlWebpage
 
-            # Obtain a reference tag for each product (in this case it image)
             productImages = baseSoup.findAll("img", { "width" : "193" })
             
-            print len(productImages)
             for productImage in productImages:
                 productData = ProductData()
                 try:
-                    productData.url = urlBase + productImage.parent['href']
+                    product_links.append(urlBase + productImage.parent['href'])
                 except:
                     continue
-                productData.custom_name = productImage.parent.parent.parent.parent.find('strong').string.encode('ascii','ignore').strip()
-                productData.price = int(productImage.parent.parent.parent.parent.find("td", { "class" : "precio" }).find('a').string.replace('$', '').replace('-', '').replace('.', '').strip())
-                productData.comparison_field = productData.url
-                print productData
-                productsData.append(productData)
-        return productsData
+                
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
+
 

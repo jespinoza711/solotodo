@@ -9,6 +9,26 @@ from fetch_scripts import ProductData
 class Racle:
     name = 'Racle'
     
+    def retrieve_product_data(self, product_link):
+        print product_link
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        try:
+            product_name = product_soup.findAll('h1')[1].string.encode('ascii', 'ignore').strip()
+        except:
+            return None
+        product_price = int(product_soup.find('span', { 'class': 'productPrice' }).string.replace('.', '').replace('$', '').replace(' ', '').strip())
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+    
     # Main method
     def getNotebooks(self):
         print 'Getting Racle notebooks'
@@ -19,12 +39,15 @@ class Racle:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
-        urlSearch = '/ventas/tienda/'            
+        urlSearch = '/ventas/'            
 
-        urlExtensions = ['netbook', 'notebook']
-
+        urlExtensions = [
+                            'tienda/netbook', 
+                            'tienda/notebook',
+                        ]
+        product_links = []
         for urlExtension in urlExtensions:
             urlWebpage = urlBase + urlSearch + urlExtension + '?limit=50&limitstart=0'
 
@@ -37,18 +60,12 @@ class Racle:
             
             for productDetailCell in productDetailsCells:
                 productLink = productDetailCell.find('a', { 'class' : 'producto_titulo' })
-                productPriceSpan = productDetailCell.find('span', { 'class' : 'productPrice' })
-                
-                if not productPriceSpan:
-                    continue
+                product_links.append(urlBase + productLink['href'].split('?')[0])
             
-                productData = ProductData()
-                productData.custom_name = ' '.join(productLink.string.split())
-                productData.url = urlBase + productLink['href'].split('?')[0]
-                productData.price = int(productPriceSpan.string.replace('$', '').replace(' ', ''))
-                productData.comparison_field = productData.url
-                print productData
-                productsData.append(productData)        
-            
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
 
