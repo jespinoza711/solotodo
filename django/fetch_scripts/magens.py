@@ -8,30 +8,23 @@ from fetch_scripts import ProductData
 
 class Magens:
     name = 'Magens'
-
-    # Method that extracts the data of a specific product given its page
-    def retrieveProductsData(self, pageUrl):
-        print pageUrl
-        br = mechanize.Browser()
-        data = br.open(pageUrl).get_data()
-        soup = BeautifulSoup(data)
-
-        productsData = []
-
-        nameCells = soup.findAll("td", { "class" : "name name2_padd" })
-        priceCells = soup.findAll("td", { "class" : "price2_padd" })
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
         
-        for i in range(len(nameCells)):
-            productData = ProductData()
-            productData.custom_name = nameCells[i].find('a').string
-            productData.url = nameCells[i].find('a')['href'].split('?osCsid')[0]
-            productData.comparison_field = productData.url            
-            productData.price = int(priceCells[i].contents[0].replace('Normal:', '').replace('$', '').replace(',', ''))
-            print productData
-            productsData.append(productData)
-
-
-        return productsData
+        product_name = product_soup.find('div', { 'class': 'titleContent' }).string.encode('ascii', 'ignore')
+        product_price = int(product_soup.find('div', { 'class': 'precioDetalle' }).string.split('$')[1].replace(',', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
 
     # Main method
@@ -45,15 +38,17 @@ class Magens:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
-        url_extensions = [  'notebooks-netbooks-netbooks-11-c-15_199.html',
-                            'notebooks-netbooks-notebooks-12-13-c-15_202.html',
-                            'notebooks-netbooks-notebooks-14-c-15_203.html',
-                            'notebooks-netbooks-notebooks-15-c-15_204.html',
-                            'notebooks-netbooks-notebooks-16-mas-c-15_205.html'
-                            ]
-                            
+        url_extensions = [  
+            'notebooks-netbooks-netbooks-11-c-15_199.html',
+            'notebooks-netbooks-notebooks-12-13-c-15_202.html',
+            'notebooks-netbooks-notebooks-14-c-15_203.html',
+            'notebooks-netbooks-notebooks-15-c-15_204.html',
+            'notebooks-netbooks-notebooks-16-mas-c-15_205.html',
+        ]
+                
+        product_links = []            
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=100'
 
@@ -63,17 +58,15 @@ class Magens:
 
             nameDivs = baseSoup.findAll('div', { 'class': 'text11Red uppercase tituloProducto' })
             priceSpans = baseSoup.findAll('span', { 'class': 'text12Green' })[::2]
-            print len(nameDivs)
-            print len(priceSpans)
             for i in range(len(nameDivs)):
-                productData = ProductData()
                 link = nameDivs[i].find('a')
-                productData.custom_name = link.string.encode('ascii', 'ignore').strip()
-                productData.url = link['href'].split('?osCsid')[0]
-                productData.comparison_field = productData.url
-                productData.price = int(priceSpans[i].string.replace('$', '').replace(',', ''))
-                print productData
-                productsData.append(productData)
+                product_links.append(link['href'].split('?osCsid')[0])
+                
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
             
-        return productsData
+        return products_data
 

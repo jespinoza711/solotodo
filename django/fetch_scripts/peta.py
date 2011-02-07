@@ -8,27 +8,43 @@ from fetch_scripts import ProductData
 
 class Peta:
     name = 'Peta'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('h3', { 'class': 'product-name' }).string.encode('ascii', 'ignore')
+        product_price = int(product_soup.find('span', { 'class': 'price' }).string.split('$')[1].replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
     # Main method
     def getNotebooks(self):
         print 'Getting Peta notebooks'
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.peta.cl'
-        urlBuscarProductos = '/computadores-1/'
+        urlBase = 'http://www.peta.cl/'
         
         # Browser initialization
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
-        url_extensions = [  'netbooks.html',
-                            'notebooks.html',
+        url_extensions = [  'computadores-1/netbooks.html',
+                            'computadores-1/notebooks.html',
                             ]
                           
-        pageLinks = []                            
+        product_links = []                            
         for url_extension in url_extensions:
-            urlWebpage = urlBase + urlBuscarProductos + url_extension
+            urlWebpage = urlBase + url_extension
             pageNumber = 1
                 
             while True:
@@ -42,7 +58,6 @@ class Peta:
                     break
                 
                 ntbkCells = ntbkCells.findAll('td')
-                
 
                 trigger = False
                 for ntbkCell in ntbkCells:
@@ -50,22 +65,22 @@ class Peta:
                         link = ntbkCell.findAll('a')[1]
                     except:
                         break
-                    if link['href'] in pageLinks:
+                        
+                    link = link['href']
+                    if link in product_links:
                         trigger = True
                         break
-                    productData = ProductData()
-                    productData.url = link['href']
-                    productData.custom_name = link.string.encode('ascii', 'ignore')
-                    productData.comparison_field = link['href']
-                    productData.price = int(ntbkCell.find('span', {'class': 'price'}).string.replace('.', '').replace('$', ''))
-                    productsData.append(productData)
-                    print productData
-                    pageLinks.append(link['href'])
+                    product_links.append(link)
                     
                 if trigger:
                     break
                     
                 pageNumber += 1
                 
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
 

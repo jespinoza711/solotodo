@@ -8,20 +8,42 @@ from fetch_scripts import ProductData
 
 class LaPolar:
     name = 'La Polar'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('div', { 'class': 'LetraDetalleProducto' }).string.encode('ascii', 'ignore')
+        product_price = int(product_soup.find('div', { 'id': 'fichaPrecioNormal' }).find('span').string.split('$')[1].split('pesos')[0].replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+
 
     # Main method
     def getNotebooks(self):
         print 'Getting La Polar notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.lapolar.cl'
-        urlBuscarProductos = '/internet/catalogo/listados/tecnologia/computacion/'
-        urlExtensions = ['notebook/', 'netbook/']
+        urlBuscarProductos = '/internet/catalogo/listados/'
+        urlExtensions = [
+                            'tecnologia/computacion/notebook/', 
+                            'tecnologia/computacion/netbook/',
+                            'electrohogar/refrigeracion/refrigerador_conv_1p']
        
         # Browser initialization
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        product_links = []
+        products_data = []
         for urlExtension in urlExtensions:
             page = 1;
             while(True):
@@ -46,19 +68,14 @@ class LaPolar:
                     productCells = productRow.findAll("td", recursive = False)[::2]
                     for productCell in productCells:
                         titleField = productCell.find("div", {'class': 'letraNormalBold'})
-                        name = titleField.find("a").string
                         link = titleField.find("a")['href']
-                        priceField = productCell.find("div", {'class' : 'LetraPrecioDestacados'})
-                        priceString = priceField.contents[0].replace('$', '').replace('.', '')
-                        price = int(priceString)
-                        productData = ProductData()
-                        productData.custom_name = name.encode('ascii','ignore').strip()
-                        productData.url = link
-                        productData.price = price
-                        productData.comparison_field = productData.url
-                        print productData
-                        productsData.append(productData)
+                        product_links.append(link)
                 page = page + 1
+                
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product) 
 
-        return productsData
+        return products_data
 

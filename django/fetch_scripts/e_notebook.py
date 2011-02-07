@@ -9,47 +9,56 @@ from fetch_scripts import ProductData
 class ENotebook:
     name = 'E-Notebook'
     
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_cells = product_soup.findAll('td', { 'class': 'pageHeading' })
+        
+        product_name = product_cells[0].find('h1').contents[0]
+        price_cell = product_cells[2]
+        
+        try:
+            product_price = int(price_cell.find('span', { 'class' : 'productSpecialPrice' }).string.replace('$', '').replace('.', ''))
+        except:
+            product_price = int(price_cell.string.split('$')[1].replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+    
     # Method that extracts the product details from a given page
-    def extractProducts(self, pageUrl):
+    def extract_product_links(self, page_link):
         br = mechanize.Browser()
-        data = br.open(pageUrl).get_data()
+        data = br.open(page_link).get_data()
         soup = BeautifulSoup(data)
-        products = []
+        product_links = []
         cellis = soup.findAll("td", { "class" : "productListing-data" })
         cells = cellis[1::4]
         prices = cellis[2::4]
         for i in range(len(cells)):
-            productData = ProductData()
             link = cells[i].find("a")
-            productData.url = link['href'].split('?osCsid')[0]
-            productData.custom_name = link.string
-            productData.comparison_field = productData.url
-            priceCell = prices[i]
-            specContainer = priceCell.find("span", { "class" : "productSpecialPrice" })
-            if (not specContainer):
-                priceTag = priceCell.string.replace('.', '').replace('$', '').replace('&nbsp;', '').strip()
-                productData.price = int(int(priceTag) * 1.07)
-            else:
-                priceTag = specContainer.string.replace('.', '').replace('$', '').strip()
-                productData.price = int(int(priceTag) * 1.07)
-            print productData
-            products.append(productData)    
-        return products
+            product_links.append(link['href'].split('?osCsid')[0])
+        return product_links
 
     # Method that extracts the products from a given catalog page
-    def extractLinks(self, pageUrl):
+    def extract_product_pages(self, base_page_link):
         br = mechanize.Browser()
-        data = br.open(pageUrl).get_data()
+        data = br.open(base_page_link).get_data()
         soup = BeautifulSoup(data)
-        links = [pageUrl];
+        links = [base_page_link];
         pageLinks = soup.findAll("a", { "class" : "pageResults" })[:-1]
         for pageLink in pageLinks:
-            links.append(pageLink['href'])
+            link = pageLink['href'].split('&osCsid')[0]
+            links.append(link)
             
-        products = []
-        for link in links:
-            products += self.extractProducts(link)
-        return products
+        return links
 
     # Main method
     def getNotebooks(self):
@@ -61,9 +70,6 @@ class ENotebook:
         # Browser initialization
         browser = mechanize.Browser()
         
-        # Array containing the data for each product
-        productsData = []
-        
         url_extensions = [
                             'it-index-n-notebooks-cP-1.html',
                         ]
@@ -74,27 +80,31 @@ class ENotebook:
         for url_extension in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
-            # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
-            
 
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
             table_navigator = baseSoup.findAll('table', { "cellpadding" : "2" })[1]
             
             pageNavigator = table_navigator.findAll("td", { "class" : "smallText" })
             for pn in pageNavigator:
                 link = pn.find("a")
-                pageLinks.append(link['href'])
+                pageLinks.append(link['href'].split('?osCsid')[0])
         
         for page_link in extra_pagelinks:
             pageLinks.append(urlBase + urlBuscarProductos + page_link)
-            
-        # For each of the pages, retrieve the data of the products
+        
+        product_link_pages = []
         for pageLink in pageLinks:
-            products = self.extractLinks(pageLink)
-            for product in products:
-                productsData.append(product)
+            links = self.extract_product_pages(pageLink)
+            product_link_pages.extend(links)
+            
+        product_links = []
+        for product_link_page in product_link_pages:
+            product_links.extend(self.extract_product_links(product_link_page))
+            
+        products_data = []
+        for product_link in product_links:
+            products_data.append(self.retrieve_product_data(product_link))
                 
-        return productsData
+        return products_data
 

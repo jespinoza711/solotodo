@@ -8,6 +8,49 @@ from fetch_scripts import ProductData
 
 class Falabella:
     name = 'Falabella'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('div', { 'id' : 'descripcion-corta' }).find('h1').string.encode('ascii', 'ignore')
+        
+        product_price = None
+        try:
+            product_price = int(product_soup.find('div', { 'id' : 'precioNormalF' }).string.split('&#36;')[1].replace('.', ''))
+        except:
+            pass
+            
+        if not product_price:
+            try:
+                product_price = int(product_soup.find('div', { 'id' : 'precioInternetF' }).string.split('&#36;')[1].replace('.', ''))
+            except:
+                pass
+            
+        if not product_price:
+            try:
+                product_price = int(product_soup.find('div', { 'id' : 'precioInternetRF' }).string.split('&#36;')[1].replace('.', ''))
+            except:
+                pass
+            
+        if not product_price:
+            try:
+                product_price = int(product_soup.find('div', { 'id' : 'oportunidadF' }).string.split('&#36;')[1].replace('.', ''))
+            except:
+                pass
+        
+        if not product_price:
+            raise Exception
+            
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
     # Main method
     def getNotebooks(self):
@@ -18,11 +61,12 @@ class Falabella:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
         url_schemas = [    'http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?cgmenbr=1891&cgrfnbr=2458576&cgpadre=2458457&cghijo=&cgnieto=2458576&division=[page]&orden=&ConFoto=1&pcomp1=&pcomp2=&pcomp3=&pcomp4=&pcomp5=&pcomp6=&pcomp7=&pcomp8=&pcomp9=&pcomp10=&cghijo1=2460493&nivel=1',
                             
  ]
+        product_links = []
                             
         for url_schema in url_schemas:
             page_number = 0
@@ -40,49 +84,14 @@ class Falabella:
                 if not mosaicDivs:
                     break
                 
-                for mosaicDiv in mosaicDivs:    
-                    productData = ProductData()
-                        
-                    divPrecioNormal = mosaicDiv.find("div", { "id" : "precioNormal" })
-                    contents = divPrecioNormal.string.replace('&nbsp;', '').replace('Oferta:', '').replace('Normal:', '').replace('&#36;', '').replace('.', '').strip()
-                    
-                    if len(contents) > 0:
-                        contents = contents.replace('&nbsp;', '').replace('Oferta:', '').replace('Normal:', '').replace('&#36;', '').replace('.', '').strip()
-                        precio = int(contents)
-                    else:
-                        divPrecio = mosaicDiv.find("div", { "id" : "precioPrincipal" })
-                        contentsi = divPrecio.string
-                        contentsi = contentsi.replace('&nbsp;', '').replace('Oferta:', '').replace('Normal:', '').replace('&#36;', '').replace('.', '').strip()
-                        precio = int(contentsi)
-                        
-                    productData.price = precio
-                    
-                    divDesc = mosaicDiv.find("div", { "id" : "descripcion" })
-                    name_1 = divDesc.find("h1").find("a")
-                    name_1b = name_1.find("b")
-                    if (name_1b):
-                        name_1 = name_1b.string
-                    else:
-                        name_1 = name_1.string
-                    name_1 = name_1.encode('ascii','ignore').strip()
-                    name_2 = divDesc.find("h1").find("a").contents
-                    if (len(name_2) > 2):
-                        name_2 = name_2[2].strip()
-                    else:
-                        name_2 = ''
-                    name_2 = name_2.encode('ascii','ignore').strip()
-                    
-                    productData.custom_name = name_1 + ' ' + name_2
-
+                for mosaicDiv in mosaicDivs:                        
                     url = 'http://www.falabella.com' + mosaicDiv.find('a')['href']
-                    productData.url = url
-                    productData.comparison_field = url
-                    
-                    print productData
-                    
-                    productsData.append(productData)
+                    product_links.append(url)
                     
                 page_number += 1
         
-        return productsData
+        for product_link in product_links:
+            products_data.append(self.retrieve_product_data(product_link))
+        
+        return products_data
 

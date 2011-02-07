@@ -8,6 +8,29 @@ from fetch_scripts import ProductData
 
 class PCFactory:
     name = 'PCFactory'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        baseData = browser.open(product_link).get_data()
+        baseSoup = BeautifulSoup(baseData)
+        product_data = ProductData()
+        
+        available_cells = baseSoup.findAll('table', { 'class' : 'ProductLine1' })[2].findAll('td')
+        if len(available_cells) != 1:
+            availability_string = available_cells[2].string
+            if availability_string == 'Agotado':      
+                return None
+        
+        titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
+        product_data.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        priceSpan = baseSoup.find('span', { 'id' : 'simulador' })
+        product_data.price = int(priceSpan.string.replace('.', ''))
+        
+        print product_data
+        return product_data
 
     # Main method
     def getNotebooks(self):
@@ -22,11 +45,12 @@ class PCFactory:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  '?papa=24&categoria=424',
+        url_extensions = [  
+                            '?papa=24&categoria=424',
                             '?papa=24&categoria=449',
                             '?papa=24&categoria=410',
                             '?papa=24&categoria=437',
-                            '?papa=24&categoria=436'
+                            '?papa=24&categoria=436',
                             ]
                           
         pageLinks = []                            
@@ -61,18 +85,8 @@ class PCFactory:
         pageLinks = list(set(pageLinks))
 
         for link in pageLinks:
-            baseData = browser.open(link).get_data()
-            baseSoup = BeautifulSoup(baseData)
-            productData = ProductData()
-            titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
-            productData.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
-            productData.url = link
-            productData.comparison_field = link
-            
-            priceSpan = baseSoup.find('span', { 'id' : 'simulador' })
-            productData.price = int(priceSpan.string.replace('.', ''))
-            print productData
-            productsData.append(productData)
+            product = self.retrieve_product_data(link)
+            productsData.append(product)
 
         return productsData
 
