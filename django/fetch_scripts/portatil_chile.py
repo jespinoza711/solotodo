@@ -8,6 +8,23 @@ from fetch_scripts import ProductData
 
 class PortatilChile:
     name = 'PortatilChile'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('th', { 'colspan': '2' }).string.encode('ascii', 'ignore').split('"')[1]
+        product_price = int(product_soup.find('table', { 'cellspacing': '1' }).find('table').findAll('td')[5].find('strong').string.replace('.', '').replace('&nbsp;', '').replace('$', '').strip())
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
     # Main method
     def get_products(self):
@@ -24,23 +41,21 @@ class PortatilChile:
         productTable = baseSoup.find('table', { 'class': 'outer' })
         productRows = productTable.findAll('tr', recursive = False)
         productCells = []
+        product_links = []
         for productRow in productRows:
             productCells.extend(productRow.findAll('td', recursive = False))
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
         for productCell in productCells:
-            productLink = productCell.find('a')
-            
-            productData = ProductData()
-            productData.custom_name = productLink['title']
-            productData.url = urlBase + productLink['href']
-            productData.comparison_field = productData.url
-            priceData = productCell.findAll('strong')[1].text
-            productData.price = int(priceData.replace('.', '').replace('$', ''))
-            productsData.append(productData)
-            print productData
+            link = urlBase + productCell.find('a')['href']
+            product_links.append(link)
 
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
 

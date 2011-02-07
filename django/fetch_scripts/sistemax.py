@@ -8,50 +8,59 @@ from fetch_scripts import ProductData
 
 class Sistemax:
     name = 'Sistemax'
+    
+    def retrieve_product_data(self, product_link):
+        print product_link
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.findAll('h2')[3].find('font').string.encode('ascii', 'ignore')
+        product_price = int(product_soup.findAll('span', { 'class': 'style18' })[1].string)
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
     # Main method
     def get_products(self):
         print 'Getting Sistemax notebooks'
         # Basic data of the target webpage and the specific catalog
         baseUrl = 'http://www.sistemax.cl/webstore/'
+        url_buscar_productos = 'index.php?op=seccion/id='
         
-        extensions = ['index.php?op=seccion/id=112&page=-1&listar=true',
-                        'index.php?op=seccion/id=27&page=-1&listar=true' ]
+        extensions = [
+                # Netbooks
+                '112',
+                # Notebooks
+                '27', 
+                ]
                         
         # Array containing the data for each product
-        productsData = []
-                        
+        products_data = []
+        product_links = []                
         for extension in extensions:
-        
-            urlWebpage = baseUrl + extension
+            urlWebpage = baseUrl + url_buscar_productos + extension + '&page=-1&listar=true'
             
-            # Browser initialization
             browser = mechanize.Browser()
 
-            # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
-
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
             info_cells = baseSoup.findAll("td", { 'scope' : 'col'})
-
-            name_cells = info_cells[::5]
-            names = [name_cell.contents[0].string for name_cell in name_cells]
-            
-            price_cells = info_cells[1::5]
-            prices = [int(price_cell.contents[0].string) for price_cell in price_cells]
             
             url_cells = info_cells[3::5]
             urls = [baseUrl + url_cell.contents[2]['href'] for url_cell in url_cells]
-            
-            for i in range(len(name_cells)):
-                productData = ProductData()
-                productData.custom_name = names[i].encode('ascii', 'ignore')
-                productData.price = prices[i]
-                productData.url = urls[i]
-                productData.comparison_field = productData.url
-                print productData
-                productsData.append(productData)
+            product_links.extend(urls)
                 
-        return productsData
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
+
+        return products_data
 

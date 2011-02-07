@@ -8,6 +8,25 @@ from fetch_scripts import ProductData
 
 class PCOfertas:
     name = 'PC Ofertas'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        
+        product_name = product_soup.find('h4', { 'class': 'Estilo5' }).string.encode('ascii', 'ignore')
+        product_price = int(product_soup.find('span', { 'class': 'Estilo4' }).parent.parent.parent.findAll('td')[3].find('span').string.replace('$', '').replace(',', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
+
 
     # Main method
     def get_products(self):
@@ -19,12 +38,13 @@ class PCOfertas:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
-        url_extensions = [  '74',
-                            '75'
+        url_extensions = [  '74',   # Notebook
+                            '75',   # Netbook
                             ]
-                            
+        
+        product_links = []                    
         for url_extension in url_extensions:
             urlWebpage = urlBase + url_extension
 
@@ -41,21 +61,12 @@ class PCOfertas:
                 link = product_cell.findAll('a')
                 if not link:
                     break
-                link = link[1]
-                url = link['href']
-                name = link.contents[0]
-                price_span = product_cell.findAll('span')[1]
-                price = int(price_span.contents[0].replace('$', '').replace(',', ''))
+                product_links.append(link[1]['href'])
                 
-                product_data = ProductData()
-                product_data.custom_name = name
-                product_data.url = url
-                product_data.comparison_field = url
-                product_data.price = price
-                
-                print product_data
-                
-                productsData.append(product_data)
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                products_data.append(product)                
 
-        return productsData
+        return products_data
 

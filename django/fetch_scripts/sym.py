@@ -10,7 +10,7 @@ class Sym:
     name = 'Sym'
 
     # Method that extracts the data of a specific product given its page
-    def retrieveProductData(self, productUrl):
+    def retrieve_product_data(self, productUrl):
         br = mechanize.Browser()
         data = br.open(productUrl).get_data()
         soup = BeautifulSoup(data)
@@ -24,18 +24,14 @@ class Sym:
 
         titleSpan = soup.find("h1")
         title = str(titleSpan.string).strip()
-        try:
-            priceCell = soup.find("div", { "id" : "product-info" }).find("ul").findAll("li")[1].contents[1]
-            price = int(str(priceCell.replace('.', '').replace('$', '')))
-        except:
-            priceCell = soup.find("div", { "id" : "product-info" }).find("ul").findAll("li")[2].contents[1]
-            price = int(str(priceCell.replace('.', '').replace('$', '')))
+        
+        price = int(soup.find('div', { 'id': 'product-info' }).find('ul').findAll('li')[-1].contents[1].replace('$', '').replace('.', ''))
 
         productData.custom_name = title
         productData.price = price
         productData.url = productUrl
         productData.comparison_field = productData.url
-
+        print productData
         return productData
 
 
@@ -87,11 +83,9 @@ class Sym:
                 page_number += 1
                     
             for productLink in productLinks:
-                prod = self.retrieveProductData(productLink)
-                if not prod:
-                    continue
-                print prod
-                productsData.append(prod)
+                prod = self.retrieve_product_data(productLink)
+                if prod:
+                    productsData.append(prod)
                     
 
         return productsData

@@ -8,6 +8,23 @@ from fetch_scripts import ProductData
 
 class Clie:
     name = 'Clie'
+    
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_name = product_soup.find('td', { 'class': 'texto-neg-bold-ficha' }).string.split('&#8226;')[1].strip()
+        product_price = int(product_soup.find('td', { 'background': 'images/ficha/bg_precio_normal_d.gif' }).find('a').string.replace('$', '').replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_name
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        print product_data
+        return product_data
 
     # Main method
     def get_products(self):
@@ -20,9 +37,10 @@ class Clie:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        productsData = []
+        products_data = []
         
-        url_extensions = [  '561',
+        url_extensions = [  
+                            '561',
                             '542',
                             '580',
                             '564',
@@ -30,18 +48,18 @@ class Clie:
                             '562',
                             '579',
                             '575',
-                            '576',
                             '612',
-                            '598',                                                        
-                            '243',                            
-                            '596',                                                        
-                            '595',                                                        
+                            '598',
+                            '596',          
+                            '595',
                             '178',
                             '500',
                             '158',
-                            '307',
-                            '308',                            
+                            '307',                            
+                            '308',     
                             ]
+                            
+        product_links = []
                             
         for url_extension in url_extensions:
             num_page = 1
@@ -57,34 +75,19 @@ class Clie:
                 
                 names = []
                 prices = []
-                onclicks = []
                 
                 if len(productNameCells) == 0:
                     break;
                     
                 for productNameCell in productNameCells:
-                    name = productNameCell.find("a").string.strip()
-                    onclick = productNameCell.find('a')['onclick'].split('\'')[1]
-                    names.append(name)
-                    onclicks.append(onclick)
-                    
-                productPriceCells = baseSoup.findAll("td", { "background" : "images/ficha/bg_precio_normal_d.gif" })
-                
-                for productPriceCell in productPriceCells:
-                    priceString = productPriceCell.findAll("a")[1].string.replace('.', '').strip()
-                    price = int(priceString)
-                    prices.append(price)
-                    
-                for i in range(len(names)):
-                    productData = ProductData()
-                    productData.custom_name = names[i].encode('ascii','ignore').strip()
-                    productData.price = prices[i]
-                    productData.url = urlBase + onclicks[i]
-                    productData.comparison_field = productData.url
-                    print productData
-                    productsData.append(productData)
+                    link = productNameCell.find('a')['onclick'].split('\'')[1]
+                    product_links.append(urlBase + link)
                     
                 num_page += 1
+                
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            products_data.append(product)
 
-        return productsData
+        return products_data
 
