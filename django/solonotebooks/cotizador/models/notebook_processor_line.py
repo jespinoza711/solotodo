@@ -8,8 +8,8 @@ class NotebookProcessorLine(models.Model):
     def __unicode__(self):
         return self.family.brand.name + ' ' + self.name
         
-    def rawText(self):
-        return self.family.rawText() + ' ' + self.name
+    def raw_text(self):
+        return self.family.raw_text() + ' ' + self.name
         
     def tablePrint(self):
         return self.name        

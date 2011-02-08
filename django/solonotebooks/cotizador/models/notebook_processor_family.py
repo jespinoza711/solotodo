@@ -8,7 +8,7 @@ class NotebookProcessorFamily(models.Model):
     def __unicode__(self):
         return self.name + ' (' + unicode(self.nm) + ')'
         
-    def rawText(self):
+    def raw_text(self):
         return self.name + ' ' + unicode(self.nm) + ' nm'
     
     class Meta:

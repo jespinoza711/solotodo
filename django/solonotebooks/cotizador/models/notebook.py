@@ -57,22 +57,22 @@ class Notebook(Product):
         if (self.has_fingerprint_reader):
             result += ' fingerprint reader huella digital'
         result += ' bateria ' + str(self.battery_cells) + ' celdas '
-        result += ' ' + self.line.rawText()
+        result += ' ' + self.line.raw_text()
         result += ' ' + self.name
-        result += ' ' + self.processor.rawText()
-        result += ' ' + self.lan.rawText()
-        result += ' ' + self.screen.rawText()
-        result += ' ' + self.operating_system.rawText()
-        result += ' ' + self.ram_type.rawText()
-        result += ' ' + self.ram_frequency.rawText()
-        result += ' ' + self.ram_quantity.rawText()
-        result += ' ' + self.chipset.rawText()
+        result += ' ' + self.processor.raw_text()
+        result += ' ' + self.lan.raw_text()
+        result += ' ' + self.screen.raw_text()
+        result += ' ' + self.operating_system.raw_text()
+        result += ' ' + self.ram_type.raw_text()
+        result += ' ' + self.ram_frequency.raw_text()
+        result += ' ' + self.ram_quantity.raw_text()
+        result += ' ' + self.chipset.raw_text()
         for video_card in self.video_card.all():
-            result += ' ' + video_card.rawText()
+            result += ' ' + video_card.raw_text()
         for video_port in self.video_port.all():
-            result += ' ' + video_port.rawText()
+            result += ' ' + video_port.raw_text()
         for storage_drive in self.storage_drive.all():
-            result += ' ' + storage_drive.rawText()            
+            result += ' ' + storage_drive.raw_text()            
         return result
         
     def __unicode__(self):
