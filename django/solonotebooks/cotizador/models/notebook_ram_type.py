@@ -6,7 +6,7 @@ class NotebookRamType(models.Model):
     def __unicode__(self):
         return self.name
 
-    def rawText(self):
+    def raw_text(self):
         return self.name
     
     class Meta:

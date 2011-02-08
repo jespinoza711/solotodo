@@ -13,8 +13,8 @@ class NotebookVideoCard(models.Model):
     def __unicode__(self):
         return unicode(self.line) + ' ' + self.name
         
-    def rawText(self):
-        return self.line.rawText() + ' ' + self.card_type.rawText() + ' ' + self.name
+    def raw_text(self):
+        return self.line.raw_text() + ' ' + self.card_type.raw_text() + ' ' + self.name
     
     class Meta:
         app_label = 'cotizador'

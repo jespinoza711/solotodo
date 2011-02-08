@@ -29,7 +29,7 @@ class NotebookType(models.Model):
     def __unicode__(self):
         return unicode(self.name)
         
-    def rawText(self):
+    def raw_text(self):
         return self.name
     
     class Meta:

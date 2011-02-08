@@ -15,7 +15,7 @@ class NotebookStorageDrive(models.Model):
             result += ' (' + unicode(self.rpm) + ')'
         return result
         
-    def rawText(self):
+    def raw_text(self):
         result = unicode(self.drive_type) + ' ' + unicode(self.capacity)
         if (self.drive_type.name == 'HDD'):
             result += ' ' + unicode(self.rpm)

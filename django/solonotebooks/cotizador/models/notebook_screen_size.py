@@ -11,8 +11,8 @@ class NotebookScreenSize(models.Model):
     def titleText(self):
         return unicode(self.size) + ' pulgadas'
         
-    def rawText(self):
-        return unicode(self.size) + ' ' + self.family.rawText()
+    def raw_text(self):
+        return unicode(self.size) + ' ' + self.family.raw_text()
     
     class Meta:
         app_label = 'cotizador'

@@ -74,8 +74,34 @@ from solonotebooks.cotizador.models.mail_lost_product import MailLostProduct
 from solonotebooks.cotizador.models.mail_revive_product import MailReviveProduct
 from solonotebooks.cotizador.models.product_comparison_list import ProductComparisonList
 from solonotebooks.cotizador.models.product_visit import ProductVisit
+from solonotebooks.cotizador.models.video_card_gpu_brand import VideoCardGpuBrand
+from solonotebooks.cotizador.models.video_card_gpu_family import VideoCardGpuFamily
+from solonotebooks.cotizador.models.video_card_gpu_line import VideoCardGpuLine
+from solonotebooks.cotizador.models.video_card_gpu_architecture import VideoCardGpuArchitecture
+from solonotebooks.cotizador.models.video_card_gpu_core_family import VideoCardGpuCoreFamily
+from solonotebooks.cotizador.models.video_card_gpu_core import VideoCardGpuCore
+from solonotebooks.cotizador.models.video_card_port import VideoCardPort
+from solonotebooks.cotizador.models.video_card_has_port import VideoCardHasPort
+from solonotebooks.cotizador.models.video_card_bus_name import VideoCardBusName
+from solonotebooks.cotizador.models.video_card_bus_lane import VideoCardBusLane
+from solonotebooks.cotizador.models.video_card_bus import VideoCardBus
+from solonotebooks.cotizador.models.video_card_gpu_directx_version import VideoCardGpuDirectxVersion
+from solonotebooks.cotizador.models.video_card_gpu_opengl_version import VideoCardGpuOpenglVersion
+from solonotebooks.cotizador.models.video_card_refrigeration import VideoCardRefrigeration
+from solonotebooks.cotizador.models.video_card_slot_type import VideoCardSlotType
+from solonotebooks.cotizador.models.video_card_profile import VideoCardProfile
+from solonotebooks.cotizador.models.video_card_brand import VideoCardBrand
+from solonotebooks.cotizador.models.video_card_memory_type import VideoCardMemoryType
+from solonotebooks.cotizador.models.video_card_memory_quantity import VideoCardMemoryQuantity
+from solonotebooks.cotizador.models.video_card_memory_bus_width import VideoCardMemoryBusWidth
+from solonotebooks.cotizador.models.video_card_gpu_core_count import VideoCardGpuCoreCount
+from solonotebooks.cotizador.models.video_card_gpu_power_connector import VideoCardGpuPowerConnector
+from solonotebooks.cotizador.models.video_card_gpu_manufacturing_process import VideoCardGpuManufacturingProcess
+from solonotebooks.cotizador.models.video_card_gpu import VideoCardGpu
+from solonotebooks.cotizador.models.video_card import VideoCard
 
-__all__ = [ 'NotebookProcessorBrand', 
+__all__ = [ 
+            'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',
             'NotebookProcessorLine', 
             'NotebookProcessorFrequency', 
@@ -149,5 +175,29 @@ __all__ = [ 'NotebookProcessorBrand',
             'NotebookType',
             'ProductComparisonList',
             'ProductVisit',       
-            'ProductType'
+            'ProductType',
+            'VideoCardGpuBrand',
+            'VideoCardGpuFamily',
+            'VideoCardGpuLine',
+            'VideoCardGpuArchitecture',
+            'VideoCardGpuCoreFamily',
+            'VideoCardGpuCore',
+            'VideoCardPort',
+            'VideoCardHasPort',
+            'VideoCardBusName',
+            'VideoCardBusLane',
+            'VideoCardBus',
+            'VideoCardGpuDirectxVersion',
+            'VideoCardGpuOpenglVersion',
+            'VideoCardRefrigeration',
+            'VideoCardSlotType',
+            'VideoCardProfile',
+            'VideoCardMemoryType',
+            'VideoCardMemoryQuantity',
+            'VideoCardMemoryBusWidth',
+            'VideoCardGpuCoreCount',
+            'VideoCardGpuPowerConnector',
+            'VideoCardGpuManufacturingProcess',
+            'VideoCardGpu',
+            'VideoCard'
             ]

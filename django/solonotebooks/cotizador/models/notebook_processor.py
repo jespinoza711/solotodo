@@ -25,11 +25,11 @@ class NotebookProcessor(models.Model):
     def __unicode__(self):
         return unicode(self.line) + ' ' + self.name
         
-    def rawText(self):
+    def raw_text(self):
         result = self.name
-        result += ' ' + self.line.rawText()
-        result += ' ' + self.frequency.rawText()
-        result += ' ' + self.family.rawText()
+        result += ' ' + self.line.raw_text()
+        result += ' ' + self.frequency.raw_text()
+        result += ' ' + self.family.raw_text()
         if self.core_number == 1:
             result += ' single un core nucleo'
         elif self.core_number == 2:

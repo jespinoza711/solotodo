@@ -91,7 +91,7 @@
                       <a href="{% url cotizador.views.store_product_redirect product_price.shpe.id %}">{{ product_price.store.picture.thumbnail_tag }}</a>
                   </td>
                   <td>
-                      <a href="/store_notebook/{{ product_price.shpe.id }}">{{ product_price.shpe.pretty_price }}</a>
+                      <a href="{% url cotizador.views.store_product_redirect product_price.shpe.id %}">{{ product_price.shpe.pretty_price }}</a>
                   </td>
               </tr>
           {% endfor %}

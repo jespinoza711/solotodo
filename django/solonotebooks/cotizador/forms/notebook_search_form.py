@@ -368,3 +368,102 @@ class NotebookSearchForm(SearchForm):
         search_registry.query = query
         search_registry.date = date.today()
         search_registry.save()
+        
+    def filter_products(self, notebooks):
+        if self.ntype:
+            notebooks = notebooks.filter(ntype = self.ntype)
+        
+        if self.notebook_brand:
+            notebooks = notebooks.filter(line__brand__id = self.notebook_brand)
+            
+        if self.processor_brand:
+            notebooks = notebooks.filter(processor__line__family__brand__id = self.processor_brand)
+            
+        if self.processor_line_family:
+            notebooks = notebooks.filter(processor__line__family__id = self.processor_line_family)
+            
+        if self.ram_quantity:
+            notebooks = notebooks.filter(ram_quantity__value__gte = NotebookRamQuantity.objects.get(pk = self.ram_quantity).value)
+            
+        if self.storage_capacity:
+            notebooks = notebooks.filter(storage_drive__capacity__value__gte = NotebookStorageDriveCapacity.objects.get(pk = self.storage_capacity).value).distinct()
+            
+        if self.screen_size_family:
+            notebooks = notebooks.filter(screen__size__family__id = self.screen_size_family)
+            
+        if self.video_card_type:
+            notebooks = notebooks.filter(video_card__card_type__id = self.video_card_type).distinct()
+            
+        if self.operating_system:
+            notebooks = notebooks.filter(operating_system__family__id = self.operating_system)
+            
+        if self.notebook_line and self.advanced_controls:
+            notebooks = notebooks.filter(line__id=self.notebook_line)
+            
+        if self.processor and self.advanced_controls:
+            notebooks = notebooks.filter(processor__id=self.processor)
+            
+        if self.ram_type and self.advanced_controls:
+            notebooks = notebooks.filter(ram_type__id=self.ram_type)
+            
+        if self.storage_type and self.advanced_controls:
+            notebooks = notebooks.filter(storage_drive__drive_type__id = self.storage_type)
+            
+        if self.screen_resolution and self.advanced_controls:
+            notebooks = notebooks.filter(screen__resolution__id = self.screen_resolution)
+            
+        if self.screen_touch and self.advanced_controls:
+            notebooks = notebooks.filter(screen__is_touchscreen = self.screen_touch)    
+            
+        if self.video_card_brand and self.advanced_controls:
+            notebooks = notebooks.filter(video_card__line__brand__id = self.video_card_brand).distinct()
+            
+        if self.video_card_line and self.advanced_controls:
+            notebooks = notebooks.filter(video_card__line__id = self.video_card_line).distinct()
+            
+        if self.video_card and self.advanced_controls:
+            notebooks = notebooks.filter(video_card__id = self.video_card).distinct()
+            
+        if self.min_price:
+            notebooks = notebooks.filter(min_price__gte = int(self.min_price))
+
+        if self.max_price and self.max_price != 1000000:
+            notebooks = notebooks.filter(min_price__lte = int(self.max_price))
+            
+        # Check the ordering orientation, if it is not set, each criteria uses 
+        # sensible defaults (asc fro price, desc for cpu performance, etc)
+        ordering_direction = [None, '', '-'][self.ordering_direction]
+        
+        # Apply the corresponding ordering based on the key
+        if self.ordering == 1:
+            if ordering_direction == None:
+                ordering_direction = ''
+            notebooks = notebooks.order_by(ordering_direction + 'min_price')
+        elif self.ordering == 2:
+            if ordering_direction == None:
+                ordering_direction = '-'    
+            notebooks = notebooks.order_by(ordering_direction + 'processor__speed_score')
+        elif self.ordering == 3:
+            if ordering_direction == None:
+                ordering_direction = '-'    
+            # Note: A notebook may have more than one video card, grab the fastest
+            notebooks = notebooks.annotate(max_video_card_score=Max('video_card__speed_score')).order_by(ordering_direction + 'max_video_card_score')
+        elif self.ordering == 4:
+            if ordering_direction == None:
+                ordering_direction = '-'    
+            notebooks = notebooks.order_by(ordering_direction + 'ram_quantity__value')
+        elif self.ordering == 5:
+            if ordering_direction == None:
+                ordering_direction = '-'    
+            # Note: A notebook may have more than one SD, grab the biggest
+            notebooks = notebooks.annotate(max_hard_drive_capacity=Max('storage_drive__capacity__value')).order_by(ordering_direction + 'max_hard_drive_capacity')        
+        elif self.ordering == 6:
+            if ordering_direction == None:
+                ordering_direction = ''    
+            notebooks = notebooks.order_by(ordering_direction + 'weight')
+        else:
+            if ordering_direction == None:
+                ordering_direction = '-'    
+            notebooks = notebooks.order_by(ordering_direction + 'date_added')    
+            
+        return [notebooks, ordering_direction]

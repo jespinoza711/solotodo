@@ -57,7 +57,7 @@ def product_type_catalog(request, product_type_urlname):
     search_form.save()
     
     # Grab all the candidates (those currently available)
-    result_products, ordering_direction = filter_notebooks(product_type_class.get_valid(), search_form)
+    result_products, ordering_direction = search_form.filter_products(product_type_class.get_valid())
     num_results = len(result_products)
     
     page_count = ceil(len(result_products) / 10.0);        

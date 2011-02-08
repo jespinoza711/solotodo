@@ -6,7 +6,7 @@ class NotebookProcessorFrequency(models.Model):
     def __unicode__(self):
         return unicode(self.value) + ' MHz'
         
-    def rawText(self):
+    def raw_text(self):
         return unicode(self.value) + ' MHz'
     
     class Meta:

@@ -9,7 +9,7 @@ class NotebookScreenSizeFamily(models.Model):
     def titleText(self):
         return unicode(self.base_size) + ' a ' + unicode(self.base_size + 0.9) + ' pulgadas'
         
-    def rawText(self):
+    def raw_text(self):
         return unicode(self.base_size)
     
     class Meta:

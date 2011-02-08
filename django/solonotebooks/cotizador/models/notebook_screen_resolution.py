@@ -7,7 +7,7 @@ class NotebookScreenResolution(models.Model):
     def __unicode__(self):
         return unicode(self.horizontal) + ' x ' + unicode(self.vertical)
         
-    def rawText(self):
+    def raw_text(self):
         return unicode(self.horizontal) + ' ' + unicode(self.vertical)
         
     class Meta:

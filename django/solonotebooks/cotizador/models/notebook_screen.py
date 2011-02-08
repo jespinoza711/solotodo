@@ -21,8 +21,8 @@ class NotebookScreen(models.Model):
             resultado += ' [Rotatoria]'
         return resultado
         
-    def rawText(self):
-        resultado = self.size.rawText() + ' ' + self.resolution.rawText()
+    def raw_text(self):
+        resultado = self.size.raw_text() + ' ' + self.resolution.raw_text()
         if self.is_glossy:
             resultado += ' Opaca'
         else:

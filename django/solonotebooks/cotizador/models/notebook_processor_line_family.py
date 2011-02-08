@@ -12,8 +12,8 @@ class NotebookProcessorLineFamily(models.Model):
         upload_to = 'processor_line',
         generate_on_save = True,)
         
-    def rawText(self):
-        result = self.brand.rawText()
+    def raw_text(self):
+        result = self.brand.raw_text()
         if self.id == 1:
             result += ' netbook'
         if self.id in [2, 11]:
