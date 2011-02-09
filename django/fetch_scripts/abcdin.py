@@ -26,8 +26,6 @@ class AbcDin:
         product_webpage = mechanize.urlopen(product_details_url)
         product_soup = BeautifulSoup(product_webpage.read())
         
-        print product_details_url
-        
         product_name = product_soup.find('td', { 'id': 'mainDescr' }).find('h2').contents[0].encode('ascii', 'ignore')
         try:
             product_price = int(product_soup.find('div', { 'id': 'precioNormal' }).find('span').string.replace('$', '').replace(',', ''))

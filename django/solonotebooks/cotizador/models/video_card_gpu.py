@@ -3,6 +3,7 @@ from solonotebooks.cotizador.models import VideoCardGpuManufacturingProcess, Vid
 
 class VideoCardGpu(models.Model):
     name = models.CharField(max_length = 255)
+    tdmark_id = models.CharField(max_length = 10)
     
     stream_processors = models.IntegerField()
     texture_units = models.IntegerField()
@@ -12,6 +13,9 @@ class VideoCardGpu(models.Model):
     transistor_count = models.IntegerField()
     rops = models.IntegerField()
     tdp = models.IntegerField()
+    tdmark_06_score = models.IntegerField()
+    tdmark_vantage_score = models.IntegerField()
+    tdmark_11_score = models.IntegerField()
     
     has_multi_gpu_support = models.BooleanField()
     
