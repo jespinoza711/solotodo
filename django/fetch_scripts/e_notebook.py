@@ -61,7 +61,7 @@ class ENotebook:
         return links
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting E-Notebook notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.notebook.cl/'

@@ -27,7 +27,7 @@ class Peta:
         return product_data
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Peta notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.peta.cl/'

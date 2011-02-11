@@ -27,7 +27,7 @@ class Cintegral:
         return product_data
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Cintegral notebooks'
         # Basic data of the target webpage and the specific catalog
         url_base = 'http://www.cintegral.cl/index.php'

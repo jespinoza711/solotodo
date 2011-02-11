@@ -9,9 +9,9 @@ from common_fetch_methods import *
 # Script to test the fetch script for a store
 def main():
     p = eval(sys.argv[1] + '()')
-    getStoreNotebooks(p)
+    get_store_products(p)
     
-    updateAvailabilityAndPrice()    
+    update_availability_and_price()    
                 
 if __name__ == '__main__':
     print datetime.now()

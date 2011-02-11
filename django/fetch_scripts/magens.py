@@ -28,7 +28,7 @@ class Magens:
 
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Magens notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.magens.cl'

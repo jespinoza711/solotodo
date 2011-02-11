@@ -86,7 +86,8 @@ def send_new_password_mail(user, new_password):
     
 # Helper method to set the search_form for almost all of the views            
 def initialize_search_form(data):
-    search_form = SearchForm(data)
+    qd = data.copy()
+    search_form = NotebookSearchForm(qd)
     search_form.validate()
     search_form.is_valid()
     
@@ -150,7 +151,7 @@ def generateChart(ntbk):
     
 def set_subscription_mail_notifications(request, subscription_id, new_mail_notification_status):
     try:
-        subscription = NotebookSubscription.objects.get(pk = subscription_id)
+        subscription = ProductSubscription.objects.get(pk = subscription_id)
         if subscription.user != request.user or not subscription.is_active:
             raise SubscriptionException('Error de seguridad')
         subscription.email_notifications = new_mail_notification_status

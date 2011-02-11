@@ -45,11 +45,14 @@ def latest_notebooks(request):
 # View for showing a particular store with the notebooks it offers    
 def store_data(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
-    shns = StoreHasNotebook.objects.filter(store = store).filter(~Q(notebook = None)).filter(is_available = True).order_by('latest_price')
-        
+    shps = StoreHasProduct.objects.filter(store = store).filter(shpe__isnull = False).order_by('shpe__latest_price')
+    
+    for shp in shps:
+        shp.product = shp.product.get_polymorphic_instance()
+        shp.product.min_price = shp.shpe.latest_price   
     return append_ads_to_response(request, 'cotizador/store_details.html', {
         'store': store,
-        'shns': shns,
+        'shns': shps,
     })
     
 # View for showing all of the stores currently in the DB    
@@ -162,10 +165,10 @@ def browse(request):
         result_notebooks = result_notebooks.filter(processor__line__family__id = search_form.processor_line_family)
         
     if search_form.ram_quantity:
-        result_notebooks = result_notebooks.filter(ram_quantity__value__gte = RamQuantity.objects.get(pk = search_form.ram_quantity).value)
+        result_notebooks = result_notebooks.filter(ram_quantity__value__gte = NotebookRamQuantity.objects.get(pk = search_form.ram_quantity).value)
         
     if search_form.storage_capacity:
-        result_notebooks = result_notebooks.filter(storage_drive__capacity__value__gte = StorageDriveCapacity.objects.get(pk = search_form.storage_capacity).value).distinct()
+        result_notebooks = result_notebooks.filter(storage_drive__capacity__value__gte = NotebookStorageDriveCapacity.objects.get(pk = search_form.storage_capacity).value).distinct()
         
     if search_form.screen_size_family:
         result_notebooks = result_notebooks.filter(screen__size__family__id = search_form.screen_size_family)
@@ -280,19 +283,17 @@ def browse(request):
     
 # View for displaying every single notebook in the DB
 def all_notebooks(request):
-    notebooks = Notebook.objects.all()
+    products = [product.get_polymorphic_instance() for product in Product.objects.all()]
     
     return append_ads_to_response(request, 'cotizador/all_notebooks.html', {
-        'result_notebooks': notebooks
+        'products': products
     })
     
 # View that gets called when a user clicks an external link to a store
 # we log this for statistical purposes and... maybe build a business model
 # someday...
 def store_notebook_redirect(request, store_notebook_id):
-    store_notebook = get_object_or_404(StoreHasNotebook, pk = store_notebook_id)
-    store_notebook.visitorCount += 1
-    store_notebook.save()
+    store_notebook = get_object_or_404(StoreHasProductEntity, pk = store_notebook_id)
     external_visit = ExternalVisit()
     external_visit.shn = store_notebook
     external_visit.ip_address = ''
@@ -321,11 +322,11 @@ def notebook_details(request, notebook_id):
     if request.method == 'POST': 
         commentForm = NotebookCommentForm(request.POST)
         if commentForm.is_valid():
-            notebook_comment = NotebookComment()
+            notebook_comment = ProductComment()
             notebook_comment.date = date.today()        
             rawComment = commentForm.cleaned_data['comments']
             notebook_comment.comments = rawComment.replace('\n', '<br />')
-            notebook_comment.notebook = notebook
+            notebook_comment.product = notebook
             if not request.user.is_anonymous():
                 notebook_comment.user = request.user
                 notebook_comment.validated = True
@@ -350,14 +351,14 @@ def notebook_details(request, notebook_id):
     
     
     # Find the stores with this notebook available
-    stores_with_notebook_available = notebook.storehasnotebook_set.all().filter(is_available=True).filter(is_hidden = False).order_by('latest_price')
+    stores_with_notebook_available = notebook.storehasproduct_set.all().filter(shpe__isnull = False).order_by('shpe__latest_price')
         
     max_suggested_price = int(notebook.min_price * 1.10 / 1000) * 1000
-    similar_notebooks_ids = notebook.similar_notebooks.split(',')
+    similar_notebooks_ids = notebook.similar_products.split(',')
     similar_notebooks = [Notebook.objects.get(pk = ntbk_id) for ntbk_id in similar_notebooks_ids if ntbk_id]
     
     try:
-        notebook_subscription = NotebookSubscription.objects.filter(user = request.user, notebook = notebook, is_active = True)[0]
+        notebook_subscription = ProductSubscription.objects.filter(user = request.user, product = notebook, is_active = True)[0]
     except:
         notebook_subscription = None
     
@@ -365,7 +366,7 @@ def notebook_details(request, notebook_id):
         'notebook': notebook,
         'comment_form': commentForm,
         'notebook_prices': stores_with_notebook_available,
-        'notebook_comments': notebook.notebookcomment_set.filter(validated = True).order_by('id'),
+        'notebook_comments': notebook.productcomment_set.filter(validated = True).order_by('id'),
         'posted_comment': posted_comment,
         'similar_notebooks': similar_notebooks,
         'notebook_subscription': notebook_subscription,
@@ -482,20 +483,21 @@ def add_subscription(request):
         notebook = Notebook.objects.get(pk = request.GET['notebook'])
         user = request.user
         
-        existing_notebook_subscriptions = NotebookSubscription.objects.filter(user = user).filter(notebook = notebook)
+        existing_notebook_subscriptions = ProductSubscription.objects.filter(user = user).filter(product = notebook)
         if existing_notebook_subscriptions:
             notebook_subscription = existing_notebook_subscriptions[0]
             notebook_subscription.is_active = True
         else:
-            notebook_subscription = NotebookSubscription()
+            notebook_subscription = ProductSubscription()
             notebook_subscription.user = user
-            notebook_subscription.notebook = notebook                                
+            notebook_subscription.product = notebook                                
             
         notebook_subscription.email_notifications = bool(int(request.GET['email_notifications']))
         notebook_subscription.save()
         
         request.flash['message'] = 'Suscripción agregada'
     except Exception, e:
+        print str(e)
         request.flash['error'] = 'Error desconocido'
 
     return HttpResponseRedirect('/notebooks/%d' % notebook.id )    
@@ -658,8 +660,8 @@ def delete_all(request):
             
 # View in charge of showing the processors of a particular line, nothing fancy            
 def processor_line_family_details(request, processor_line_family_id):
-    processor_line_family = get_object_or_404(ProcessorLineFamily, pk = processor_line_family_id)
-    other_processor_line_families = ProcessorLineFamily.objects.filter(~Q(id = processor_line_family.id))
+    processor_line_family = get_object_or_404(NotebookProcessorLineFamily, pk = processor_line_family_id)
+    other_processor_line_families = NotebookProcessorLineFamily.objects.filter(~Q(id = processor_line_family.id))
     
     processor_id = 0
     if 'processor' in request.GET:
@@ -669,7 +671,7 @@ def processor_line_family_details(request, processor_line_family_id):
             processor_id = 0
             
         try:
-            processor = Processor.objects.filter(line__family = processor_line_family).get(pk = processor_id)
+            processor = NotebookProcessor.objects.filter(line__family = processor_line_family).get(pk = processor_id)
             ntbks = Notebook.objects.filter(processor = processor).order_by('?')[0:5]
         except:
             processor = None
@@ -678,7 +680,7 @@ def processor_line_family_details(request, processor_line_family_id):
         processor = None
         ntbks = Notebook.objects.filter(processor__line__family = processor_line_family).order_by('?')[0:5]
         
-    processors = Processor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
+    processors = NotebookProcessor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/processor_line_family_details.html', {
                 'processor_line_family': processor_line_family,
                 'processors': processors,
@@ -689,8 +691,8 @@ def processor_line_family_details(request, processor_line_family_id):
             })
             
 def video_card_line_details(request, video_card_line_id):
-    video_card_line = get_object_or_404(VideoCardLine, pk = video_card_line_id)
-    other_video_card_lines = VideoCardLine.objects.filter(~Q(id = video_card_line.id))
+    video_card_line = get_object_or_404(NotebookVideoCardLine, pk = video_card_line_id)
+    other_video_card_lines = NotebookVideoCardLine.objects.filter(~Q(id = video_card_line.id))
     video_card_id = 0
     if 'video_card' in request.GET:
         try:
@@ -699,7 +701,7 @@ def video_card_line_details(request, video_card_line_id):
             video_card_id = 0
             
         try:
-            video_card = VideoCard.objects.filter(line = video_card_line).get(pk = video_card_id)
+            video_card = NotebookVideoCard.objects.filter(line = video_card_line).get(pk = video_card_id)
             ntbks = Notebook.objects.filter(video_card = video_card).order_by('?').distinct()[0:5]
         except:
             video_card = None
@@ -708,7 +710,7 @@ def video_card_line_details(request, video_card_line_id):
         video_card = None    
         ntbks = Notebook.objects.filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
     
-    video_cards = VideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
+    video_cards = NotebookVideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/video_card_line_details.html', {
                 'video_card_line': video_card_line,
                 'video_cards': video_cards,
@@ -719,16 +721,16 @@ def video_card_line_details(request, video_card_line_id):
             })            
             
 def all_processor_line_families(request):
-    processor_line_families = ProcessorLineFamily.objects.all()
-    processors = Processor.objects.order_by('-speed_score')
+    processor_line_families = NotebookProcessorLineFamily.objects.all()
+    processors = NotebookProcessor.objects.order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/all_processor_line_families.html', {
                 'processor_line_families': processor_line_families,
                 'processors': processors
             })            
             
 def all_video_card_lines(request):
-    video_card_lines = VideoCardLine.objects.all()
-    video_cards = VideoCard.objects.order_by('-speed_score')
+    video_card_lines = NotebookVideoCardLine.objects.all()
+    video_cards = NotebookVideoCard.objects.order_by('-speed_score')
     return append_ads_to_response(request, 'cotizador/all_video_card_lines.html', {
                 'video_card_lines': video_card_lines,
                 'video_cards': video_cards
@@ -800,7 +802,9 @@ def analyze_searches(request):
 
 @login_required    
 def subscriptions(request):
-    notebook_subscriptions = NotebookSubscription.objects.filter(user = request.user, is_active = True)
+    notebook_subscriptions = ProductSubscription.objects.filter(user = request.user, is_active = True)
+    for s in notebook_subscriptions:
+        s.product = s.product.get_polymorphic_instance()
     return append_ads_to_response(request, 'account/subscriptions.html', {
         'notebook_subscriptions': notebook_subscriptions,
     })
@@ -818,7 +822,7 @@ def disable_subscription_mail(request, subscription_id):
 @login_required
 def remove_subscription(request, subscription_id):
     try:
-        subscription = NotebookSubscription.objects.get(pk = subscription_id)
+        subscription = ProductSubscription.objects.get(pk = subscription_id)
         if subscription.user != request.user:
             raise SubscriptionException('Error de seguridad')
         subscription.is_active = False;

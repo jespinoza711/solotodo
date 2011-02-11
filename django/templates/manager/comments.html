@@ -1,6 +1,6 @@
 {% extends "manager/base.html" %}
 
-{% block title %}SoloNotebooks - Manager{% endblock %}
+{% block title %}Comentarios - {{ site_name }}{% endblock %}
 
 {% block mainContent %}
 
@@ -11,30 +11,22 @@
     <br />
     <strong>Nickname: </strong> {{ comment.nickname }}
     <br />
-    <strong>Notebook: </strong> <a href="/notebooks/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.notebook_details comment.product.id %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
     {{ comment.comments }}
     <br />
-    <form method="POST" action="/manager/delete/{{ comment.id }}">
+    <form method="POST" action="{% url cotizador.views_manager.delete_comment comment.id %}">
         <input type="submit" value="Eliminar comentario" />
-    </form>
-    &nbsp;
-    <form method="POST" action="/manager/validate/{{ comment.id }}">
-        <input type="submit" value="Validar comentario" />
     </form>
     <hr />
 
 {% endfor %}
 
 
-<form method="POST" action="/manager/validate_all">
+<form method="POST" action="{% url cotizador.views_manager.validate_all %}">
     <input type="submit" value="Validar todos los mensajes" />
-</form>
-&nbsp;
-<form method="POST" action="/manager/delete_all">
-    <input type="submit" value="Eliminar todos los mensajes" />
 </form>
 
 <h2>Últimos comentarios</h2>
@@ -49,13 +41,13 @@
         {{ comment.nickname }}
     {% endif %}
     <br />
-    <strong>Notebook: </strong> <a href="/notebooks/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.notebook_details comment.product.id %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
     {{ comment.comments }}
     <br />
-    <form method="POST" action="/manager/delete/{{ comment.id }}">
+    <form method="POST" action="{% url cotizador.views_manager.delete_comment comment.id %}">
         <input type="submit" value="Eliminar comentario" />
     </form>
     <hr />

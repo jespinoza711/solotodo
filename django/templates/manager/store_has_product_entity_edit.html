@@ -1,0 +1,16 @@
+{% extends "manager/base.html" %}
+
+{% block title %}Crear entrada de producto - {{ site_name }}{% endblock %}
+
+{% block mainContent %}
+
+<h2><a href="{{ shpe.url }}">{{ shpe }}</a></h2>
+
+<form method="post" action="">
+    {{ shpe_form.as_p }}
+    <p>
+        <input type="submit" value="Guardar" />
+    </p>
+</form>
+
+{% endblock %}

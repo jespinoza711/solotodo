@@ -9,7 +9,7 @@ import sys
 # Script to test the fetch script for a store
 def main():
     p = eval(sys.argv[1] + '()')
-    p.getNotebooks()
+    p.get_products()
                 
 if __name__ == '__main__':
     print datetime.now()

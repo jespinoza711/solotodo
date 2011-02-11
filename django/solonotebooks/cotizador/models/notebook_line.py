@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import NotebookBrand
+from . import NotebookBrand
 
 class NotebookLine(models.Model):
     name = models.CharField(max_length = 255)
@@ -8,8 +8,8 @@ class NotebookLine(models.Model):
     def __unicode__(self):
         return unicode(self.brand) + ' ' + self.name
         
-    def rawText(self):
-        return self.brand.rawText() + ' ' + self.name
+    def raw_text(self):
+        return self.brand.raw_text() + ' ' + self.name
     
     class Meta:
         app_label = 'cotizador'

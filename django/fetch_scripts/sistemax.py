@@ -28,7 +28,7 @@ class Sistemax:
         return product_data
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Sistemax notebooks'
         # Basic data of the target webpage and the specific catalog
         baseUrl = 'http://www.sistemax.cl/webstore/'

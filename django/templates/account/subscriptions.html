@@ -22,20 +22,20 @@
         <tr>
             <td class="notebook_column">
                 <div class="notebook_container">
-                    <div class="subscription_notebook_thumb_image"><a href="/notebooks/{{ ns.notebook.id }}{{ produt_link_args }}">{{ ns.notebook.picture.thumbnail_tag }}</a></div>
-                    <h2><a href="/notebooks/{{ ns.notebook.id }}{{ produt_link_args }}">{{ ns.notebook }}</a></h2>
-                    <strong>Procesador:</strong> {{ ns.notebook.processor.prettyPrint }}
+                    <div class="subscription_notebook_thumb_image"><a href="/notebooks/{{ ns.product.id }}{{ produt_link_args }}">{{ ns.product.picture.thumbnail_tag }}</a></div>
+                    <h2><a href="/notebooks/{{ ns.product.id }}{{ produt_link_args }}">{{ ns.product }}</a></h2>
+                    <strong>Procesador:</strong> {{ ns.product.processor.pretty_print }}
                     <br />
-                    <strong>RAM: </strong> {{ ns.notebook.ram_quantity }} ({{ns.notebook.ram_type}}-{{ns.notebook.ram_frequency.value}})
+                    <strong>RAM: </strong> {{ ns.product.ram_quantity }} ({{ns.product.ram_type}}-{{ns.product.ram_frequency.value}})
                     <br />
-                    <strong>Disco Duro: </strong> {{ ns.notebook.storage_drive.all.0 }}
+                    <strong>Disco Duro: </strong> {{ ns.product.storage_drive.all.0 }}
                             <br />
                     <strong>Pantalla: </strong> 
-                    {{ ns.notebook.screen.prettyDisplay }}
+                    {{ ns.product.screen.pretty_display }}
                     <br />
                     <div class="subscription_notebook_min_price">
-                        <a href="/notebooks/{{ ns.notebook.id }}{{ produt_link_args }}">
-                            {{ ns.notebook.prettyMinPrice }}
+                        <a href="/notebooks/{{ ns.product.id }}{{ produt_link_args }}">
+                            {{ ns.product.prettyMinPrice }}
                         </a>
                     </div>
                 </div>

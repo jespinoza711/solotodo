@@ -47,7 +47,7 @@ class Bip:
         return productData
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Bip notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.bip.cl/ecommerce/'

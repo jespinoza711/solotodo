@@ -13,22 +13,22 @@
 
 {% for shn in shns %}
         <div class="notebook_container">
-        <div class="notebook_thumb_image"><a href="/notebooks/{{ shn.notebook.id }}">{{ shn.notebook.picture.thumbnail_tag }}</a></div>
+        <div class="notebook_thumb_image"><a href="/notebooks/{{ shn.product.id }}">{{ shn.product.picture.thumbnail_tag }}</a></div>
         <div class="notebook_thumb_price">
-<a href="/notebooks/{{ shn.notebook.id }}">
-    {{ shn.prettyPrice }}
+<a href="/notebooks/{{ shn.product.id }}">
+    {{ shn.shpe.pretty_price }}
     </a>
     
         </div>
-        <h2><a href="/notebooks/{{ shn.notebook.id }}">{{ shn.notebook }}</a></h2>
-        <strong>Procesador:</strong> {{ shn.notebook.processor.prettyPrint }}
+        <h2><a href="/notebooks/{{ shn.product.id }}">{{ shn.product }}</a></h2>
+        <strong>Procesador:</strong> {{ shn.product.processor.pretty_print }}
         <br />
-        <strong>RAM: </strong> {{ shn.notebook.ram_quantity }} ({{ shn.notebook.ram_type }}-{{ shn.notebook.ram_frequency.value }})
+        <strong>RAM: </strong> {{ shn.product.ram_quantity }} ({{ shn.product.ram_type }}-{{ shn.product.ram_frequency.value }})
         <br />
-        <strong>Almacenamiento: </strong> {{ shn.notebook.storage_drive.all.0 }}
+        <strong>Almacenamiento: </strong> {{ shn.product.storage_drive.all.0 }}
                 <br />
         <strong>Pantalla: </strong> 
-        {{ shn.notebook.screen.prettyDisplay }}
+        {{ shn.product.screen.pretty_display }}
     </div>
 {% endfor %}
 

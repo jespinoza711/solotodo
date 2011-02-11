@@ -31,7 +31,7 @@ class PackardBell:
 
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Packard Bell notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.packardbell.cl'

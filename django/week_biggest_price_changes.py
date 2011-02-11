@@ -6,31 +6,31 @@ from datetime import date, timedelta
 import operator
 
 def main():
-    ntbks = Notebook.objects.filter(is_available = True)
+    prods = Product.objects.filter(is_available = True)
     
-    notebook_price_changes = []
+    product_price_changes = []
     last_week_day = date.today() - timedelta(days = 7)
     
-    for ntbk in ntbks:
-        latest_price = ntbk.min_price
+    for prod in prods:
+        latest_price = prod.min_price
         
-        nearest_npc = NotebookPriceChange.objects.filter(notebook = ntbk).filter(date__lte = last_week_day).order_by('-date')
+        nearest_ppc = ProductPriceChange.objects.filter(notebook = prod).filter(date__lte = last_week_day).order_by('-date')
         
-        if len(nearest_npc) == 0:
+        if len(nearest_ppc) == 0:
             continue
             
-        nearest_price = nearest_npc[0].price
+        nearest_price = nearest_ppc[0].price
         
         if latest_price == nearest_price:
             continue
         
-        notebook_price_changes.append([ntbk, latest_price - nearest_price, nearest_price, latest_price])
+        product_price_changes.append([prod, latest_price - nearest_price, nearest_price, latest_price])
         
-    notebook_price_changes = sorted(notebook_price_changes, key = operator.itemgetter(1))
+    product_price_changes = sorted(product_price_changes, key = operator.itemgetter(1))
     
-    for npc in notebook_price_changes:
-        print npc[0]
-        print str(npc[2]) + ' - ' + str(npc[3]) + ' (' + str(npc[1]) + ')'
+    for ppc in product_price_changes:
+        print ppc[0]
+        print str(ppc[2]) + ' - ' + str(ppc[3]) + ' (' + str(ppc[1]) + ')'
 
 if __name__ == '__main__':
     main()

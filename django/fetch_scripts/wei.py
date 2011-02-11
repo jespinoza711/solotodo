@@ -38,7 +38,7 @@ class Wei:
 
 
     # Main method
-    def getNotebooks(self):
+    def get_products(self):
         print 'Getting Wei notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.wei.cl/catalogue/category.htm?action=subcategory&ccode='

@@ -6,8 +6,8 @@ class VideoCardBrand(models.Model):
     def __unicode__(self):
         return self.name
         
-    def rawText(self):
-        return self.name 
+    def raw_text(self):
+        return self.name        
     
     class Meta:
         app_label = 'cotizador'

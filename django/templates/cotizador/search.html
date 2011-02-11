@@ -28,14 +28,14 @@
     
         </div>
         <h2><a href="/notebooks/{{ notebook.0.id }}">{{ notebook.0 }} <span class="search_result_score"> ({{ notebook.1|floatformat }}%)</span></a></h2>
-        <strong>Procesador:</strong> {{ notebook.0.processor.prettyPrint }}
+        <strong>Procesador:</strong> {{ notebook.0.processor.pretty_print }}
         <br />
         <strong>RAM: </strong> {{ notebook.0.ram_quantity }} ({{notebook.0.ram_type}}-{{notebook.0.ram_frequency.value}})
         <br />
         <strong>Disco Duro: </strong> {{ notebook.0.storage_drive.all.0 }}
                 <br />
         <strong>Pantalla: </strong> 
-        {{ notebook.0.screen.prettyDisplay }}
+        {{ notebook.0.screen.pretty_display }}
     </div>
 
 {% endfor %}

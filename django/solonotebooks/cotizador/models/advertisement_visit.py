@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import Advertisement
+from . import Advertisement
 
 class AdvertisementVisit(models.Model):
     referer_url = models.CharField(max_length = 255)

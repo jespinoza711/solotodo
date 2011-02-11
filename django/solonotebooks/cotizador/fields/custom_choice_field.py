@@ -7,3 +7,7 @@ class CustomChoiceField(ChoiceField):
     def set_name(self, name):
         self.name = name
         return self
+        
+    def requires_advanced_controls(self):
+        self.requires_advanced_controls = True
+        return self

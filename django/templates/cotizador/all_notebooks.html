@@ -6,9 +6,9 @@
 
 <h1>Lista de todos los notebooks</h1>
 
-{% for notebook in result_notebooks %}
+{% for product in products %}
 
-<a href="/notebooks/{{notebook.id}}">{{ notebook }} </a>
+<a href="/admin/cotizador/{{product.ptype.adminurlname}}/{{product.id}}">{{ product }} </a>
 <br />
 
 {% endfor %}
