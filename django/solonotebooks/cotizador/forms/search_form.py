@@ -10,8 +10,8 @@ class SearchForm(forms.Form):
             qd['max_price'] = utils.roundToCeil10000(Notebook.objects.filter(is_available = True).aggregate(Max('min_price'))['min_price__max'])
         if 'min_price' not in qd:
             qd['min_price'] = utils.roundToFloor10000(Notebook.objects.filter(is_available = True).aggregate(Min('min_price'))['min_price__min'])
-        if 'ordering' not in qd:
-            qd['ordering'] = '1'
+        #if 'ordering' not in qd:
+        #    qd['ordering'] = '7'
         super(SearchForm, self).__init__(qd)
 
     def get_quick_search_fields(self):
