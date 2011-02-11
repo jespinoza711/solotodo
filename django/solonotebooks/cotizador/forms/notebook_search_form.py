@@ -31,9 +31,8 @@ class NotebookSearchForm(SearchForm):
     ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'), ('7', 'Nuevos modelos'))
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     
-    ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
+    ordering = CustomChoiceField(choices = ordering_choices).set_name('Ordenamiento')
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil').requires_advanced_controls()
-    ntype = ClassChoiceField(NotebookType, 'Uso', widget = forms.HiddenInput())
     
     ordering_direction = forms.IntegerField(widget = forms.HiddenInput())
     advanced_controls = forms.IntegerField(widget = forms.HiddenInput())
