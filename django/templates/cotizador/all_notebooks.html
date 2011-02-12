@@ -8,7 +8,7 @@
 
 {% for product in products %}
 
-<a href="/admin/cotizador/{{product.ptype.adminurlname}}/{{product.id}}">{{ product }} </a>
+<a href="/{{ product.ptype.urlname }}/{{product.id}}">{{ product }} </a>
 <br />
 
 {% endfor %}
