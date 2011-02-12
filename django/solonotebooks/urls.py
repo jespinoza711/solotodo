@@ -71,7 +71,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^all_products/$', 'all_products'),
     (r'^search/$', 'search'),
     (r'^ad_visited/(?P<advertisement_id>\d+)/$', 'ad_visited'),    
-    (r'^(?P<product_type_urlname>\w+)/search/$', 'product_type_search'),
+    (r'^search/$', 'search'),
     (r'^(?P<product_type_urlname>\w+)/catalog/$', 'product_type_catalog'),
     (r'^(?P<product_type_urlname>\w+)/$', 'product_type_index'),
 )

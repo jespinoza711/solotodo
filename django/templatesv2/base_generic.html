@@ -83,9 +83,10 @@
 					<div id="combo-search" class="left">
 						<a href="{% url cotizador.views.index %}" title="Inicio" title="{{ site_name }}" class="left"><img src="/media/cssv2/img/logo.png" /></a>
 						<ol id="search" class="left">
-						    <form method="get" action="{% url cotizador.views.product_type_search ptype.urlname %}">
+						    <form method="get" action="{% url cotizador.views.search %}">
 							<li>
     							    <input name="search_keywords" type="text" class="input-search" />
+    							    <input name="product_type" type="hidden" value="{{ ptype.urlname }}" />
     							    </li>
 							<li><input type="submit" class="btn-search" value=""/></li>
 </form>
@@ -108,7 +109,7 @@
 						<li class="intro-catalogo">Tipos de {{ ptype.displayname }}</li>
 					    {% for category_choice in main_category_choices %}
                             <li {% ifequal category_choice.id main_category_comparison_key %}class="active-menu"{% endifequal %}>
-                                <a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?{{change_ntype_url}}ntype={{ category_choice.id }}" title="{{ category_choice }}">
+                                <a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?{{ change_category_url }}={{ category_choice.id }}" title="{{ category_choice }}">
                                     {{ category_choice }}
                                 </a>
                             </li>
