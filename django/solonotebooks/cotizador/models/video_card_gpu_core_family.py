@@ -6,10 +6,10 @@ class VideoCardGpuCoreFamily(models.Model):
     architecture = models.ForeignKey(VideoCardGpuArchitecture)
     
     def __unicode__(self):
-        return unicode(architecture) + self.name
+        return unicode(self.architecture) + self.name
         
     def raw_text(self):
-        return architecture.raw_text() + ' ' + self.name
+        return self.architecture.raw_text() + ' ' + self.name
     
     class Meta:
         app_label = 'cotizador'

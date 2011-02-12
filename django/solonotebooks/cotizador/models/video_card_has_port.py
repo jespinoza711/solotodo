@@ -6,7 +6,7 @@ class VideoCardHasPort(models.Model):
     quantity = models.IntegerField()
     
     def __unicode__(self):
-        return str(self.quantity) + 'x ' + self.name
+        return str(self.quantity) + 'x ' + str(self.port)
         
     def raw_text(self):
         return self.port.raw_text()

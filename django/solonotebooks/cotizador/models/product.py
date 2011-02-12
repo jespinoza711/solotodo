@@ -35,6 +35,23 @@ class Product(models.Model):
         },                                          
         upload_to = 'notebook_pics',
         generate_on_save = True,)
+        
+    @staticmethod
+    def get_all_ordered():
+        from solonotebooks.cotizador.models import *
+        pts = ProductType.objects.all()
+        result = []
+        for pt in pts:
+            c = eval(pt.classname)
+            result.extend(c.objects.all())
+        return result
+    
+    def save(self):
+        print 'saving'
+        if self.similar_products == '0':
+            print 'laoding similar prducts'
+            self.load_similar_products()
+        super(Product, self).save()
     
     def get_polymorphic_instance(self):
         from solonotebooks.cotizador.models import *
@@ -151,8 +168,11 @@ class Product(models.Model):
         template_file = 'templatetags/div_' + self.ptype.adminurlname + '.html'
         return render_to_string(template_file, { self.ptype.adminurlname: entity })
         
-    def find_similar_products(self):
-        return []
+    def load_similar_products(self):
+        entity = self
+        if entity.__class__.__name__ == 'Product':
+            entity = entity.get_polymorphic_instance()
+        entity.load_similar_products()
         
     def clone_product(self):
         clone_prod = deepcopy(self)

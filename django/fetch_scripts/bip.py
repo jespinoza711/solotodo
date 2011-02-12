@@ -59,8 +59,9 @@ class Bip:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  'categoria=191',    # Netbooks
-                            'categoria=166',    # Notebooks
+        url_extensions = [  'categoria=191',                    # Netbooks
+                            'categoria=166',                    # Notebooks
+                            'categoria=118&categoria_papa=97',  # Tarjetas de video
                             ]
                             
         productLinks = []

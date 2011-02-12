@@ -7,7 +7,7 @@ class VideoCardGpuOpenglVersion(models.Model):
         return str(self.value)
         
     def raw_text(self):
-        return str(self.value)  
+        return 'OpenGL ' + str(self.value)  
     
     class Meta:
         app_label = 'cotizador'
