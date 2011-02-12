@@ -3,7 +3,7 @@ import os
 import sys
 import hashlib
 import operator
-import simplejson, urllib
+import urllib
 from datetime import date, timedelta
 from time import time
 from math import ceil
@@ -11,7 +11,6 @@ from django.db.models import Min, Max, Q
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils import simplejson 
 from django.utils.http import urlquote
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
