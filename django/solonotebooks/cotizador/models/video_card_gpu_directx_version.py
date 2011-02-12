@@ -7,7 +7,7 @@ class VideoCardGpuDirectxVersion(models.Model):
         return str(self.value)
         
     def raw_text(self):
-        return str(self.value)  
+        return 'DirectX ' + str(self.value)  
     
     class Meta:
         app_label = 'cotizador'

@@ -43,6 +43,8 @@ class Notebook(Product):
     video_card = models.ManyToManyField(NotebookVideoCard)
     video_port = models.ManyToManyField(NotebookVideoPort)
     storage_drive = models.ManyToManyField(NotebookStorageDrive)
+    
+    # Interface methods
         
     def raw_text(self):
         result = ''
@@ -77,6 +79,63 @@ class Notebook(Product):
         
     def __unicode__(self):
         return unicode(self.line) + ' ' + self.name
+        
+    def load_similar_products(self):
+        threshold = 4
+        ntbks = Notebook.objects.filter(is_available = True).filter(~Q(id = self.id))
+        
+        max_card_type = self.video_card.all().aggregate(Max('card_type'))['card_type__max']
+        ntbks_gpu = ntbks.filter(video_card__card_type__id = max_card_type).distinct()
+                
+        ntbks_cpu = ntbks.filter(processor__line__family__id = self.processor.line.family.id)
+
+        ntbks_lcd = ntbks.filter(screen__size__family__id = self.screen.size.family.id)
+        
+        ntbks_brand = ntbks.filter(line__brand__id = self.line.brand.id)        
+                
+        result_notebooks = [[ntbk, 0] for ntbk in ntbks]
+        
+        for result_notebook in result_notebooks:
+            if result_notebook[0] in ntbks_gpu:
+                result_notebook[1] += max_card_type * max_card_type
+            if result_notebook[0] in ntbks_cpu:
+                result_notebook[1] += 1
+            if result_notebook[0] in ntbks_lcd:
+                result_notebook[1] += 1
+            if result_notebook[0] in ntbks_brand:
+                result_notebook[1] += 1
+            if result_notebook[0].screen.is_touchscreen and self.screen.is_touchscreen:
+                result_notebook[1] += 5
+            result_notebook[1] -= abs(self.min_price - result_notebook[0].min_price) / 100000
+            result_notebook[1] = -result_notebook[1]
+        
+        sorted_result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1))
+        if len(sorted_result_notebooks) > threshold:
+            sorted_result_notebooks = sorted_result_notebooks[0:threshold]
+        
+        ntbks = [str(result_notebook[0].id) for result_notebook in sorted_result_notebooks]
+        self.similar_products = ','.join(ntbks)
+        
+    @staticmethod
+    def get_valid():
+        return Notebook.objects.filter(is_available = True)
+    
+    def clone_product(self):
+        clone_prod = super(Notebook, self).clone_product()
+
+        for video_card in self.video_card.all():
+            clone_prod.video_card.add(video_card)
+
+        for video_port in self.video_port.all():
+            clone_prod.video_port.add(video_port)
+
+        for storage_drive in self.storage_drive.all():
+            clone_prod.storage_drive.add(storage_drive)
+
+        clone_prod.save()
+        return clone_prod
+        
+    # Custom methods
         
     def prettyBattery(self):
         if (self.battery_cells == 0 and self.battery_mwh == 0 and self.battery_mv == 0 and self.battery_mah == 0):
@@ -119,44 +178,6 @@ class Notebook(Product):
             for video_port in self.video_port.all():
                 videoPorts.append(unicode(video_port))
             return ' | '.join(videoPorts)
-
-            
-    def find_similar_products(self):
-        threshold = 4
-        ntbks = Notebook.objects.filter(is_available = True).filter(~Q(id = self.id))
-        
-        max_card_type = self.video_card.all().aggregate(Max('card_type'))['card_type__max']
-        ntbks_gpu = ntbks.filter(video_card__card_type__id = max_card_type).distinct()
-                
-        ntbks_cpu = ntbks.filter(processor__line__family__id = self.processor.line.family.id)
-
-        ntbks_lcd = ntbks.filter(screen__size__family__id = self.screen.size.family.id)
-        
-        ntbks_brand = ntbks.filter(line__brand__id = self.line.brand.id)        
-                
-        result_notebooks = [[ntbk, 0] for ntbk in ntbks]
-        
-        for result_notebook in result_notebooks:
-            if result_notebook[0] in ntbks_gpu:
-                result_notebook[1] += max_card_type * max_card_type
-            if result_notebook[0] in ntbks_cpu:
-                result_notebook[1] += 1
-            if result_notebook[0] in ntbks_lcd:
-                result_notebook[1] += 1
-            if result_notebook[0] in ntbks_brand:
-                result_notebook[1] += 1
-            if result_notebook[0].screen.is_touchscreen and self.screen.is_touchscreen:
-                result_notebook[1] += 5
-            result_notebook[1] -= abs(self.min_price - result_notebook[0].min_price) / 100000
-            result_notebook[1] = -result_notebook[1]
-        
-        sorted_result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1))
-        if len(sorted_result_notebooks) > threshold:
-            sorted_result_notebooks = sorted_result_notebooks[0:threshold]
-        
-        ntbks = [result_notebook[0] for result_notebook in sorted_result_notebooks]
-
-        return ntbks
             
     def determine_type(self):
         types = NotebookType.objects.all()
@@ -169,25 +190,6 @@ class Notebook(Product):
                 base_score = score
                 
         self.ntype = current_type
-
-    @staticmethod
-    def get_valid():
-        return Notebook.objects.filter(is_available = True)
-    
-    def clone_product(self):
-        clone_prod = super(Notebook, self).clone_product()
-
-        for video_card in self.video_card.all():
-            clone_prod.video_card.add(video_card)
-
-        for video_port in self.video_port.all():
-            clone_prod.video_port.add(video_port)
-
-        for storage_drive in self.storage_drive.all():
-            clone_prod.storage_drive.add(storage_drive)
-
-        clone_prod.save()
-        return clone_prod
     
     class Meta:
         app_label = 'cotizador'

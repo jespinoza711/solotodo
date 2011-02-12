@@ -35,12 +35,17 @@ def manager_login_required(f):
     wrap.__name__ = f.__name__
     return wrap
     
+def append_manager_ptype_to_response(request, template, args):
+    ptype = ProductType.objects.get(classname = 'Notebook')
+    args['ptype'] = ptype
+    return append_ads_to_response(request, template, args)
+    
 @manager_login_required    
 def news(request):
     # Shows the logs for the last week
     today = date.today()
     last_logs = LogEntry.objects.filter(date__gte = today - timedelta(days = 1)).order_by('-date').all()
-    return append_ads_to_response(request, 'manager/news.html', {
+    return append_manager_ptype_to_response(request, 'manager/news.html', {
             'last_logs': last_logs,
         })
         
@@ -49,7 +54,7 @@ def comments(request):
     # Shows the comments pending for aproval
     due_comments = ProductComment.objects.filter(validated = False)
     app_comments = ProductComment.objects.filter(validated = True).filter(date__gte = date.today() - timedelta(days = 2)).order_by('-date').all()
-    return append_ads_to_response(request, 'manager/comments.html', {
+    return append_manager_ptype_to_response(request, 'manager/comments.html', {
             'due_comments': due_comments,
             'app_comments': app_comments,            
         })
@@ -58,7 +63,7 @@ def comments(request):
 def new_entities(request):
     # Shows the models that don't have an associated product in the DB (i.e.: pending)
     new_entities = StoreHasProductEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shp__isnull = True)
-    return append_ads_to_response(request, 'manager/new_entities.html', {
+    return append_manager_ptype_to_response(request, 'manager/new_entities.html', {
             'new_entities': new_entities,
         })
         
@@ -72,25 +77,29 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             product = form.cleaned_data['product']
             store = form.cleaned_data['store']
             
-            shps = StoreHasProduct.objects.filter(store = store).filter(product = product)
-            if shps:
-                shp = shps[0]
-            else:
-                shp = StoreHasProduct()
-                shp.product = product
-                shp.store = store
-                shp.save()
-               
-            print shp.id 
+            shp, created = StoreHasProduct.objects.get_or_create(store = store, product = product)
+
             shpe.shp = shp
             shpe.save()
-            return HttpResponseRedirect('/manager/new_products')
+            if created:
+                shp.shpe = shpe
+                shp.save()
+            return HttpResponseRedirect('/manager/new_entities')
     else:
-        form = StoreHasProductEntityEditForm()
+        d = {}
+        for store in Store.objects.all():
+            if store.url in shpe.url:
+                d['store'] = store
+                break
+            
+        form = StoreHasProductEntityEditForm(d)
         
-    return append_ads_to_response(request, 'manager/store_has_product_entity_edit.html', {
+    options = Product.get_all_ordered()
+        
+    return append_manager_ptype_to_response(request, 'manager/store_has_product_entity_edit.html', {
         'shpe_form': form,
-        'shpe': shpe
+        'shpe': shpe,
+        'options': options
     })
         
 @manager_login_required
@@ -178,7 +187,7 @@ def analyze_searches(request):
         else:
             results[field]['meta']['is_available'] = False
             
-    return append_ads_to_response(request, 'manager/analyze_searches.html', {
+    return append_manager_ptype_to_response(request, 'manager/analyze_searches.html', {
                 'form': sf,
                 'results': results,
                 'num_queries': num_queries,

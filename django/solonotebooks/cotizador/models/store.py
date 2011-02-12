@@ -13,5 +13,6 @@ class Store(models.Model):
         return unicode(self.name)
     
     class Meta:
+        ordering = ['name']
         app_label = 'cotizador'
         verbose_name = 'Store'
