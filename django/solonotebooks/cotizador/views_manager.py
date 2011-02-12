@@ -71,18 +71,13 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             product = form.cleaned_data['product']
             store = form.cleaned_data['store']
             
-            shps = StoreHasProduct.objects.filter(store = store).filter(product = product)
-            if shps:
-                shp = shps[0]
-            else:
-                shp = StoreHasProduct()
-                shp.product = product
-                shp.store = store
-                shp.save()
-               
-            print shp.id 
+            shp, created = StoreHasProduct.objects.get_or_create(store = store, product = product)
+
             shpe.shp = shp
             shpe.save()
+            if created:
+                shp.shpe = shpe
+                shp.save()
             return HttpResponseRedirect('/manager/new_entities')
     else:
         form = StoreHasProductEntityEditForm()
