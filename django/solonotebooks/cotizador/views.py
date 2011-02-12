@@ -283,7 +283,7 @@ def browse(request):
     
 # View for displaying every single notebook in the DB
 def all_notebooks(request):
-    products = [product.get_polymorphic_instance() for product in Product.objects.all()]
+    products = [product.get_polymorphic_instance() for product in Product.get_all_ordered()]
     
     return append_ads_to_response(request, 'cotizador/all_notebooks.html', {
         'products': products
