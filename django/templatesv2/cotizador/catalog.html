@@ -1,7 +1,7 @@
 {% extends "cotizador/base_catalog.html" %}
 
 {% block title %}
-    {{ form.generateTitle }} - {{ site_name }}
+    {{ form.generate_title }} - {{ site_name }}
 {% endblock %}
 
 {% block catalog_content %}
@@ -27,7 +27,7 @@
 	    <input type="hidden" id="current_url" value="{{ current_url }}" />
 		<span>Ordenar por</span>
 		<select id="ordering_options">
-            {% for ordering_criteria in form.getOrderingOptions %}
+            {% for ordering_criteria in form.get_ordering_options %}
                 {% ifequal ordering ordering_criteria.0 %}
                     <option value="{{ ordering_criteria.0 }}" selected="selected">{{ ordering_criteria.1 }}</option>            
                 {% else %}
@@ -55,7 +55,7 @@
 <div id="pagination">
     {% ifnotequal page_count 0 %}
         {% ifnotequal page_number 1 %}
-		    <a href="{{ form.generateBasePageLink }}{{ prev_page }}" title="Anterior">&laquo; Anterior</a>                        
+		    <a href="{{ form.generate_base_page_link }}{{ prev_page }}" title="Anterior">&laquo; Anterior</a>                        
         {% endifnotequal %}
         {% ifnotequal left_page 1 %}
             ...
@@ -64,7 +64,7 @@
             {% ifequal page page_number %}
                 <span class="page-active">Pagina: {{ page }}</span>
             {% else %}
-			    <a href="{{ form.generateBasePageLink }}{{ page }}" title="Numero pagina">{{ page }}</a>
+			    <a href="{{ form.generate_base_page_link }}{{ page }}" title="Numero pagina">{{ page }}</a>
             {% endifequal %}
         {% endfor %}
         {% ifnotequal right_page page_count %}

@@ -25,12 +25,7 @@ from utils import *
     
 # Main landing page (/)    
 def index(request):
-    url = reverse('cotizador.views.product_type_index', kwargs = {'product_type_urlname': 'notebooks'})
-    return HttpResponseRedirect(url)
-    
-def search(request):
-    url = reverse('cotizador.views.product_type_search', kwargs = {'product_type_urlname': 'notebooks'})
-    url += concat_dictionary(request.GET)
+    url = reverse('solonotebooks.cotizador.views.product_type_index', kwargs = {'product_type_urlname': 'notebooks'})
     return HttpResponseRedirect(url)
     
 def product_type_index(request, product_type_urlname):
@@ -57,7 +52,7 @@ def product_type_catalog(request, product_type_urlname):
     search_form.save()
     
     # Grab all the candidates (those currently available)
-    result_products, ordering_direction = search_form.filter_products(product_type_class.get_valid())
+    result_products = search_form.filter_products(product_type_class.get_valid())
     num_results = len(result_products)
     
     page_count = ceil(len(result_products) / 10.0);        
@@ -78,8 +73,6 @@ def product_type_catalog(request, product_type_urlname):
     if last_result_index > num_results:
         last_result_index = num_results
     result_products = result_products[first_result_index - 1 : last_result_index]
-    
-    product_link_args = search_form.generateProdutLinkArgs()
 
     d = dict(NotebookSearchForm.price_choices)
     
@@ -88,12 +81,12 @@ def product_type_catalog(request, product_type_urlname):
         'max_price': d[str(search_form.max_price)], 
         'min_price': d[str(search_form.min_price)],
         'remove_filter_links': search_form.generate_remove_filter_links(),
-        'change_ntype_url': search_form.generate_url_without_ntype(),
+        'change_category_url': search_form.generate_url_without_main_category(),
         'num_results': num_results,
         'first_result_index': first_result_index,
         'last_result_index': last_result_index,
         'products': result_products,
-        'current_url': search_form.generateUrlWithoutOrdering(),
+        'current_url': search_form.generate_url_without_ordering(),
         'page_number': search_form.page_number,
         'prev_page': search_form.page_number - 1,
         'post_page': search_form.page_number + 1,
@@ -128,13 +121,23 @@ def store_index(request):
         'ptype': ProductType.default()
     })  
     
-def product_type_search(request, product_type_urlname):
-    ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
-    product_type_class = ptype.get_class()
-
-    url = reverse('cotizador.views.product_type_index', kwargs = {'product_type_urlname': ptype.urlname})
-        
+def search(request):
+    ptype = None
+    url = reverse('solonotebooks.cotizador.views.index')
+    
     try:
+        if 'product_type' in request.GET:
+            ptype = ProductType.objects.get(urlname = request.GET['product_type'])
+    except:
+        return HttpResponseRedirect(url)
+        
+    product_type_class = Product
+    
+    if ptype:
+        url = reverse('solonotebooks.cotizador.views.product_type_index', kwargs = {'product_type_urlname': ptype.urlname})
+        product_type_class = ptype.get_class()
+
+    try:    
         query = request.GET['search_keywords']
         if not query:
             return HttpResponseRedirect(url)
@@ -186,7 +189,7 @@ def product_type_search(request, product_type_urlname):
         'page_range': pages,
         'left_page': left_page,
         'right_page': right_page,        
-        'ptype': ptype
+        'ptype': ProductType.default()
     })
     
 def append_ads_to_response(request, template, args):

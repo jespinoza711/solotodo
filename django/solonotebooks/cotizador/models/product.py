@@ -45,11 +45,13 @@ class Product(models.Model):
             c = eval(pt.classname)
             result.extend(c.objects.all())
         return result
+        
+    @staticmethod
+    def get_valid():
+        return Product.objects.filter(is_available = True)
     
     def save(self):
-        print 'saving'
         if self.similar_products == '0':
-            print 'laoding similar prducts'
             self.load_similar_products()
         super(Product, self).save()
     

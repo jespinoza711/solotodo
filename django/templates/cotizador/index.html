@@ -1,6 +1,6 @@
 {% extends "cotizador/base_browse.html" %}
 
-{% block title %}SoloNotebooks - {{ form.generateTitle }}{% endblock %}
+{% block title %}SoloNotebooks - {{ form.generate_title }}{% endblock %}
 
 {% block header %}
 <script type="text/javascript" src="/media/js/browse_script.js"></script>
@@ -31,7 +31,7 @@
     <input type="hidden" id="current_ordering_direction" value="{{ ordering_direction }}" />
     <h3>Ordenar por:</h3>
     <select id="ordering_options">
-        {% for ordering_criteria in form.getOrderingOptions %}
+        {% for ordering_criteria in form.get_ordering_options %}
             {% ifequal ordering ordering_criteria.0 %}
                 <option value="{{ ordering_criteria.0 }}" selected="selected">{{ ordering_criteria.1 }}</option>            
             {% else %}
