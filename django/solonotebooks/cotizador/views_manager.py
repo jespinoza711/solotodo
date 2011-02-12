@@ -88,9 +88,12 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
     else:
         form = StoreHasProductEntityEditForm()
         
+    options = Product.get_all_ordered()
+        
     return append_ads_to_response(request, 'manager/store_has_product_entity_edit.html', {
         'shpe_form': form,
-        'shpe': shpe
+        'shpe': shpe,
+        'options': options
     })
         
 @manager_login_required

@@ -48,7 +48,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
 )
 
-urlpatterns += patterns('cotizador.views_manager',
+urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/$', 'news'),
     (r'^manager/news/$', 'news'),
     (r'^manager/comments/$', 'comments'),

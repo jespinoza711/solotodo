@@ -9,6 +9,7 @@ from copy import deepcopy
 from utils import prettyPrice
 from solonotebooks import settings
 from django.template.loader import render_to_string
+from itertools import chain
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
@@ -51,6 +52,16 @@ class Product(models.Model):
         
     def pretty_min_price(self):
         return prettyPrice(self.min_price)
+    
+    @staticmethod    
+    def get_all_ordered():
+        from solonotebooks.cotizador.models import *
+        pts = ProductType.objects.all()
+        result = []
+        for pt in pts:
+            c = eval(pt.classname)
+            result.extend(c.objects.all())
+        return result
         
     def create_miniature(self):
         return { 

@@ -7,7 +7,14 @@
 <h2><a href="{{ shpe.url }}">{{ shpe }}</a></h2>
 
 <form method="post" action="">
-    {{ shpe_form.as_p }}
+    <select id="id_product" name="product">
+        {% for option in options %}
+            <option value="{{ option.id }}">{{ option }}</option>
+        {% endfor %}
+    </select>
+        
+    </input>
+    {{ shpe_form.store }}
     <p>
         <input type="submit" value="Guardar" />
     </p>
