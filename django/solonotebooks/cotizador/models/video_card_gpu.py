@@ -1,4 +1,6 @@
 from django.db import models
+import mechanize
+from BeautifulSoup import BeautifulSoup
 from solonotebooks.cotizador.models import VideoCardGpuManufacturingProcess, VideoCardGpuCore, VideoCardGpuLine, VideoCardGpuDirectxVersion, VideoCardGpuOpenglVersion, VideoCardGpuPowerConnector, VideoCardGpuCoreCount
 
 class VideoCardGpu(models.Model):
