@@ -57,8 +57,8 @@
     padding-top: 35px;
 }
 
-.mytable tbody tr:nth-child(2n) td, .mytable tbody tr.even td {
-    background-color: inherit;
+#mytable tr td {
+    background-color: #ffffff;
 }
 
 .table_product_detail_prices {
@@ -239,4 +239,12 @@ hr.product_details_comment_separator {
 .processor_image_container {
     float: left;
     margin: 0px 5px 5px 0px;
+}
+
+.sub_ul {
+    margin-left: 20px;
+}
+
+.selected_processor td {
+    font-weight: bold;
 }

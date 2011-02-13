@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from solonotebooks.cotizador.models import Product, VideoCardGpu, VideoCardMemoryBusWidth, VideoCardMemoryQuantity, VideoCardMemoryType, VideoCardBrand, VideoCardBus, VideoCardProfile, VideoCardSlotType, VideoCardRefrigeration, VideoCardHasPort
 
 class VideoCard(Product):
@@ -43,8 +44,8 @@ class VideoCard(Product):
         
     def load_similar_products(self):
         threshold = 4
-        video_cards = VideoCard.get_valid().filter(gpu = self.gpu)[:threshold]
-        self.similar_products = ','.join([video_card.id for video_card in video_cards])
+        video_cards = VideoCard.get_valid().filter(gpu = self.gpu).filter(~Q(id = self.id))[:threshold]
+        self.similar_products = ','.join([str(video_card.id) for video_card in video_cards])
         
     @staticmethod
     def get_valid():

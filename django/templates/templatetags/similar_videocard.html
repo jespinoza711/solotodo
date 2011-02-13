@@ -1,0 +1,15 @@
+<div class="product_container">
+    <div class="product_thumb_image">
+        <a href="{% url solonotebooks.cotizador.views.product_details videocard.id %}">{{ videocard.picture.thumbnail_tag }}</a>
+    </div>
+    <div class="similar_product_stats">
+            <a href="{% url solonotebooks.cotizador.views.product_details videocard.id %}">
+    	        {{ videocard }}
+            </a>
+    	    <p>
+            	{{ videocard.gpu }} <br />
+                {{ videocard.pretty_memory }}<br />
+    	        <strong>{{ videocard.pretty_min_price }}</strong>
+            </p>
+    </div>
+</div>

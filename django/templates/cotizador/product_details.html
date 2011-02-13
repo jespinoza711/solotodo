@@ -1,6 +1,6 @@
 {% extends "cotizador/base_catalog.html" %}
 
-{% block title %}SoloAsdf - {{ product }}{% endblock %}
+{% block title %}{{site_name}} - {{ product }}{% endblock %}
 
 {% block catalog_header_content %}
     <link href="/media/css/galleria.css" rel="stylesheet" type="text/css" media="screen" /> 
@@ -36,7 +36,7 @@
     </div>
     <br class="clear" />
     <div class="price_table_container">
-        <table class="table_product_detail_prices mytable">
+        <table id="mytable" class="table_product_detail_prices">
             <tr>
                 <th>Tienda</th>
                 <th>Precio</th>
@@ -64,7 +64,7 @@
     
     <div id="price_suggestion_box">
         {% if not subscription %}
-        <table class="mytable">
+        <table id="mytable">
             <tr>
                 <td>
                     <a href="" class="subscribe_link">
@@ -96,7 +96,7 @@
         </table>
         {% else %}
             {% if subscription.email_notifications %}
-                <table>
+                <table id="mytable">
                     <tr>
                         <td>
                             <img src="/media/assets/subscribe-icon.png" />
@@ -150,7 +150,7 @@
     </div>
 
     <div class="similar_products">
-        <h3>Notebooks similares</h3>
+        <h3>{{ ptype.indexname }} similares</h3>
         {% for ntbk in similar_products %}
             {{ ntbk.render_similar }}
         {% endfor %}

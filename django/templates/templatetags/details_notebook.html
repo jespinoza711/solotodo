@@ -21,7 +21,7 @@
     {% ifequal notebook.video_card.all.count 1 %}
         <a href="/video_card_line/{{notebook.video_card.all.0.line.id}}/?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
     {% else %}
-        <ul>
+        <ul class="sub_ul">
             {% for video_card in notebook.video_card.all %}
             <li><a href="/video_card_line/{{video_card.line.id}}/?video_card={{video_card.id}}">{{ video_card }}</a></li>
         {% endfor %}

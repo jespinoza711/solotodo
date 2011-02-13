@@ -1,0 +1,33 @@
+<h1>{{ videocard }}</h1>
+<h3 class="subtitle">Especificaciones esenciales</h3>
+<strong>Fabricante: </strong> {{ videocard.brand }}
+<br />
+<strong>GPU: </strong> <a href="{% url solonotebooks.cotizador.views_videocards.gpu_details videocard.gpu.id %}">{{ videocard.gpu }}</a>
+<br />
+<strong>Memoria: </strong> {{ videocard.pretty_memory }}
+<br />
+<strong>Bus: </strong> {{ videocard.bus }}
+<br />
+<strong>Frecuencias: </strong>
+    <ul class="sub_ul">
+        <li><i>Core:</i> {{ videocard.core_clock }} MHz</li>
+        <li><i>Shaders:</i> {{ videocard.shader_clock }} MHz</li>
+        <li><i>Memorias:</i> {{ videocard.memory_clock }} MHz</li>
+    </ul>
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Núcleo: </strong> {{ videocard.gpu.core.pretty_display }}
+<br />
+<strong>Perfil: </strong> {{ videocard.profile }}
+<br />
+<strong>Refrigeración: </strong> {{ videocard.refrigeration }}
+<br/>    
+<strong>Slots: </strong> {{ videocard.slot_type }}
+<br/>    
+<strong>Conectores de poder: </strong> {{ videocard.gpu.power_connectors }}
+<br />    
+<strong>Puertos de video: </strong>
+<ul class="sub_ul">
+    {% for port in videocard.video_ports.all %}
+        <li>{{ port }}</li>
+    {% endfor %}
+</ul>

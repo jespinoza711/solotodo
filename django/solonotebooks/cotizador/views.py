@@ -121,20 +121,20 @@ def store_index(request):
     })  
     
 def search(request):
-    ptype = None
+    ptype = ProductType.default()
     url = reverse('solonotebooks.cotizador.views.index')
     
     try:
         if 'product_type' in request.GET:
             ptype = ProductType.objects.get(urlname = request.GET['product_type'])
+
     except:
         return HttpResponseRedirect(url)
         
     product_type_class = Product
     
-    if ptype:
-        url = reverse('solonotebooks.cotizador.views.product_type_index', kwargs = {'product_type_urlname': ptype.urlname})
-        product_type_class = ptype.get_class()
+    url = reverse('solonotebooks.cotizador.views.product_type_index', kwargs = {'product_type_urlname': ptype.urlname})
+    product_type_class = ptype.get_class()
 
     try:    
         query = request.GET['search_keywords']
