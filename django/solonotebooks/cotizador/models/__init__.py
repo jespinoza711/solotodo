@@ -74,6 +74,7 @@ from solonotebooks.cotizador.models.mail_lost_product import MailLostProduct
 from solonotebooks.cotizador.models.mail_revive_product import MailReviveProduct
 from solonotebooks.cotizador.models.product_comparison_list import ProductComparisonList
 from solonotebooks.cotizador.models.product_visit import ProductVisit
+from solonotebooks.cotizador.models.video_card_brand import VideoCardBrand
 from solonotebooks.cotizador.models.video_card_gpu_brand import VideoCardGpuBrand
 from solonotebooks.cotizador.models.video_card_gpu_family import VideoCardGpuFamily
 from solonotebooks.cotizador.models.video_card_gpu_line import VideoCardGpuLine
@@ -176,6 +177,7 @@ __all__ = [
             'ProductComparisonList',
             'ProductVisit',       
             'ProductType',
+            'VideoCardBrand',
             'VideoCardGpuBrand',
             'VideoCardGpuFamily',
             'VideoCardGpuLine',

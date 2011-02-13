@@ -51,28 +51,26 @@
 		<div id="head">
 			<div id="content-head" class="container">
 				
-				<div id="nav-user">
+				<div id="nav-user" class="nav-mine">
 					{% if authenticated_user %}    
                         <div id="logout">
                             <div>
                                 <span id="logout_links">
-                                {{ username }} | <a href="{% url cotizador.views_account.subscriptions %}">Mis Productos</a> | <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}">Logout</a>
+                                {{ username }} | <a href="{% url cotizador.views_account.subscriptions %}" class="toplink">Mis Productos</a> | <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="toplink">Logout</a>
                                 </span>
                             </div>
                         </div>            
                     {% else %}
                         <div id="login">
                             <form id="login-form" method="post" action="/account/login/{% if next %}?next={{ next|iriencode }}{% endif %}">
-                                Nombre: <input class="login_input" type="text" name="username" id="username">
+                                <span class="toplink">Nombre:</span> <input class="login_input" type="text" name="username" id="username">
                                 &nbsp;
-                                Contraseña: <input class="login_input" type="password" name="password" id="password">
+                                <span class="toplink">Contraseña:</span> <input class="login_input" type="password" name="password" id="password">
                                 <input type="submit" value="Entrar" class="login_button" />
-                            </form>
-                            <div id="login_options">
                                 &nbsp;
-                                <span><a href="" class="register_link">Registrarse</a> | <a href="" class="regenerate_link">¿Olvidaste tu contraseña?</a>
+                                <span><a href="" id="register_link" class="register_link toplink">Registrarse</a> | <a href="" class="regenerate_link toplink">¿Olvidaste tu contraseña?</a>
                                 </span>
-                            </div>
+                            </form>
                         </div>
                     {% endif %}
 					

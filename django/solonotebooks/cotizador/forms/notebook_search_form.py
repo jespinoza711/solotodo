@@ -9,12 +9,12 @@ from datetime import date
 from . import SearchForm
 
 class NotebookSearchForm(SearchForm):
-    notebook_brand = ClassChoiceField(NotebookBrand, 'Marca', in_quick_search = True)
+    notebook_brand = ClassChoiceField(NotebookBrand, 'Marca', in_quick_search = True, quick_search_name = 'Marca')
     notebook_line = ClassChoiceField(NotebookLine, 'Línea', requires_advanced_controls = True)
     processor_brand = ClassChoiceField(NotebookProcessorBrand, 'Marca')
-    processor_line_family = ClassChoiceField(NotebookProcessorLineFamily, 'Línea', in_quick_search = True)
+    processor_line_family = ClassChoiceField(NotebookProcessorLineFamily, 'Línea', in_quick_search = True, quick_search_name = 'Procesador')
     processor = ClassChoiceField(NotebookProcessor, 'Modelo', requires_advanced_controls = True)
-    ram_quantity = ClassChoiceField(NotebookRamQuantity, 'Cant. min.', in_quick_search = True)
+    ram_quantity = ClassChoiceField(NotebookRamQuantity, 'Cant. min.', in_quick_search = True, quick_search_name = 'RAM')
     ram_type = ClassChoiceField(NotebookRamType, 'Tipo', requires_advanced_controls = True)
     storage_type = ClassChoiceField(NotebookStorageDriveType, 'Tipo', requires_advanced_controls = True)
     storage_capacity = ClassChoiceField(NotebookStorageDriveCapacity, 'Cant. min.')
@@ -23,7 +23,7 @@ class NotebookSearchForm(SearchForm):
     operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Nombre')
     video_card_brand = ClassChoiceField(NotebookVideoCardBrand, 'Marca', requires_advanced_controls = True)
     video_card_line = ClassChoiceField(NotebookVideoCardLine, 'Línea', requires_advanced_controls = True)
-    video_card_type = ClassChoiceField(NotebookVideoCardType, 'Tipo', in_quick_search = True)
+    video_card_type = ClassChoiceField(NotebookVideoCardType, 'Tipo', in_quick_search = True, quick_search_name = 'Tarjeta de video')
     video_card = ClassChoiceField(NotebookVideoCard, 'Modelo', requires_advanced_controls = True)
     
     ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Capacidad para juegos'), ('4', 'Cantidad de RAM'),
@@ -220,7 +220,7 @@ class NotebookSearchForm(SearchForm):
         if self.min_price:
             notebooks = notebooks.filter(min_price__gte = int(self.min_price))
 
-        if self.max_price and self.max_price != 1000000:
+        if self.max_price and self.max_price != int(self.price_choices[-1][0]):
             notebooks = notebooks.filter(min_price__lte = int(self.max_price))
             
         # Check the ordering orientation, if it is not set, each criteria uses 
