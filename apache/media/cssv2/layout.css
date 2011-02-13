@@ -419,8 +419,8 @@ div#login {padding-left: 8px;}
 
 -------------------------------------------------------------- */
 
-#ad-top {margin-top: 20px;}
-#ad-top a {margin-left: 110px;}
+#ad_top {margin-top: 20px;}
+#ad_top a {margin-left: 110px;}
 
 #content {background: #fff; min-height: 700px; margin-top: 20px; }
 #left {float: left; width: 640px; margin-right: 20px;}
@@ -474,8 +474,8 @@ div#login {padding-left: 8px;}
 
 .content-producto {
  display:block;
- margin-left: 10px;
- width: 520px;
+ margin-left: 20px;
+ width: 500px;
  float: left;
  font-size: 12px;
  line-height: 16px;

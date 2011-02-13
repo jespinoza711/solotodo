@@ -60,7 +60,7 @@ def send_change_mail(user):
         user.get_profile().save()        
     
 def send_confirmation_mail_from_template(user, template):
-    subject = 'Confirmación correo electrónico de SoloNotebooks'
+    subject = 'Confirmación correo electrónico de ' + settings.SITE_NAME
     user_digest = hashlib.sha224(settings.SECRET_KEY + user.username + user.email).hexdigest()
     
     t = get_template(template)
@@ -69,7 +69,7 @@ def send_confirmation_mail_from_template(user, template):
     send_email(user, subject, t, args)
     
 def send_password_regeneration_mail(user):
-    subject = 'Regeneración de contraseña de SoloNotebooks'
+    subject = 'Regeneración de contraseña de ' + settings.SITE_NAME
     user_digest = hashlib.sha224(settings.SECRET_KEY + user.username + user.password).hexdigest()
     
     t = get_template('mails/password_regeneration_mail.html')
@@ -77,7 +77,7 @@ def send_password_regeneration_mail(user):
     send_email(user, subject, t, args)    
     
 def send_new_password_mail(user, new_password):
-    subject = 'Nueva contraseña de SoloNotebooks'
+    subject = 'Nueva contraseña de ' + settings.SITE_NAME
     
     t = get_template('mails/new_password_mail.html')
     args = {'new_password': new_password}
@@ -96,7 +96,7 @@ def initialize_search_form(data, ptype = ProductType.default()):
     
 def set_subscription_mail_notifications(request, subscription_id, new_mail_notification_status):
     try:
-        subscription = NotebookSubscription.objects.get(pk = subscription_id)
+        subscription = ProductSubscription.objects.get(pk = subscription_id)
         if subscription.user != request.user or not subscription.is_active:
             raise SubscriptionException('Error de seguridad')
         subscription.email_notifications = new_mail_notification_status

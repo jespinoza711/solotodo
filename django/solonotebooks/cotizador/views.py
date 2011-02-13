@@ -81,7 +81,6 @@ def product_type_catalog(request, product_type_urlname):
         'max_price': d[str(search_form.max_price)], 
         'min_price': d[str(search_form.min_price)],
         'remove_filter_links': search_form.generate_remove_filter_links(),
-        'change_category_url': search_form.generate_url_without_main_category(),
         'num_results': num_results,
         'first_result_index': first_result_index,
         'last_result_index': last_result_index,
@@ -148,8 +147,8 @@ def search(request):
     available_products = product_type_class.get_valid()
     
     # For each one, we assign a score base on how many of the keywords match a 
-    # huge single line description of the notebook stored in the DB
-    result_products = [[ntbk, stringCompare(ntbk.long_description, query)] for ntbk in available_products]
+    # huge single line description of the product stored in the DB
+    result_products = [[prod, stringCompare(prod.long_description, query)] for prod in available_products]
     # If the hit is too low (< 10%) they are eliminated
     result_products = filter(lambda(x): x[1] > 10, result_products) 
     # Finally we sort them from highest to lowest hit rate
@@ -189,7 +188,7 @@ def search(request):
         'page_range': pages,
         'left_page': left_page,
         'right_page': right_page,        
-        'ptype': ProductType.default()
+        'ptype': ptype
     })
     
 def append_ads_to_response(request, template, args):
@@ -234,6 +233,9 @@ def append_user_to_response(request, template, args):
     if 'form' not in args:
         args['form'] = initialize_search_form(request.GET, ptype)
         
+        
+    args['change_category_url'] = args['form'].generate_url_without_main_category()
+        
     search_form = args['form']
     main_category_choices = [Category()]
     main_category_choices.extend(list(search_form.main_category().choices.queryset))
@@ -247,7 +249,7 @@ def append_user_to_response(request, template, args):
     
     return render_to_response(template, args)
     
-# View for displaying every single notebook in the DB
+# View for displaying every single product in the DB
 def all_products(request):
     result = []
     product_types = ProductType.objects.all()
@@ -300,7 +302,7 @@ def product_details(request, product_id):
             product_comment.date = date.today()        
             rawComment = commentForm.cleaned_data['comments']
             product_comment.comments = rawComment.replace('\n', '<br />')
-            product_comment.notebook = product
+            product_comment.product = product
             if not request.user.is_anonymous():
                 product_comment.user = request.user
                 product_comment.validated = True
@@ -312,7 +314,7 @@ def product_details(request, product_id):
             return HttpResponseRedirect(request.META['HTTP_REFERER']);
     else:
         nv = ProductVisit()
-        nv.notebook = product
+        nv.product = product
         nv.save()
         commentForm = ProductCommentForm()
 
@@ -323,7 +325,7 @@ def product_details(request, product_id):
         request.session['posted_comment'] = False
     
     
-    # Find the stores with this notebook available
+    # Find the stores with this product available
     stores_with_product_available = product.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')
         
     similar_products_ids = product.similar_products.split(',')
@@ -331,11 +333,12 @@ def product_details(request, product_id):
     
     try:
         product_subscription = ProductSubscription.objects.filter(user = request.user, product = product, is_active = True)[0]
+        print product_subscription
     except:
         product_subscription = None
     
-    return append_ads_to_response(request, 'cotizador/' + product.ptype.adminurlname + '_details.html', {
-        product.ptype.adminurlname: product,
+    return append_ads_to_response(request, 'cotizador/product_details.html', {
+        'product': product,
         'comment_form': commentForm,
         'product_prices': stores_with_product_available,
         'product_comments': product.productcomment_set.filter(validated = True).order_by('id'),

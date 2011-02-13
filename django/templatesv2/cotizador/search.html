@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block catalog_content %}
-
+<div id="result_set">
 <h1>Resultados de la búsqueda</h1>
 
 <p><b>Términos utilizados:</b> {{ query }}</p>
@@ -20,6 +20,8 @@
 {% for product in products %}
     {{ product.render_div }}
 {% endfor %}
+
+</div>
 
 <div id="pagination">
     {% ifnotequal page_count 0 %}

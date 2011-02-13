@@ -13,6 +13,10 @@ from exceptions import *
 from utils import *
 from views import *
 
+def append_account_ptype_to_response(request, template, args):
+    ptype = ProductType.objects.get(classname = 'Notebook')
+    args['ptype'] = ptype
+    return append_ads_to_response(request, template, args)
 
 # Page to login to the account, everything is boilerplate
 def login(request):
@@ -34,7 +38,7 @@ def login(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(next_url)
     else:
-        return append_ads_to_response(request, 'account/login.html', {
+        return append_account_ptype_to_response(request, 'account/login.html', {
             })
             
 @login_required    
@@ -44,6 +48,13 @@ def logout(request):
     if 'next' in request.GET:
         next_url = request.GET['next']
     return HttpResponseRedirect(next_url)
+    
+@login_required    
+def subscriptions(request):
+    product_subscriptions = ProductSubscription.objects.filter(user = request.user, is_active = True)
+    return append_account_ptype_to_response(request, 'account/subscriptions.html', {
+        'product_subscriptions': product_subscriptions,
+    })
     
 @login_required
 def validate_email(request):
@@ -63,12 +74,12 @@ def validate_email(request):
         
         user.save()
         request.flash['message'] = 'Cuenta de correo activada correctamente'
-        return HttpResponseRedirect('/account/')        
+        return HttpResponseRedirect('/account/?refresh=True')        
     except MailValidationException, e:
         error = str(e)
     except Exception, e:
         error = 'Error desconocido'
-    return append_ads_to_response(request, 'account/validate_email.html', {
+    return append_account_ptype_to_response(request, 'account/validate_email.html', {
             'error': error,
         })
     
@@ -91,64 +102,56 @@ def regenerate_password(request):
         user.save()
         
         request.flash['message'] = 'La nueva contraseña ha sido enviada a su correo'
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/?refresh=True')
 
     except PasswordRegenerationException, e:
         error = str(e)
     except Exception, e:
         error = 'Error desconocido'
         
-    return append_ads_to_response(request, 'account/regenerate_password.html', {
+    return append_account_ptype_to_response(request, 'account/regenerate_password.html', {
         'error': error,
     })
-    
-@login_required    
-def subscriptions(request):
-    product_subscriptions = ProductSubscription.objects.filter(user = request.user, is_active = True)
-    return append_ads_to_response(request, 'account/subscriptions.html', {
-        'product_subscriptions': product_subscriptions,
-    })
+   
     
 @login_required    
 def add_subscription(request):
     try:
-        notebook = Notebook.objects.get(pk = request.GET['notebook'])
+        product = Product.objects.get(pk = request.GET['product'])
         user = request.user
         
-        existing_notebook_subscriptions = NotebookSubscription.objects.filter(user = user).filter(notebook = notebook)
-        if existing_notebook_subscriptions:
-            notebook_subscription = existing_notebook_subscriptions[0]
-            notebook_subscription.is_active = True
+        existing_product_subscriptions = ProductSubscription.objects.filter(user = user).filter(product = product)
+        if existing_product_subscriptions:
+            product_subscription = existing_product_subscriptions[0]
+            product_subscription.is_active = True
         else:
-            notebook_subscription = NotebookSubscription()
-            notebook_subscription.user = user
-            notebook_subscription.notebook = notebook                                
+            product_subscription = ProductSubscription()
+            product_subscription.user = user
+            product_subscription.product = product                                
             
-        notebook_subscription.email_notifications = bool(int(request.GET['email_notifications']))
-        notebook_subscription.save()
+        product_subscription.email_notifications = bool(int(request.GET['email_notifications']))
+        product_subscription.save()
         
         request.flash['message'] = 'Suscripción agregada'
     except Exception, e:
         request.flash['error'] = 'Error desconocido'
 
-    return HttpResponseRedirect('/notebooks/%d' % notebook.id )   
+    return HttpResponseRedirect('/products/' + str(product.id) + '?refresh=true')
     
 @login_required
-def enable_subscription_mail(request):
-    subscription_id = request.POST['subscription_id']
+def enable_subscription_mail(request, subscription_id):
     set_subscription_mail_notifications(request, subscription_id, True)
     return HttpResponseRedirect('/account?refresh=true')
         
 @login_required
-def disable_subscription_mail(request):
-    subscription_id = request.POST['subscription_id']
+def disable_subscription_mail(request, subscription_id):
     set_subscription_mail_notifications(request, subscription_id, False)
     return HttpResponseRedirect('/account?refresh=true')
     
 @login_required
 def remove_subscription(request, subscription_id):
     try:
-        subscription = NotebookSubscription.objects.get(pk = subscription_id)
+        subscription = ProductSubscription.objects.get(pk = subscription_id)
         if subscription.user != request.user:
             raise SubscriptionException('Error de seguridad')
         subscription.is_active = False;
@@ -157,7 +160,7 @@ def remove_subscription(request, subscription_id):
         request.flash['error'] = str(e)
     except Exception, e:
         request.flash['error'] = 'Error desconocido'    
-    return HttpResponseRedirect('/account')
+    return HttpResponseRedirect('/account/?refresh=True')
     
 @login_required    
 def change_email(request):
@@ -174,10 +177,10 @@ def change_email(request):
                 request.flash['message'] = 'Correo cambiado exitosamente, hemos enviado un mensaje para que pueda activarlo'
             except MailException, e:
                 request.flash['error'] = str(e)
-            return HttpResponseRedirect('/account/')
+            return HttpResponseRedirect('/account/?refresh=True')
     else:
         change_email_form = ChangeEmailForm()
-    return append_ads_to_response(request, 'account/change_email.html', {
+    return append_account_ptype_to_response(request, 'account/change_email.html', {
         'change_email_form': change_email_form,
     })
     
@@ -191,10 +194,10 @@ def change_password(request):
             user.set_password(new_pass);
             user.save()
             request.flash['message'] = 'Contraseña cambiada exitosamente'
-            return HttpResponseRedirect('/account/')
+            return HttpResponseRedirect('/account/?refresh=True')
     else:
         form = ChangePasswordForm()
-    return append_ads_to_response(request, 'account/change_password.html', {
+    return append_account_ptype_to_response(request, 'account/change_password.html', {
         'p_form': form, })
         
 @login_required
@@ -207,7 +210,7 @@ def send_confirmation_mail(request):
             request.flash['error'] = str(e)            
     else:
         request.flash['message'] = 'Tu cuenta de correo ya está activada'
-    return HttpResponseRedirect('/account/')
+    return HttpResponseRedirect('/account/?refresh=True')
     
 def ajax_login(request):
     response = {'code': 'ERROR'}
