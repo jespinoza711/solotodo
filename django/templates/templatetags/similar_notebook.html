@@ -1,9 +1,9 @@
 <div class="product_container">
     <div class="product_thumb_image">
-        <a href="../{{ notebook.id }}">{{ notebook.picture.thumbnail_tag }}</a>
+        <a href="{% url solonotebooks.cotizador.views.product_details notebook.id %}">{{ notebook.picture.thumbnail_tag }}</a>
     </div>
     <div class="similar_product_stats">
-            <a href="../{{ notebook.id }}">
+            <a href="{% url solonotebooks.cotizador.views.product_details notebook.id %}">
     	        {{ notebook }}
             </a>
     	    <p>

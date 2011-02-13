@@ -10,6 +10,9 @@ class VideoCardGpuCore(models.Model):
         
     def raw_text(self):
         return self.family.raw_text() + ' ' + self.name
+        
+    def pretty_display(self):
+        return self.name + ' (' + unicode(self.family.architecture) + ')'
     
     class Meta:
         app_label = 'cotizador'

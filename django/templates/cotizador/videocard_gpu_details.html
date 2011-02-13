@@ -1,0 +1,57 @@
+{% extends "cotizador/base_catalog.html" %}
+
+{% block title %}{{site_name}} - {{ gpu }}{% endblock %}
+
+{% block catalog_content %}
+
+<div class="product_details_sidebar">
+    <div class="similar_products">
+        <h3>Tarjetas de video con esta GPU</h3>
+        {% for video_card in video_cards %}
+            {{ video_card.render_similar }}
+        {% endfor %}
+    </div>
+</div>
+<div class="product_details_specs">
+    <h1>{{ gpu }}</h1>
+    
+    <h3>Especificaciones</h3>   
+    <strong>Núcleo:</strong> {{ gpu.core.pretty_display }}
+    <br />
+    <strong>Stream processors:</strong> {{ gpu.stream_processors }}
+    <br />
+    <strong>Texture units:</strong> {{ gpu.texture_units }}
+    <br />
+    <strong>ROPs:</strong> {{ gpu.rops }}
+    <br />
+    <strong>Frecuencias: </strong>
+        <ul class="sub_ul">
+            <li><i>Core:</i> {{ gpu.default_core_clock }} MHz</li>
+            <li><i>Shaders:</i> {{ gpu.default_shader_clock }} MHz</li>
+            <li><i>Memorias:</i> {{ gpu.default_memory_clock }} MHz</li>
+        </ul>
+    <br />
+    <h3>Especificaciones secundarias</h3>   
+    <strong>Número de transistores:</strong> {{ gpu.transistor_count }} millones
+    <br />
+    <strong>TDP:</strong> {{ gpu.tdp }} W
+    <br />
+    <strong>Proceso de manufactura:</strong> {{ gpu.manufacturing_process }}
+    <br />
+    <strong>SLI / Crossfire:</strong> {% if gpu.has_multi_gpu_support %} Sí {% else %} No {% endif %}
+    <br />
+    <strong>DirectX:</strong> {{ gpu.dx_version }}
+    <br />
+    <strong>OpenGL:</strong> {{ gpu.ogl_version }}
+    <br />
+    &nbsp;
+    <br />
+    <h3>Puntajes</h3>   
+    <strong>3DMark 06:</strong> {{ gpu.tdmark_06_score }}
+    <br />
+    <strong>3DMark Vantage:</strong> {{ gpu.tdmark_vantage_score }}
+    <br />
+    <strong>3DMark 11:</strong> {{ gpu.tdmark_11_score }}
+    <br />
+</div>
+{% endblock %}

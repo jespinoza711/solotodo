@@ -17,6 +17,10 @@ urlpatterns += patterns('solonotebooks.cotizador.views_notebooks',
     (r'^notebooks/video_card_lines/$', 'video_card_line'),
 )
 
+urlpatterns += patterns('solonotebooks.cotizador.views_videocards',
+    (r'^video_cards/gpu_details/(?P<gpu_id>\d+)/$', 'gpu_details'),
+)
+
 urlpatterns += patterns('solonotebooks.cotizador.views_advertisement',
     (r'^advertisement/manage/$', 'manage'),    
     (r'^advertisement/get_advertisement_options/$', 'get_advertisement_options'),        
