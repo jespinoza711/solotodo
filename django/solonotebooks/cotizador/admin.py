@@ -80,6 +80,7 @@ admin.site.register(NotebookWifiCardNorm)
 admin.site.register(NotebookWifiCard)
 admin.site.register(NotebookVideoPort)
 
+admin.site.register(VideoCardBrand)
 admin.site.register(VideoCardGpuBrand)
 admin.site.register(VideoCardGpuFamily)
 admin.site.register(VideoCardGpuLine)

@@ -21,7 +21,7 @@ def save_products(products, s):
         print 'Guardando ' + str(product)
         print 'Buscando si tiene un registro existente'
         try:
-            current_shpe = StoreHasProductEntity.objects.filter(shp__store = s).get(comparison_field = product.comparison_field)
+            current_shpe = StoreHasProductEntity.objects.get(comparison_field = product.comparison_field)
             print 'Si tiene registro existente, usandolo'
         except StoreHasProductEntity.DoesNotExist:
             print 'No tiene registro existente, creandolo'

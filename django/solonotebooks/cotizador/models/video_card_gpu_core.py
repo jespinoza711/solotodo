@@ -6,7 +6,7 @@ class VideoCardGpuCore(models.Model):
     family = models.ForeignKey(VideoCardGpuCoreFamily)
     
     def __unicode__(self):
-        return unicode(self.family.architecture) + self.name
+        return unicode(self.family.architecture) + ' ' + self.name
         
     def raw_text(self):
         return self.family.raw_text() + ' ' + self.name

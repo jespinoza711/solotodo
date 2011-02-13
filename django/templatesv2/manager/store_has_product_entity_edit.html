@@ -8,6 +8,7 @@
 
 <form method="post" action="">
     <select id="id_product" name="product">
+        <option value="">---------</option>
         {% for option in options %}
             <option value="{{ option.id }}">{{ option }}</option>
         {% endfor %}

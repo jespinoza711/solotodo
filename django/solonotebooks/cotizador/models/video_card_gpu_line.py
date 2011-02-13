@@ -6,12 +6,12 @@ class VideoCardGpuLine(models.Model):
     family = models.ForeignKey(VideoCardGpuFamily)
     
     def __unicode__(self):
-        return unicode(self.family) + self.name
+        return unicode(self.family) + ' ' + self.name
         
     def raw_text(self):
         return self.family.raw_text() + ' ' + self.name
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Video card GPU family'
+        verbose_name = 'Video card GPU line'
         ordering = ['family', 'name']
