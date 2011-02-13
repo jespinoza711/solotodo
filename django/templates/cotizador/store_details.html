@@ -1,35 +1,20 @@
-{% extends "cotizador/base_browse.html" %}
+{% extends "base_generic.html" %}
 
-{% block title %}SoloNotebooks - {{ store.name }}{% endblock %}
+{% block title %}{{ store.name }} - {{ site_name }}{% endblock %}
 
 {% block header %}
 {% endblock %}
 
-{% block mainContent %}
+{% block content %}
 
 <h1>{{ store.name }}</h1>
 
 <h2>Equipos indexados</h2>
 
-{% for shn in shns %}
-        <div class="notebook_container">
-        <div class="notebook_thumb_image"><a href="/notebooks/{{ shn.notebook.id }}">{{ shn.notebook.picture.thumbnail_tag }}</a></div>
-        <div class="notebook_thumb_price">
-<a href="/notebooks/{{ shn.notebook.id }}">
-    {{ shn.shne.prettyPrice }}
-    </a>
-    
-        </div>
-        <h2><a href="/notebooks/{{ shn.notebook.id }}">{{ shn.notebook }}</a></h2>
-        <strong>Procesador:</strong> {{ shn.notebook.processor.prettyPrint }}
-        <br />
-        <strong>RAM: </strong> {{ shn.notebook.ram_quantity }} ({{ shn.notebook.ram_type }}-{{ shn.notebook.ram_frequency.value }})
-        <br />
-        <strong>Almacenamiento: </strong> {{ shn.notebook.storage_drive.all.0 }}
-                <br />
-        <strong>Pantalla: </strong> 
-        {{ shn.notebook.screen.prettyDisplay }}
-    </div>
+{% for shp in shps %}
+
+    {{ shp.product.render_div }}
+
 {% endfor %}
 
 {% endblock %}

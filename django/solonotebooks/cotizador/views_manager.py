@@ -113,9 +113,15 @@ def hide_entity(request, store_has_product_entity_id):
 
 @manager_login_required
 def delete_comment(request, comment_id):
-    # Deletes a comment
     comment = get_object_or_404(ProductComment, pk = comment_id)
     comment.delete()
+    return HttpResponseRedirect(request.META['HTTP_REFERER']);
+    
+@manager_login_required
+def validate_comment(request, comment_id):
+    comment = get_object_or_404(ProductComment, pk = comment_id)
+    comment.validated = True
+    comment.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER']);
                        
 @manager_login_required                        
@@ -124,6 +130,13 @@ def validate_all(request):
     for comment in comments:
         comment.validated = True
         comment.save()
+    return HttpResponseRedirect('/manager')
+    
+@manager_login_required                        
+def delete_all(request):
+    comments = ProductComment.objects.filter(validated = False)
+    for comment in comments:
+        comment.delete()
     return HttpResponseRedirect('/manager')
     
 @manager_login_required            

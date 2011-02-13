@@ -1,96 +1,96 @@
 {% extends "manager/base.html" %}
 
-{% block title %}SoloNotebooks - Manager{% endblock %}
+{% block title %}Noticias - {{ site_name }}{% endblock %}
 
-{% block mainContent %}
+{% block manager_content %}
 
 <h2>Últimos eventos</h2>
 
 {% for log in last_logs %}
     <h3>{{ log.date }}</h3>
     
-    <h4>Nuevos modelos</h4>
+    <h4>Nuevas entidades</h4>
     
-    {% if log.lognewmodel_set.all %}
+    {% if log.lognewentity_set.all %}
         <ul>
-        {% for log_new_model in log.lognewmodel_set.all %}
-            <li>{{ log_new_model.message|safe }}</li>
+        {% for log_new_entity in log.lognewentity_set.all %}
+            <li>{{ log_new_entity.message|safe }}</li>
         {% endfor %}
         </ul>    
     {% else %}
-        <p>No se reportaron nuevos modelos</p>
+        <p>No se reportaron nuevas entidades</p>
     {% endif %}
     
-    <h4>Modelos perdidos</h4>
+    <h4>Entidades perdidas</h4>
     
-    {% if log.loglostmodel_set.all %}
+    {% if log.loglostentity_set.all %}
         <ul>
-        {% for log_lost_model in log.loglostmodel_set.all %}
-            <li>{{ log_lost_model.message|safe }}</li>
+        {% for log_lost_entity in log.loglostentity_set.all %}
+            <li>{{ log_lost_entity.message|safe }}</li>
         {% endfor %}
         </ul>    
     {% else %}
-        <p>No se reportaron pérdidas de modelos</p>
+        <p>No se reportaron pérdidas de entidades</p>
     {% endif %}
     
-    <h4>Modelos resucitados</h4>
+    <h4>Entidades resucitadas</h4>
     
-    {% if log.logrevivemodel_set.all %}
+    {% if log.logreviveentity_set.all %}
         <ul>
-        {% for log_revive_model in log.logrevivemodel_set.all %}
-            <li>{{ log_revive_model.message|safe }}</li>
+        {% for log_revive_entity in log.logreviveentity_set.all %}
+            <li>{{ log_revive_entity.message|safe }}</li>
         {% endfor %}
         </ul>    
     {% else %}
-        <p>No se reportaron resucitaciones de modelos</p>
+        <p>No se reportaron resucitaciones de entidades</p>
     {% endif %}    
     
-    <h4>Modelos con cambios de precio</h4>
+    <h4>Entidades con cambios de precio</h4>
     
-    {% if log.logchangemodelprice_set.all %}
+    {% if log.logchangeentityprice_set.all %}
         <ul>
-        {% for log_change_model_price in log.logchangemodelprice_set.all %}
-            <li>{{ log_change_model_price.message|safe }}</li>
+        {% for log_change_entity_price in log.logchangeentityprice_set.all %}
+            <li>{{ log_change_entity_price.message|safe }}</li>
         {% endfor %}
         </ul>    
     {% else %}
-        <p>No se reportaron cambios de precio en los modelos</p>
+        <p>No se reportaron cambios de precio en las entidades</p>
     {% endif %}
 
-    <h4>Notebooks perdidos</h4>
+    <h4>Productos perdidos</h4>
 
-    {% if log.loglostnotebook_set.all %}
+    {% if log.loglostproduct_set.all %}
         <ul>
-        {% for log_lost_notebook in log.loglostnotebook_set.all %}
-            <li>{{ log_lost_notebook.message|safe }}</li>
+        {% for log_lost_product in log.loglostproduct_set.all %}
+            <li>{{ log_lost_product.message|safe }}</li>
         {% endfor %}
         </ul>    
     {% else %}
-        <p>No se reportaron pérdidas de notebooks</p>
+        <p>No se reportaron pérdidas de productos</p>
     {% endif %}
     
-    <h4>Notebooks resucitados</h4>
+    <h4>Productos resucitados</h4>
     
-    {% if log.logrevivenotebook_set.all %}
+    {% if log.logreviveproduct_set.all %}
         <ul>
-        {% for log_revive_notebook in log.logrevivenotebook_set.all %}
-            <li>{{ log_revive_notebook.message|safe }}</li>
+        {% for log_revive_product in log.logreviveproduct_set.all %}
+            <li>{{ log_revive_product.message|safe }}</li>
         {% endfor %}
         </ul>    
     {% else %}
-        <p>No se reportaron resucitaciones de notebooks</p>
+        <p>No se reportaron resucitaciones de productos</p>
     {% endif %}    
     
-    <h4>Notebooks con cambios de precio</h4>
+    <h4>Productos con cambios de precio</h4>
     
-    {% if log.logchangenotebookprice_set.all %}
+    {% if log.logchangeproductprice_set.all %}
         <ul>
-        {% for log_change_notebook_price in log.logchangenotebookprice_set.all %}
-            <li>{{ log_change_notebook_price.message|safe }}</li>
+        {% for log_change_product_price in log.logchangeproductprice_set.all %}
+            <li>{{ log_change_product_price.message|safe }}</li>
         {% endfor %}
         </ul>    
     {% else %}
-        <p>No se reportaron cambios de precio en los notebooks</p>
+        <p>No se reportaron cambios de precio en los productos</p>
     {% endif %}
 
     <h4>Errores de recepción</h4>

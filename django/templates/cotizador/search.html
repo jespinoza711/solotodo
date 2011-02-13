@@ -1,75 +1,50 @@
-{% extends "cotizador/base_browse.html" %}
+{% extends "cotizador/base_catalog.html" %}
 
-{% block title %}SoloNotebooks - Resultados de la búsqueda{% endblock %}
+{% block title %}Resultados de la búsqueda - {{ site_name }}{% endblock %}
 
 {% block header %}
 {% endblock %}
 
-{% block mainContent %}
-
+{% block catalog_content %}
+<div id="result_set">
 <h1>Resultados de la búsqueda</h1>
 
 <p><b>Términos utilizados:</b> {{ query }}</p>
 
-{% ifequal result_notebooks.count 0 %}
+{% ifequal result_products.count 0 %}
 
 <h2>No se han encontrado equipos con esas características</h2>
 
 {% endifequal %}
 
-{% for notebook in ntbk_results %}
-
-    <div class="notebook_container">
-        <div class="notebook_thumb_image"><a href="/notebooks/{{ notebook.0.id }}">{{ notebook.0.picture.thumbnail_tag }}</a></div>
-        <div class="notebook_thumb_price">
-<a href="/notebooks/{{ notebook.0.id }}">
-    {{ notebook.0.prettyMinPrice }}
-    </a>
-    
-        </div>
-        <h2><a href="/notebooks/{{ notebook.0.id }}">{{ notebook.0 }} <span class="search_result_score"> ({{ notebook.1|floatformat }}%)</span></a></h2>
-        <strong>Procesador:</strong> {{ notebook.0.processor.prettyPrint }}
-        <br />
-        <strong>RAM: </strong> {{ notebook.0.ram_quantity }} ({{notebook.0.ram_type}}-{{notebook.0.ram_frequency.value}})
-        <br />
-        <strong>Disco Duro: </strong> {{ notebook.0.storage_drive.all.0 }}
-                <br />
-        <strong>Pantalla: </strong> 
-        {{ notebook.0.screen.prettyDisplay }}
-    </div>
-
+{% for product in products %}
+    {{ product.render_div }}
 {% endfor %}
 
-{% ifnotequal page_count 0 %}
-<div id="left_page_navigator">
-{% ifnotequal page_number 1 %}
-    <a href="/search/?search_keywords={{ query }}&page_number=1">Primera</a> - 
-    <a href="/search/?search_keywords={{ query }}&page_number={{ prev_page }}">Anterior</a> 
-{% endifnotequal %}
 </div>
 
-<div id="right_page_navigator">
-{% ifnotequal page_number page_count %}
-    <a href="/search/?search_keywords={{ query }}&page_number={{ post_page }}">Siguiente</a> - 
-    <a href="/search/?search_keywords={{ query }}&page_number={{ page_count }}">Última</a>
-{% endifnotequal %}
-</div>
-
-<div id="center_page_navigator">
-{% ifnotequal left_page 1 %}
-    ...
-{% endifnotequal %}
-{% for page in page_range %}
-    {% ifequal page page_number %}
-        {{ page }}
-    {% else %}
-        <a href="/search/?search_keywords={{query}}&page_number={{ page }}"> {{ page }}</a>
-    {% endifequal %}
-{% endfor %}
-{% ifnotequal right_page page_count %}
-    ...
-{% endifnotequal %}
-</div>
-{% endifnotequal %}
+<div id="pagination">
+    {% ifnotequal page_count 0 %}
+        {% ifnotequal page_number 1 %}
+		    <a href="/search/?search_keywords={{query}}&page_number={{ prev_page }}" title="Anterior">&laquo; Anterior</a>                        
+        {% endifnotequal %}
+        {% ifnotequal left_page 1 %}
+            ...
+        {% endifnotequal %}
+        {% for page in page_range %}
+            {% ifequal page page_number %}
+                <span class="page-active">Pagina: {{ page }}</span>
+            {% else %}
+			    <a href="/search/?search_keywords={{query}}&page_number={{ page }}" title="Numero pagina">{{ page }}</a>
+            {% endifequal %}
+        {% endfor %}
+        {% ifnotequal right_page page_count %}
+            ...
+        {% endifnotequal %}
+        {% ifnotequal page_number page_count %}
+            <a href="/search/?search_keywords={{query}}&page_number={{ post_page }}" title="Siguiente">Siguiente &raquo;</a>
+        {% endifnotequal %}
+    {% endifnotequal %}
+</div> <!-- end pagination -->
 
 {% endblock %}

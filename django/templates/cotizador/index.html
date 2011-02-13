@@ -1,118 +1,74 @@
-{% extends "cotizador/base_browse.html" %}
+{% extends "base_generic.html" %}
 
-{% block title %}SoloNotebooks - {{ form.generate_title }}{% endblock %}
+{% block content %}
 
-{% block header %}
-<script type="text/javascript" src="/media/js/browse_script.js"></script>
-{% endblock %}
-
-{% block mainContent %}
-
-{% if remove_filter_links %}
-
-<h3>Filtros actuales: </h3>
-
-<div class="current_filters">
-    {% for key, value in remove_filter_links.items %}
-        {{ key }} (<a href="/{{ value }}">X</a>) <br />
-    {% endfor %}
-</div>
-
-{% endif %}
-
-{% ifequal result_notebooks|length 0 %}
-
-<h2>No se han encontrado equipos con esas características</h2>
-
-{% else %}
-
-<div id="ordering_div">
-    <input type="hidden" id="current_url" value="{{ current_url }}" />
-    <input type="hidden" id="current_ordering_direction" value="{{ ordering_direction }}" />
-    <h3>Ordenar por:</h3>
-    <select id="ordering_options">
-        {% for ordering_criteria in form.get_ordering_options %}
-            {% ifequal ordering ordering_criteria.0 %}
-                <option value="{{ ordering_criteria.0 }}" selected="selected">{{ ordering_criteria.1 }}</option>            
-            {% else %}
-                <option value="{{ ordering_criteria.0}}">{{ ordering_criteria.1 }}</option>
-            {% endifequal %}
+<div id="left">
+    <div id="top-left">
+	    <img src="/media/css/img/fake-h1.png" class="left" />
+        <span class="left">Destacados por</span>
+		<ul class="right">
+		    {% for ordering_option in hnf.fields.highlighted_ordering.choices %}
+                <li {% ifequal hnf.cleaned_data.highlighted_ordering ordering_option.0 %} class="active-top-left" {% endifequal %}>
+                    <a href="?highlighted_ordering={{ ordering_option.0 }}" title="{{ ordering_option.1 }}">{{ordering_option.1}}</a>
+                </li>
+            {% endfor %}
+		</ul>
+		<br class="clear" />
+	</div> <!-- !end top left -->
+	<div id="cat-index">
+		{% for product in products %}
+		    {{ product.render_div }}
         {% endfor %}
-    </select>
-    &nbsp;
-    {% ifequal ordering_direction 0 %}
-        <b>De menor a mayor</b>
-        &nbsp;
-        <a href="{{ordering_direction_url}}2">De mayor a menor</a>
-    {% else %}
-        <a href="{{ordering_direction_url}}1">De menor a mayor</a>
-        &nbsp;
-        <b>De mayor a menor</b>
-    {% endifequal %}
-</div>
+		<a href="#" title="Ver Listado Completo" class="more-index">Ver Listado Completo</a>
+		
+	</div> <!-- !end cat index -->
+<!-- !end loop de producto -->	
+</div> 
+<!-- !end left -->
 
-{% for notebook in result_notebooks %}
-    {% if notebook.is_publicized %}
-        <div class="notebook_container publicized_notebook_container">
-    {% else %}
-        <div class="notebook_container">    
-    {% endif %}
-        <div class="notebook_thumb_image"><a href="{{ notebook.url }}">{{ notebook.picture.thumbnail_tag }}</a></div>
-        <div class="notebook_thumb_price">
-<a href="{{ notebook.url }}">
-    {% if notebook.is_publicized %}
-        {{ notebook.publicized_offer.prettyPrice }}
-    {% else %}
-        {{ notebook.prettyMinPrice }}
-    {% endif %}
-    </a>
-    
-        </div>
-        <h2><a href="{{ notebook.url }}">{{ notebook }}</a> </h2>
-        <strong>Procesador:</strong> {{ notebook.processor.prettyPrint }}
-        <br />
-        <strong>RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})
-        <br />
-        <strong>Disco Duro: </strong> {{ notebook.storage_drive.all.0 }}
-                <br />
-        <strong>Pantalla: </strong> 
-        {{ notebook.screen.prettyDisplay }}
-    </div>
-
-{% endfor %}
-
-{% ifnotequal page_count 0 %}
-<div id="left_page_navigator">
-{% ifnotequal page_number 1 %}
-    <a href="/{{ form.generateBasePageLink }}1">Primera</a> - 
-    <a href="/{{ form.generateBasePageLink }}{{ prev_page }}">Anterior</a> 
-{% endifnotequal %}
-</div>
-
-<div id="right_page_navigator">
-{% ifnotequal page_number page_count %}
-    <a href="/{{ form.generateBasePageLink }}{{ post_page }}">Siguiente</a> - 
-    <a href="/{{ form.generateBasePageLink }}{{ page_count }}">Última</a>
-{% endifnotequal %}
-</div>
-
-<div id="center_page_navigator">
-{% ifnotequal left_page 1 %}
-    ...
-{% endifnotequal %}
-{% for page in page_range %}
-    {% ifequal page page_number %}
-        {{ page }}
-    {% else %}
-        <a href="/{{ form.generateBasePageLink }}{{ page }}"> {{ page }}</a>
-    {% endifequal %}
-{% endfor %}
-{% ifnotequal right_page page_count %}
-    ...
-{% endifnotequal %}
-</div>
-{% endifnotequal %}
-
-{% endifequal %}
-
+<div id="right">
+    <div id="search-index">
+		<img src="/media/css/img/fake-search.png" class="right" />
+		<h3>Búsqueda Rápida</h3>
+			
+			<div class="spacer-search">
+			    <form method="get" action="/catalog">
+				    <span>Marca</span><br />
+				    {{ form.notebook_brand }}
+				
+				    <span>Procesador</span><br />
+                    {{ form.processor_line_family }}
+				
+				    <span>Cantidad RAM</span><br />
+                    {{ form.ram_quantity }}
+				
+				    <span>Tipo tarjeta de video</span><br />
+                    {{ form.video_card_type }}
+				
+				    <input type="submit" class="right" value="Buscar" />
+		        </form>
+			</div>
+		<br class="clear" />
+	</div> <!-- end search index -->
+	
+	<div id="ad-right">
+		{{ side_ad.embedding_html|safe }}
+	</div> <!-- end ad right -->
+	
+	<div id="arbol-site">
+		<ul>
+			<li><span>NOTEBOOKS</span></li>
+			{% for notebook_type in form.fields.ntype.choices %}
+            <li><a href="{% url cotizador.views.catalog %}?ntype={{notebook_type.0}}" title="{{ notebook_type.1 }}">{{ notebook_type.1 }}</a></li>						
+            {% endfor %}
+		</ul>
+		<ul>
+			<li><span>CATEGORIAS</span></li>
+			<li><a href="{% url cotizador.views.catalog %}" title="Catálogo">Catálogo</a></li>
+			<li><a href="/blog" title="Blog">Blog</a></li>
+			<li><a href="/blog/about" title="Nosotros">Nosotros</a></li>
+			<li><a href="/blog/contacto" title="Contacto">Contacto</a></li>
+		</ul>
+	</div> <!-- end arbol site -->
+</div> <!-- !end right -->				
 {% endblock %}

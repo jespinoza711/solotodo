@@ -1,8 +1,8 @@
 {% extends "manager/base.html" %}
 
-{% block title %}SoloNotebooks - Manager{% endblock %}
+{% block title %}Comentarios - {{ site_name }}{% endblock %}
 
-{% block mainContent %}
+{% block manager_content %}
 
 <h2>Comentarios sin validar</h2>
 
@@ -11,29 +11,27 @@
     <br />
     <strong>Nickname: </strong> {{ comment.nickname }}
     <br />
-    <strong>Notebook: </strong> <a href="/notebooks/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.id %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
     {{ comment.comments }}
     <br />
-    <form method="POST" action="/manager/delete/{{ comment.id }}">
-        <input type="submit" value="Eliminar comentario" />
-    </form>
-    &nbsp;
-    <form method="POST" action="/manager/validate/{{ comment.id }}">
+    <form method="POST" action="{% url solonotebooks.cotizador.views_manager.validate_comment comment.id %}">
         <input type="submit" value="Validar comentario" />
+    </form>
+    <form method="POST" action="{% url solonotebooks.cotizador.views_manager.delete_comment comment.id %}">
+        <input type="submit" value="Eliminar comentario" />
     </form>
     <hr />
 
 {% endfor %}
 
 
-<form method="POST" action="/manager/validate_all">
+<form method="POST" action="{% url solonotebooks.cotizador.views_manager.validate_all %}">
     <input type="submit" value="Validar todos los mensajes" />
 </form>
-&nbsp;
-<form method="POST" action="/manager/delete_all">
+<form method="POST" action="{% url solonotebooks.cotizador.views_manager.delete_all %}">
     <input type="submit" value="Eliminar todos los mensajes" />
 </form>
 
@@ -49,13 +47,13 @@
         {{ comment.nickname }}
     {% endif %}
     <br />
-    <strong>Notebook: </strong> <a href="/notebooks/{{ comment.notebook.id }}">{{ comment.notebook }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.id %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
     {{ comment.comments }}
     <br />
-    <form method="POST" action="/manager/delete/{{ comment.id }}">
+    <form method="POST" action="{% url solonotebooks.cotizador.views_manager.delete_comment comment.id %}">
         <input type="submit" value="Eliminar comentario" />
     </form>
     <hr />

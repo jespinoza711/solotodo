@@ -48,9 +48,11 @@ urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/comments/$', 'comments'),
     (r'^manager/new_entities/$', 'new_entities'),
     (r'^manager/delete/(?P<comment_id>\d+)$', 'delete_comment'),
+    (r'^manager/validate/(?P<comment_id>\d+)$', 'validate_comment'),
     (r'^manager/hide_entity/(?P<store_has_product_entity_id>\d+)$', 'hide_entity'),
     (r'^manager/storehasproductentity/(?P<store_has_product_entity_id>\d+)/edit$', 'storehasproductentity_edit'),
     (r'^manager/validate_all$', 'validate_all'),
+    (r'^manager/delete_all$', 'delete_all'),
     (r'^manager/analyze_searches$', 'analyze_searches'), 
 )
 
