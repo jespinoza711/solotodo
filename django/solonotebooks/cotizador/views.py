@@ -310,7 +310,7 @@ def product_details(request, product_id):
                 request.session['posted_comment'] = True
                 
             product_comment.save()
-            return HttpResponseRedirect(request.META['HTTP_REFERER']);
+            return HttpResponseRedirect(request.META['HTTP_REFERER'] + '?refresh=true');
     else:
         nv = ProductVisit()
         nv.product = product
