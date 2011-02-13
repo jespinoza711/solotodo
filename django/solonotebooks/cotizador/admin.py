@@ -9,7 +9,6 @@ admin.site.register(SearchRegistry)
 admin.site.register(ExternalVisit)
 admin.site.register(Store)
 
-admin.site.register(Product)
 admin.site.register(ProductType)
 admin.site.register(ProductComment)
 admin.site.register(ProductPicture)
@@ -35,7 +34,6 @@ admin.site.register(LogChangeEntityPrice)
 admin.site.register(LogEntry)
 admin.site.register(LogEntryMessage)
 
-admin.site.register(Notebook)
 admin.site.register(NotebookLine)
 admin.site.register(NotebookBrand)
 admin.site.register(NotebookCardReader)
@@ -104,4 +102,16 @@ admin.site.register(VideoCardGpuCoreCount)
 admin.site.register(VideoCardGpuPowerConnector)
 admin.site.register(VideoCardGpuManufacturingProcess)
 admin.site.register(VideoCardGpu)
-admin.site.register(VideoCard)
+
+class ProductAdmin(admin.ModelAdmin):
+    exclude = ['publicized_offer']
+    
+class NotebookAdmin(admin.ModelAdmin):
+    exclude = ['publicized_offer']
+    
+class VideoCardAdmin(admin.ModelAdmin):
+    exclude = ['publicized_offer']
+    
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Notebook, NotebookAdmin)
+admin.site.register(VideoCard, VideoCardAdmin)
