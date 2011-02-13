@@ -91,7 +91,7 @@ class SearchForm(forms.Form):
         for field_name, field in self.fields.items():
             try:
                 if field.in_quick_search:
-                    quick_search_fields.append([field.name, self[field_name]])
+                    quick_search_fields.append([field.quick_search_name, self[field_name]])
             except:
                 continue
         return quick_search_fields

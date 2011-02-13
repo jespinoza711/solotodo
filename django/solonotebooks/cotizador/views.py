@@ -74,7 +74,7 @@ def product_type_catalog(request, product_type_urlname):
         last_result_index = num_results
     result_products = result_products[first_result_index - 1 : last_result_index]
 
-    d = dict(NotebookSearchForm.price_choices)
+    d = dict(search_form.price_choices)
     
     return append_ads_to_response(request, 'cotizador/catalog.html', {
         'form': search_form,
@@ -226,8 +226,13 @@ def append_user_to_response(request, template, args):
     if 'signup_key' not in request.session:
         request.session['signup_key'] = int(time())
         
+    if 'ptype' in args:
+        ptype = args['ptype']
+    else:
+        ptype = ProductType.default()
+        
     if 'form' not in args:
-        args['form'] = initialize_search_form(request.GET)
+        args['form'] = initialize_search_form(request.GET, ptype)
         
     search_form = args['form']
     main_category_choices = [Category()]
