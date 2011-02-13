@@ -4,7 +4,7 @@ class VideoCardBusLane(models.Model):
     value = models.IntegerField()
     
     def __unicode__(self):
-        return str(self.value) + 'x'
+        return  'x' + str(self.value)
         
     def raw_text(self):
         return unicode(self)

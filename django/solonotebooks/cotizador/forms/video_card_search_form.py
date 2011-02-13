@@ -10,18 +10,18 @@ from . import SearchForm
 
 class VideoCardSearchForm(SearchForm):
     gpu_brand = ClassChoiceField(VideoCardGpuBrand, 'Marca', in_quick_search = True, quick_search_name = 'Marca')
-    gpu_family = ClassChoiceField(VideoCardGpuFamily, 'Familia', in_quick_search = True, quick_search_name = 'Familia')
-    brand = ClassChoiceField(VideoCardBrand, 'Fabricante', requires_advanced_controls = True)
+    gpu_family = ClassChoiceField(VideoCardGpuFamily, 'Familia')
+    brand = ClassChoiceField(VideoCardBrand, 'Fabricante', in_quick_search = True, quick_search_name = 'Fabricante')
     gpu_line = ClassChoiceField(VideoCardGpuLine, 'Línea')
     gpu = ClassChoiceField(VideoCardGpu, 'Modelo', in_quick_search = True, quick_search_name = 'GPU')
     gpu_core_count = ClassChoiceField(VideoCardGpuCoreCount, 'Núcleos', requires_advanced_controls = True)
     memory_quantity = ClassChoiceField(VideoCardMemoryQuantity, 'Cant. mín', in_quick_search = True, quick_search_name = 'Memoria')
     memory_type = ClassChoiceField(VideoCardMemoryType, 'Tipo', requires_advanced_controls = True)
-    memory_bus_width = ClassChoiceField(VideoCardMemoryBusWidth, 'Ancho', requires_advanced_controls = True)
+    memory_bus_width = ClassChoiceField(VideoCardMemoryBusWidth, 'Bus mín.', requires_advanced_controls = True)
     gpu_architecture = ClassChoiceField(VideoCardGpuArchitecture, 'Nombre')
     gpu_core_family = ClassChoiceField(VideoCardGpuCoreFamily, 'Familia')
-    gpu_dx_version = ClassChoiceField(VideoCardGpuDirectxVersion, 'DirectX', requires_advanced_controls = True)
-    gpu_ogl_version = ClassChoiceField(VideoCardGpuOpenglVersion, 'OpenGL', requires_advanced_controls = True)
+    gpu_dx_version = ClassChoiceField(VideoCardGpuDirectxVersion, 'DX mín.', requires_advanced_controls = True)
+    gpu_ogl_version = ClassChoiceField(VideoCardGpuOpenglVersion, 'OGl mín.', requires_advanced_controls = True)
     bus_name = ClassChoiceField(VideoCardBusName, 'Nombre')
     bus_lanes = ClassChoiceField(VideoCardBusLane, 'Lanes', requires_advanced_controls = True)
     bus = ClassChoiceField(VideoCardBus, 'Bus', requires_advanced_controls = True)
@@ -82,7 +82,7 @@ class VideoCardSearchForm(SearchForm):
         if key == 'gpu_brand':
             value = unicode(VideoCardGpuBrand.objects.get(pk = pk_value))
         if key == 'gpu_family':
-            value = unicode(VideoCardGpuLineFamily.objects.get(pk = pk_value))
+            value = unicode(VideoCardGpuFamily.objects.get(pk = pk_value))
         if key == 'brand':
             value = unicode(VideoCardBrand.objects.get(pk = pk_value))
         if key == 'gpu_line':
@@ -102,13 +102,13 @@ class VideoCardSearchForm(SearchForm):
         if key == 'gpu_core_family':
             value = unicode(VideoCardGpuCoreFamily.objects.get(pk = pk_value))
         if key == 'gpu_dx_version':
-            value = unicode(VideoCardGpuDirecxVersion.objects.get(pk = pk_value))
+            value = 'DirectX ' + unicode(VideoCardGpuDirectxVersion.objects.get(pk = pk_value))
         if key == 'gpu_ogl_version':
-            value = unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value))
+            value = 'OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value))
         if key == 'bus_name':
             value = unicode(VideoCardBusName.objects.get(pk = pk_value))
         if key == 'bus_lanes':
-            value = unicode(VideoCardBusLane.objects.get(pk = pk_value))
+            value = 'Bus ' + unicode(VideoCardBusLane.objects.get(pk = pk_value))
         if key == 'bus':
             value = unicode(VideoCardBus.objects.get(pk = pk_value))
         if key == 'profile':
@@ -151,7 +151,7 @@ class VideoCardSearchForm(SearchForm):
         if key == 'gpu_core_family':
             value = 'Tarjetas de video con núcleo ' + unicode(VideoCardGpuCoreFamily.objects.get(pk = pk_value))
         if key == 'gpu_dx_version':
-            value = 'Tarjetas de video DirectX ' + unicode(VideoCardGpuDirecxVersion.objects.get(pk = pk_value))
+            value = 'Tarjetas de video DirectX ' + unicode(VideoCardGpuDirectxVersion.objects.get(pk = pk_value))
         if key == 'gpu_ogl_version':
             value = 'Tarjetas de video OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value))
         if key == 'bus_name':
@@ -177,7 +177,7 @@ class VideoCardSearchForm(SearchForm):
             video_cards = video_cards.filter(gpu__line__family__brand = self.gpu_brand)
         if self.gpu_family:
             video_cards = video_cards.filter(gpu__line__family = self.gpu_family)
-        if self.brand and self.advanced_controls:
+        if self.brand:
             video_cards = video_cards.filter(brand = self.brand)
         if self.gpu_line:
             video_cards = video_cards.filter(gpu__line = self.gpu_line)
@@ -186,23 +186,23 @@ class VideoCardSearchForm(SearchForm):
         if self.gpu_core_count and self.advanced_controls:
             video_cards = video_cards.filter(gpu__core_count = self.gpu_core_count)
         if self.memory_quantity:
-            video_cards = video_cards.filter(memory_quantity = self.memory_quantity)
+            video_cards = video_cards.filter(memory_quantity__value__gte = VideoCardMemoryQuantity.objects.get(pk = self.memory_quantity).value)
         if self.memory_type and self.advanced_controls:
             video_cards = video_cards.filter(memory_type = self.memory_type)
         if self.memory_bus_width and self.advanced_controls:
-            video_cards = video_cards.filter(memory_bus_width = self.memory_bus_width)
+            video_cards = video_cards.filter(memory_bus_width__value__gte = VideoCardMemoryBusWidth.objects.get(pk = self.memory_bus_width).value)
         if self.gpu_architecture:
             video_cards = video_cards.filter(gpu__core__family__architecture = self.gpu_architecture)
         if self.gpu_core_family:
             video_cards = video_cards.filter(gpu__core__family = self.gpu_core_family)
         if self.gpu_dx_version and self.advanced_controls:
-            video_cards = video_cards.filter(gpu__directx_version = self.gpu_dx_version)
+            video_cards = video_cards.filter(gpu__dx_version__value__gte = VideoCardGpuDirectxVersion.objects.get(pk = self.gpu_dx_version).value)
         if self.gpu_ogl_version and self.advanced_controls:
-            video_cards = video_cards.filter(gpu__opengl_version = self.gpu_ogl_version)
+            video_cards = video_cards.filter(gpu__ogl_version__value__gte = VideoCardGpuOpenglVersion.objects.get(pk = self.gpu_ogl_version).value)
         if self.bus_name:
             video_cards = video_cards.filter(bus__name = self.bus_name)
         if self.bus_lanes and self.advanced_controls:
-            video_cards = video_cards.filter(bus__lanes = self.bus_lanes)
+            video_cards = video_cards.filter(bus__lane = self.bus_lanes)
         if self.bus and self.advanced_controls:
             video_cards = video_cards.filter(bus = self.bus)
         if self.profile:
@@ -210,7 +210,7 @@ class VideoCardSearchForm(SearchForm):
         if self.refrigeration and self.advanced_controls:
             video_cards = video_cards.filter(refrigeration = self.refrigeration)
         if self.slots and self.advanced_controls:
-            video_cards = video_cards.filter(slots = self.slots)
+            video_cards = video_cards.filter(slot_type = self.slots)
         if self.min_price:
             video_cards = video_cards.filter(min_price__gte = int(self.min_price))
         if self.max_price and self.max_price != int(self.price_choices[-1][0]):

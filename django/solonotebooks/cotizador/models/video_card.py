@@ -59,6 +59,18 @@ class VideoCard(Product):
         clone_prod.save()
         return clone_prod
         
+    # custom methods
+    
+    def pretty_memory(self):
+        return unicode(self.memory_quantity) + ' ' + unicode(self.memory_type) + ' (' + unicode(self.memory_bus_width) + ')'
+        
+    def pretty_frequencies(self):
+        return self.pretty_frequency(self.core_clock) + ' core / ' + self.pretty_frequency(self.shader_clock) + ' shaders / ' + self.pretty_frequency(self.memory_clock) + ' memorias'
+        
+    @staticmethod
+    def pretty_frequency(value):
+        return str(value) + ' MHz'
+        
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Video card'
