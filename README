@@ -1,19 +1,19 @@
-SoloNotebooks is a project that seeks to create a complete
-and advanced notebook comparison and price search system
+SoloTodo is a project that seeks to create a complete
+and advanced product comparison and price search system
 for the chilean market.
 
-Installation instructions for SoloNotebooks on Ubuntu 10.04 (Development)
+Installation instructions for SoloTodo on Ubuntu 10.04 (Development)
 =========================================================================
 
 This document describes the steps to take to install the
-development version of SoloNotebooks on a freshly installed
+development version of SoloTodo on a freshly installed
 Ubuntu machine only with its normal updates installed,
 the instructions are mostly the same for other distributions.
 
 1. Installing pre-requisites
 ----------------------------
 
-SoloNotebooks is an application written in Python using the
+SoloTodo is an application written in Python using the
 Django framework, with some additional plugins, in this step
 we will install all the required libraries to get everything
 working smoothly.
@@ -58,7 +58,7 @@ $ sudo python setup.py install
 1.4 BeautifulSoup
 
 BeautifulSoup is a parser for HTML pages that allows us to grab the info
-for each notebook.  Please note that we HAVE to use the 3.0.8 version and
+for each product.  Please note that we HAVE to use the 3.0.8 version and
 not the latest, as the latter has horrible support for badly coded webpages.
 
 $ wget http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.0.8.1.tar.gz
@@ -122,7 +122,7 @@ file using Django 1.2, place it in the directory django/solonotebooks
 
 =================================================
 
-# Django settings for SoloNotebooks project.
+# Django settings for SoloTodo project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -190,7 +190,7 @@ INSTALLED_APPS = (
 
 Replace [PATH_TO_SQLITE_DB] with a route to a writable file (Django will create 
 it) and [PATH_TO_REPOSITORY] with the location of the repository 
-(e.g. /home/vkhemlan/SoloNotebooks)
+(e.g. /home/vkhemlan/SoloTodo)
 
 Now we need to set up the database
 
@@ -218,7 +218,7 @@ http://127.0.0.1:8000
 -------------------------------------------------
 
 By now the web side of the application should be running without problems, but 
-without any notebooks, to fix this let us run the updater script to add some 
+without any products, to fix this let us run the updater script to add some 
 base models to work on
 
 $ cd django
@@ -230,15 +230,13 @@ http://127.0.0.1:8000/manager/
 
 To login with the data you provided during the database synchronization, and then to
 
-http://127.0.0.1:8000/manager/new_notebooks/
+http://127.0.0.1:8000/manager/new_entities/
 
-To see a list of notebooks.  Choose to edit one, click the "Add Notebook" 
-button, fill up the information and then save it (remember to save on the 
-notebook pop-up and on the page that opened that popup!)
+To see a list of pending products.
 
-To guarantee that the notebook will appear in the main page, we need to execute a script that normalizes the DB
+To guarantee that the product will appear in the main page, we need to execute a script that normalizes the DB
 
 $ cd django
 $ python manual_update.py
 
-Now the notebook should appear on the main page.
+Now the product should appear on the main page.
