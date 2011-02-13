@@ -1,0 +1,15 @@
+<div class="product_container">
+    <div class="product_thumb_image">
+        <a href="../{{ notebook.id }}">{{ notebook.picture.thumbnail_tag }}</a>
+    </div>
+    <div class="similar_product_stats">
+            <a href="../{{ notebook.id }}">
+    	        {{ notebook }}
+            </a>
+    	    <p>
+            	{{ notebook.processor }} <br />
+                {{ notebook.screen.pretty_display }}<br />
+    	        <strong>{{ notebook.pretty_min_price }}</strong>
+            </p>
+    </div>
+</div>

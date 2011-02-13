@@ -6,13 +6,14 @@
 	<link rel="stylesheet" href="/media/cssv2/slider/redmond/jquery-ui-1.7.1.custom.css" type="text/css" />
 	<link rel="stylesheet" href="/media/cssv2/slider/ui.slider.extras.css" type="text/css" />
 	<script type="text/javascript" src="/media/jsv2/catalog.js"></script>
-
+    {% block catalog_header_content %}
+    {% endblock %}
 {% endblock %}
 
 {% block content %}
 <div id="left-c">
     <div id="top-left">
-		<img src="/media/cssv2/img/fake-h1.png" class="left" /> <span class="left">Filtros de Busqueda</span>
+		<img src="/media/cssv2/img/fake-h1.png" class="left" /> <span class="left">Buscador</span>
 		<br class="clear" />
 	</div> <!-- !end top left -->
 	<br />
@@ -41,7 +42,9 @@
 			{% endfor %}
 		{% endfor %}
 
-		<a id="toggle_hidden_link" href="">Búsqueda avanzada</a>
+        <div id="toggle_hidden_link_container">
+    		<a id="toggle_hidden_link" href="">Búsqueda avanzada</a>
+		</div>
 		<div>
 			<input type="hidden" value="1" name="page_number"/>
 		</div>

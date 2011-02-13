@@ -1,4 +1,4 @@
-{% extends "base_generic.html" %}
+{% extends "cotizador/base_catalog.html" %}
 
 {% block title %}
     {% ifequal processor None %}
@@ -8,7 +8,7 @@
     {% endifequal %}
 {% endblock %}
 
-{% block content %}
+{% block catalog_content %}
 
 {% ifequal processor None %}
     <h1>Procesadores {{ processor_line_family }}</h1>

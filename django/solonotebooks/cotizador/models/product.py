@@ -28,7 +28,7 @@ class Product(models.Model):
     similar_products = models.CommaSeparatedIntegerField(max_length = 30)
     
     picture = ImageWithThumbnailsField(
-        thumbnail = { 'size': (88, 88), },
+        thumbnail = { 'size': (100, 100), },
         extra_thumbnails = {
             'large': {'size': (300, 300)},
             'gallery_thumb': {'size': (90, 90)},
@@ -168,6 +168,22 @@ class Product(models.Model):
             entity = entity.get_polymorphic_instance()
         
         template_file = 'templatetags/div_' + self.ptype.adminurlname + '.html'
+        return render_to_string(template_file, { self.ptype.adminurlname: entity })
+        
+    def render_similar(self):
+        entity = self
+        if entity.__class__.__name__ == 'Product':
+            entity = entity.get_polymorphic_instance()
+        
+        template_file = 'templatetags/similar_' + self.ptype.adminurlname + '.html'
+        return render_to_string(template_file, { self.ptype.adminurlname: entity })
+        
+    def render_details(self):
+        entity = self
+        if entity.__class__.__name__ == 'Product':
+            entity = entity.get_polymorphic_instance()
+        
+        template_file = 'templatetags/details_' + self.ptype.adminurlname + '.html'
         return render_to_string(template_file, { self.ptype.adminurlname: entity })
         
     def load_similar_products(self):

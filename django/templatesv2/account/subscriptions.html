@@ -2,10 +2,6 @@
 
 {% block title %}Mis productos - {{ site_name }}{% endblock %}
 
-{% block header_content %}
-	<script type="text/javascript" src="/media/jsv2/subscriptions.js"></script>
-{% endblock %}
-
 {% block account_content %}
 
 <h1>Mis productos</h1>
@@ -28,20 +24,16 @@
                 {{ ps.product.render_div }}
             </td>
             <td class="email_notification_choice_cell">
-                {% if ns.email_notifications %}
-                    <form method="post" action="/account/disable_subscription_mail/">
-                        <input type="hidden" name="subscription_id" value="{{ ns.id }}" />
-                        <strong>Sí</strong> /  <a class="subscription_link" href="#">No</a>
-                    </form>
+                {% if ps.email_notifications %}
+                    <strong>Sí</strong> / 
+                    <a href="/account/disable_subscription_mail/{{ ps.id }}">No</a>
                 {% else %}
-                    <form method="post" action="/account/enable_subscription_mail/">
-                        <input type="hidden" name="subscription_id" value="{{ ns.id }}" />
-                        <a class="subscription_link" href="#">Sí</a> / <strong>No</strong>
-                    </form>
+                    <a href="/account/enable_subscription_mail/{{ ps.id }}">Sí</a> / 
+                    <strong>No</strong>
                 {% endif %}
             </td>
             <td>
-                <form method="post" action="/account/remove_subscription/{{ ns.id }}/">
+                <form method="post" action="/account/remove_subscription/{{ ps.id }}/">
                     <input type="submit" value="Eliminar" />
                 </form>
             </td>

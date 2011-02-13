@@ -1,4 +1,4 @@
-{% extends "base_generic.html" %}
+{% extends "cotizador/base_catalog.html" %}
 
 {% block title %}
     {% ifequal video_card None %}
@@ -8,7 +8,7 @@
     {% endifequal %}
 {% endblock %}
 
-{% block content %}
+{% block catalog_content %}
 
 {% ifequal video_card None %}
     <h1>Tarjetas de video {{ video_card_line }}</h1>

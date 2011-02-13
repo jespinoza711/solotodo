@@ -1,0 +1,67 @@
+<h1>{{ notebook }}</h1>
+    <h3 class="subtitle">Especificaciones esenciales</h3>
+    <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
+    <br />
+    <strong>Pantalla: </strong> {{ notebook.screen.pretty_display }}
+    <br />
+    <strong>Memoria RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})
+    <br />
+    <strong>Almacenamiento: </strong>
+    {% ifequal notebook.storage_drive.all.count 1 %}
+        {{ notebook.storage_drive.all.0 }}
+    {% else %}
+        <ul>
+            {% for storage in notebook.storage_drive.all %}
+            <li>{{ storage }}</li>
+        {% endfor %}
+    </ul>
+    {% endifequal %}
+    <br />
+    <strong>Tarjeta de video: </strong>
+    {% ifequal notebook.video_card.all.count 1 %}
+        <a href="/video_card_line/{{notebook.video_card.all.0.line.id}}/?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
+    {% else %}
+        <ul>
+            {% for video_card in notebook.video_card.all %}
+            <li><a href="/video_card_line/{{video_card.line.id}}/?video_card={{video_card.id}}">{{ video_card }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endifequal %}
+    <br />
+    <h3 class="subtitle">Especificaciones secundarias</h3>
+    <strong>Batería: </strong> {% if notebook.prettyBattery %} {{ notebook.prettyBattery }} {% else %} No hay información disponible {% endif %}
+    <br />
+    <strong>Chipset: </strong> {{ notebook.chipset }}
+    <br/>    
+    <strong>Peso: </strong> {% if notebook.weight %} {{ notebook.weight }} g. {% else %} No hay información disponible {% endif %}
+    <br />
+    <strong>Dimensiones: </strong> {% if notebook.prettyDimensions %} {{ notebook.prettyDimensions }} {% else %} No hay información disponible{% endif %}
+    <br />
+    <strong>Sistema Operativo: </strong> {{ notebook.operating_system }}
+    <br />
+    <strong>Unidad óptica: </strong> {{ notebook.optical_drive }}
+    <br />
+    <strong>WiFi: </strong> {{ notebook.wifi_card }}
+    <br />
+<h3 class="subtitle">Accesorios</h3>
+    <strong>Puertos USB: </strong> {% if notebook.usb_port_count %} {{ notebook.usb_port_count }} {% else %} No hay información disponible{% endif %}
+    <br />
+    <strong>Webcam: </strong> {% if notebook.webcam_mp %} {{ notebook.webcam_mp }} MP {% else %} No posee{% endif %}
+    <br />
+    <strong>LAN: </strong> {{ notebook.lan }}
+    <br />
+    <strong>Adaptador de energía: </strong> {{ notebook.power_adapter }}
+    <br />
+    <strong>Lector de tarjetas: </strong> {{ notebook.card_reader }}
+    <br />
+    <strong>Puertos de video: </strong> {{ notebook.prettyVideoPorts }}    
+    <br />    
+    <strong>¿RAM de doble canal?: </strong> {% if notebook.is_ram_dual_channel %} Sí {% else %} No {% endif %}
+    <br />
+    <strong>¿Bluetooth?: </strong> {% if notebook.has_bluetooth %} Sí {% else %} No {% endif %}
+    <br />
+    <strong>¿Conexión eSATA?: </strong> {% if notebook.has_esata %} Sí {% else %} No {% endif %}
+    <br />
+    <strong>¿Lector de huellas digitales?: </strong> {% if notebook.has_fingerprint_reader %} Sí {% else %} No {% endif %}
+    <br />
+    <strong>¿Conexión Firewire?: </strong> {% if notebook.has_firewire %} Sí {% else %} No {% endif %}

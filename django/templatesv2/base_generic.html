@@ -10,9 +10,15 @@
 		<link rel="stylesheet" href="/media/cssv2/screen.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/cssv2/layout.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/cssv2/mine.css" type="text/css" media="screen, projection" />
+   	 	<link rel="stylesheet" href="/media/cssv2/dialog/jquery-ui-1.8.9.custom.css" type="text/css" />
    	 	<link rel="shortcut icon" href="/media/iconsv2/favicon.ico" type="image/x-icon" />
    	 	<script type="text/javascript" src="/media/jsv2/jquery-1.4.3.min.js"></script>
-<script type="text/javascript" src="/media/jsv2/comparison_list.js"></script>
+   	 	<script type="text/javascript" src="/media/jsv2/dialog/jquery-ui-1.8.9.custom.min.js"></script>
+   	 	<script type="text/javascript" src="/media/jsv2/account_script.js"></script>
+        <script type="text/javascript" src="/media/jsv2/comparison_list.js"></script>
+        <script type="text/javascript">
+            authenticated_user = {% if user.is_authenticated %}true{% else %}false{% endif %}
+        </script>
    	 	{% block header_content %}
 		{% endblock %}
 
@@ -83,7 +89,7 @@
 						<ol id="search" class="left">
 						    <form method="get" action="{% url cotizador.views.search %}">
 							<li>
-    							    <input name="search_keywords" type="text" class="input-search" />
+    							    <input name="search_keywords" type="text" class="input-search" value="¿Qué {{ ptype.displayname }} estás buscando?" />
     							    <input name="product_type" type="hidden" value="{{ ptype.urlname }}" />
     							    </li>
 							<li><input type="submit" class="btn-search" value=""/></li>
@@ -125,11 +131,27 @@
 		
 		<!-- !end head global -->
 		
-		<div id="ad-top" class="container">
+		<div id="ad_top" class="container">
 			{{ top_ad.embedding_html|safe }}
 		</div> <!-- !end ads-top -->
 		
 		<div id="content" class="container">
+		    {% block flash_message %}
+                {% if flash.message %}
+                    <div id="info_message" class="info_message">
+                        {{ flash.message }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+            {% block flash_error %}
+                {% if flash.error %}
+                    <div id="error_message" class="error_message">
+                        {{ flash.error }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+		    {% block alertContent %}
+		    {% endblock %}
 			{% block content %}
     		{% endblock %}					
 		    <br class="clear" />
@@ -138,5 +160,75 @@
 		
 		<div id="footer"></div> <!-- end #footer -->
 		<div id="fb-root"></div>
+		
+		{% if not user.is_authenticated %}
+            <div class="dialog_form" id="dialog-confirm" title="Formulario de registro" style="display: none;">
+	            <div>
+                    <div id="signup_text"></div>
+	                <form id="signup_form" method="post" action="/account/signup">
+	                    <div class="dialog_error" id="signup_error"></div>
+	                    <div class="signup_element">
+                            <label for="username" maxlength="30">Nombre de usuario: </label> 
+                            <input type="text" name="username" id="signup_username" />
+                        </div>
+	                    <div class="signup_element">            
+                            <label for="email">Correo electrónico: </label> 
+                            <input type="text" name="email" id="signup_email" />
+                        </div>
+	                    <div class="signup_element">
+                            <label for="password">Contraseña: </label> 
+                            <input type="password" id="signup_password" name="password" id="signup_password" />
+                        </div>
+	                    <div class="signup_element">
+                            <label for="repeat_password">Repita la contraseña: </label> 
+                            <input type="password" name="repeat_password"  id="signup_repeat_password" />
+                        </div>
+                        <input type="hidden" name="sigup_key" id="signup_key" value="{{ signup_key }}" />
+	                </form>
+	                <br />
+	                <a href="#" id="already_registered_link">¿Ya estás registrado?</a>
+                    <div id="signup_ajax_loader" class="ajax_loader">
+                        <img src="/media/assets/ajax-loader.gif" />
+                    </div>
+	            </div>
+            </div>
+
+            <div class="dialog_form" id="dialog_regenerate" title="Regeneración de contraseña" style="display: none;">
+	            <div>
+	                <div style="margin-bottom: 10px;">
+	                Si no recuerdas tu contraseña, coloca tu nombre de usuario a continuación y se te hará llegar una nueva a tu cuenta de correo. Esto sólo será posible si tu cuenta de correo está activada.
+                    </div>
+	                <form id="regenerate_password_form" method="post" action="/account/regenerate_password">
+	                    <div class="dialog_error" id="regenerate_error"></div>
+	                    <div class="signup_element">
+                            <label for="username" maxlength="30">Nombre de usuario: </label> 
+                            <input type="text" name="username" id="regenerate_username" />
+                        </div>
+	                </form>
+                    <div id="regenerate_ajax_loader" class="ajax_loader">
+                        <img src="/media/assets/ajax-loader.gif" />
+                    </div>	    
+	            </div>
+            </div>
+
+            <div class="dialog_form" id="dialog_login" title="Login" style="display: none;">
+	            <div>
+	                <form id="login_form" method="post" action="/account/ajax_login">
+	                    <div class="dialog_error" id="login_error"></div>
+	                    <div class="signup_element">
+                            <label for="username" maxlength="30">Nombre de usuario: </label> 
+                            <input type="text" name="username" id="login_username" />
+                        </div>
+	                    <div class="signup_element">
+                            <label for="password">Contraseña: </label> 
+                            <input type="password" name="password" id="login_password" />
+                        </div>            
+	                </form>
+                    <div id="login_ajax_loader" class="ajax_loader">
+                        <img src="/media/assets/ajax-loader.gif" />
+                    </div>	    
+	            </div>
+            </div>
+            {% endif %}
 	</body>
-</html>				
+</html>

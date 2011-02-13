@@ -1,12 +1,13 @@
 <div class="producto-li">
-    <div class="{{ notebook.ntype.css_name }}">
+    <div class="thumb-videocard thumb-product">
 	    <a href="{% url cotizador.views.product_details notebook.id %}" title="{{ notebook }}">
 		    {{ notebook.picture.thumbnail_tag }}<br />
 	    </a>
-	    <p>{{ notebook.ntype.name }}</p>	
+	    <!--<p>{{ notebook.ntype.name }}</p>	-->
     </div>
     <div class="content-producto">
 	    <a href="{% url cotizador.views.product_details notebook.id %}">{{ notebook }}</a> {% if notebook.matching %} ({{ notebook.matching|floatformat }}%) {% endif %}
+	    <br />
 	    <ul class="info-producto left">
 		    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
 		    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
@@ -24,14 +25,7 @@
 		    {% endif %}
 	    </ul>
 	    <br class="clear" />
-	    <a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> 
-        <!--<div>
-            {% if notebook.in_comparison_list %}
-        	    <a href="#" class="remove_from_comparison_list_link" ntbk_id="{{ notebook.id }}">Quitar de la lista</a>
-            {% else %}
-        	    <a href="#" class="add_to_comparison_list_link" ntbk_id="{{ notebook.id }}">Agregar a la lista</a>
-    	    {% endif %}
-	    </div>-->
+	    <!--<a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> -->
     </div>
     <br class="clear" />
 </div> <!-- end producto li -->

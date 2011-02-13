@@ -37,8 +37,8 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
     (r'^account/change_password/$', 'change_password'),
     (r'^account/send_confirmation_mail/$', 'send_confirmation_mail'),    
     (r'^account/add_subscription/$', 'add_subscription'),
-    (r'^account/enable_subscription_mail/$', 'enable_subscription_mail'),
-    (r'^account/disable_subscription_mail/$', 'disable_subscription_mail'),    
+    (r'^account/enable_subscription_mail/(?P<subscription_id>\d+)$', 'enable_subscription_mail'),
+    (r'^account/disable_subscription_mail/(?P<subscription_id>\d+)$', 'disable_subscription_mail'),    
     (r'^account/remove_subscription/(?P<subscription_id>\d+)/$', 'remove_subscription'),
 )
 

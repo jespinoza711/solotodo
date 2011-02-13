@@ -18,3 +18,225 @@
 .default_table tbody tr.even td  { 
 	background-color: #ffffff; 
 }
+
+.product_details_sidebar {
+    float: right;
+    width: 300px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.product_details_specs {
+    padding: 10px;
+}
+
+.product_details_specs h1 {
+    font-size: 30px;
+}
+
+.product_container a {
+    text-decoration: none;
+    color: #005C8E;
+}
+
+.product_container {
+    height: 100px;
+}
+
+.product_thumb_image {
+    float: left;
+    margin-right: 15px;
+    height: 100px;
+}
+
+.product_thumb_price {
+    float: right;
+    color: #005C8E;
+    font-weight: bold;
+    font-size: 24px;
+    padding-top: 35px;
+}
+
+.mytable tbody tr:nth-child(2n) td, .mytable tbody tr.even td {
+    background-color: inherit;
+}
+
+.table_product_detail_prices {
+    margin-top: 30px;
+    width: 300px;
+}
+
+.table_product_detail_prices tr td {
+    text-align: center;
+    font-size: 16px;
+    background: #FFFFFF;
+}
+
+.table_product_detail_prices th {
+    font-size: 18px;
+    text-align: center;
+}
+
+h3.subtitle {
+    margin-top: 10px;
+}
+
+hr.product_details_comment_separator {
+    clear: inherit;
+    width: 350px;
+    margin-top: 10px;
+}
+
+.comment_nickname {
+    font-weight: bold;
+}
+
+.comment_date {
+    font-size: 8px;
+}
+
+.comment_body {
+    margin-top: 10px;
+}
+
+#product_comment_add {
+    margin-top: 10px;
+}
+
+#comment_form {
+    margin-top: 10px;
+}
+
+.comment_form_label {
+    font-weight: bold;
+}
+
+#comment_form textarea {
+    width: 300px;
+}
+
+#result_set {
+    margin: 20px 0 20px 18px;
+}
+
+#toggle_hidden_link {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#toggle_hidden_link_container {
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+#ad_top {
+    text-align: center;
+}
+
+#ad-right {
+    text-align: center;
+}
+
+.thumb-product {
+    text-align: center;
+}
+
+.error_message {
+    border: 2px solid #970000;
+    background-color: #FFD4D4;
+    color: #970000;
+    padding: 10px;
+    margin: 10px;
+    display: none;    
+}
+
+.dialog_button {
+    height: 24px;
+}
+
+.dialog_form label {
+    width: 150px;
+    float: left;
+    width: 140px;
+    margin-right: 10px;
+    padding-top: 6px;
+    text-align: right;
+    font-weight: bold;
+}
+
+#signup_form input {
+    width: 180px;
+}
+
+.signup_element {
+    padding: 2px;
+}
+
+.dialog_error {
+    border: 2px solid #970000;
+    background-color: #FFD4D4;
+    color: #970000;
+    font-size: 12px;
+    padding: 2px;
+    margin: 5px;
+    display: none;
+    padding-left: 10px;
+}
+
+#custom_form label {
+    width: 200px;
+}
+
+.errorlist {
+    font-weight: bold;
+    font-size: 11px;
+    color: #970000;
+    list-style-type: none;
+}
+
+.info_message {
+    border: 2px solid #468130;
+    background-color: #B4E0B4;
+    color: #216B1A;
+    padding: 10px;
+    margin: 10px;
+    display: none;
+}
+
+#signup_text {
+    margin-bottom: 10px;
+}
+
+.ajax_loader {
+    display: none;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#account_options {
+    font-weight: bold;
+    font-size: 13px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+#subscription_list td {
+    background-color: inherit;
+}
+
+#subscription_list th {
+    text-align: center;
+}
+
+#always_on_error_message {
+    display: block;
+}
+
+#content {
+    padding-top: 10px;
+}
+
+.processor_image_container {
+    float: left;
+    margin: 0px 5px 5px 0px;
+}
