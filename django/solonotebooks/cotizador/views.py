@@ -332,7 +332,6 @@ def product_details(request, product_id):
     
     try:
         product_subscription = ProductSubscription.objects.filter(user = request.user, product = product, is_active = True)[0]
-        print product_subscription
     except:
         product_subscription = None
     
