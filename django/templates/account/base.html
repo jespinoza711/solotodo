@@ -1,33 +1,31 @@
-{% extends "cotizador/base_generic.html" %}
-
-{% block top_menu %}
-<div class="MTL"></div>
-        <div class="MTR"></div>
-        <ul>
-            <li>
-                <a href="/account/subscriptions" title="Últimos Movimientos"><span>Mis Notebooks</span></a>
-            </li>
-            <li>
-                <a href="/account/change_email" title="Comentarios"><span>Cambiar correo electrónico</span></a>
-            </li>
-            <li>
-                <a href="/account/change_password" title="Nuevos Equipos"><span>Cambiar contraseña</span></a>
-            </li>
-        </ul> 
-{% endblock %}
+{% extends "base_generic.html" %}
 
 {% block alertContent %}
+    {% if not user.is_active %}
+        <div class="error_message" id="always_on_error_message">
+            <strong>Tu correo electrónico aún no ha sido validado</strong>
+            <p>
+                Validar tu correo te permitirá suscribirte a los cambios de precio  y disponibilidad en tus notebooks favoritos, además de poder regenerar tu contraseña en caso de extravío.
+            </p>
+            <p>
+            <a href="/account/send_confirmation_mail">Haz click aquí para reenviar el mensaje de validación a tu cuenta de correo</a>
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}
 
-{% if not user.is_active %}
-    <div class="error_message" id="always_on_error_message">
-        <strong>Tu correo electrónico aún no ha sido validado</strong>
-        <p>
-            Validar tu correo te permitirá suscribirte a los cambios de precio  y disponibilidad en tus notebooks favoritos, además de poder regenerar tu contraseña en caso de extravío.
-        </p>
-        <p>
-        <a href="/account/send_confirmation_mail">Haz click aquí para reenviar el mensaje de validación a tu cuenta de correo</a>
-        </p>
+{% block content %}
+    <div id="result_set">
+        <div id="account_options">
+            <a href="/account/subscriptions" title="Últimos Movimientos"><span>Mis Productos</span></a>
+             | 
+            <a href="/account/change_email" title="Comentarios"><span>Cambiar correo electrónico</span></a>
+             | 
+            <a href="/account/change_password" title="Nuevos Equipos"><span>Cambiar contraseña</span></a>
+        </div>
+
+        {% block account_content %}
+        {% endblock %}
+
     </div>
-{% endif %}
-
 {% endblock %}

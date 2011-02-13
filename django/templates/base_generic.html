@@ -7,15 +7,15 @@
 		        {{ site_name }}
 	        {% endblock %}
 	    </title>
-		<link rel="stylesheet" href="/media/cssv2/screen.css" type="text/css" media="screen, projection" />
-   	 	<link rel="stylesheet" href="/media/cssv2/layout.css" type="text/css" media="screen, projection" />
-   	 	<link rel="stylesheet" href="/media/cssv2/mine.css" type="text/css" media="screen, projection" />
-   	 	<link rel="stylesheet" href="/media/cssv2/dialog/jquery-ui-1.8.9.custom.css" type="text/css" />
-   	 	<link rel="shortcut icon" href="/media/iconsv2/favicon.ico" type="image/x-icon" />
-   	 	<script type="text/javascript" src="/media/jsv2/jquery-1.4.3.min.js"></script>
-   	 	<script type="text/javascript" src="/media/jsv2/dialog/jquery-ui-1.8.9.custom.min.js"></script>
-   	 	<script type="text/javascript" src="/media/jsv2/account_script.js"></script>
-        <script type="text/javascript" src="/media/jsv2/comparison_list.js"></script>
+		<link rel="stylesheet" href="/media/css/screen.css" type="text/css" media="screen, projection" />
+   	 	<link rel="stylesheet" href="/media/css/layout.css" type="text/css" media="screen, projection" />
+   	 	<link rel="stylesheet" href="/media/css/mine.css" type="text/css" media="screen, projection" />
+   	 	<link rel="stylesheet" href="/media/css/dialog/jquery-ui-1.8.9.custom.css" type="text/css" />
+   	 	<link rel="shortcut icon" href="/media/icons/favicon.ico" type="image/x-icon" />
+   	 	<script type="text/javascript" src="/media/js/jquery-1.4.3.min.js"></script>
+   	 	<script type="text/javascript" src="/media/js/dialog/jquery-ui-1.8.9.custom.min.js"></script>
+   	 	<script type="text/javascript" src="/media/js/account_script.js"></script>
+        <script type="text/javascript" src="/media/js/comparison_list.js"></script>
         <script type="text/javascript">
             authenticated_user = {% if user.is_authenticated %}true{% else %}false{% endif %}
         </script>
@@ -23,10 +23,10 @@
 		{% endblock %}
 
 		<!--[if IE 7]>
-			<link rel="stylesheet" type="text/css" href="/media/cssv2/ie7style.css" />
+			<link rel="stylesheet" type="text/css" href="/media/css/ie7style.css" />
 		<![endif]-->
 		<!--[if IE 8]>
-			<link rel="stylesheet" type="text/css" href="/media/cssv2/ie8style.css" />
+			<link rel="stylesheet" type="text/css" href="/media/css/ie8style.css" />
 		<![endif]-->
 		<script type="text/javascript">
 		        $(document).ready(function() {
@@ -85,7 +85,7 @@
 					
 				<div id="menu">
 					<div id="combo-search" class="left">
-						<a href="{% url cotizador.views.index %}" title="Inicio" title="{{ site_name }}" class="left"><img src="/media/cssv2/img/logo.png" /></a>
+						<a href="{% url cotizador.views.index %}" title="Inicio" title="{{ site_name }}" class="left"><img src="/media/css/img/logo.png" /></a>
 						<ol id="search" class="left">
 						    <form method="get" action="{% url cotizador.views.search %}">
 							<li>

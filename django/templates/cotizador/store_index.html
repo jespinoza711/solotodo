@@ -1,16 +1,16 @@
-{% extends "cotizador/base_browse.html" %}
+{% extends "base_generic.html" %}
 
-{% block title %}SoloNotebooks - Tiendas{% endblock %}
+{% block title %}Tiendas - {{ site_name }}{% endblock %}
 
 {% block header %}
 {% endblock %}
 
-{% block mainContent %}
+{% block content %}
 
 <h1>Tiendas indexadas</h1>
 
 {% for store in stores %}
-    <a href="{{ store.id }}">{{ store }}</a>
+    <a href="{% url cotizador.views.store_details store.id %}">{{ store }}</a>
     <br />
 {% endfor %}
 
