@@ -38,7 +38,8 @@ class Rigam:
         # Array containing the data for each product
         products_data = []
         
-        url_extensions = [  'index.php?act=viewCat&catId=39&',
+        url_extensions = [  'index.php?act=viewCat&catId=39&',  # Notebooks
+                            'index.php?act=viewCat&catId=60',   # Tarjetas de video
                             ]
         
         product_links = []                    
