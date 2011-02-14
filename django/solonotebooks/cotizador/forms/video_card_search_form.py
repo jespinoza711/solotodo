@@ -202,7 +202,7 @@ class VideoCardSearchForm(SearchForm):
         if self.bus_name:
             video_cards = video_cards.filter(bus__name = self.bus_name)
         if self.bus_lanes and self.advanced_controls:
-            video_cards = video_cards.filter(bus__lane = self.bus_lanes)
+            video_cards = video_cards.filter(bus__lane = self.bus_lanes).filter(bus__name__show_version_and_lanes = True)
         if self.bus and self.advanced_controls:
             video_cards = video_cards.filter(bus = self.bus)
         if self.profile:
