@@ -35,6 +35,12 @@ class VideoCardGpu(models.Model):
     def pretty_display(self):
         return unicode(self)
         
+    def pretty_transistors(self):
+        if self.transistor_count:
+            return str(self.transistor_count) + ' millones'
+        else:
+            return 'No disponible'
+        
     def raw_text(self):
         result = ''
         result += ' ' + self.name
@@ -75,9 +81,32 @@ class VideoCardGpu(models.Model):
         
         return sum(scores) / len(scores)
         
-    def update_tdmark_scores(self):
+    @staticmethod
+    def update_all_tdmark_scores():
+        gpus = VideoCardGpu.objects.all()
+        for gpu in gpus:
+            print gpu
+            if gpu.tdmark_id == '0':
+                print 'Sin ID'
+                continue
+            if gpu.tdmark_06_score == 0:
+                print 'Actualizando 3DMark06'
+                gpu.update_tdmark_06_score()
+            if gpu.tdmark_vantage_score == 0:
+                print 'Actualizando 3DMark Vantage'
+                gpu.update_tdmark_vantage_score()
+            if gpu.tdmark_11_score == 0:
+                print 'Actualizando 3DMark 11'
+                gpu.update_tdmark_11_score()
+            gpu.save()
+        
+    def update_tdmark_06_score(self):
         self.tdmark_06_score = self.get_tdmark_score('14')
+        
+    def update_tdmark_vantage_score(self):
         self.tdmark_vantage_score = self.get_tdmark_score('192')
+        
+    def update_tdmark_11_score(self):
         self.tdmark_11_score = self.get_tdmark_score('232')
     
     class Meta:

@@ -22,7 +22,7 @@ class VideoCard(Product):
     # Interface methods
     
     def __unicode__(self):
-        return unicode(self.brand) + ' ' + self.gpu.name + ' ' + self.name
+        return unicode(self.brand) + ' ' + self.gpu.name + ' (' + self.name + ')'
         
     def pretty_display(self):
         return unicode(self)
