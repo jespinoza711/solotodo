@@ -47,7 +47,9 @@ class Sym:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  '?cat=104',
+        url_extensions = [  '?cat=104',         # Notebooks
+                            '?cat=32_68',       # Tarjetas de video AGP
+                            '?cat=32_69',       # Tarjetas de video PCIe
                             ]
                             
         productLinks = []
