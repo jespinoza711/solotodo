@@ -61,6 +61,9 @@ class Sistemax:
             product = self.retrieve_product_data(product_link)
             if product:
                 products_data.append(product)                
+                
+        if not products_data:
+            raise Exception('No products found')
 
         return products_data
 

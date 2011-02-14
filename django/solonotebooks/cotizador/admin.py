@@ -103,7 +103,6 @@ admin.site.register(VideoCardMemoryBusWidth)
 admin.site.register(VideoCardGpuCoreCount)
 admin.site.register(VideoCardGpuPowerConnector)
 admin.site.register(VideoCardGpuManufacturingProcess)
-admin.site.register(VideoCardGpu)
             
 class ProductAdmin(admin.ModelAdmin):
     exclude = ['publicized_offer']
@@ -113,7 +112,13 @@ class NotebookAdmin(admin.ModelAdmin):
     
 class VideoCardAdmin(admin.ModelAdmin):
     exclude = ['publicized_offer']
+    list_display = ['pretty_display', 'gpu', 'core_clock', 'shader_clock', 'memory_clock']
     
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Notebook, NotebookAdmin)
 admin.site.register(VideoCard, VideoCardAdmin)
+
+class VideoCardGpuAdmin(admin.ModelAdmin):
+    list_display = ['pretty_display', 'default_core_clock', 'default_shader_clock', 'default_memory_clock']
+
+admin.site.register(VideoCardGpu, VideoCardGpuAdmin)
