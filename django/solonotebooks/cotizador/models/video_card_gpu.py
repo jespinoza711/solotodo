@@ -9,11 +9,11 @@ class VideoCardGpu(models.Model):
     
     stream_processors = models.IntegerField()
     texture_units = models.IntegerField()
+    rops = models.IntegerField()
     default_core_clock = models.IntegerField()
     default_shader_clock = models.IntegerField()
     default_memory_clock = models.IntegerField()
     transistor_count = models.IntegerField()
-    rops = models.IntegerField()
     tdp = models.IntegerField()
     tdmark_06_score = models.IntegerField()
     tdmark_vantage_score = models.IntegerField()
@@ -31,6 +31,9 @@ class VideoCardGpu(models.Model):
     
     def __unicode__(self):
         return unicode(self.line.family) + ' ' + self.name
+        
+    def pretty_display(self):
+        return unicode(self)
         
     def raw_text(self):
         result = ''

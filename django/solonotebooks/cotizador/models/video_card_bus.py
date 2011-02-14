@@ -9,7 +9,10 @@ class VideoCardBus(models.Model):
     def __unicode__(self):
         str_name = unicode(self.name) 
         if self.name.show_version_and_lanes:
-            str_name += ' ' + str(self.version) + ' ' + unicode(self.lane)
+            str_name += ' '
+            if str(self.version) != '1.0':
+                str_name += str(self.version) + ' ' 
+            str_name += unicode(self.lane)
         return str_name
         
     def raw_text(self):

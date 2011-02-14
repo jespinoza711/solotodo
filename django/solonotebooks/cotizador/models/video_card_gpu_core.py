@@ -16,5 +16,5 @@ class VideoCardGpuCore(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Video card GPU core family'
+        verbose_name = 'Video card GPU core'
         ordering = ['family', 'name']
