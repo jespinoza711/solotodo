@@ -167,6 +167,9 @@ def update_availability_and_price():
         product.save()
         product.generate_chart()
         
+    # Other housekeeping stuff
+    VideoCardGpu.update_all_tdmark_scores()
+        
 def get_store_products(fetch_store):
     try:
         store = Store.objects.get(name = fetch_store.name)
