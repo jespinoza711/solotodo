@@ -83,7 +83,7 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             if created:
                 shp.shpe = shpe
                 shp.save()
-            return HttpResponseRedirect('/manager/new_entities')
+            return HttpResponseRedirect('/manager/new_entities/?refresh=true')
     else:
         d = {}
         for store in Store.objects.all():
@@ -108,7 +108,7 @@ def hide_entity(request, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     shpe.is_hidden = True
     shpe.save()
-    return HttpResponseRedirect(request.META['HTTP_REFERER']);
+    return HttpResponseRedirect(request.META['HTTP_REFERER'] + '?refresh=true');
 
 @manager_login_required
 def delete_comment(request, comment_id):
