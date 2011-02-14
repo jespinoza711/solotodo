@@ -1,6 +1,6 @@
 <h1>{{ notebook }}</h1>
     <h3 class="subtitle">Especificaciones esenciales</h3>
-    <strong>Procesador: </strong> <a href="/processor_line_families/{{ notebook.processor.line.family.id }}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
+    <strong>Procesador: </strong> <a href="{% url solonotebooks.cotizador.views_notebooks.processor_line_details notebook.processor.line.family.id %}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
     <br />
     <strong>Pantalla: </strong> {{ notebook.screen.pretty_display }}
     <br />
@@ -19,11 +19,11 @@
     <br />
     <strong>Tarjeta de video: </strong>
     {% ifequal notebook.video_card.all.count 1 %}
-        <a href="/video_card_line/{{notebook.video_card.all.0.line.id}}/?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
+        <a href="{% url solonotebooks.cotizador.views_notebooks.video_card_line_details notebook.video_card.all.0.line.id %}?video_card={{notebook.video_card.all.0.id}}">{{ notebook.video_card.all.0 }}</a>
     {% else %}
         <ul class="sub_ul">
             {% for video_card in notebook.video_card.all %}
-            <li><a href="/video_card_line/{{video_card.line.id}}/?video_card={{video_card.id}}">{{ video_card }}</a></li>
+            <li><a href="{% url solonotebooks.cotizador.views_notebooks.video_card_line_details video_card.line.id %}?video_card={{video_card.id}}">{{ video_card }}</a></li>
         {% endfor %}
     </ul>
     {% endifequal %}
