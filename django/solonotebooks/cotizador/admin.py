@@ -112,7 +112,7 @@ class NotebookAdmin(admin.ModelAdmin):
     
 class VideoCardAdmin(admin.ModelAdmin):
     exclude = ['publicized_offer']
-    list_display = ['pretty_display', 'gpu', 'core_clock', 'shader_clock', 'memory_clock']
+    list_display = ['pretty_display', 'core_clock', 'shader_clock', 'memory_clock']
     
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Notebook, NotebookAdmin)
