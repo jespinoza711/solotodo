@@ -7,16 +7,19 @@ from django.forms import ChoiceField
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.forms import *
 from solonotebooks.cotizador.fields import *
+from solonotebooks import settings
 
 # Script that generates the sitemap of the catalog, including notebooks,
 # processor lines and video card lines
 def main():
+    siteUrl = settings.SERVER_NAME
+
     xml = minidom.Document()
     
     rootElem = xml.createElement('urlset');
     rootElem.setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9')
     
-    specificSites = ['http://www.solonotebooks.net/', 'http://www.solonotebooks.net/blog']
+    specificSites = [siteUrl + '/', siteUrl + '/blog']
     
     for specificSite in specificSites:
         siteElem = xml.createElement('url')
@@ -38,32 +41,32 @@ def main():
         
         rootElem.appendChild(siteElem)
     
-    ntbks = Notebook.objects.order_by('id')
-    for ntbk in ntbks:
-        ntbkElem = xml.createElement('url')
+    prods = Product.objects.order_by('id')
+    for prod in prods:
+        prodElem = xml.createElement('url')
         
-        locText = xml.createTextNode('http://www.solonotebooks.net/notebooks/' + str(ntbk.id))
+        locText = xml.createTextNode(siteUrl + '/products/' + str(prod.id))
         locElem = xml.createElement('loc')
         locElem.appendChild(locText)
-        ntbkElem.appendChild(locElem)
+        prodElem.appendChild(locElem)
         
         changeFreqText = xml.createTextNode('daily')
         changeFreqElem = xml.createElement('changefreq')
         changeFreqElem.appendChild(changeFreqText)
-        ntbkElem.appendChild(changeFreqElem)
+        prodElem.appendChild(changeFreqElem)
         
         priorityText = xml.createTextNode('1.00')
         priorityElem = xml.createElement('priority')
         priorityElem.appendChild(priorityText)
-        ntbkElem.appendChild(priorityElem)        
+        prodElem.appendChild(priorityElem)        
         
-        rootElem.appendChild(ntbkElem)
+        rootElem.appendChild(prodElem)
         
     video_card_lines = NotebookVideoCardLine.objects.order_by('id')
     for video_card_line in video_card_lines:
         vclElem = xml.createElement('url')
         
-        locText = xml.createTextNode('http://www.solonotebooks.net/video_card_line/' + str(video_card_line.id))
+        locText = xml.createTextNode(siteUrl + '/notebooks/video_card_lines/' + str(video_card_line.id))
         locElem = xml.createElement('loc')
         locElem.appendChild(locText)
         vclElem.appendChild(locElem)
@@ -84,7 +87,7 @@ def main():
     for processor_line_family in processor_line_families:
         procElem = xml.createElement('url')
         
-        locText = xml.createTextNode('http://www.solonotebooks.net/processor_line_families/' + str(processor_line_family.id))
+        locText = xml.createTextNode(siteUrl + '/notebooks/processor_lines/' + str(processor_line_family.id))
         locElem = xml.createElement('loc')
         locElem.appendChild(locText)
         procElem.appendChild(locElem)
@@ -100,37 +103,39 @@ def main():
         procElem.appendChild(priorityElem)        
         
         rootElem.appendChild(procElem)
-        
-    sf = SearchForm()
-    for field in sf.fields:
-        field_value = sf.fields[field]
-        if field_value.__class__.__name__ == 'ClassChoiceField':
-            queryset = field_value.queryset
-            ids = [elem.id for elem in queryset]
-        elif field_value.__class__.__name__ == 'CustomChoiceField':
-            queryset = field_value.choices
-            ids = [elem[0] for elem in queryset]
-        else:
-            continue
-        for i in ids:
-            procElem = xml.createElement('url')
-        
-            locText = xml.createTextNode('http://www.solonotebooks.net/?advanced_controls=1&' + field + '=' + str(i))
-            locElem = xml.createElement('loc')
-            locElem.appendChild(locText)
-            procElem.appendChild(locElem)
+    
+    ptypes = ProductType.objects.all()
+    for ptype in ptypes:
+        sf = eval(ptype.classname + 'SearchForm({})')
+        for field in sf.fields:
+            field_value = sf.fields[field]
+            if field_value.__class__.__name__ == 'ClassChoiceField':
+                queryset = field_value.queryset
+                ids = [elem.id for elem in queryset]
+            elif field_value.__class__.__name__ == 'CustomChoiceField':
+                queryset = field_value.choices
+                ids = [elem[0] for elem in queryset]
+            else:
+                continue
+            for i in ids:
+                procElem = xml.createElement('url')
             
-            changeFreqText = xml.createTextNode('daily')
-            changeFreqElem = xml.createElement('changefreq')
-            changeFreqElem.appendChild(changeFreqText)
-            procElem.appendChild(changeFreqElem)
-            
-            priorityText = xml.createTextNode('1.00')
-            priorityElem = xml.createElement('priority')
-            priorityElem.appendChild(priorityText)
-            procElem.appendChild(priorityElem)        
-            
-            rootElem.appendChild(procElem)
+                locText = xml.createTextNode(siteUrl + '/' + ptype.urlname + '/catalog/?advanced_controls=1&' + field + '=' + str(i))
+                locElem = xml.createElement('loc')
+                locElem.appendChild(locText)
+                procElem.appendChild(locElem)
+                
+                changeFreqText = xml.createTextNode('daily')
+                changeFreqElem = xml.createElement('changefreq')
+                changeFreqElem.appendChild(changeFreqText)
+                procElem.appendChild(changeFreqElem)
+                
+                priorityText = xml.createTextNode('1.00')
+                priorityElem = xml.createElement('priority')
+                priorityElem.appendChild(priorityText)
+                procElem.appendChild(priorityElem)        
+                
+                rootElem.appendChild(procElem)
         
     xml.appendChild(rootElem)
     
