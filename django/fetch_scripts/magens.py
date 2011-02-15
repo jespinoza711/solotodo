@@ -46,6 +46,10 @@ class Magens:
             'notebooks-netbooks-notebooks-14-c-15_203.html',
             'notebooks-netbooks-notebooks-15-c-15_204.html',
             'notebooks-netbooks-notebooks-16-mas-c-15_205.html',
+            'video-c-24_128.html',
+            'video-pcie-c-24_130.html',
+            'video-pcie-nvidia-c-24_129.html',
+            'video-profesionales-c-24_131.html',
         ]
                 
         product_links = []            
