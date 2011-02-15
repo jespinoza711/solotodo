@@ -10,7 +10,6 @@ class Webco:
     name = 'Webco'
     
     def retrieve_product_data(self, product_link):
-        print product_link
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
@@ -39,8 +38,12 @@ class Webco:
         # Array containing the data for each product
         products_data = []
         
-        url_extensions = [  'n_new_productos.asp?CATEGORIA={761FD739-2D0F-4177-8AE0-C641D6F16502}',
+        url_extensions = [  # Netbooks
+                            'n_new_productos.asp?CATEGORIA={761FD739-2D0F-4177-8AE0-C641D6F16502}',
+                            # Notebooks
                             'n_new_productos.asp?CATEGORIA={D70BBB30-F5E9-4246-B812-A939C8777429}',
+                            # Tarjetas de video
+                            'n_new_productos.asp?CATEGORIA={FFE74755-6E24-4958-A066-F75670943D3E}',
                             ]
         
         product_links = []                    

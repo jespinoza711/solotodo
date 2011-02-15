@@ -42,7 +42,8 @@ class TecnoCl:
         
         url_extensions = [  'productos.asp?cat=8',
                             'productos.asp?cat=259',
-                            'productos.asp?cat=85'
+                            'productos.asp?cat=85',
+                            'productos.asp?cat=50'
                             ]
         
         product_links = []                    
