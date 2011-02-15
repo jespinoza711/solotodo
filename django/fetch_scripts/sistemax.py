@@ -10,7 +10,6 @@ class Sistemax:
     name = 'Sistemax'
     
     def retrieve_product_data(self, product_link):
-        print product_link
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
@@ -35,10 +34,9 @@ class Sistemax:
         url_buscar_productos = 'index.php?op=seccion/id='
         
         extensions = [
-                # Netbooks
-                '112',
-                # Notebooks
-                '27', 
+                '112',      # Netbooks
+                '27',       # Notebooks
+                '35',       # Tarjetas de video
                 ]
                         
         # Array containing the data for each product
