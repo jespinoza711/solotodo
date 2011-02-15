@@ -14,6 +14,10 @@ class Magens:
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
+        availability = product_soup.find('div', { 'class': 'stock' }).contents[4]
+        if 'Agotado' in availability:
+            return None
+        
         product_name = product_soup.find('div', { 'class': 'titleContent' }).string.encode('ascii', 'ignore')
         product_price = int(product_soup.find('div', { 'class': 'precioDetalle' }).string.split('$')[1].replace(',', ''))
         
