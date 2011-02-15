@@ -42,6 +42,7 @@ class PCOfertas:
         
         url_extensions = [  '74',   # Notebook
                             '75',   # Netbook
+                            '87',   # Tarjetas de video
                             ]
         
         product_links = []                    
