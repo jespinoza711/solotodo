@@ -78,4 +78,4 @@ class VideoCard(Product):
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Video card'
-        ordering = ['brand', 'name']
+        ordering = ['brand', 'gpu__name', 'name']

@@ -41,7 +41,10 @@ class PCExpress:
         productsData = []
         
         url_extensions = [  
-                            '75_136',
+                            '75_136',   # Notebooks
+                            '83_157',   # Tarjetas de video AGP
+                            '83_158',   # Tarjetas de video PCIe AMD
+                            '83_159',   # Tarjetas de video PCIe Nvidia
                         ]
                             
         product_links = []
