@@ -11,5 +11,5 @@ class VideoCardMemoryBusWidth(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Video card memory quantity'
+        verbose_name = 'Video card memory bus width'
         ordering = ['value']
