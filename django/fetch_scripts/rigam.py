@@ -38,7 +38,7 @@ class Rigam:
         # Array containing the data for each product
         products_data = []
         
-        url_extensions = [  'index.php?act=viewCat&catId=39&',  # Notebooks
+        url_extensions = [  'index.php?act=viewCat&catId=39',  # Notebooks
                             'index.php?act=viewCat&catId=60',   # Tarjetas de video
                             ]
         
@@ -47,7 +47,7 @@ class Rigam:
             page_number = 0
             
             while True:
-                urlWebpage = urlBase + url_extension + 'page=' + str(page_number)
+                urlWebpage = urlBase + url_extension + '&page=' + str(page_number)
 
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()
