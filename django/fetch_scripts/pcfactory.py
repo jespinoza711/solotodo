@@ -46,11 +46,15 @@ class PCFactory:
         productsData = []
         
         url_extensions = [  
-                            '?papa=24&categoria=424',
-                            '?papa=24&categoria=449',
-                            '?papa=24&categoria=410',
-                            '?papa=24&categoria=437',
-                            '?papa=24&categoria=436',
+                            '?papa=24&categoria=424',   # Notebooks 7 a 11
+                            '?papa=24&categoria=449',   # Notebooks 12 a 13
+                            '?papa=24&categoria=410',   # Notebooks 14
+                            '?papa=24&categoria=437',   # Notebooks 15
+                            '?papa=24&categoria=436',   # Notebooks 16 y +
+                            '?papa=334&categoria=40',   # VGA AGP
+                            '?papa=334&categoria=378',  # VGA PCIe Nvidia
+                            '?papa=334&categoria=454',  # VGA PCIe ATI
+                            '?papa=334&categoria=455',  # VGA Profesionales
                             ]
                           
         pageLinks = []                            
