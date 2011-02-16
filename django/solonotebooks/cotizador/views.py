@@ -24,8 +24,19 @@ from utils import *
     
 # Main landing page (/)    
 def index(request):
-    url = reverse('solonotebooks.cotizador.views.product_type_index', kwargs = {'product_type_urlname': 'notebooks'})
-    return HttpResponseRedirect(url)
+    # Correct
+    
+    ptypes = ProductType.objects.all()
+    highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
+    result_products = highlighted_products_form.apply_filter(Product.get_valid())[:10]
+    
+    return append_ads_to_response(request, 'cotizador/index.html', {
+        'hnf': highlighted_products_form,
+        'products': result_products,
+        'ptype': None,
+        
+        'ptypes': ptypes,
+    })
     
 def product_type_index(request, product_type_urlname):
     ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
@@ -120,7 +131,7 @@ def store_index(request):
     })  
     
 def search(request):
-    ptype = ProductType.default()
+    ptype = None
     url = reverse('solonotebooks.cotizador.views.index')
     
     try:
@@ -130,10 +141,15 @@ def search(request):
     except:
         return HttpResponseRedirect(url)
         
-    product_type_class = Product
+    if ptype:
+        url = reverse('solonotebooks.cotizador.views.product_type_index', kwargs = {'product_type_urlname': ptype.urlname})
+    else:
+        url = reverse('solonotebooks.cotizador.views.index')
     
-    url = reverse('solonotebooks.cotizador.views.product_type_index', kwargs = {'product_type_urlname': ptype.urlname})
-    product_type_class = ptype.get_class()
+    try:
+        product_type_class = ptype.get_class()
+    except:
+        product_type_class = Product
 
     try:    
         query = request.GET['search_keywords']
@@ -153,12 +169,14 @@ def search(request):
     # Finally we sort them from highest to lowest hit rate
     result_products = sorted(result_products, key = operator.itemgetter(1), reverse = True)
     
-    # Boilerplate code for setting up the links to each page of the results
-    search_form = initialize_search_form(request.GET, ptype)
+    page_count = int(ceil(len(result_products) / 10.0))
     
-    page_count = ceil(len(result_products) / 10.0);
+    try:
+        page_number = int(request.GET['page_number'])
+    except:
+        page_number = 1
         
-    pages = filter(lambda(x): x > 0 and x <= page_count, range(search_form.page_number - 3, search_form.page_number + 3))
+    pages = filter(lambda(x): x > 0 and x <= page_count, range(page_number - 3, page_number + 3))
     try:
         left_page = pages[0]
     except:
@@ -169,25 +187,30 @@ def search(request):
     except:
         right_page = 0
         
-    result_products = result_products[(search_form.page_number - 1) * 10 : search_form.page_number * 10]
+    result_products = result_products[(page_number - 1) * 10 : page_number * 10]
     
     for result in result_products:
         result[0].matching = result[1]
         
     result_products = [result[0] for result in result_products]
     
-    return append_ads_to_response(request, 'cotizador/search.html', {
-        'form': search_form,
+    if ptype:
+        template = 'cotizador/search.html'
+    else:
+        template = 'cotizador/search_no_product_type.html'
+    
+    return append_ads_to_response(request, template, {
         'query': query,
         'products': result_products,
-        'page_number': search_form.page_number,
-        'prev_page': search_form.page_number - 1,
-        'post_page': search_form.page_number + 1,
-        'page_count': int(page_count),
+        'page_number': page_number,
+        'prev_page': page_number - 1,
+        'post_page': page_number + 1,
+        'page_count': page_count,
         'page_range': pages,
         'left_page': left_page,
         'right_page': right_page,        
-        'ptype': ptype
+        'ptype': ptype,
+        'ptypes': ProductType.objects.all()
     })
     
 def append_ads_to_response(request, template, args):
@@ -232,17 +255,20 @@ def append_user_to_response(request, template, args):
     if 'form' not in args:
         args['form'] = initialize_search_form(request.GET, ptype)
         
-        
-    args['change_category_url'] = args['form'].generate_url_without_main_category()
-        
-    search_form = args['form']
-    main_category_choices = [Category()]
-    main_category_choices.extend(list(search_form.main_category().choices.queryset))
-    args['main_category_choices'] = main_category_choices
-        
-    main_category_comparison_key = search_form.main_category_key()
     
-    args['main_category_comparison_key'] = main_category_comparison_key
+    try:    
+        args['change_category_url'] = args['form'].generate_url_without_main_category()        
+        search_form = args['form']
+        main_category_choices = [Category()]
+        main_category_choices.extend(list(search_form.main_category().choices.queryset))
+        args['main_category_choices'] = main_category_choices
+            
+        main_category_comparison_key = search_form.main_category_key()
+        args['main_category_comparison_key'] = main_category_comparison_key
+    except:
+        pass
+
+        
     args['signup_key'] = request.session['signup_key']
     args['site_name'] = settings.SITE_NAME
     

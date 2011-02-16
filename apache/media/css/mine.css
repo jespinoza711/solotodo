@@ -248,3 +248,9 @@ hr.product_details_comment_separator {
 .selected_processor td {
     font-weight: bold;
 }
+
+#categories-index {
+    background: #FFFFFF; 
+    margin: 20px 0 23px 3px; 
+    height: auto;
+}

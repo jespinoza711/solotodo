@@ -8,6 +8,7 @@
 	        {% endblock %}
 	    </title>
 		<link rel="stylesheet" href="/media/css/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/media/css/menu_style.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/css/layout.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/css/mine.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/css/dialog/jquery-ui-1.8.9.custom.css" type="text/css" />
@@ -89,8 +90,10 @@
 						<ol id="search" class="left">
 						    <form method="get" action="{% url cotizador.views.search %}">
 							<li>
-    							    <input name="search_keywords" type="text" class="input-search" value="¿Qué {{ ptype.displayname }} estás buscando?" />
-    							    <input name="product_type" type="hidden" value="{{ ptype.urlname }}" />
+    							    <input name="search_keywords" type="text" class="input-search" value="¿Qué{% if ptype %} {{ ptype.displayname }}{% endif %} estás buscando?" />
+    							    {% if ptype %}
+    							        <input name="product_type" type="hidden" value="{{ ptype.urlname }}" />
+    							    {% endif %}
     							    </li>
 							<li><input type="submit" class="btn-search" value=""/></li>
 </form>
@@ -101,13 +104,18 @@
 					<div id="areas-site" class="right">
 						<ul>
 							<li class="sprite-inicio-active"><a href="{% url cotizador.views.index %}" title="Inicio">Inicio</a></li>
-							<li class="sprite-catalogo"><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}" title="Catálogo">Catálogo</a></li>
-							<li class="sprite-blog"><a href="/blog" title="Blog">Blog</a></li>
+							<li class="sprite-catalogo">							    
+							    <a href="{% if ptype %}{% url cotizador.views.product_type_catalog ptype.urlname %} {% else %}/{% endif %}" title="Catálogo">
+							        Catálogo
+						        </a>
+						    </li>
+							<li class="sprite-blog"><a href="/blog/contacto/" title="Contacto">Contacto</a></li>
 						</ul>
 					</div> <!-- end areas -->
 				<br class="clear" />
 				</div> <!-- end menu -->
 				
+				{% block tabs %}
 				<div id="tabs">
 					<ul class="catalogo left">
 						<li class="intro-catalogo">Tipos de {{ ptype.displayname }}</li>
@@ -125,6 +133,7 @@
 						<li class="twitter"><a href="#">Síguenos</a></li>
 					</ul>-->
 				</div> <!-- end tabs -->
+				{% endblock %}
 				
 			</div><!-- !end content head -->
 		</div> <!-- !end #head -->
@@ -150,7 +159,7 @@
                     </div>
                 {% endif %}
             {% endblock %}
-		    {% block alertContent %}
+		    {% block alert_content %}
 		    {% endblock %}
 			{% block content %}
     		{% endblock %}					

@@ -1,22 +1,24 @@
-{% extends "cotizador/base_catalog.html" %}
+{% extends "base_no_product_type.html" %}
 
 {% block title %}Resultados de la búsqueda - {{ site_name }}{% endblock %}
 
-{% block catalog_content %}
+{% block content %}
 <div id="result_set">
 <h1>Resultados de la búsqueda</h1>
 
 <p><b>Términos utilizados:</b> {{ query }}</p>
 
-{% ifequal result_products.count 0 %}
-
-<h2>No se han encontrado equipos con esas características</h2>
-
-{% endifequal %}
+{% if products %}
 
 {% for product in products %}
     {{ product.render_div }}
 {% endfor %}
+
+{% else %}
+
+<h4>No se han encontrado equipos con esas características</h4>
+
+{% endif %}
 
 </div>
 
