@@ -19,7 +19,7 @@ def main():
     rootElem = xml.createElement('urlset');
     rootElem.setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9')
     
-    specificSites = [siteUrl + '/', siteUrl + '/blog']
+    specificSites = [siteUrl + '/', siteUrl + '/blog/']
     
     for specificSite in specificSites:
         siteElem = xml.createElement('url')
@@ -40,12 +40,12 @@ def main():
         siteElem.appendChild(priorityElem)        
         
         rootElem.appendChild(siteElem)
-    
-    prods = Product.objects.order_by('id')
-    for prod in prods:
+        
+    product_types = ProductType.objects.all()
+    for product_type in product_types:
         prodElem = xml.createElement('url')
         
-        locText = xml.createTextNode(siteUrl + '/products/' + str(prod.id))
+        locText = xml.createTextNode(siteUrl + '/' + product_type.urlname + '/')
         locElem = xml.createElement('loc')
         locElem.appendChild(locText)
         prodElem.appendChild(locElem)
@@ -62,48 +62,46 @@ def main():
         
         rootElem.appendChild(prodElem)
         
-    video_card_lines = NotebookVideoCardLine.objects.order_by('id')
-    for video_card_line in video_card_lines:
-        vclElem = xml.createElement('url')
+        prodElem = xml.createElement('url')
         
-        locText = xml.createTextNode(siteUrl + '/notebooks/video_card_lines/' + str(video_card_line.id))
+        locText = xml.createTextNode(siteUrl + '/' + product_type.urlname + '/catalog/')
         locElem = xml.createElement('loc')
         locElem.appendChild(locText)
-        vclElem.appendChild(locElem)
+        prodElem.appendChild(locElem)
         
         changeFreqText = xml.createTextNode('daily')
         changeFreqElem = xml.createElement('changefreq')
         changeFreqElem.appendChild(changeFreqText)
-        vclElem.appendChild(changeFreqElem)
+        prodElem.appendChild(changeFreqElem)
         
         priorityText = xml.createTextNode('1.00')
         priorityElem = xml.createElement('priority')
         priorityElem.appendChild(priorityText)
-        vclElem.appendChild(priorityElem)        
+        prodElem.appendChild(priorityElem)        
         
-        rootElem.appendChild(vclElem)
-        
-    processor_line_families = NotebookProcessorLineFamily.objects.order_by('id')
-    for processor_line_family in processor_line_families:
-        procElem = xml.createElement('url')
-        
-        locText = xml.createTextNode(siteUrl + '/notebooks/processor_lines/' + str(processor_line_family.id))
-        locElem = xml.createElement('loc')
-        locElem.appendChild(locText)
-        procElem.appendChild(locElem)
-        
-        changeFreqText = xml.createTextNode('daily')
-        changeFreqElem = xml.createElement('changefreq')
-        changeFreqElem.appendChild(changeFreqText)
-        procElem.appendChild(changeFreqElem)
-        
-        priorityText = xml.createTextNode('1.00')
-        priorityElem = xml.createElement('priority')
-        priorityElem.appendChild(priorityText)
-        procElem.appendChild(priorityElem)        
-        
-        rootElem.appendChild(procElem)
+        rootElem.appendChild(prodElem)
     
+    prods = Product.objects.order_by('id')
+    for prod in prods:
+        prodElem = xml.createElement('url')
+        
+        locText = xml.createTextNode(siteUrl + '/products/' + str(prod.id) + '/')
+        locElem = xml.createElement('loc')
+        locElem.appendChild(locText)
+        prodElem.appendChild(locElem)
+        
+        changeFreqText = xml.createTextNode('daily')
+        changeFreqElem = xml.createElement('changefreq')
+        changeFreqElem.appendChild(changeFreqText)
+        prodElem.appendChild(changeFreqElem)
+        
+        priorityText = xml.createTextNode('1.00')
+        priorityElem = xml.createElement('priority')
+        priorityElem.appendChild(priorityText)
+        prodElem.appendChild(priorityElem)        
+        
+        rootElem.appendChild(prodElem)
+        
     ptypes = ProductType.objects.all()
     for ptype in ptypes:
         sf = eval(ptype.classname + 'SearchForm({})')
@@ -136,6 +134,69 @@ def main():
                 procElem.appendChild(priorityElem)        
                 
                 rootElem.appendChild(procElem)
+        
+    video_card_lines = NotebookVideoCardLine.objects.order_by('id')
+    for video_card_line in video_card_lines:
+        vclElem = xml.createElement('url')
+        
+        locText = xml.createTextNode(siteUrl + '/notebooks/video_card_lines/' + str(video_card_line.id) + '/')
+        locElem = xml.createElement('loc')
+        locElem.appendChild(locText)
+        vclElem.appendChild(locElem)
+        
+        changeFreqText = xml.createTextNode('daily')
+        changeFreqElem = xml.createElement('changefreq')
+        changeFreqElem.appendChild(changeFreqText)
+        vclElem.appendChild(changeFreqElem)
+        
+        priorityText = xml.createTextNode('1.00')
+        priorityElem = xml.createElement('priority')
+        priorityElem.appendChild(priorityText)
+        vclElem.appendChild(priorityElem)        
+        
+        rootElem.appendChild(vclElem)
+        
+    processor_line_families = NotebookProcessorLineFamily.objects.order_by('id')
+    for processor_line_family in processor_line_families:
+        procElem = xml.createElement('url')
+        
+        locText = xml.createTextNode(siteUrl + '/notebooks/processor_lines/' + str(processor_line_family.id) + '/')
+        locElem = xml.createElement('loc')
+        locElem.appendChild(locText)
+        procElem.appendChild(locElem)
+        
+        changeFreqText = xml.createTextNode('daily')
+        changeFreqElem = xml.createElement('changefreq')
+        changeFreqElem.appendChild(changeFreqText)
+        procElem.appendChild(changeFreqElem)
+        
+        priorityText = xml.createTextNode('1.00')
+        priorityElem = xml.createElement('priority')
+        priorityElem.appendChild(priorityText)
+        procElem.appendChild(priorityElem)        
+        
+        rootElem.appendChild(procElem)
+        
+    gpus = VideoCardGpu.objects.all()
+    for gpu in gpus:
+        procElem = xml.createElement('url')
+        
+        locText = xml.createTextNode(siteUrl + '/video_cards/gpu_details/' + str(gpu.id) + '/')
+        locElem = xml.createElement('loc')
+        locElem.appendChild(locText)
+        procElem.appendChild(locElem)
+        
+        changeFreqText = xml.createTextNode('daily')
+        changeFreqElem = xml.createElement('changefreq')
+        changeFreqElem.appendChild(changeFreqText)
+        procElem.appendChild(changeFreqElem)
+        
+        priorityText = xml.createTextNode('1.00')
+        priorityElem = xml.createElement('priority')
+        priorityElem.appendChild(priorityText)
+        procElem.appendChild(priorityElem)        
+        
+        rootElem.appendChild(procElem)
         
     xml.appendChild(rootElem)
     

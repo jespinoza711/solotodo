@@ -19,6 +19,8 @@
 	<br />
 				
 	<form id="search_form" action="{% url cotizador.views.product_type_catalog ptype.urlname %}" method="get">
+	
+    	{{ form.main_category_bound_field.as_hidden }}
 		<!-- Filtros generales -->
 		<h2>Precio</h2>
 		<div class="filter_item">
@@ -41,8 +43,6 @@
 		        </div>
 			{% endfor %}
 		{% endfor %}
-		
-		{{ form.main_category_bound_field.as_hidden }}
 
         <div id="toggle_hidden_link_container">
     		<a id="toggle_hidden_link" href="">Búsqueda avanzada</a>

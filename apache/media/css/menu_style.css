@@ -1,0 +1,51 @@
+div#categoriesContainer {
+    width: 250px;
+    z-index: 200;
+    line-height: 13px;
+    text-align: left;
+    font: 13px/1.231 arial,helvetica,clean,sans-serif;
+}
+
+div.categories {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.firstCategory {
+    background: url("menu_images/first_category.gif") no-repeat scroll 0 0 transparent;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 14px 0 20px;
+}
+
+.categoryOff {
+    background: url("menu_images/middle_category.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 24px;
+    line-height: 24px;
+    margin: 0;
+    overflow: hidden;
+    padding: 4px 14px 2px 20px;
+    width: 224px;
+}
+
+.lastCategory {
+    background: url("menu_images/last_category.gif") no-repeat scroll 0 0 transparent;
+    height: 33px;
+    padding-top: 7px;
+}
+
+span.categoryTitle a {
+    color: #013257;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 4px;
+    padding: 0;
+    text-decoration: none;
+}
+
+.categoryOff {
+    line-height: 24px;
+}
