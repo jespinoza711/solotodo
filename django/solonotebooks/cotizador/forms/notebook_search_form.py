@@ -32,7 +32,7 @@ class NotebookSearchForm(SearchForm):
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil').requires_advanced_controls()
-    ntype = ClassChoiceField(NotebookType, 'Uso', widget = forms.HiddenInput())
+    ntype = ClassChoiceField(NotebookType, 'Uso')
         
     price_choices = SearchForm.generate_price_range(0, 1000000, 50000)
     

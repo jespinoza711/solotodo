@@ -3,6 +3,7 @@ from django import forms
 from solonotebooks.cotizador.fields import *
 from solonotebooks.cotizador.models.utils import prettyPrice
 from solonotebooks.cotizador.models import SearchRegistry
+from django.forms.forms import BoundField
 from datetime import date
 
 class SearchForm(forms.Form):
@@ -72,6 +73,10 @@ class SearchForm(forms.Form):
         
     def main_category_key(self):
         return self.__dict__[self.main_category_string()]
+        
+    def main_category_bound_field(self):
+        print 'Called'
+        return BoundField(self, self.main_category(), self.main_category_string())        
         
     def get_attributes_requiring_advanced_controls(self):
         result = []
