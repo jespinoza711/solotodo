@@ -706,6 +706,7 @@ h2.subheader {
 
 div.processor_details_container {
     height: inherit;
+    overflow: auto;
 }
 
 span.processor_table_notice {
