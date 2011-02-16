@@ -122,3 +122,23 @@ class VideoCardGpuAdmin(admin.ModelAdmin):
     list_display = ['pretty_display', 'default_core_clock', 'default_shader_clock', 'default_memory_clock']
 
 admin.site.register(VideoCardGpu, VideoCardGpuAdmin)
+
+
+admin.site.register(ProcessorBrand)
+admin.site.register(ProcessorLine)
+admin.site.register(ProcessorL1CacheQuantity)
+admin.site.register(ProcessorL2CacheQuantity)
+admin.site.register(ProcessorL3CacheQuantity)
+admin.site.register(ProcessorL1Cache)
+admin.site.register(ProcessorL2Cache)
+admin.site.register(ProcessorL3Cache)
+admin.site.register(ProcessorSocket)
+admin.site.register(ProcessorCoreCount)
+admin.site.register(ProcessorArchitecture)
+admin.site.register(ProcessorManufacturingProcess)
+admin.site.register(ProcessorCore)
+
+class ProcessorAdmin(admin.ModelAdmin):
+    exclude = ['publicized_offer']
+
+admin.site.register(Processor, ProcessorAdmin)
