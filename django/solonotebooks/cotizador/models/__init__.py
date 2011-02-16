@@ -101,6 +101,23 @@ from solonotebooks.cotizador.models.video_card_gpu_manufacturing_process import 
 from solonotebooks.cotizador.models.video_card_gpu import VideoCardGpu
 from solonotebooks.cotizador.models.video_card import VideoCard
 
+from solonotebooks.cotizador.models.processor_brand import ProcessorBrand
+from solonotebooks.cotizador.models.processor_line import ProcessorLine
+from solonotebooks.cotizador.models.processor_l1_cache_quantity import ProcessorL1CacheQuantity
+from solonotebooks.cotizador.models.processor_l2_cache_quantity import ProcessorL2CacheQuantity
+from solonotebooks.cotizador.models.processor_l3_cache_quantity import ProcessorL3CacheQuantity
+from solonotebooks.cotizador.models.processor_l1_cache import ProcessorL1Cache
+from solonotebooks.cotizador.models.processor_l2_cache import ProcessorL2Cache
+from solonotebooks.cotizador.models.processor_l3_cache import ProcessorL3Cache
+from solonotebooks.cotizador.models.processor_socket import ProcessorSocket
+from solonotebooks.cotizador.models.processor_core_count import ProcessorCoreCount
+from solonotebooks.cotizador.models.processor_architecture import ProcessorArchitecture
+from solonotebooks.cotizador.models.processor_manufacturing_process import ProcessorManufacturingProcess
+from solonotebooks.cotizador.models.processor_core import ProcessorCore
+from solonotebooks.cotizador.models.processor_multiplier import ProcessorMultiplier
+from solonotebooks.cotizador.models.processor_fsb import ProcessorFsb
+from solonotebooks.cotizador.models.processor import Processor
+
 __all__ = [ 
             'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',
@@ -201,5 +218,19 @@ __all__ = [
             'VideoCardGpuPowerConnector',
             'VideoCardGpuManufacturingProcess',
             'VideoCardGpu',
-            'VideoCard'
+            'VideoCard',
+            'ProcessorBrand',
+            'ProcessorLine',
+            'ProcessorL1CacheQuantity',
+            'ProcessorL2CacheQuantity',
+            'ProcessorL3CacheQuantity',
+            'ProcessorL1Cache',
+            'ProcessorL2Cache',
+            'ProcessorL3Cache',
+            'ProcessorSocket',
+            'ProcessorCoreCount',
+            'ProcessorArchitecture',
+            'ProcessorManufacturingProcess',
+            'ProcessorCore',
+            'Processor',
             ]
