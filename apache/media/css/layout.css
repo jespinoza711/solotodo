@@ -251,6 +251,7 @@ div#login {padding-left: 8px;}
  font-size: 14px; 
  font-weight: bold;
  text-shadow: #010407 0 1px 0;
+ padding-top: 30px;
 }
 
 #areas-site ul li.sprite-inicio {background: url(img/inicio.png) no-repeat 6px 0;}
@@ -259,12 +260,12 @@ div#login {padding-left: 8px;}
 #areas-site ul li.sprite-catalogo {background: url(img/catalogo.png) no-repeat 12px 0;}
 #areas-site ul li.sprite-catalogo:hover {background: url(img/catalogo.png) no-repeat 12px -50px;}
 
-#areas-site ul li.sprite-blog {background: url(img/blog.png) no-repeat 6px 0; background-position: center top;}
-#areas-site ul li.sprite-blog:hover {background: url(img/blog.png) no-repeat 6px -50px; background-position: center top;}
+#areas-site ul li.sprite-blog {background: url(img/blog.png) no-repeat 24px 0; }
+#areas-site ul li.sprite-blog:hover {background: url(img/blog.png) no-repeat 24px -50px; }
 
 #areas-site ul li.sprite-inicio-active {background: url(img/inicio.png) no-repeat 6px -50px;}
 #areas-site ul li.sprite-catalogo-active {background: url(img/catalogo.png) no-repeat 12px -50px;}
-#areas-site ul li.sprite-blog-active {background: url(img/blog.png) no-repeat 6px -50px; background-position: center top;}
+#areas-site ul li.sprite-blog-active {background: url(img/blog.png) no-repeat 24px -50px; background-position: center top;}
 
 .catalogo {margin-left: 26px;}
 .catalogo li {
