@@ -24,8 +24,6 @@ from utils import *
     
 # Main landing page (/)    
 def index(request):
-    # Correct
-    
     ptypes = ProductType.objects.all()
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
     result_products = highlighted_products_form.apply_filter(Product.get_valid())[:10]
@@ -43,7 +41,8 @@ def product_type_index(request, product_type_urlname):
     product_type_class = ptype.get_class()
     
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
-    result_products = highlighted_products_form.apply_filter(product_type_class.get_valid())[:10]
+    base_products = product_type_class.get_valid()
+    result_products = highlighted_products_form.apply_filter(base_products)[:10]
     
     return append_ads_to_response(request, 'cotizador/product_type_index.html', {
         'hnf': highlighted_products_form,
