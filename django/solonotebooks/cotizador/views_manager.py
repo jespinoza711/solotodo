@@ -38,6 +38,12 @@ def append_manager_ptype_to_response(request, template, args):
     ptype = ProductType.objects.get(classname = 'Notebook')
     args['ptype'] = ptype
     return append_ads_to_response(request, template, args)
+
+@manager_login_required    
+def polymorphic_admin_request(request, product_id):
+    product = Product.objects.get(pk = product_id)
+    url = '/admin/cotizador/' + product.ptype.adminurlname + '/' + str(product.id)
+    return HttpResponseRedirect(url)
     
 @manager_login_required    
 def news(request):
