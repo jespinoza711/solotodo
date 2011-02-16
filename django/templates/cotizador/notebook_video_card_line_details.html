@@ -45,16 +45,6 @@
 <sup>*</sup> Este valor sirve para comparar dos tarjetas gráficas distintas, aún si son de marcas diferentes
 </span>
 
-<div>
-    <h2>Ver otras líneas</h2>
-    <ul>
-        <li><a href="{% url cotizador.views_notebooks.video_card_line %}">Comparar todas las líneas</a></li>
-    {% for video_card_line in other_video_card_lines %}
-        <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
-    {% endfor %}
-    </ul>
-</div>
-
 {% if notebooks %}
     {% if video_card %}
         <h2 class="subheader">Algunos equipos la tarjeta gráfica {{ video_card }}</h2>
@@ -67,5 +57,15 @@
 {% for notebook in notebooks %}
     {{ notebook.render_div }}
 {% endfor %}
+
+<div>
+    <h2>Ver otras líneas</h2>
+    <ul>
+        <li><a href="{% url cotizador.views_notebooks.video_card_line %}">Comparar todas las líneas</a></li>
+    {% for video_card_line in other_video_card_lines %}
+        <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
 
 {% endblock %}

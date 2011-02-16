@@ -59,16 +59,6 @@
 <sup>*</sup> Este valor es un puntaje promedio en pruebas, y sirve para comparar dos procesadores distintos, inclusive de distintas marcas
 </span>
 
-<div style="clear: both;">
-    <h2>Ver otras líneas</h2>
-    <ul>
-        <li><a href="{% url cotizador.views_notebooks.processor_line %}">Comparar todas las líneas</a></li>
-    {% for processor_line_family in other_processor_line_families %}
-        <li><a href="{% url cotizador.views_notebooks.processor_line_details processor_line_family.id %}">{{ processor_line_family }}</a></li>
-    {% endfor %}
-    </ul>
-</div>
-
 {% ifequal processor None %}
     <h2 class="subheader">Algunos equipos con estos procesadores</h2>
 {% else %}
@@ -78,5 +68,15 @@
 {% for notebook in notebooks %}
     {{ notebook.render_div }}
 {% endfor %}
+
+<div style="clear: both;">
+    <h2>Ver otras líneas</h2>
+    <ul>
+        <li class="processor_list_option"><a href="{% url cotizador.views_notebooks.processor_line %}">Comparar todas las líneas</a></li>
+    {% for processor_line_family in other_processor_line_families %}
+        <li class="processor_list_option"><a href="{% url cotizador.views_notebooks.processor_line_details processor_line_family.id %}">{{ processor_line_family }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
 
 {% endblock %}
