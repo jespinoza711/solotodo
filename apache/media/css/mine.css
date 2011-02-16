@@ -47,6 +47,8 @@
     float: left;
     margin-right: 15px;
     height: 100px;
+    width: 100px;
+    text-align: center;
 }
 
 .product_thumb_price {
@@ -253,4 +255,8 @@ hr.product_details_comment_separator {
     background: #FFFFFF; 
     margin: 20px 0 23px 3px; 
     height: auto;
+}
+
+.subheader {
+    clear: both;
 }

@@ -6,15 +6,7 @@
 
 <h1>Tarjetas de video de notebooks</h1>
 
-<div>
-    <h2>Ver línea específica</h2>
-    <ul>
-    {% for video_card_line in video_card_lines %}
-        <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
-    {% endfor %}
-    </ul>
-</div>
-<h2 class="subheader">Modelos</h2>
+<h2 class="subheader">Comparación de rendimiento</h2>
 <table class="processor_table">
     <tr>
         <th>Modelo</th>
@@ -38,5 +30,14 @@
 <span class="processor_table_notice">
 <sup>*</sup> Este valor sirve para comparar dos tarjetas gráficas distintas, aún si son de marcas diferentes
 </span>
+
+<div>
+    <h2>Ver línea específica</h2>
+    <ul>
+    {% for video_card_line in video_card_lines %}
+        <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
 
 {% endblock %}
