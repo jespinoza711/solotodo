@@ -66,7 +66,6 @@ class Clie:
             num_page = 1
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '&pagina=' + str(num_page)
-                print urlWebpage
 
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()

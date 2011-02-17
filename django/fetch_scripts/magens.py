@@ -54,6 +54,11 @@ class Magens:
             'video-pcie-c-24_130.html',
             'video-pcie-nvidia-c-24_129.html',
             'video-profesionales-c-24_131.html',
+            'sam2-c-1_196.html',
+            'sam3-c-1_31.html',
+            'intel-s1156-c-1_197.html',
+            'intel-s775-c-1_32.html',
+            'server-c-1_30.html',
         ]
                 
         product_links = []            
