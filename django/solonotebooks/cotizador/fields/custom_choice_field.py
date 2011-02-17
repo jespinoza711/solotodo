@@ -8,6 +8,6 @@ class CustomChoiceField(ChoiceField):
         self.name = name
         return self
         
-    def requires_advanced_controls(self):
+    def does_require_advanced_controls(self):
         self.requires_advanced_controls = True
         return self

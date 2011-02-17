@@ -5,6 +5,10 @@ class ProcessorManufacturingProcess(models.Model):
     
     def __unicode__(self):
         return unicode(self.value) + ' nm'
+        
+    def raw_text(self):
+        return unicode(self)
     
     class Meta:
+        ordering = ['value']
         app_label = 'cotizador'

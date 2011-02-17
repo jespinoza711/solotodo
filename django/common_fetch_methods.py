@@ -169,6 +169,7 @@ def update_availability_and_price():
         
     # Other housekeeping stuff
     VideoCardGpu.update_all_tdmark_scores()
+    Processor.update_all_pcmark_scores()
         
 def get_store_products(fetch_store):
     try:

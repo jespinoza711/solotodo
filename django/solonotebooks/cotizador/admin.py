@@ -125,11 +125,10 @@ admin.site.register(VideoCardGpu, VideoCardGpuAdmin)
 
 
 admin.site.register(ProcessorBrand)
+admin.site.register(ProcessorFamily)
 admin.site.register(ProcessorLine)
-admin.site.register(ProcessorL1CacheQuantity)
 admin.site.register(ProcessorL2CacheQuantity)
 admin.site.register(ProcessorL3CacheQuantity)
-admin.site.register(ProcessorL1Cache)
 admin.site.register(ProcessorL2Cache)
 admin.site.register(ProcessorL3Cache)
 admin.site.register(ProcessorSocket)
@@ -137,6 +136,9 @@ admin.site.register(ProcessorCoreCount)
 admin.site.register(ProcessorArchitecture)
 admin.site.register(ProcessorManufacturingProcess)
 admin.site.register(ProcessorCore)
+admin.site.register(ProcessorMultiplier)
+admin.site.register(ProcessorFsb)
+admin.site.register(ProcessorGraphics)
 
 class ProcessorAdmin(admin.ModelAdmin):
     exclude = ['publicized_offer']
