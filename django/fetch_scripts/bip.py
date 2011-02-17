@@ -59,9 +59,15 @@ class Bip:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  'categoria=191',                    # Netbooks
-                            'categoria=166',                    # Notebooks
-                            'categoria=118&categoria_papa=97',  # Tarjetas de video
+        url_extensions = [  'categoria=191',                     # Netbooks
+                            'categoria=166',                     # Notebooks
+                            'categoria=118&categoria_papa=97',   # Tarjetas de video
+                            'categoria=99&categoria_papa=111',   # Proces Intel 775
+                            'categoria=339&categoria_papa=111',  # Proces Intel 1155
+                            'categoria=262&categoria_papa=111',  # Proces Intel 1156
+                            'categoria=263&categoria_papa=111',  # Proces Intel 1366
+                            'categoria=100&categoria_papa=111',  # Proces AMD AM2
+                            'categoria=242&categoria_papa=111',  # Proces AMD AM3
                             ]
                             
         productLinks = []
