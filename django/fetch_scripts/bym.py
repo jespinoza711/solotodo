@@ -49,6 +49,8 @@ class Bym:
         url_extensions = [  
                             'subpro.php?idCat=21&idSubCat=20',  # Notebooks
                             'catpro.php?idCat=31',              # Tarjetas de video
+                            'catpro.php?idCat=25',              # Procesadores AMD
+                            'catpro.php?idCat=26',              # Procesadores Intel
                             ]
                             
         for url_extension in url_extensions:
