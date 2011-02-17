@@ -55,6 +55,11 @@ class PCFactory:
                             '?papa=334&categoria=378',  # VGA PCIe Nvidia
                             '?papa=334&categoria=454',  # VGA PCIe ATI
                             '?papa=334&categoria=455',  # VGA Profesionales
+                            '?papa=272&categoria=409',  # CPU Server
+                            '?papa=272&categoria=465',  # CPU AM3
+                            '?papa=272&categoria=388',  # CPU 775
+                            '?papa=272&categoria=468',  # CPU 1156
+                            '?papa=272&categoria=446',  # CPU 1366
                             ]
                           
         pageLinks = []                            
