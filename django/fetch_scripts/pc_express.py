@@ -45,6 +45,12 @@ class PCExpress:
                             '83_157',   # Tarjetas de video AGP
                             '83_158',   # Tarjetas de video PCIe AMD
                             '83_159',   # Tarjetas de video PCIe Nvidia
+                            '61_85',    # Procesadores AM2
+                            '61_84',    # Procesadores AM3
+                            '61_86',    # Procesadores 775
+                            '61_193',   # Procesadores 1155
+                            '61_87',    # Procesadores 1156
+                            '61_165',   # Procesadores 1366
                         ]
                             
         product_links = []
