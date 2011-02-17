@@ -114,7 +114,7 @@ class Processor(Product):
                 print 'Actualizando PCMark 05'
                 processor.update_pcmark_05_score()
             if processor.pcmark_vantage_score == 0:
-                print 'Actualizando 3DMark Vantage'
+                print 'Actualizando PCMark Vantage'
                 processor.update_pcmark_vantage_score()
             processor.save()
         
