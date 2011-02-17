@@ -41,6 +41,7 @@ class Peta:
         url_extensions = [  'computadores-1/netbooks.html',
                             'computadores-1/notebooks.html',
                             'peta-cl/tarjetas-de-video.html',
+                            'peta-cl/procesadores.html',
                             ]
                           
         product_links = []                            
