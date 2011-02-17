@@ -130,6 +130,12 @@ class Processor(Product):
             result += ' / ' + unicode(self.l3_cache) + ' L3'
         return result
         
+    def pretty_voltages(self):
+        if not self.min_voltage:
+            return 'Desconocido'
+        else:
+            return str(self.min_voltage) + ' - ' + str(self.max_voltage) + ' mV'
+        
     def pretty_frequency(self):
         return unicode(self.frequency) + ' MHz'
         
