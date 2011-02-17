@@ -1,7 +1,7 @@
 from django.db import models
 
 class ProcessorMultiplier(models.Model):
-    value = models.IntegerField()
+    value = models.DecimalField(max_digits = 3, decimal_places = 1)
     
     def __unicode__(self):
         return str(self.value) + 'x'
