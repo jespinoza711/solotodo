@@ -13,5 +13,5 @@ class ProcessorArchitecture(models.Model):
         return unicode(self)
     
     class Meta:
-        ordering = ['brand', 'name']
+        ordering = ['brand']
         app_label = 'cotizador'
