@@ -7,6 +7,7 @@
     </div>
     <div class="content-producto">
 	    <a href="{% url cotizador.views.product_details videocard.id %}">{{ videocard }}</a> {% if videocard.matching %} ({{ videocard.matching|floatformat }}%) {% endif %}
+	    <br />
 	    <ul class="info-producto left">
 		    <li><strong>GPU:</strong> {{ videocard.gpu }}</li>
 		    <li><strong>Memoria:</strong> {{ videocard.pretty_memory }}</li>

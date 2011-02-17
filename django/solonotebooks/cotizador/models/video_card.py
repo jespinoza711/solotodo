@@ -47,7 +47,7 @@ class VideoCard(Product):
         
     def load_similar_products(self):
         threshold = 4
-        video_cards = VideoCard.get_valid().filter(gpu = self.gpu).filter(~Q(id = self.id))[:threshold]
+        video_cards = VideoCard.get_valid().filter(gpu = self.gpu).filter(~Q(id = self.id)).order_by('?')[:threshold]
         self.similar_products = ','.join([str(video_card.id) for video_card in video_cards])
         
     @staticmethod
