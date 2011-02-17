@@ -42,6 +42,7 @@ class Cintegral:
         url_extensions = [  '84',   # Netbooks
                             '9',    # Notebooks
                             '14',   # Tarjetas de video
+                            '3',    # Procesadores
                             ]
                             
         for url_extension in url_extensions:
