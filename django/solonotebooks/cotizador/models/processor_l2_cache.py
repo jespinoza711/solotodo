@@ -12,6 +12,10 @@ class ProcessorL2Cache(models.Model):
         if self.multiplier > 1:
             result = unicode(self.multiplier) + 'x ' + result
         return result
+        
+    def raw_text(self):
+        return unicode(self)
     
     class Meta:
+        ordering = ['quantity', 'multiplier']
         app_label = 'cotizador'

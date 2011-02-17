@@ -31,7 +31,7 @@ class NotebookSearchForm(SearchForm):
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
-    screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil').requires_advanced_controls()
+    screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil').does_require_advanced_controls()
     ntype = ClassChoiceField(NotebookType, 'Uso')
         
     price_choices = SearchForm.generate_price_range(0, 1000000, 50000)
@@ -206,7 +206,7 @@ class NotebookSearchForm(SearchForm):
             notebooks = notebooks.filter(screen__resolution__id = self.screen_resolution)
             
         if self.screen_touch and self.advanced_controls:
-            notebooks = notebooks.filter(screen__is_touchscreen = self.screen_touch)    
+            notebooks = notebooks.filter(screen__is_touchscreen = self.screen_touch - 1)    
             
         if self.video_card_brand and self.advanced_controls:
             notebooks = notebooks.filter(video_card__line__brand__id = self.video_card_brand).distinct()

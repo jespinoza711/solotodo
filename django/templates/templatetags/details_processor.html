@@ -1,0 +1,33 @@
+<h1>{{ processor }}</h1>
+<h3 class="subtitle">Especificaciones principales</h3>
+<strong>Frecuencia: </strong> {{ processor.pretty_frequency }}
+<br />
+<strong>Núcleos: </strong> {{ processor.core_count }}
+<br />
+<strong>Caché: </strong> {{ processor.pretty_cache }}
+<br />
+<strong>Socket: </strong> {{ processor.socket }}
+<br />
+
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Núcleo: </strong> {{ processor.core }}
+<br />
+<strong>Proceso de manufactura: </strong> {{ processor.core.manufacturing_process }}
+<br />
+<strong>FSB / DMI / HTT: </strong> {{ processor.fsb }}
+<br />
+<strong>Multiplicador: </strong> {{ processor.pretty_multiplier }}
+<br />
+<strong>Gráficos integrados: </strong> {{ processor.graphics }}
+<br />
+<strong>Frecuencias Turbo: </strong>
+    {% if processor.turbo_clocks %}
+        <ul class="sub_ul">
+        {% for turbo_clock in processor.turbo_clocks %}
+            <li>{{ forloop.counter }} core{{ forloop.counter|pluralize }}: {{ turbo_clock }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        No posee frecuencias turbo
+    {% endif %}
+<br />

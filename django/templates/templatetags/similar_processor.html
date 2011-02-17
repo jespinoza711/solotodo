@@ -1,0 +1,15 @@
+<div class="product_container">
+    <div class="product_thumb_image">
+        <a href="{% url solonotebooks.cotizador.views.product_details processor.id %}">{{ processor.picture.thumbnail_tag }}</a>
+    </div>
+    <div class="similar_product_stats">
+            <a href="{% url solonotebooks.cotizador.views.product_details processor.id %}">
+    	        {{ processor }}
+            </a>
+    	    <p>
+            	{{ processor.frequency }} MHz <br />
+                {{ processor.pretty_cache }}<br />
+    	        <strong>{{ processor.pretty_min_price }}</strong>
+            </p>
+    </div>
+</div>

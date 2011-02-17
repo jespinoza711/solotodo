@@ -5,6 +5,10 @@ class ProcessorFsb(models.Model):
     
     def __unicode__(self):
         return str(self.value) + ' MHz'
+        
+    def raw_text(self):
+        return unicode(self)
     
     class Meta:
+        ordering = ['value']
         app_label = 'cotizador'

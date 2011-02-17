@@ -1,0 +1,30 @@
+<div class="producto-li">
+    <div class="thumb-videocard thumb-product">
+	    <a href="{% url cotizador.views.product_details processor.id %}" title="{{ processor }}">
+		    {{ processor.picture.thumbnail_tag }}<br />
+	    </a>
+	    <p></p>	
+    </div>
+    <div class="content-producto">
+	    <a href="{% url cotizador.views.product_details processor.id %}">{{ processor }}</a> {% if processor.matching %} ({{ processor.matching|floatformat }}%) {% endif %}
+	    <ul class="info-producto left">
+		    <li><strong>Frecuencia:</strong> {{ processor.frequency }} MHz</li>
+		    <li><strong>Núcleos:</strong> {{ processor.core_count }}</li>
+		    <li><strong>Cache:</strong> {{ processor.pretty_cache }}</li>
+		    <li><strong>Socket:</strong> {{ processor.socket }}</li>
+	    </ul>
+	    <ul class="precio-producto right">
+		    <li>
+		        <a href="{% url cotizador.views.product_details processor.id %}">{{ processor.pretty_min_price }}</a>
+	        </li>
+		    {% if processor.week_discount >= 10 %}
+		        <li class="mas-barato">
+		            <strong>{{ processor.week_discount }}</strong>% de Descuento
+                </li>
+		    {% endif %}
+	    </ul>
+	    <br class="clear" />
+	    <!--<a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> -->
+    </div>
+    <br class="clear" />
+</div> <!-- end producto li -->

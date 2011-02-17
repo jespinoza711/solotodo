@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models import Q
 from . import *
+import mechanize
+from BeautifulSoup import BeautifulSoup
 
 class Processor(Product):
     pcmark_id = models.CharField(max_length = 255)
@@ -15,8 +18,8 @@ class Processor(Product):
     is_64_bit = models.BooleanField()
     has_vt = models.BooleanField()
     has_smp = models.BooleanField()
+    has_unlocked_multiplier = models.BooleanField()
     
-    l1_cache = models.ForeignKey(ProcessorL1Cache)
     l2_cache = models.ForeignKey(ProcessorL2Cache)
     l3_cache = models.ForeignKey(ProcessorL3Cache)
     line = models.ForeignKey(ProcessorLine)
@@ -25,12 +28,13 @@ class Processor(Product):
     core = models.ForeignKey(ProcessorCore)
     multiplier = models.ForeignKey(ProcessorMultiplier)
     fsb = models.ForeignKey(ProcessorFsb)
+    graphics = models.ForeignKey(ProcessorGraphics)
     turbo_modes = models.CommaSeparatedIntegerField(max_length = 50)
     
     # Interface methods
     
     def __unicode__(self):
-        return unicode(self.line) + self.line.separator + self.name
+        return unicode(self.line) + self.line.family.separator + self.name
         
     def pretty_display(self):
         return unicode(self)
@@ -45,7 +49,6 @@ class Processor(Product):
             result += ' virtualization virtualizacion VT'
         if self.has_smp:
             result += ' smp simultaneous multi processing hyper threading hyperthreading hyper-threading HT'
-        result += ' ' + self.l1_cache.raw_text()
         result += ' ' + self.l2_cache.raw_text()
         result += ' ' + self.l3_cache.raw_text()
         result += ' ' + self.socket.raw_text()
@@ -71,6 +74,85 @@ class Processor(Product):
 
         clone_prod.save()
         return clone_prod
+        
+    # Mine
+    
+    def get_pcmark_score(self, test_id):
+        base_url = 'http://3dmark.com/search?resultTypeId=' + test_id + '&linkedDisplayAdapters=1&cpuModelId=' + self.pcmark_id + '&page='
+        
+        page_number = 0
+        scores = []
+        while True:
+            url = base_url + str(page_number)
+            print url
+            browser = mechanize.Browser()
+            data = browser.open(url).get_data()
+            soup = BeautifulSoup(data)
+            
+            score_divs = soup.findAll('div', { 'class': 'span-2 label result-table-score' })
+            if not score_divs:
+                break
+                
+            scores.extend([int(div.string) for div in score_divs if int(div.string) > 0])
+            
+            page_number += 1
+        
+        if not scores:
+            return 0
+        
+        return sum(scores) / len(scores)
+        
+    @staticmethod
+    def update_all_pcmark_scores():
+        processors = Processor.objects.all()
+        for processor in processors:
+            print processor
+            if processor.pcmark_id == '0':
+                print 'Sin ID'
+                continue
+            if processor.pcmark_05_score == 0:
+                print 'Actualizando PCMark 05'
+                processor.update_pcmark_05_score()
+            if processor.pcmark_vantage_score == 0:
+                print 'Actualizando 3DMark Vantage'
+                processor.update_pcmark_vantage_score()
+            processor.save()
+        
+    def update_pcmark_05_score(self):
+        self.pcmark_05_score = self.get_pcmark_score('13')
+        
+    def update_pcmark_vantage_score(self):
+        self.pcmark_vantage_score = self.get_pcmark_score('18')
+        
+    def pretty_cache(self):
+        result = unicode(self.l2_cache) + ' L2'
+        if self.l3_cache.is_valid():
+            result += ' / ' + unicode(self.l3_cache) + ' L3'
+        return result
+        
+    def pretty_frequency(self):
+        return unicode(self.frequency) + ' MHz'
+        
+    def pretty_multiplier(self):
+        result = unicode(self.multiplier) + ' ('
+        if self.has_unlocked_multiplier:
+            result += 'Desbloqueado'
+        else:
+            result += 'Bloqueado'
+        result += ')'
+        return result
+        
+    def turbo_clocks(self):
+        values = self.turbo_modes
+        if values == '0':
+            return []
+        values = [int(multiplier) for multiplier in values.split(',')]
+        result = [self.frequency + value * self.core.architecture.turbo_step for value in values]
+        result = [str(value) + ' MHz' for value in result]
+        return result
+        
     
     class Meta:
         app_label = 'cotizador'
+        
+    
