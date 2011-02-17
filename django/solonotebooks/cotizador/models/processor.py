@@ -159,6 +159,7 @@ class Processor(Product):
         
     
     class Meta:
+        ordering = ['line', 'name']
         app_label = 'cotizador'
         
     
