@@ -36,9 +36,6 @@ class Processor(Product):
     def __unicode__(self):
         return unicode(self.line) + self.line.family.separator + self.name
         
-    def pretty_display(self):
-        return unicode(self)
-        
     def raw_text(self):
         result = 'Procesador CPU'
         result += ' ' + self.name

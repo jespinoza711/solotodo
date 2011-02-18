@@ -24,9 +24,6 @@ class VideoCard(Product):
     def __unicode__(self):
         return unicode(self.brand) + ' ' + self.gpu.name + ' (' + self.name + ')'
         
-    def pretty_display(self):
-        return unicode(self)
-        
     def raw_text(self):
         result = 'Tarjeta de video VGA GPU'
         result += ' ' + self.name

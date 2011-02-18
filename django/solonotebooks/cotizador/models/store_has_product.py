@@ -11,6 +11,15 @@ class StoreHasProduct(models.Model):
     shpe = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
     store = models.ForeignKey(Store)
     
+    def update(self):
+        shpes = self.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
+        if shpes:
+            self.shpe = shpes[0]
+        else:
+            self.shpe = None
+            
+        self.save()
+    
     def __unicode__(self):
         return unicode(self.store) + ' - ' + unicode(self.product)
         
