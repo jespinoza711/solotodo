@@ -23,7 +23,7 @@ class MailLostProduct(models.Model):
             if not settings.DEBUG:
                 send_email(self.subscription.user, str(self.subscription.product) + ' ya no está disponible', t, {'product': self.subscription.product })
             self.success = True
-        except:
+        except Exception, e:
             self.success = False
         self.save()
     

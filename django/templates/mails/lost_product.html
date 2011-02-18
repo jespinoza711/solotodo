@@ -2,11 +2,11 @@ Hola {{ user.username }},
 
 El equipo {{ product }} ya no está disponible en ninguna de las tiendas de nuestro registro. Más información acá
 
-{{ server_name }}{{ url cotizador.views.product_details product.id }}
+{{ server_name }}{% url cotizador.views.product_details product.id %}
 
 Este correo fue enviado pues estás suscrito a los cambios de este equipo, para modificar tus preferencias sólo necesitas editarlas en tu lista de lista de equipos:
 
-{{ server_name }}{{ url cotizador.views_account.subscriptions }}
+{{ server_name }}{% url cotizador.views_account.subscriptions %}
 
 Atentamente,
 

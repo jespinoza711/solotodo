@@ -22,11 +22,11 @@ class LogLostProduct(models.Model):
         return str(self.product) + ' (<a href="/' + self.product.ptype.urlname + '/' + str(self.product.id) + '/">Link</a> / <a href="/admin/cotizador/' + self.product.ptype.adminurlname + '/' + str(self.product.id) + '/">Editar</a>)'
         
     def send_notification_mails(self):
-            from . import MailLostProduct
-        
-            active_subscriptions = ProductSubscription.objects.filter(product = self.product).filter(email_notifications = True).filter(user__is_active = True).filter(is_active = True)
-            for subscription in active_subscriptions:
-                MailLostProduct.new(subscription, self)        
+        from . import MailLostProduct
+    
+        active_subscriptions = ProductSubscription.objects.filter(product = self.product).filter(email_notifications = True).filter(user__is_active = True).filter(is_active = True)
+        for subscription in active_subscriptions:
+            MailLostProduct.new(subscription, self)        
     
     class Meta:
         app_label = 'cotizador'
