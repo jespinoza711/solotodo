@@ -142,6 +142,6 @@ admin.site.register(ProcessorGraphics)
 
 class ProcessorAdmin(admin.ModelAdmin):
     exclude = ['publicized_offer']
-    list_display = ['pretty_display', 'pcmark_05_score', 'pcmark_vantage_score', 'passmark_score']
+    list_display = ['pretty_display', 'pcmark_id', 'pcmark_05_score', 'pcmark_vantage_score', 'passmark_score']
 
 admin.site.register(Processor, ProcessorAdmin)
