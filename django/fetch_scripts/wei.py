@@ -54,6 +54,8 @@ class Wei:
                     'NB&sccode=79',      # Notebooks
                     'TV&sccode=133',     # Tarjetas de video AGP
                     'TV&sccode=134',     # Tarjetas de video PCI Express
+                    'CP&sccode=57',     # Procesadores AMD
+                    'CP&sccode=58',     # Procesadores Intel
                         ]
                             
         for category_url in category_urls:

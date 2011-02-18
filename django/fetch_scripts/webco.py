@@ -44,6 +44,10 @@ class Webco:
                             'n_new_productos.asp?CATEGORIA={D70BBB30-F5E9-4246-B812-A939C8777429}',
                             # Tarjetas de video
                             'n_new_productos.asp?CATEGORIA={FFE74755-6E24-4958-A066-F75670943D3E}',
+                            # Procesadores AMD
+                            'n_new_productos.asp?CATEGORIA={AA5D5535-B127-4AEE-8583-4529F66DE4D7}#ct_39',
+                            # Procesadores Intel
+                            'n_new_productos.asp?CATEGORIA={5701C20F-03E6-430E-8CCF-01EE820BEDF8}#ct_39',
                             ]
         
         product_links = []                    

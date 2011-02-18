@@ -43,7 +43,9 @@ class TecnoCl:
         url_extensions = [  'productos.asp?cat=8',
                             'productos.asp?cat=259',
                             'productos.asp?cat=85',
-                            'productos.asp?cat=50'
+                            'productos.asp?cat=50',
+                            'productos.asp?cat=244',    # Procesadores AMD
+                            'productos.asp?cat=251',    # Procesadores Intel
                             ]
         
         product_links = []                    

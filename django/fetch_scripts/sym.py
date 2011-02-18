@@ -50,6 +50,8 @@ class Sym:
         url_extensions = [  '?cat=104',         # Notebooks
                             '?cat=32_68',       # Tarjetas de video AGP
                             '?cat=32_69',       # Tarjetas de video PCIe
+                            '?cat=50',          # Procesadores Intel
+                            '?cat=25',          # Procesadores AMD
                             ]
                             
         productLinks = []
