@@ -37,6 +37,8 @@ class Sistemax:
                 '112',      # Netbooks
                 '27',       # Notebooks
                 '35',       # Tarjetas de video
+                '58',       # Procesadores AMD
+                '59',       # Procesadores Intel
                 ]
                         
         # Array containing the data for each product
