@@ -82,6 +82,19 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             product = form.cleaned_data['product']
             store = form.cleaned_data['store']
             
+            # Begin changes
+            
+            if shpe.shp:
+                shp = shpe.shp
+                if shp.storehasproductentity_set.count() == 1:
+                    shp.delete()
+                else:
+                    shpe.shp = None
+                    shpe.save()
+                    shp.update()
+            
+            # End changes
+            
             shp, created = StoreHasProduct.objects.get_or_create(store = store, product = product)
 
             shpe.shp = shp
@@ -89,6 +102,8 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             if created:
                 shp.shpe = shpe
                 shp.save()
+            else:
+                shp.update()
             return HttpResponseRedirect('/manager/new_entities/?refresh=true')
     else:
         d = {}

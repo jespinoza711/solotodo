@@ -107,16 +107,9 @@ def update_availability_and_price():
         shpe.save()
         
     print 'Paso 2: Actualizando StoreHasProduct'
-    shps = StoreHasProduct.objects.all()
-    for shp in shps:
+    for shp in StoreHasProduct.objects.all():
         print shp
-        shpes = shp.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
-        if shpes:
-            shp.shpe = shpes[0]
-        else:
-            shp.shpe = None
-            
-        shp.save()
+        shp.update()
         
     print 'Paso 3: Actualizando Productos'
 

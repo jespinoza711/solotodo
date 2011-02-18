@@ -36,6 +36,9 @@ class Product(models.Model):
         upload_to = 'notebook_pics',
         generate_on_save = True,)
         
+    def pretty_display(self):
+        return unicode(self)
+        
     @staticmethod
     def get_all_ordered():
         from solonotebooks.cotizador.models import *
