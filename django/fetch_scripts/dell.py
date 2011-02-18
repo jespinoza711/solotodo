@@ -68,7 +68,7 @@ class Dell:
                 url = urlBase + url
             
             productData.url = url
-            productData.custom_name = productName + ' ' + url
+            productData.custom_name = productName
             productData.comparison_field = productData.url	    
             
             r = mechanize.urlopen(url)
@@ -217,7 +217,7 @@ class Dell:
             for latitudeCell in latitudeCells:
                 productData = ProductData()
                 productData.custom_name = latitudeCell.find('b').string
-                productData.url = urlBase + latitudeCell.parent.find('a')['href']
+                productData.url = latitudeCell.parent.find('a')['href']
                 span = latitudeCell.parent.find('span', {'class': 'pricing_retail_nodiscount_price'})
                 if not span:
                     span = latitudeCell.parent.find('span', {'class': 'pricing_sale_price'})
