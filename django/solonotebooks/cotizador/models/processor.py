@@ -81,7 +81,6 @@ class Processor(Product):
         scores = []
         while True:
             url = base_url + str(page_number)
-            print url
             browser = mechanize.Browser()
             data = browser.open(url).get_data()
             soup = BeautifulSoup(data)

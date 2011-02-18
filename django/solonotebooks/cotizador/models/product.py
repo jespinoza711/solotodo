@@ -66,7 +66,7 @@ class Product(models.Model):
         
     def __unicode__(self):
         entity = self.get_polymorphic_instance()
-        return self.ptype.classname + ' - ' + unicode(entity)
+        return unicode(entity)
         
     def raw_text(self):
         entity = self.get_polymorphic_instance()

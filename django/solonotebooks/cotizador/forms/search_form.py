@@ -75,7 +75,6 @@ class SearchForm(forms.Form):
         return self.__dict__[self.main_category_string()]
         
     def main_category_bound_field(self):
-        print 'Called'
         return BoundField(self, self.main_category(), self.main_category_string())        
         
     def get_attributes_requiring_advanced_controls(self):

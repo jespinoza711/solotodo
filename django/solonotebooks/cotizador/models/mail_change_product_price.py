@@ -18,12 +18,13 @@ class MailChangeProductPrice(models.Model):
         m.try_and_send_mail()
         
     def try_and_send_mail(self):
+        from solonotebooks.cotizador.utils import send_email
         try:
             t = get_template('mails/change_product_price.html')
             if not settings.DEBUG:
                 send_email(self.subscription.user, 'Cambio de precio de ' + str(self.subscription.product), t, {'product': self.subscription.product })
             self.success = True
-        except:
+        except Exception, e:
             self.success = False
         self.save()
     
