@@ -54,9 +54,10 @@ class Product(models.Model):
         return Product.objects.filter(is_available = True)
     
     def save(self):
+        super(Product, self).save()
         if self.similar_products == '0':
             self.load_similar_products()
-        super(Product, self).save()
+            super(Product, self).save()
     
     def get_polymorphic_instance(self):
         from solonotebooks.cotizador.models import *
