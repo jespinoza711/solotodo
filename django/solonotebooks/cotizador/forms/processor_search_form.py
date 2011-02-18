@@ -58,7 +58,7 @@ class ProcessorSearchForm(SearchForm):
         return self.parse_model(model)
         
     def main_category_string(self):
-        return 'family'    
+        return 'brand'    
 
     def get_key_data_value(self, key, pk_value):
         value = ''
