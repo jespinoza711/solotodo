@@ -25,9 +25,9 @@ class ProcessorSearchForm(SearchForm):
     
     ordering_choices = (
         ('1', 'Precio'), 
-        ('2', 'Puntaje PCMark 05'), 
-        ('3', 'Puntaje PCMark Vantage'), 
-        ('4', 'Puntaje Passmark'),
+        ('2', 'Puntaje Passmark'),
+        ('3', 'Puntaje PCMark 05'), 
+        ('4', 'Puntaje PCMark Vantage'), 
         ('5', 'Frecuencia'),
         ('6', 'TDP'))
     
@@ -155,15 +155,15 @@ class ProcessorSearchForm(SearchForm):
         elif self.ordering == 2:
             if ordering_direction == None:
                 ordering_direction = '-'    
-            processors = processors.order_by(ordering_direction + 'pcmark_05_score')
+            processors = processors.order_by(ordering_direction + 'passmark_score')
         elif self.ordering == 3:
             if ordering_direction == None:
                 ordering_direction = '-'    
-            processors = processors.order_by(ordering_direction + 'pcmark_vantage_score')
+            processors = processors.order_by(ordering_direction + 'pcmark_05_score')
         elif self.ordering == 4:
             if ordering_direction == None:
                 ordering_direction = '-'    
-            processors = processors.order_by(ordering_direction + 'passmark_score')
+            processors = processors.order_by(ordering_direction + 'pcmark_vantage_score')
         elif self.ordering == 5:
             if ordering_direction == None:
                 ordering_direction = '-'    

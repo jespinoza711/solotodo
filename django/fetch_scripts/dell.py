@@ -218,6 +218,8 @@ class Dell:
                 productData = ProductData()
                 productData.custom_name = latitudeCell.find('b').string
                 productData.url = latitudeCell.parent.find('a')['href']
+                if 'dell.com' not in productData.url:
+                    productData.url = urlBase + productData.url
                 span = latitudeCell.parent.find('span', {'class': 'pricing_retail_nodiscount_price'})
                 if not span:
                     span = latitudeCell.parent.find('span', {'class': 'pricing_sale_price'})
