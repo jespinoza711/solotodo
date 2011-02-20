@@ -58,6 +58,7 @@ class AbcDin:
         xml_resources = [
                     'notebooks',
                     'netbooks',
+                    'LCD',
                         ]
                         
         product_links = []

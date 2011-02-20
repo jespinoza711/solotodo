@@ -24,7 +24,7 @@
 		<!-- Filtros generales -->
 		<h2>Precio</h2>
 		<div class="filter_item">
-		    <div id="price_slider">
+		    <div class="price_slider">
 		        {{ form.min_price }} {{ form.max_price }}
 			</div>
 			<br />
@@ -38,8 +38,16 @@
 			    {% else %}
 			        <div class="filter_item">
 			    {% endif %}
-			        <label>{{ field.0.name }}</label>
-			        {{ field.1 }}
+			        {% if field.0.has_css_slider %}
+			            <div class="price_slider">
+			                <label>{{ field.0.name }}</label>
+			                {{ field.1 }}
+		                </div>
+		                <br />
+	                {% else %}
+	                    <label>{{ field.0.name }}</label>
+			                {{ field.1 }}
+	                {% endif %}
 		        </div>
 			{% endfor %}
 		{% endfor %}

@@ -41,6 +41,8 @@ class SearchForm(forms.Form):
         
         # For each filter (including those not active, represented by empty)
         adv_fields = self.get_attributes_requiring_advanced_controls()
+        slider_fields = self.get_slider_attributes()
+        
         for key in self.fields:
             if key in skip_keys:
                 continue
@@ -48,15 +50,19 @@ class SearchForm(forms.Form):
             # If this filter requires advanced controls, but they are not activated, skip
             if not self.advanced_controls and key in adv_fields:
                 continue
+                
+            if key in slider_fields and self.__dict__[key] == self.fields[key].default_slider_value:
+                continue
     
             # If the filter is active (i.e., its value is not empty)...
             if key in self.__dict__ and self.__dict__[key]:
                 valid_keys.append(key)
-                
+        
         if len(valid_keys) == 0:
             return 'Catálogo de productos'
         elif len(valid_keys) == 1:
-            return self.generate_title_tag(valid_keys[0], self.__dict__[valid_keys[0]])
+            value = self.generate_title_tag(valid_keys[0], self.__dict__[valid_keys[0]])
+            return value
         else: 
             return 'Resultados de la búsqueda'
         
@@ -82,6 +88,16 @@ class SearchForm(forms.Form):
         for key, field in self.fields.items():
             try:
                 if field.requires_advanced_controls:
+                    result.append(key)
+            except:
+                continue
+        return result
+        
+    def get_slider_attributes(self):
+        result = []
+        for key, field in self.fields.items():
+            try:
+                if field.default_slider_value:
                     result.append(key)
             except:
                 continue
@@ -195,12 +211,16 @@ class SearchForm(forms.Form):
         
         # For each filter (including those not active, represented by empty)
         adv_fields = self.get_attributes_requiring_advanced_controls()
+        slider_fields = self.get_slider_attributes()
         for key in self.fields:
             if key in skip_keys:
                 continue
                 
             # If this filter requires advanced controls, but they are not activated, skip
             if not self.advanced_controls and key in adv_fields:
+                continue
+                
+            if key in slider_fields and self.__dict__[key] == self.fields[key].default_slider_value:
                 continue
     
             # If the filter is active (i.e., its value is not empty)...

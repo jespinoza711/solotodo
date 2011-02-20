@@ -11,18 +11,17 @@ from . import SearchForm
 class ScreenSearchForm(SearchForm):
     screen_type = ClassChoiceField(ScreenType, 'Categoría', in_quick_search = True, quick_search_name = 'Categoría')
     brand = ClassChoiceField(ScreenBrand, 'Marca', in_quick_search = True, quick_search_name = 'Marca')
-    display = ClassChoiceField(ScreenDisplay, 'Tipo av.')
+    display = ClassChoiceField(ScreenDisplay, 'Tipo av.', requires_advanced_controls = True)
     display_type = ClassChoiceField(ScreenDisplayType, 'Tipo', in_quick_search = True, quick_search_name = 'Tipo')
-    min_size = ClassChoiceField(ScreenSizeFamily, 'Mín')
-    max_size = ClassChoiceField(ScreenSizeFamily, 'Max')
+    min_size, max_size = ClassChoiceField.generate_slider(ScreenSizeFamily)
     resolution = ClassChoiceField(ScreenResolution, 'Resolución', in_quick_search = True, quick_search_name = 'Resolución')
-    panel_type = ClassChoiceField(ScreenPanelType, 'Panel')
+    panel_type = ClassChoiceField(ScreenPanelType, 'Panel', requires_advanced_controls = True)
     response_time = ClassChoiceField(ScreenResponseTime, 'T. resp.')
     
-    digital_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
+    digital_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Si'))
     digital_tuner = CustomChoiceField(choices = digital_tuner_choices).set_name('Digital')
     
-    analog_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
+    analog_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Si'))
     analog_tuner = CustomChoiceField(choices = analog_tuner_choices).set_name('Análogo')
     
     ordering_choices = (
@@ -42,14 +41,13 @@ class ScreenSearchForm(SearchForm):
         
     def generate_interface_model(self):
         model = [['Datos generales',
-                    ['screen_type',
-                     'brand',
+                    ['brand',
+                     'resolution',
                      'display_type',
                      'display',]],
                  ['Tamaño',
                     ['min_size',
-                     'max_size',
-                     'resolution',]],
+                     'max_size',]],
                  ['Sintonizadores',
                     ['analog_tuner',
                      'digital_tuner',]],
@@ -60,8 +58,15 @@ class ScreenSearchForm(SearchForm):
                      
         return self.parse_model(model)
         
+    def __init__(self, qd):
+        if 'max_size' not in qd:
+            qd['max_size'] = ScreenSizeFamily.objects.reverse()[0].id
+        if 'min_size' not in qd:
+            qd['min_size'] = ScreenSizeFamily.objects.all()[0].id
+        super(ScreenSearchForm, self).__init__(qd)
+        
     def main_category_string(self):
-        return 'screen_type'    
+        return 'screen_type' 
 
     def get_key_data_value(self, key, pk_value):
         value = ''
@@ -74,18 +79,19 @@ class ScreenSearchForm(SearchForm):
         if key == 'screen_type':
             value = unicode(ScreenType.objects.get(pk = pk_value))
         if key == 'min_size':
-            value = unicode(ScreenSizeFamily.objects.get(pk = pk_value))
+            value = u'Tam. mínimo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'max_size':
-            value = unicode(ScreenSizeFamily.objects.get(pk = pk_value))
+            value = u'Tam. máximo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'resolution':
-            value = unicode(ScreenResolution.objects.get(pk = pk_value))
+            value = u'Resolución mínima: ' + unicode(ScreenResolution.objects.get(pk = pk_value))
         if key == 'panel_type':
-            value = unicode(ScreenPanelType.objects.get(pk = pk_value))
+            value = 'Panel ' + unicode(ScreenPanelType.objects.get(pk = pk_value))
         if key == 'response_time':
-            value = unicode(ScreenResponseTime.objects.get(pk = pk_value))
-        if key == 'has_analog_tuner':
-            value = 'Sintonizador análogo: ' + self.analog_tuner_choices[pk_value][1]
-        if key == 'has_digital_tuner':
+            value = u'T. de respuesta max.: ' + unicode(ScreenResponseTime.objects.get(pk = pk_value))
+        if key == 'analog_tuner':
+            choice = self.analog_tuner_choices[pk_value][1]
+            value = u'Sintonizador análogo: ' + choice
+        if key == 'digital_tuner':
             value = 'Sintonizador digital: ' + self.digital_tuner_choices[pk_value][1]
         return value
         
@@ -100,44 +106,44 @@ class ScreenSearchForm(SearchForm):
         if key == 'screen_type':
             value = unicode(ScreenType.objects.get(pk = pk_value))
         if key == 'min_size':
-            value = 'Pantallas con tamaño mínimo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value)) + ' pulgadas'
+            value = u'Pantallas con tamaño mínimo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'max_size':
-            value = 'Pantallas con tamaño máximo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value)) + ' pulgadas'
+            value = u'Pantallas con tamaño máximo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'resolution':
-            value = 'Pantallas con resolución de ' + unicode(ScreenResolution.objects.get(pk = pk_value))
+            value = u'Pantallas con resolución mínima ' + unicode(ScreenResolution.objects.get(pk = pk_value))
         if key == 'panel_type':
             value = 'Pantallas con paneles ' + unicode(ScreenPanelType.objects.get(pk = pk_value))
         if key == 'response_time':
-            value = 'Pantallas con tiempo de respuesta de ' + unicode(ScreenResponseTime.objects.get(pk = pk_value))
-        if key == 'has_analog_tuner':
-            value = 'Pantallas ' + ['sin', 'con'][pk_value][1] + ' sintonizador análogo'
-        if key == 'has_digital_tuner':
-            value = 'Pantallas ' + ['sin', 'con'][pk_value][1] + ' sintonizador digital'
+            value = u'Pantallas con tiempo de respuesta máximo de ' + unicode(ScreenResponseTime.objects.get(pk = pk_value))
+        if key == 'analog_tuner':
+            value = 'Pantallas ' + ['sin', 'con'][pk_value - 1] + u' sintonizador análogo'
+        if key == 'digital_tuner':
+            value = 'Pantallas ' + ['sin', 'con'][pk_value - 1] + ' sintonizador digital'
         return value
         
     def filter_products(self, screens):
         if self.brand:
             screens = screens.filter(line__brand = self.brand)
-        if self.display:
+        if self.display and self.advanced_controls:
             screens = screens.filter(display = self.display)
         if self.display_type:
-            screens = screens.filter(display__type = self.display_type)
+            screens = screens.filter(display__dtype = self.display_type)
         if self.screen_type:
             screens = screens.filter(stype = self.screen_type)
         if self.min_size:
-            screens = screens.filter(size__value__gte = ScreenSizeFamily.objects.get(pk = self.min_size).value)
+            screens = screens.filter(size__family__value__gte = ScreenSizeFamily.objects.get(pk = self.min_size).value)
         if self.max_size:
-            screens = screens.filter(size__value__lte = ScreenSizeFamily.objects.get(pk = self.max_size).value)
+            screens = screens.filter(size__family__value__lte = ScreenSizeFamily.objects.get(pk = self.max_size).value)
         if self.resolution:
-            screens = screens.filter(resolution = self.resolution)
-        if self.panel_type:
+            screens = screens.filter(resolution__total_pixels__gte = ScreenResolution.objects.get(pk = self.resolution).total_pixels)
+        if self.panel_type and self.advanced_controls:
             screens = screens.filter(panel_type = self.panel_type)
         if self.response_time:
-            screens = screens.filter(response_time = self.response_time)
+            screens = screens.filter(response_time__value__lte = ScreenResponseTime.objects.get(pk = self.response_time).value)
         if self.analog_tuner:
             screens = screens.filter(has_analog_tuner = self.analog_tuner - 1)
         if self.digital_tuner:
-            screens = screens.filter(digital_tuner = self.digital_tuner - 1)
+            screens = screens.filter(has_digital_tuner = self.digital_tuner - 1)
         if self.min_price:
             screens = screens.filter(min_price__gte = int(self.min_price))
         if self.max_price and self.max_price != int(self.price_choices[-1][0]):

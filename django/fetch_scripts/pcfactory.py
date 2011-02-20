@@ -60,8 +60,8 @@ class PCFactory:
                             '?papa=272&categoria=388',  # CPU 775
                             '?papa=272&categoria=468',  # CPU 1156
                             '?papa=272&categoria=446',  # CPU 1366
-                            '?papa=256&categoria=250',  # Monitores LCD
-                            '?papa=256&categoria=260',  # Televisores LCD
+                            #'?papa=256&categoria=250',  # Monitores LCD
+                            #'?papa=256&categoria=260',  # Televisores LCD
                             ]
                           
         pageLinks = []                            
