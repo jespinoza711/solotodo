@@ -1,4 +1,13 @@
 $(function() {
+    // Generate the custom slider if exists
+    if ($('.custom_range_select').length > 0) {
+        $('.custom_range_select').selectToUISlider({
+            labelSrc: 'text',
+            tooltipSrc: 'text',
+            labels: 2,
+        }).hide();
+    }
+
     // Generate the price slider
     $('.price_range_select').selectToUISlider({
         labelSrc: 'text',
