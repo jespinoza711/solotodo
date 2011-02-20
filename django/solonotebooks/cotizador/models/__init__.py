@@ -117,6 +117,21 @@ from solonotebooks.cotizador.models.processor_multiplier import ProcessorMultipl
 from solonotebooks.cotizador.models.processor_fsb import ProcessorFsb
 from solonotebooks.cotizador.models.processor_graphics import ProcessorGraphics
 from solonotebooks.cotizador.models.processor import Processor
+from solonotebooks.cotizador.models.screen_type import ScreenType
+from solonotebooks.cotizador.models.screen_brand import ScreenBrand
+from solonotebooks.cotizador.models.screen_line import ScreenLine
+from solonotebooks.cotizador.models.screen_display_type import ScreenDisplayType
+from solonotebooks.cotizador.models.screen_display import ScreenDisplay
+from solonotebooks.cotizador.models.screen_size_family import ScreenSizeFamily
+from solonotebooks.cotizador.models.screen_size import ScreenSize
+from solonotebooks.cotizador.models.screen_aspect_ratio import ScreenAspectRatio
+from solonotebooks.cotizador.models.screen_resolution import ScreenResolution
+from solonotebooks.cotizador.models.screen_video_port import ScreenVideoPort
+from solonotebooks.cotizador.models.screen_has_video_port import ScreenHasVideoPort
+from solonotebooks.cotizador.models.screen_panel_type import ScreenPanelType
+from solonotebooks.cotizador.models.screen_speakers import ScreenSpeakers
+from solonotebooks.cotizador.models.screen_response_time import ScreenResponseTime
+from solonotebooks.cotizador.models.screen import Screen
 
 __all__ = [ 
             'NotebookProcessorBrand', 
@@ -235,4 +250,19 @@ __all__ = [
             'ProcessorFsb',
             'ProcessorGraphics',
             'Processor',
+            'ScreenType',
+            'ScreenBrand',
+            'ScreenLine',
+            'ScreenDisplayType',
+            'ScreenDisplay',
+            'ScreenSizeFamily',
+            'ScreenSize',
+            'ScreenAspectRatio',
+            'ScreenResolution',
+            'ScreenVideoPort',
+            'ScreenHasVideoPort',
+            'ScreenPanelType',
+            'ScreenSpeakers',
+            'ScreenResponseTime',
+            'Screen',
             ]

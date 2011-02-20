@@ -7,6 +7,7 @@ from highlighted_products_form import HighlightedProductsForm
 from store_has_product_entity_edit_form import StoreHasProductEntityEditForm
 from video_card_search_form import VideoCardSearchForm
 from processor_search_form import ProcessorSearchForm
+from screen_search_form import ScreenSearchForm
 
 __all__ = [ 
             'SearchForm', 
@@ -17,5 +18,6 @@ __all__ = [
             'HighlightedProductsForm', 
             'StoreHasProductEntityEditForm', 
             'VideoCardSearchForm', 
-            'ProcessorSearchForm' 
+            'ProcessorSearchForm',
+            'ScreenSearchForm',
             ]
