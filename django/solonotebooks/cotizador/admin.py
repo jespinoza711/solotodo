@@ -145,3 +145,23 @@ class ProcessorAdmin(admin.ModelAdmin):
     list_display = ['pretty_display', 'pcmark_id', 'pcmark_05_score', 'pcmark_vantage_score', 'passmark_score']
 
 admin.site.register(Processor, ProcessorAdmin)
+
+admin.site.register(ScreenType)
+admin.site.register(ScreenBrand)
+admin.site.register(ScreenLine)
+admin.site.register(ScreenDisplayType)
+admin.site.register(ScreenDisplay)
+admin.site.register(ScreenSizeFamily)
+admin.site.register(ScreenSize)
+admin.site.register(ScreenAspectRatio)
+admin.site.register(ScreenResolution)
+admin.site.register(ScreenVideoPort)
+admin.site.register(ScreenHasVideoPort)
+admin.site.register(ScreenPanelType)
+admin.site.register(ScreenSpeakers)
+admin.site.register(ScreenResponseTime)
+
+class ScreenAdmin(admin.ModelAdmin):
+    exclude = ['publicized_offer']
+
+admin.site.register(Screen, ScreenAdmin)
