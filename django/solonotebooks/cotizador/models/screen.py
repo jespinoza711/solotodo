@@ -32,7 +32,8 @@ class Screen(Product):
         return result
         
     def load_similar_products(self):
-        self.similar_products = ''
+        similar_products = Screen.objects.filter(size__family = self.size.family).order_by('?')[:4]
+        self.similar_products = ','.join([str(prod.id) for prod in similar_products])
         
     @staticmethod
     def get_valid():
@@ -48,6 +49,18 @@ class Screen(Product):
     
     def pretty_contrast(self):
         return str(self.contrast) + ':1'
+        
+    def pretty_brightness(self):
+        return str(self.brightness) + ' cd/m<sup>2</sup>'
+        
+    def pretty_consumption(self):
+        return str(self.consumption) + ' W'
+        
+    def pretty_usb_ports(self):
+        if self.usb_ports:
+            return str(self.usb_ports)
+        else:
+            return 'No posee'
             
     class Meta:
         ordering = ['line', 'name']

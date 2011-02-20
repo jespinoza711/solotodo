@@ -1,0 +1,38 @@
+<h1>{{ screen }}</h1>
+<h3 class="subtitle">Especificaciones principales</h3>
+<strong>Tipo: </strong> {{ screen.display }}
+<br />
+<strong>Tamaño: </strong> {{ screen.size }}
+<br />
+<strong>Resolución: </strong> {{ screen.resolution }}
+<br />
+<strong>Contraste: </strong> {{ screen.pretty_contrast }}
+<br />
+<strong>Brillo: </strong> {{ screen.pretty_brightness|safe }}
+<br />
+
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Tiempo de respuesta: </strong> {{ screen.response_time }}
+<br />
+<strong>Puertos USB: </strong> {{ screen.pretty_usb_ports }}
+<br />
+<strong>Sintonizador TV análoga: </strong> {% if screen.has_analog_tuner %}Sí{%else %} No {% endif %}
+<br />
+<strong>Sintonizador TV digital: </strong> {% if screen.has_digital_tuner %}Sí{%else %} No {% endif %}
+<br />
+<strong>Soporte 3D: </strong> {% if screen.is_3d %}Sí{%else %} No {% endif %}
+<br />
+
+<h3 class="subtitle">Otros</h3>
+<strong>Tipo de panel: </strong> {{ screen.panel_type }}
+<br />
+<strong>Parlantes: </strong> {{ screen.speakers }}
+<br />
+
+<strong>Puertos de video: </strong>
+    <ul class="sub_ul">
+    {% for video_port in screen.video_ports.all %}
+        <li>{{ video_port }}</li>
+    {% endfor %}
+    </ul>
+<br />
