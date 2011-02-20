@@ -17,6 +17,7 @@ class ScreenSearchForm(SearchForm):
     resolution = ClassChoiceField(ScreenResolution, 'Resolución', in_quick_search = True, quick_search_name = 'Resolución')
     panel_type = ClassChoiceField(ScreenPanelType, 'Panel', requires_advanced_controls = True)
     response_time = ClassChoiceField(ScreenResponseTime, 'T. resp.')
+    video_port = ClassChoiceField(ScreenVideoPort, 'Puerto')
     
     digital_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Si'))
     digital_tuner = CustomChoiceField(choices = digital_tuner_choices).set_name('Digital')
@@ -52,7 +53,8 @@ class ScreenSearchForm(SearchForm):
                     ['analog_tuner',
                      'digital_tuner',]],
                  ['Otros',
-                    ['response_time',
+                    ['video_port',
+                     'response_time',
                      'panel_type',]],
                      ]
                      
@@ -93,6 +95,8 @@ class ScreenSearchForm(SearchForm):
             value = u'Sintonizador análogo: ' + choice
         if key == 'digital_tuner':
             value = 'Sintonizador digital: ' + self.digital_tuner_choices[pk_value][1]
+        if key == 'video_port':
+            value = u'Con puerto de video: ' + unicode(ScreenVideoPort.objects.get(pk = pk_value))                
         return value
         
     def generate_title_tag(self, key, pk_value):
@@ -119,6 +123,8 @@ class ScreenSearchForm(SearchForm):
             value = 'Pantallas ' + ['sin', 'con'][pk_value - 1] + u' sintonizador análogo'
         if key == 'digital_tuner':
             value = 'Pantallas ' + ['sin', 'con'][pk_value - 1] + ' sintonizador digital'
+        if key == 'video_port':
+            value = u'Pantallas con puerto de video ' + unicode(ScreenVideoPort.objects.get(pk = pk_value)) 
         return value
         
     def filter_products(self, screens):
@@ -148,6 +154,8 @@ class ScreenSearchForm(SearchForm):
             screens = screens.filter(min_price__gte = int(self.min_price))
         if self.max_price and self.max_price != int(self.price_choices[-1][0]):
             screens = screens.filter(min_price__lte = int(self.max_price))
+        if self.video_port:
+            screens = screens.filter(video_ports__port__id = self.video_port).distinct()
             
         # Check the ordering orientation, if it is not set, each criteria uses 
         # sensible defaults (asc for price, desc for cpu performance, etc)
