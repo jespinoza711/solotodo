@@ -51,10 +51,16 @@ class Screen(Product):
         return str(self.contrast) + ':1'
         
     def pretty_brightness(self):
-        return str(self.brightness) + ' cd/m<sup>2</sup>'
+        if self.brightness:
+            return str(self.brightness) + ' cd/m<sup>2</sup>'
+        else:
+            return 'Desconocido'
         
     def pretty_consumption(self):
-        return str(self.consumption) + ' W'
+        if self.consumption:
+            return str(self.consumption) + ' W'
+        else:
+            return 'Desconocido'
         
     def pretty_usb_ports(self):
         if self.usb_ports:
