@@ -68,6 +68,7 @@ class Bip:
                             'categoria=263&categoria_papa=111',  # Proces Intel 1366
                             'categoria=100&categoria_papa=111',  # Proces AMD AM2
                             'categoria=242&categoria_papa=111',  # Proces AMD AM3
+                            'categoria=19'                       # LCD
                             ]
                             
         productLinks = []

@@ -4,7 +4,7 @@ class ScreenRefreshRate(models.Model):
     value = models.IntegerField()
     
     def __unicode__(self):
-        return str(self.value) + ' MHz'
+        return str(self.value) + ' Hz'
             
     class Meta:
         ordering = ['value']
