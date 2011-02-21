@@ -51,6 +51,7 @@ class Bym:
                             'catpro.php?idCat=31',              # Tarjetas de video
                             'catpro.php?idCat=25',              # Procesadores AMD
                             'catpro.php?idCat=26',              # Procesadores Intel
+                            'catpro.php?idCat=18',              # LCD
                             ]
                             
         for url_extension in url_extensions:
