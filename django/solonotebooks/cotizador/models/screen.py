@@ -48,7 +48,10 @@ class Screen(Product):
     # Custom methods
     
     def pretty_contrast(self):
-        return str(self.contrast) + ':1'
+        if self.contrast:
+            return str(self.contrast) + ':1'
+        else:
+            return 'Desconocido'
         
     def pretty_brightness(self):
         if self.brightness:

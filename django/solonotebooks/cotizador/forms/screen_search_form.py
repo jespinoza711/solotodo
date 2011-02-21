@@ -29,8 +29,7 @@ class ScreenSearchForm(SearchForm):
         ('1', 'Precio'), 
         ('2', 'Tamaño'),
         ('3', 'Resolución'),
-        ('4', 'Contraste'),
-        ('5', 'Tiempo de respuesta'),
+        ('4', 'Tiempo de respuesta'),
         )
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
@@ -174,10 +173,6 @@ class ScreenSearchForm(SearchForm):
             if ordering_direction == None:
                 ordering_direction = '-'    
             screens = screens.order_by(ordering_direction + 'resolution')
-        elif self.ordering == 4:
-            if ordering_direction == None:
-                ordering_direction = '-'    
-            screens = screens.order_by(ordering_direction + 'contrast')
         else:
             if ordering_direction == None:
                 ordering_direction = ''
