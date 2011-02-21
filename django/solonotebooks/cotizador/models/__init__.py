@@ -131,6 +131,7 @@ from solonotebooks.cotizador.models.screen_has_video_port import ScreenHasVideoP
 from solonotebooks.cotizador.models.screen_panel_type import ScreenPanelType
 from solonotebooks.cotizador.models.screen_speakers import ScreenSpeakers
 from solonotebooks.cotizador.models.screen_response_time import ScreenResponseTime
+from solonotebooks.cotizador.models.screen_refresh_rate import ScreenRefreshRate
 from solonotebooks.cotizador.models.screen import Screen
 
 __all__ = [ 
@@ -264,5 +265,6 @@ __all__ = [
             'ScreenPanelType',
             'ScreenSpeakers',
             'ScreenResponseTime',
+            'ScreenRefreshRate',
             'Screen',
             ]
