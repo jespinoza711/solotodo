@@ -17,7 +17,9 @@ class ScreenSearchForm(SearchForm):
     resolution = ClassChoiceField(ScreenResolution, 'Resolución', in_quick_search = True, quick_search_name = 'Resolución')
     panel_type = ClassChoiceField(ScreenPanelType, 'Panel', requires_advanced_controls = True)
     response_time = ClassChoiceField(ScreenResponseTime, 'T. resp.')
+    refresh_rate = ClassChoiceField(ScreenRefreshRate, 'Refresco', requires_advanced_controls = True)
     video_port = ClassChoiceField(ScreenVideoPort, 'Puerto')
+    
     
     digital_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Si'))
     digital_tuner = CustomChoiceField(choices = digital_tuner_choices).set_name('Digital')
@@ -54,6 +56,7 @@ class ScreenSearchForm(SearchForm):
                  ['Otros',
                     ['video_port',
                      'response_time',
+                     'refresh_rate',
                      'panel_type',]],
                      ]
                      
@@ -89,6 +92,8 @@ class ScreenSearchForm(SearchForm):
             value = 'Panel ' + unicode(ScreenPanelType.objects.get(pk = pk_value))
         if key == 'response_time':
             value = u'T. de respuesta max.: ' + unicode(ScreenResponseTime.objects.get(pk = pk_value))
+        if key == 'refresh_rate':
+            value = u'T. de refresco mín.: ' + unicode(ScreenRefreshRate.objects.get(pk = pk_value))
         if key == 'analog_tuner':
             choice = self.analog_tuner_choices[pk_value][1]
             value = u'Sintonizador análogo: ' + choice
@@ -118,6 +123,8 @@ class ScreenSearchForm(SearchForm):
             value = 'Pantallas con paneles ' + unicode(ScreenPanelType.objects.get(pk = pk_value))
         if key == 'response_time':
             value = u'Pantallas con tiempo de respuesta máximo de ' + unicode(ScreenResponseTime.objects.get(pk = pk_value))
+        if key == 'refresh_rate':
+            value = u'Pantallas con tasa de refresco mínima de ' + unicode(ScreenRefreshRate.objects.get(pk = pk_value))
         if key == 'analog_tuner':
             value = 'Pantallas ' + ['sin', 'con'][pk_value - 1] + u' sintonizador análogo'
         if key == 'digital_tuner':
@@ -145,6 +152,8 @@ class ScreenSearchForm(SearchForm):
             screens = screens.filter(panel_type = self.panel_type)
         if self.response_time:
             screens = screens.filter(response_time__value__lte = ScreenResponseTime.objects.get(pk = self.response_time).value)
+        if self.refresh_rate and self.advanced_controls:
+            screens = screens.filter(refresh_rate__value__gte = ScreenRefreshRate.objects.get(pk = self.refresh_rate).value)
         if self.analog_tuner:
             screens = screens.filter(has_analog_tuner = self.analog_tuner - 1)
         if self.digital_tuner:
