@@ -1,5 +1,5 @@
 from django.db import models
-from . import Product, ScreenLine, ScreenDisplay, ScreenType, ScreenSize, ScreenResolution, ScreenHasVideoPort, ScreenPanelType, ScreenSpeakers, ScreenResponseTime
+from . import Product, ScreenLine, ScreenDisplay, ScreenType, ScreenSize, ScreenResolution, ScreenHasVideoPort, ScreenPanelType, ScreenSpeakers, ScreenResponseTime, ScreenRefreshRate
 
 class Screen(Product):
     brightness = models.IntegerField()
@@ -12,6 +12,7 @@ class Screen(Product):
     is_3d = models.BooleanField()
 
     response_time = models.ForeignKey(ScreenResponseTime)
+    refresh_rate = models.ForeignKey(ScreenRefreshRate)
     stype = models.ForeignKey(ScreenType)
     line = models.ForeignKey(ScreenLine)
     display = models.ForeignKey(ScreenDisplay)
