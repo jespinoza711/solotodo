@@ -47,6 +47,9 @@ class Screen(Product):
         
     # Custom methods
     
+    def pretty_display(self):
+        return unicode(self)
+    
     def pretty_contrast(self):
         if self.contrast:
             return str(self.contrast) + ':1'
