@@ -14,7 +14,7 @@ class Cintegral:
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
-        product_name = product_soup.find('td', { 'class': 'stylenomprod' }).string.strip()
+        product_name = product_soup.find('td', { 'class': 'stylenomprod' }).string.encode('ascii', 'ignore').strip()
         product_price = int(product_soup.find('td', { 'class': 'styleprod' }).string.replace('$', '').replace('.', ''))
         
         product_data = ProductData()
