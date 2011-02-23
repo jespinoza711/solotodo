@@ -1,5 +1,5 @@
 from django.db import models
-from . import Product, ScreenLine, ScreenDisplay, ScreenType, ScreenSize, ScreenResolution, ScreenHasVideoPort, ScreenPanelType, ScreenSpeakers, ScreenResponseTime, ScreenRefreshRate
+from . import Product, ScreenLine, ScreenDisplay, ScreenType, ScreenSize, ScreenResolution, ScreenHasVideoPort, ScreenPanelType, ScreenSpeakers, ScreenResponseTime, ScreenRefreshRate, ScreenDigitalTuner
 
 class Screen(Product):
     brightness = models.IntegerField()
@@ -11,6 +11,7 @@ class Screen(Product):
     has_digital_tuner = models.BooleanField()
     is_3d = models.BooleanField()
 
+    digital_tuner = models.ForeignKey(ScreenDigitalTuner)
     response_time = models.ForeignKey(ScreenResponseTime)
     refresh_rate = models.ForeignKey(ScreenRefreshRate)
     stype = models.ForeignKey(ScreenType)

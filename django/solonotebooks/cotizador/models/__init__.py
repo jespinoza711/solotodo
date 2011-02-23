@@ -132,6 +132,7 @@ from solonotebooks.cotizador.models.screen_panel_type import ScreenPanelType
 from solonotebooks.cotizador.models.screen_speakers import ScreenSpeakers
 from solonotebooks.cotizador.models.screen_response_time import ScreenResponseTime
 from solonotebooks.cotizador.models.screen_refresh_rate import ScreenRefreshRate
+from solonotebooks.cotizador.models.screen_digital_tuner import ScreenDigitalTuner
 from solonotebooks.cotizador.models.screen import Screen
 
 __all__ = [ 
@@ -266,5 +267,6 @@ __all__ = [
             'ScreenSpeakers',
             'ScreenResponseTime',
             'ScreenRefreshRate',
+            'ScreenDigitalTuner',
             'Screen',
             ]
