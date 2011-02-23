@@ -72,6 +72,7 @@ class ENotebook:
         
         url_extensions = [
                             'it-index-n-notebooks-cP-1.html',
+                            'it-index-n-monitores_televisores_lcd-cP-22.html',
                         ]
                         
         extra_pagelinks = [ ]
