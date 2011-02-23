@@ -165,6 +165,5 @@ admin.site.register(ScreenDigitalTuner)
 
 class ScreenAdmin(admin.ModelAdmin):
     exclude = ['publicized_offer']
-    list_display = ['pretty_display', 'has_analog_tuner', 'digital_tuner']
 
 admin.site.register(Screen, ScreenAdmin)
