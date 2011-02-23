@@ -58,10 +58,18 @@ class Clie:
                             '307',                            
                             '308',
                             '646',  # Procesadores Intel
-                            '18',   # LCD monitor
-                            '265',  # LCD TV monitor
-                            '615',  # LED monitor
-                            '613',  # LED TV monitor
+                            '167',  # LCD monitor
+                            '551',   
+                            '19',   
+                            '536',   
+                            '156',   
+                            '310',  # LCD TV monitor
+                            '266',  
+                            '550',  
+                            '560',  
+                            '632',  # LED monitor
+                            '616',  
+                            '614',  # LED TV monitor
                             ]
                             
         product_links = []
