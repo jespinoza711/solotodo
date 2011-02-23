@@ -58,7 +58,8 @@ urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/validate_all$', 'validate_all'),
     (r'^manager/delete_all$', 'delete_all'),
     (r'^manager/analyze_searches$', 'analyze_searches'), 
-    (r'^manager/polymorphic_admin_request/(?P<product_id>\d+)$', 'polymorphic_admin_request'), 
+    (r'^manager/polymorphic_admin_request/(?P<product_id>\d+)$', 'polymorphic_admin_request'),
+    (r'^manager/clone_product/(?P<product_id>\d+)$', 'clone_product'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_legacy',

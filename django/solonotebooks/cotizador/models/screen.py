@@ -42,6 +42,9 @@ class Screen(Product):
     
     def clone_product(self):
         clone_prod = super(Screen, self).clone_product()
+        
+        for video_port in self.video_ports.all():
+            clone_prod.video_ports.add(video_port)
 
         clone_prod.save()
         return clone_prod

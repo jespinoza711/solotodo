@@ -46,6 +46,14 @@ def polymorphic_admin_request(request, product_id):
     return HttpResponseRedirect(url)
     
 @manager_login_required    
+def clone_product(request, product_id):
+    product = Product.objects.get(pk = product_id).get_polymorphic_instance()
+    cloned_product = product.clone_product()
+    
+    url = reverse('solonotebooks.cotizador.views_manager.polymorphic_admin_request', args = [cloned_product.id])
+    return HttpResponseRedirect(url)
+    
+@manager_login_required    
 def news(request):
     # Shows the logs for the last week
     today = date.today()
