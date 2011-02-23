@@ -20,9 +20,7 @@ class ScreenSearchForm(SearchForm):
     refresh_rate = ClassChoiceField(ScreenRefreshRate, 'Refresco', requires_advanced_controls = True)
     video_port = ClassChoiceField(ScreenVideoPort, 'Puerto')
     
-    
-    digital_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Si'))
-    digital_tuner = CustomChoiceField(choices = digital_tuner_choices).set_name('Digital')
+    digital_tuner = ClassChoiceField(ScreenDigitalTuner, 'Digital')
     
     analog_tuner_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Si'))
     analog_tuner = CustomChoiceField(choices = analog_tuner_choices).set_name('Análogo')
@@ -98,7 +96,7 @@ class ScreenSearchForm(SearchForm):
             choice = self.analog_tuner_choices[pk_value][1]
             value = u'Sintonizador análogo: ' + choice
         if key == 'digital_tuner':
-            value = 'Sintonizador digital: ' + self.digital_tuner_choices[pk_value][1]
+            value = 'Sintonizador digital: ' + unicode(ScreenDigitalTuner.objects.get(pk = pk_value))
         if key == 'video_port':
             value = u'Con puerto de video: ' + unicode(ScreenVideoPort.objects.get(pk = pk_value))                
         return value
@@ -128,7 +126,7 @@ class ScreenSearchForm(SearchForm):
         if key == 'analog_tuner':
             value = 'Pantallas ' + ['sin', 'con'][pk_value - 1] + u' sintonizador análogo'
         if key == 'digital_tuner':
-            value = 'Pantallas ' + ['sin', 'con'][pk_value - 1] + ' sintonizador digital'
+            value = 'Pantallas con sintonizador digital: ' + unicode(ScreenDigitalTuner.objects.get(pk = pk_value))
         if key == 'video_port':
             value = u'Pantallas con puerto de video ' + unicode(ScreenVideoPort.objects.get(pk = pk_value)) 
         return value
@@ -157,7 +155,7 @@ class ScreenSearchForm(SearchForm):
         if self.analog_tuner:
             screens = screens.filter(has_analog_tuner = self.analog_tuner - 1)
         if self.digital_tuner:
-            screens = screens.filter(has_digital_tuner = self.digital_tuner - 1)
+            screens = screens.filter(digital_tuner = self.digital_tuner)
         if self.min_price:
             screens = screens.filter(min_price__gte = int(self.min_price))
         if self.max_price and self.max_price != int(self.price_choices[-1][0]):
