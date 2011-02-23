@@ -161,6 +161,7 @@ admin.site.register(ScreenPanelType)
 admin.site.register(ScreenSpeakers)
 admin.site.register(ScreenResponseTime)
 admin.site.register(ScreenRefreshRate)
+admin.site.register(ScreenDigitalTuner)
 
 class ScreenAdmin(admin.ModelAdmin):
     exclude = ['publicized_offer']
