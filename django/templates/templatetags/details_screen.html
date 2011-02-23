@@ -18,7 +18,7 @@
 <br />
 <strong>Sintonizador TV análoga: </strong> {% if screen.has_analog_tuner %}Sí{%else %} No {% endif %}
 <br />
-<strong>Sintonizador TV digital: </strong> {% if screen.has_digital_tuner %}Sí{%else %} No {% endif %}
+<strong>Sintonizador TV digital: </strong> {{ screen.digital_tuner }}
 <br />
 <strong>Soporte 3D: </strong> {% if screen.is_3d %}Sí{%else %} No {% endif %}
 <br />

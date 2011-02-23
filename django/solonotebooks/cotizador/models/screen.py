@@ -8,7 +8,6 @@ class Screen(Product):
     usb_ports = models.IntegerField()
     
     has_analog_tuner = models.BooleanField()
-    has_digital_tuner = models.BooleanField()
     is_3d = models.BooleanField()
 
     digital_tuner = models.ForeignKey(ScreenDigitalTuner)
