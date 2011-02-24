@@ -59,6 +59,7 @@ class Magens:
             'intel-s1156-c-1_197.html',
             'intel-s775-c-1_32.html',
             'server-c-1_30.html',
+            'monitores-televisores-c-13.html',
         ]
                 
         product_links = []            

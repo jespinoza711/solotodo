@@ -62,6 +62,8 @@ class NotebookCenter:
                             '?id_categoria=212', # Notebook Sony
                             '?id_categoria=63',  # Notebook Toshiba
                             '?id_categoria=534', # Notebook Viewsonic
+                            '?id_categoria=275', # Monitores Apple
+                            '?id_categoria=162', # Monitores LCD
                             ]
                           
         product_links = []  
