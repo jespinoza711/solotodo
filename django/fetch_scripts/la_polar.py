@@ -36,7 +36,8 @@ class LaPolar:
         urlExtensions = [
                             'tecnologia/computacion/notebook/', 
                             'tecnologia/computacion/netbook/',
-                            'electrohogar/refrigeracion/refrigerador_conv_1p']
+                            'electrohogar/tv_video/led/',
+                            'electrohogar/tv_video/lcd/',]
        
         # Browser initialization
         browser = mechanize.Browser()

@@ -41,6 +41,7 @@ class GlobalMac:
         
         url_extensions = [  'Apple/MacBook',
                             'Apple/MacBook%20Pro',
+                            'Hardware/Monitores%20LCD',
                             ]
         product_links = []
                             

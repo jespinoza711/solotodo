@@ -46,6 +46,7 @@ class FullNotebook:
         
         url_extensions = [  
                     'notebooks',
+                    'monitores',
                     ]
         
         for url_extension in url_extensions:
