@@ -42,6 +42,7 @@ class Rigam:
                             'index.php?act=viewCat&catId=60',   # Tarjetas de video
                             'index.php?act=viewCat&catId=40',   # Procesadores AMD
                             'index.php?act=viewCat&catId=2',    # Procesadores Intel
+                            'index.php?act=viewCat&catId=54',   # Monitores
                             ]
         
         product_links = []                    

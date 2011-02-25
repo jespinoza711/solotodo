@@ -49,7 +49,8 @@ class Ripley:
         urlBase = 'http://www.ripley.cl/webapp/wcs/stores/servlet/'
         
         category_urls = [
-            'categoria-TVRipley-10051-001772-130000-ESP-N--',
+            'categoria-TVRipley-10051-001772-130000-ESP-N--',   # Notebooks
+            'categoria-TVRipley-10051-013040-230000-ESP-N',     # LCDs
                         ]
         
         # Browser initialization
@@ -63,6 +64,7 @@ class Ripley:
             j = 1                    
             while True:
                 urlWebpage = urlBase + category_url + '?curPg=' + str(j)
+                print urlWebpage
 
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()
