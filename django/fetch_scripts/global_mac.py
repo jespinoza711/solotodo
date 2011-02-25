@@ -15,7 +15,10 @@ class GlobalMac:
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.find('div', { 'id': 'ficha' }).find('h1').string.encode('ascii', 'ignore')
-        product_price = int(product_soup.find('div', { 'class': 'price' }).find('h4').string.split('$')[1].split('pesos')[0].replace('.', ''))
+        try:
+            product_price = int(product_soup.find('div', { 'class': 'price' }).find('h4').string.split('$')[1].split('pesos')[0].replace('.', ''))
+        except:
+            return None
         
         product_data = ProductData()
         product_data.custom_name = product_name
