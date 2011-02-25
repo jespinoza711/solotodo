@@ -56,6 +56,9 @@ class Wei:
                     'TV&sccode=134',     # Tarjetas de video PCI Express
                     'CP&sccode=57',     # Procesadores AMD
                     'CP&sccode=58',     # Procesadores Intel
+                    'MO&sccode=162',    # LCD TV
+                    'MO&sccode=19',     # Monitores LCD
+                    
                         ]
                             
         for category_url in category_urls:

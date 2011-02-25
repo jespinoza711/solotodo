@@ -48,6 +48,10 @@ class Webco:
                             'n_new_productos.asp?CATEGORIA={AA5D5535-B127-4AEE-8583-4529F66DE4D7}#ct_39',
                             # Procesadores Intel
                             'n_new_productos.asp?CATEGORIA={5701C20F-03E6-430E-8CCF-01EE820BEDF8}#ct_39',
+                            # LCD TV
+                            'n_new_productos.asp?CATEGORIA={E49A199E-214A-4658-99AA-7E6220434D8D}#ct_32',
+                            # LCD
+                            'n_new_productos.asp?CATEGORIA={79A1AF72-4B4D-4368-9205-FC0D646A1145}#ct_32',
                             ]
         
         product_links = []                    
