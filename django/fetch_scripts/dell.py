@@ -144,7 +144,8 @@ class Dell:
         productsData = []
         
         
-        url_extensions = [  'domesticos/Notebooks/inspnnb-mini/ct.aspx?refid=inspnnb-mini&s=dhs&cs=cldhs1',
+        url_extensions = [  
+            'domesticos/Notebooks/inspnnb-mini/ct.aspx?refid=inspnnb-mini&s=dhs&cs=cldhs1',
                             ]
                             
         for url_extension in url_extensions:
@@ -183,7 +184,8 @@ class Dell:
                 productsData += self.retrieveAlienwareProductData(modelUrls[i], modelNames[i])
         
         # Now for the business (Vostro / Latitude / Precision)        
-        url_extensions = [  'empresas/notebooks/ct.aspx?refid=notebooks&s=bsd&cs=clbsdt1&~ck=mn',
+        url_extensions = [  
+            'empresas/notebooks/ct.aspx?refid=notebooks&s=bsd&cs=clbsdt1&~ck=mn',
                             ]
                             
         for url_extension in url_extensions:
@@ -253,6 +255,37 @@ class Dell:
                 productData.price = int(priceSpan.string.replace('CLP$', '').replace('.', ''))
                 productData.comparison_field = productData.url
                 productsData.append(productData)  
+                
+        url_extensions = [  
+            '/content/products/compare.aspx/19_22widescreen?c=cl&cs=cldhs1&l=es&s=dhs',
+            '/content/products/compare.aspx/23_30widescreen?c=cl&cs=cldhs1&l=es&s=dhs',
+                            ]
+                            
+        for url_extension in url_extensions:
+            urlWebpage = urlBase + url_extension
+            
+            r = mechanize.urlopen(urlWebpage)
+            baseSoup = BeautifulSoup(r.read())
+            
+            prices = baseSoup.findAll('span', {'class': ['pricing_sale_price', 'pricing_retail_nodiscount_price']})
+            prices = [int(price.contents[0].replace('CLP$', '').replace('.', '')) for price in prices]
+            num_prods = len(prices)
+            names = baseSoup.findAll('span', {'class': 'title_emph'})[3:num_prods + 3]
+            names = [name.contents[0] for name in names]
+            links = baseSoup.findAll('a', {'class': 'lnk'})
+            final_links = []
+            for link in links:
+                if 'configure' in link['href']:
+                    final_links.append(link['href'])
+            final_links = final_links[:num_prods]
+            
+            for i in range(num_prods):
+                product_data = ProductData()
+                product_data.custom_name = names[i].encode('ascii', 'ignore')
+                product_data.url = final_links[i]
+                product_data.comparison_field = final_links[i]
+                product_data.price = prices[i]
+                productsData.append(product_data)
                 
         for productData in productsData:
             print productData
