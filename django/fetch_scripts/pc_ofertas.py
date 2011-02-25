@@ -44,6 +44,7 @@ class PCOfertas:
                             '75',   # Netbook
                             '87',   # Tarjetas de video
                             '18',   # Procesadores
+                            '28',   # Monitores
                             ]
         
         product_links = []                    

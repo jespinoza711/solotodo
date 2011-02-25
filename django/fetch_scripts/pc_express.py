@@ -51,6 +51,9 @@ class PCExpress:
                             '61_193',   # Procesadores 1155
                             '61_87',    # Procesadores 1156
                             '61_165',   # Procesadores 1366
+                            '73_128',   # LCD
+                            '73_129',   # LCD/TV
+                            '73_171',   # LED
                         ]
                             
         product_links = []
