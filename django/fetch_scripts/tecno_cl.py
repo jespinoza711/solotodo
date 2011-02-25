@@ -46,6 +46,10 @@ class TecnoCl:
                             'productos.asp?cat=50',
                             'productos.asp?cat=244',    # Procesadores AMD
                             'productos.asp?cat=251',    # Procesadores Intel
+                            'productos.asp?cat=217',    # LCD 15
+                            'productos.asp?cat=40',     # LCD 17
+                            'productos.asp?cat=218',    # LCD 19+
+                            'productos.asp?cat=87',    # LCDTV
                             ]
         
         product_links = []                    
