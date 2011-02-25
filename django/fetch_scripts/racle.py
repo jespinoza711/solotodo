@@ -46,6 +46,8 @@ class Racle:
         urlExtensions = [
                             'tienda/netbook', 
                             'tienda/notebook',
+                            'tienda/monitor',
+                            'tieda/moitor-led',
                         ]
         product_links = []
         for urlExtension in urlExtensions:

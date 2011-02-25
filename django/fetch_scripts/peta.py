@@ -42,6 +42,7 @@ class Peta:
                             'computadores-1/notebooks.html',
                             'peta-cl/tarjetas-de-video.html',
                             'peta-cl/procesadores.html',
+                            'peta-cl/monitores.html',
                             ]
                           
         product_links = []                            
