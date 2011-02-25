@@ -43,6 +43,7 @@ class Syd:
         url_extensions = [  '/computadoras/macbook_pro',
                             '/computadoras/macbook',
                             '/computadoras/macbook_air',
+                            '/computadoras/monitores',
                             ]
         
         product_links = []                    

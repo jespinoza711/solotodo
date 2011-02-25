@@ -52,6 +52,7 @@ class Sym:
                             '?cat=32_69',       # Tarjetas de video PCIe
                             '?cat=50',          # Procesadores Intel
                             '?cat=25',          # Procesadores AMD
+                            '?cat=81',          # Monitores LCD
                             ]
                             
         productLinks = []

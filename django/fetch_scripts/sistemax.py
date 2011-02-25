@@ -39,6 +39,7 @@ class Sistemax:
                 '35',       # Tarjetas de video
                 '58',       # Procesadores AMD
                 '59',       # Procesadores Intel
+                '25',       # Monitores
                 ]
                         
         # Array containing the data for each product
