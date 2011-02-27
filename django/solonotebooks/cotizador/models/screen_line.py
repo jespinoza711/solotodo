@@ -7,6 +7,9 @@ class ScreenLine(models.Model):
     
     def __unicode__(self):
         return unicode(self.brand) + ' ' + self.name
+        
+    def raw_text(self):
+        return self.brand.raw_text() + ' ' + self.name
             
     class Meta:
         ordering = ['brand', 'name']

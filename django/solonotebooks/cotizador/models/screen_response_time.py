@@ -5,6 +5,9 @@ class ScreenResponseTime(models.Model):
     
     def __unicode__(self):
         return str(self.value) + ' ms'
+        
+    def raw_text(self):
+        return unicode(self)
             
     class Meta:
         ordering = ['value']

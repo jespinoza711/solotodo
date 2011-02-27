@@ -13,6 +13,13 @@ class ScreenResolution(models.Model):
         if self.commercial_name.strip():
             value = self.commercial_name + ' (' + value + ')'
         return value
+        
+    def raw_text(self):
+        result = str(self.h_value) + ' ' + str(self.v_value)
+        result += ' ' + str(self.h_value) + 'x' + str(self.v_value)
+        result += ' ' + self.commercial_name
+        result += ' ' + self.aspect_ratio.raw_text()
+        return result
             
     class Meta:
         ordering = ['total_pixels']

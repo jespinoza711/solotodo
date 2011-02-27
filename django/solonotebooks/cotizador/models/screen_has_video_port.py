@@ -7,6 +7,9 @@ class ScreenHasVideoPort(models.Model):
     
     def __unicode__(self):
         return str(self.quantity) + 'x ' + unicode(self.port)
+        
+    def raw_text(self):
+        return self.port.raw_text()
             
     class Meta:
         ordering = ['port', 'quantity']

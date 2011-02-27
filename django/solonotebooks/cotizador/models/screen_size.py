@@ -7,6 +7,12 @@ class ScreenSize(models.Model):
     
     def __unicode__(self):
         return str(self.value) + '"'
+        
+    def raw_text(self):
+        result = str(self.value) + ' pulgadas'
+        result += ' ' + self.family.raw_text()
+        return result
+        
             
     class Meta:
         ordering = ['value']
