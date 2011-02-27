@@ -3,7 +3,19 @@
 {% block title %}{{ product }} - {{ site_name }}{% endblock %}
 
 {% block catalog_header_content %}
+    {% if settings.DEBUG %}
+        <script type="text/javascript"> 
+            var disqus_developer = 1;
+        </script>
+    {% endif %}
+    <meta property="og:title" content="{{ product }}"/>
+    <meta property="og:type" content="product"/>
+    <meta property="og:url" content="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}"/>
+    <meta property="og:image" content="{{settings.SERVER_NAME }}{{ product.picture.extra_thumbnails.large.absolute_url }}"/>
+    <meta property="og:site_name" content="{{ settings.SITE_NAME }}"/>
+
     <link href="/media/css/galleria.css" rel="stylesheet" type="text/css" media="screen" /> 
+    <link rel="image_src" href="" />
     <script type="text/javascript" src="/media/js/galleria/jquery.galleria.js"></script>
     <script type="text/javascript"> 
         $(function() {
@@ -16,7 +28,6 @@
 		    });
 		    
 		    product_id = {{ product.id }}
-
         }); 
     </script>
 {% endblock %}
@@ -36,7 +47,7 @@
     </div>
     <br class="clear" />
     <div class="price_table_container">
-        <table id="mytable" class="table_product_detail_prices">
+        <table class="table_product_detail_prices mytable">
             <tr>
                 <th>Tienda</th>
                 <th>Precio</th>
@@ -64,7 +75,7 @@
     
     <div id="price_suggestion_box">
         {% if not subscription %}
-        <table id="mytable">
+        <table class="mytable">
             <tr>
                 <td>
                     <a href="" class="subscribe_link">
@@ -96,7 +107,7 @@
         </table>
         {% else %}
             {% if subscription.email_notifications %}
-                <table id="mytable">
+                <table class="mytable">
                     <tr>
                         <td>
                             <img src="/media/assets/subscribe-icon.png" />
@@ -119,7 +130,7 @@
                     </tr>                         
                 </table>            
             {% else %}
-                <table>
+                <table class="mytable">
                     <tr>
                         <td>
                             <a href="" class="subscribe_link">
@@ -148,68 +159,29 @@
             {% endif %}
         {% endif %}
     </div>
-
-    <div class="similar_products">
-        <h3>{{ ptype.indexname }} similares</h3>
-        {% for ntbk in similar_products %}
-            {{ ntbk.render_similar }}
-        {% endfor %}
-    </div>
 </div>
 <div class="product_details_specs">
     {{ product.render_details }}
     
-    <br />
-    <hr class="product_details_comment_separator" />
-    <div id="product_comments">
-    <h3>Comentarios</h3>
-    {% ifequal product_comments.count 0 %}
-        No hay comentarios para este producto
-    {% else %}
-        {% for comment in product_comments %}
-            <div class="notebok_comment">
-                <span class="comment_nickname">
-                    {% if comment.user %}
-                        {{ comment.user.username}}
-                    {% else %}
-                        {{ comment.nickname }}
-                    {% endif %}
-                </span>
-                <span class="comment_date">{{ comment.date }}</span>
-                <div class="comment_body">
-                {{ comment.comments|safe }}
-                </div>
-                {% if user.is_staff %}
-                    <small><a href="/manager/delete/{{ comment.id }}">Eliminar</a></small>
-                {% endif %}
-                <hr class="product_details_comment_separator" />
-            </div>
-        {% endfor %}
-    {% endifequal %}
-    </div>
-    <div id="product_comment_add">
-    {% if posted_comment %}
-    <strong>Gracias por tus comentarios, dentro de unos minutos será publicado. Recuerda que <a href="#" class="register_link">si te registras</a> tus próximos mensajes aparecerán inmediatamente.</strong>
-    {% else %}
-        ¿Preguntas, comentarios o sugerencias de este producto? Deja tu mensaje!
-        <form action="" id="comment_form" method="post">
-            <div>
-                <span class="comment_form_label">Nombre:</span>
-                {% if user.is_authenticated %}
-                    {{ user.username }}
-                {% else %}
-                    {{ comment_form.nickname }}
-                {% endif %}
-                <p>
-                    <span class="comment_form_label">Comentarios:</span>
-                    <br />
-                    {{ comment_form.comments }}
-                    <br />
-                </p>
-                <input type="submit" value="Enviar" />
-            </div>
-        </form>
-    {% endif %}
-    </div>
+    <p id="product_like">
+    <fb:like href="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}" show_faces="true" width="350"></fb:like>
+    </p>
 </div>
+
+<br class="product_details_comment_separator" />
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '{{ settings.DISQUS_SHORTNAME }}';
+    var disqus_identifier = '{{ product.id }}';
+    var disqus_url = '{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 {% endblock %}

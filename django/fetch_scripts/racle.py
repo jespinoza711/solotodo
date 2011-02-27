@@ -10,7 +10,6 @@ class Racle:
     name = 'Racle'
     
     def retrieve_product_data(self, product_link):
-        print product_link
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)

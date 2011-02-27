@@ -42,7 +42,7 @@
     <br />
         <strong>Nickname: </strong>     
     {% if comment.user %}
-        {{ comment.user.username }}
+        {{ comment.user.get_profile.name }}
     {% else %}
         {{ comment.nickname }}
     {% endif %}

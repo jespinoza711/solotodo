@@ -19,7 +19,7 @@
     display: none;
 }
 
-label {
+label.search_form_label {
     float:left;
     width:25%;
     margin-right: 10px;
