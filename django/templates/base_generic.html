@@ -35,35 +35,12 @@
 		<!--[if IE 8]>
 			<link rel="stylesheet" type="text/css" href="/media/css/ie8style.css" />
 		<![endif]-->
-		<script type="text/javascript">
-		        $(document).ready(function() {
-		
-		            $(".signin").click(function(e) {
-		                e.preventDefault();
-		                $("fieldset#signin_menu").toggle();
-		                $(".signin").toggleClass("menu-open");
-		            });
-		
-		            $("fieldset#signin_menu").mouseup(function() {
-		                return false
-		            });
-		            $(document).mouseup(function(e) {
-		                if($(e.target).parent("a.signin").length==0) {
-		                    $(".signin").removeClass("menu-open");
-		                    $("fieldset#signin_menu").hide();
-		                }
-		            });            
-		
-		        });
-		</script>
-
 	</head>
 	
 	<body>
 		
 		<div id="head">
 			<div id="content-head" class="container">
-				
 				<div id="nav-user" class="nav-mine">
 					{% if authenticated_user %}    
                         <div id="logout">
@@ -193,25 +170,6 @@
                         </div>
 	                </form>
                     <div id="regenerate_ajax_loader" class="ajax_loader">
-                        <img src="/media/assets/ajax-loader.gif" />
-                    </div>	    
-	            </div>
-            </div>
-
-            <div class="dialog_form" id="dialog_login" title="Login" style="display: none;">
-	            <div>
-	                <form id="login_form" method="post" action="/account/ajax_login">
-	                    <div class="dialog_error" id="login_error"></div>
-	                    <div class="signup_element">
-                            <label for="username" maxlength="30">Nombre de usuario: </label> 
-                            <input type="text" name="username" id="login_username" />
-                        </div>
-	                    <div class="signup_element">
-                            <label for="password">Contraseña: </label> 
-                            <input type="password" name="password" id="login_password" />
-                        </div>            
-	                </form>
-                    <div id="login_ajax_loader" class="ajax_loader">
                         <img src="/media/assets/ajax-loader.gif" />
                     </div>	    
 	            </div>

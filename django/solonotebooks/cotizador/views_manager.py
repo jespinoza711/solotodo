@@ -63,16 +63,6 @@ def news(request):
         })
         
 @manager_login_required    
-def comments(request):
-    # Shows the comments pending for aproval
-    due_comments = ProductComment.objects.filter(validated = False)
-    app_comments = ProductComment.objects.filter(validated = True).filter(date__gte = date.today() - timedelta(days = 2)).order_by('-date').all()
-    return append_manager_ptype_to_response(request, 'manager/comments.html', {
-            'due_comments': due_comments,
-            'app_comments': app_comments,            
-        })
-        
-@manager_login_required    
 def new_entities(request):
     # Shows the models that don't have an associated product in the DB (i.e.: pending)
     new_entities = StoreHasProductEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shp__isnull = True)
@@ -138,34 +128,6 @@ def hide_entity(request, store_has_product_entity_id):
     shpe.is_hidden = True
     shpe.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER'] + '?refresh=true');
-
-@manager_login_required
-def delete_comment(request, comment_id):
-    comment = get_object_or_404(ProductComment, pk = comment_id)
-    comment.delete()
-    return HttpResponseRedirect(request.META['HTTP_REFERER']);
-    
-@manager_login_required
-def validate_comment(request, comment_id):
-    comment = get_object_or_404(ProductComment, pk = comment_id)
-    comment.validated = True
-    comment.save()
-    return HttpResponseRedirect(request.META['HTTP_REFERER']);
-                       
-@manager_login_required                        
-def validate_all(request):
-    comments = ProductComment.objects.filter(validated = False)
-    for comment in comments:
-        comment.validated = True
-        comment.save()
-    return HttpResponseRedirect('/manager')
-    
-@manager_login_required                        
-def delete_all(request):
-    comments = ProductComment.objects.filter(validated = False)
-    for comment in comments:
-        comment.delete()
-    return HttpResponseRedirect('/manager')
     
 @manager_login_required            
 def analyze_searches(request):
