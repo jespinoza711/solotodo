@@ -9,23 +9,40 @@ from fetch_scripts import ProductData
 class Impulso:
     name = 'Impulso'
 
+    def retrieve_product_data(self, product_link):
+        browser = mechanize.Browser()
+        product_data = browser.open(product_link).get_data()
+        product_soup = BeautifulSoup(product_data)
+        
+        product_title = product_soup.find('h2').string
+        product_price = int(product_soup.find('span', { 'id': 'our_price_display'}).string.replace('$', '').replace('.', ''))
+        
+        product_data = ProductData()
+        product_data.custom_name = product_title
+        product_data.price = product_price
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        print product_data
+        
+        return product_data
 
     def get_products(self):
         print 'Getting Impulso notebooks'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://impulso.cl'
-        urlBuscarProductos = '/prestashop/category.php?id_category='
+        urlBuscarProductos = '/prestashop/'
         
         # Browser initialization
         browser = mechanize.Browser()
         
         # Array containing the data for each product
         productsData = []
+        product_links = []
         
-        url_extensions = [  '5',
-                            '6',
-                            '17',
-                            '18',
+        url_extensions = [  
+                            '32-notebooks',
+                            '35-netbooks',
+                            '37-tablets',
                             ]
                             
         for url_extension in url_extensions:
@@ -35,25 +52,21 @@ class Impulso:
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
 
-            prods = baseSoup.find('ul', {'id': 'product_list'})
+            prod_list = baseSoup.find('ul', {'id': 'product_list'})
+            
+            if not prod_list:
+                continue
+            
+            prod_cells = prod_list.findAll('li')
 
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            titles = prods.findAll('h3')
-            prices = prods.findAll('span', {'class': 'price'})
-
-            # Array containing the catalog pages, beginning with the original one
-            pageLinks = [urlWebpage]
-
-            for i in range(len(titles)):
-                productData = ProductData()
-                link = titles[i].find('a')
-                productData.custom_name = link.string
-                productData.url = link['href']
-                productData.comparison_field = productData.url
+            for cell in prod_cells:
+                product_links.append(cell.find('a')['href'])
                 
-                productData.price = int(prices[i].string.replace('$', '').replace('.', ''))
-                print productData
-                productsData.append(productData)
-
+            
+        for product_link in product_links:
+            product = self.retrieve_product_data(product_link)
+            if product:
+                productsData.append(product)
+                
         return productsData
 

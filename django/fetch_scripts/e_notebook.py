@@ -89,7 +89,10 @@ class ENotebook:
             pageNavigator = table_navigator.findAll("td", { "class" : "smallText" })
             for pn in pageNavigator:
                 link = pn.find("a")
-                pageLinks.append(link['href'].split('?osCsid')[0])
+                try:
+                    pageLinks.append(link['href'].split('?osCsid')[0])
+                except:
+                    continue
         
         for page_link in extra_pagelinks:
             pageLinks.append(urlBase + urlBuscarProductos + page_link)
