@@ -1,13 +1,4 @@
-var clear_search_field = true
-
 $(function() {
-    $('.input-search').click(function() {
-        if (clear_search_field) {
-            $('.input-search').val('')
-            clear_search_field = false
-        }
-    });
-    
     $('.regenerate_link').click(function(event) {
         event.preventDefault()
     
@@ -29,10 +20,7 @@ $(function() {
                 }
             ]
         });
-    });
-    
-    $('#error_message').slideDown().delay(3000).slideUp()
-    $('#info_message').slideDown().delay(3000).slideUp()    
+    });    
     
     $('.subscribe_link').click(function(event) {
         event.preventDefault()
@@ -44,60 +32,6 @@ $(function() {
         subscribe(authenticated_user, false, 0)
     })
 })
-
-function show_login_dialog(callback) {
-    $('#login_error').hide()
-    $('#dialog_login').dialog({
-        resizable: false,
-        height: 200,
-        width: 400,
-        modal: true,
-        buttons: [
-            {
-                text: "Confirmar",
-                click: function() { validate_login_form(callback) },
-                'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
-            },
-            {
-                text: "Cancelar",
-                click: function() { $(this).dialog('close'); },
-                'class': 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only dialog_button', 
-            }
-        ]
-    });    
-}
-
-function validate_login_form(callback) {
-    username = $.trim($('#login_username').val())
-    password = $('#login_password').val()
-    
-    if (username == '') {
-        display_login_error('Por favor ingrese su nombre de usuario')
-        return
-    }
-    
-    if (password == '') {
-        display_login_error('Por favor ingrese su contraseña')
-        return
-    }    
-    
-    $('#login_error').slideUp(function() {
-        $('#login_ajax_loader').slideDown(function() {
-            $.post('/account/ajax_login/', {
-                username: username,
-                password: password
-            },
-            function(data) {
-                response = $.parseJSON(data)
-                if (response.code == 'OK') {
-                    callback()
-                } else {
-                    display_login_error(response.message)
-                }
-            })
-        })
-    })
-}
 
 function show_js_error(text) {
     $('#js_error_message').html(text).slideDown().delay(3000).slideUp()
@@ -148,14 +82,6 @@ function validate_regenerate_form() {
     });
 }
 
-function display_login_error(message) {
-    $('#login_ajax_loader').slideUp(function() {
-        $('#login_error').slideUp(function() {
-            $('#login_error').html(message).slideDown()
-        })
-    })
-}
-
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
@@ -192,11 +118,6 @@ function subscribe(registered, reload_on_finish, include_email) {
         url = '/account/add_subscription?product=' + product_id + '&email_notifications=' + include_email
         window.location = url
     }
-}
-
-function validate_email(email) {
-   var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-   return reg.test(email)
 }
 
 function handle_facebook_login() {

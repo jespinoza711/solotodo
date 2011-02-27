@@ -1,7 +1,5 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
@@ -34,9 +32,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
     (r'^account/login/$', 'login'),
     (r'^account/logout/$', 'logout'),
     (r'^account/validate_email/$', 'validate_email'),
-    (r'^account/ajax_login/$', 'ajax_login'),
     (r'^account/fuse_facebook_account/$', 'fuse_facebook_account'),
-    (r'^account/signup/$', 'signup'),
     (r'^account/request_password_regeneration/$', 'request_password_regeneration'),
     (r'^account/regenerate_password/$', 'regenerate_password'),
     (r'^account/subscriptions/$', 'subscriptions'),
@@ -53,14 +49,9 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/$', 'news'),
     (r'^manager/news/$', 'news'),
-    (r'^manager/comments/$', 'comments'),
     (r'^manager/new_entities/$', 'new_entities'),
-    (r'^manager/delete/(?P<comment_id>\d+)$', 'delete_comment'),
-    (r'^manager/validate/(?P<comment_id>\d+)$', 'validate_comment'),
     (r'^manager/hide_entity/(?P<store_has_product_entity_id>\d+)$', 'hide_entity'),
     (r'^manager/storehasproductentity/(?P<store_has_product_entity_id>\d+)/edit$', 'storehasproductentity_edit'),
-    (r'^manager/validate_all$', 'validate_all'),
-    (r'^manager/delete_all$', 'delete_all'),
     (r'^manager/analyze_searches$', 'analyze_searches'), 
     (r'^manager/polymorphic_admin_request/(?P<product_id>\d+)$', 'polymorphic_admin_request'),
     (r'^manager/clone_product/(?P<product_id>\d+)$', 'clone_product'),

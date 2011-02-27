@@ -42,6 +42,29 @@ def facebook_login(request):
             return HttpResponseRedirect(next)
     except:
         return HttpResponseRedirect(next)
+        
+def facebook_ajax_login(request):
+    response = {'code': 'ERROR'}
+    try:
+        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
+        if facebook_cookie_name in request.COOKIES:
+            cookie = request.COOKIES[facebook_cookie_name]
+            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
+            uid = cookie_info['uid']
+            access_token = cookie_info['access_token']
+            
+            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
+            user_data = simplejson.load(urllib.urlopen(url))
+            
+            user = auth.authenticate(username = uid, email = user_data['email'], facebook_name = user_data['name'])
+            if user:
+                auth.login(request, user)
+                response['code'] = 'OK'
+    except:
+        pass
+        
+    data = simplejson.dumps(response, indent=4)
+    return HttpResponse(data, mimetype='application/javascript')  
 
 @login_required        
 def facebook_fusion(request):
@@ -77,53 +100,6 @@ def facebook_fusion(request):
         request.flash['error'] = 'Error fusionando cuentas'
         return HttpResponseRedirect(next)
             
-def facebook_ajax_login(request):
-    response = {'code': 'ERROR'}
-    try:
-        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
-        if facebook_cookie_name in request.COOKIES:
-            cookie = request.COOKIES[facebook_cookie_name]
-            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
-            uid = cookie_info['uid']
-            access_token = cookie_info['access_token']
-            
-            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
-            user_data = simplejson.load(urllib.urlopen(url))
-            
-            user = auth.authenticate(username = uid, email = user_data['email'], facebook_name = user_data['name'])
-            if user:
-                auth.login(request, user)
-                response['code'] = 'OK'
-    except:
-        pass
-        
-    data = simplejson.dumps(response, indent=4)
-    return HttpResponse(data, mimetype='application/javascript')  
-    
-
-# Page to login to the account, everything is boilerplate
-def login(request):
-    next_url = '/'
-    if 'next' in request.GET:
-        next_url = request.GET['next']
-        
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username = username, password = password)
-        
-        if user is not None:
-            auth.login(request, user)
-        else:
-            request.flash['error'] = 'Nombre de usuario o contraseña incorrectos'
-            return HttpResponseRedirect('/account/login/?next=%s' % urlquote(next_url))
-    
-    if request.user.is_authenticated():
-        return HttpResponseRedirect(next_url)
-    else:
-        return append_account_ptype_to_response(request, 'account/login.html', {
-            })
-            
 @login_required    
 def logout(request):
     auth.logout(request)
@@ -143,64 +119,6 @@ def subscriptions(request):
 @login_required    
 def fuse_facebook_account(request):
     return append_account_ptype_to_response(request, 'account/fuse_facebook_account.html', {})
-    
-@login_required
-def validate_email(request):
-    try:
-        user = request.user
-        if user.is_active:
-            raise MailValidationException('El correo ya está validado')
-        validation_key = request.GET['validation_key']
-        orig_validation_key = hashlib.sha224(settings.SECRET_KEY + user.username + user.email).hexdigest()
-        if validation_key != orig_validation_key:
-            raise MailValidationException('Error en código de validación')
-            
-        user.is_active = True;
-        user.get_profile().change_mails_sent = 0;
-        user.get_profile().confirmation_mails_sent = 0;
-        user.get_profile().save()
-        
-        user.save()
-        request.flash['message'] = 'Cuenta de correo activada correctamente'
-        return HttpResponseRedirect('/account/?refresh=True')        
-    except MailValidationException, e:
-        error = str(e)
-    except Exception, e:
-        error = 'Error desconocido'
-    return append_account_ptype_to_response(request, 'account/validate_email.html', {
-            'error': error,
-        })
-    
-    
-def regenerate_password(request):
-    try:
-        user_id = int(request.GET['id'])
-        validation_key = request.GET['validation_key']
-        user = User.objects.get(pk = user_id)
-        
-        orig_validation_key = hashlib.sha224(settings.SECRET_KEY + user.username + user.password).hexdigest()
-        if validation_key != orig_validation_key:
-            raise PasswordRegenerationException('Error en llave de validación')
-            
-        new_password = User.objects.make_random_password()
-        
-        send_new_password_mail(user, new_password)
-        
-        user.set_password(new_password);
-        user.save()
-        
-        request.flash['message'] = 'La nueva contraseña ha sido enviada a su correo'
-        return HttpResponseRedirect('/?refresh=True')
-
-    except PasswordRegenerationException, e:
-        error = str(e)
-    except Exception, e:
-        error = 'Error desconocido'
-        
-    return append_account_ptype_to_response(request, 'account/regenerate_password.html', {
-        'error': error,
-    })
-   
     
 @login_required    
 def add_subscription(request):
@@ -250,6 +168,10 @@ def remove_subscription(request, subscription_id):
         request.flash['error'] = 'Error desconocido'    
     return HttpResponseRedirect('/account/?refresh=True')
     
+#########################################################################
+### Deprecated registration system
+
+# Deprecated    
 @login_required    
 def change_email(request):
     if request.method == 'POST':
@@ -271,7 +193,8 @@ def change_email(request):
     return append_account_ptype_to_response(request, 'account/change_email.html', {
         'change_email_form': change_email_form,
     })
-    
+
+# Deprecated    
 @login_required    
 def change_password(request):
     if request.method == 'POST':
@@ -287,7 +210,8 @@ def change_password(request):
         form = ChangePasswordForm()
     return append_account_ptype_to_response(request, 'account/change_password.html', {
         'p_form': form, })
-        
+
+# Deprecated        
 @login_required
 def send_confirmation_mail(request):
     if not request.user.is_active:
@@ -299,80 +223,8 @@ def send_confirmation_mail(request):
     else:
         request.flash['message'] = 'Tu cuenta de correo ya está activada'
     return HttpResponseRedirect('/account/?refresh=True')
-    
-def ajax_login(request):
-    response = {'code': 'ERROR'}
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username = username, password = password)
-        
-        if user is not None:
-            auth.login(request, user)
-            response['code'] = 'OK'
-            response['message'] = 'OK'
-        else:
-            response['message'] = 'Nombre de usuario o contraseña incorrectos'
-    else:
-        response['message'] = 'Error en el proceso de login'
-        
-    data = simplejson.dumps(response, indent=4)    
-    return HttpResponse(data, mimetype='application/javascript') 
-    
-def signup(request):
-    response = {'code': 'ERROR'}
-    if request.method == 'POST':
-        try:
-            username = request.POST['username']
-            if username == '':
-                raise FormException('Debe introducir un nombre de usuario')
-            if len(username) > 30:
-                raise FormException('El nombre de usuario debe tener menos de 30 caracteres')
-            
-            existing_users = User.objects.filter(username = username)
-            if existing_users:
-                raise FormException('El nombre de usuario ya esta tomado')
-                
-            email = request.POST['email']
-            if not email_re.match(email):
-                raise FormException('Por favor ingrese un correo electrónico válido')
-                
-            password = request.POST['password']
-            if password == '':
-                raise FormException('Debe ingresar una contraseña')
-            
-            repeat_password = request.POST['repeat_password']
-            if repeat_password != password:
-                raise FormException('Las contraseñas no concuerdan')
-            
-            signup_key = int(request.POST['signup_key'])
-            if signup_key != request.session['signup_key']:
-                raise FormException('Error desconocido')                
-            
-            user = User.objects.create_user(username, email, password)
-            user.is_active = False
-            user.save()
-            
-            auth_user = auth.authenticate(username = username, password = password)
-            auth.login(request, auth_user)
-            
-            send_signup_mail(user)
-            
-            response['code'] = 'OK'
-            response['message'] = 'OK'
-            
-        except FormException, e:
-            response['message'] = str(e)
-        except Exception, e:
-            if user:
-                user.delete()
-            response['message'] = 'Error desconocido'
-    else:
-        response['message'] = 'Error desconocido'
 
-    data = simplejson.dumps(response, indent=4)    
-    return HttpResponse(data, mimetype='application/javascript') 
-
+# Deprecated
 def request_password_regeneration(request):
     response = {'code': 'ERROR'}
     if request.method == 'POST':
@@ -409,3 +261,84 @@ def request_password_regeneration(request):
 
     data = simplejson.dumps(response, indent=4)    
     return HttpResponse(data, mimetype='application/javascript')
+    
+# Deprecated
+def login(request):
+    next_url = '/'
+    if 'next' in request.GET:
+        next_url = request.GET['next']
+        
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username = username, password = password)
+        
+        if user is not None:
+            auth.login(request, user)
+        else:
+            request.flash['error'] = 'Nombre de usuario o contraseña incorrectos'
+            return HttpResponseRedirect('/account/login/?next=%s' % urlquote(next_url))
+    
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(next_url)
+    else:
+        return append_account_ptype_to_response(request, 'account/login.html', {
+            })
+
+# Deprecated    
+@login_required
+def validate_email(request):
+    try:
+        user = request.user
+        if user.is_active:
+            raise MailValidationException('El correo ya está validado')
+        validation_key = request.GET['validation_key']
+        orig_validation_key = hashlib.sha224(settings.SECRET_KEY + user.username + user.email).hexdigest()
+        if validation_key != orig_validation_key:
+            raise MailValidationException('Error en código de validación')
+            
+        user.is_active = True;
+        user.get_profile().change_mails_sent = 0;
+        user.get_profile().confirmation_mails_sent = 0;
+        user.get_profile().save()
+        
+        user.save()
+        request.flash['message'] = 'Cuenta de correo activada correctamente'
+        return HttpResponseRedirect('/account/?refresh=True')        
+    except MailValidationException, e:
+        error = str(e)
+    except Exception, e:
+        error = 'Error desconocido'
+    return append_account_ptype_to_response(request, 'account/validate_email.html', {
+            'error': error,
+        })
+    
+# Deprecated    
+def regenerate_password(request):
+    try:
+        user_id = int(request.GET['id'])
+        validation_key = request.GET['validation_key']
+        user = User.objects.get(pk = user_id)
+        
+        orig_validation_key = hashlib.sha224(settings.SECRET_KEY + user.username + user.password).hexdigest()
+        if validation_key != orig_validation_key:
+            raise PasswordRegenerationException('Error en llave de validación')
+            
+        new_password = User.objects.make_random_password()
+        
+        send_new_password_mail(user, new_password)
+        
+        user.set_password(new_password);
+        user.save()
+        
+        request.flash['message'] = 'La nueva contraseña ha sido enviada a su correo'
+        return HttpResponseRedirect('/?refresh=True')
+
+    except PasswordRegenerationException, e:
+        error = str(e)
+    except Exception, e:
+        error = 'Error desconocido'
+        
+    return append_account_ptype_to_response(request, 'account/regenerate_password.html', {
+        'error': error,
+    })
