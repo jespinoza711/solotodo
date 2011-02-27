@@ -8,6 +8,7 @@
             var disqus_developer = 1;
         </script>
     {% endif %}
+    <meta property="fb:app_id" content="{{ settings.FACEBOOK_ID }}"/>
     <meta property="og:title" content="{{ product }}"/>
     <meta property="og:type" content="product"/>
     <meta property="og:url" content="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}"/>
