@@ -52,7 +52,6 @@ class Peta:
                 
             while True:
                 completeWebpage = urlWebpage + '?p=' + str(pageNumber)
-                print completeWebpage
 
                 baseData = browser.open(completeWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)

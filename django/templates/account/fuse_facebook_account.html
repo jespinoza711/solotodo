@@ -1,0 +1,22 @@
+{% extends "account/base.html" %}
+
+{% block title %}Fusionar con cuenta de Facebook - {{ site_name }}{% endblock %}
+
+{% block account_content %}
+
+<h1>Fusionar con cuenta de Facebook</h1>
+
+<p>
+    Actualmente SoloTodo está migrando a un sistema de registro más sencillo que aproveche las cuentas de Facebook de sus usuarios, lo que les dará más facilidad para acceder al sitio y sus funcionalidades.
+</p>
+<p>
+    Los usuarios que han estado con nosotros desde el comienzo (como tú) también pueden hacer uso del nuevo sistema, manteniendo sus actuales suscripciones y preferencias. Para esto sólo tienes que hacer click en el botón de abajo e ingresar con tu cuenta de Facebook.
+</p>
+<p>
+    Una vez terminado el procedimiento tu contraseña actual quedará obsoleta, por lo que tendrás que acceder a tu cuenta usando el botón de "Entrar con Facebook" que aparecerá en la parte superior del sitio.
+</p>
+<p>
+    <div id="fb-root"></div>
+    <fb:login-button perms="email" onlogin="handle_facebook_fusion()">Fusionar con cuenta Facebook</fb:login-button>
+</p>
+{% endblock %}

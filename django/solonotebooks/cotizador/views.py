@@ -237,6 +237,9 @@ def append_user_to_response(request, template, args):
     args['authenticated_user'] = authenticated_user
     args['flash'] = request.flash
     args['username'] = username
+    args['server_name'] = settings.SERVER_NAME
+    args['settings'] = settings
+    
     if 'PATH_INFO' in request.META:
         next = urlquote(request.META['PATH_INFO'])
         next += concat_dictionary(request.GET)

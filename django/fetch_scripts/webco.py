@@ -59,7 +59,6 @@ class Webco:
             urlWebpage = urlBase + url_extension
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
-            print urlWebpage
 
             productImages = baseSoup.findAll("img", { "width" : "193" })
             

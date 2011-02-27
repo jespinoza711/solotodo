@@ -7,6 +7,7 @@ from django.utils.http import urlquote
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from solonotebooks.cotizador.views import append_ads_to_response
+import simplejson
 from models import *
 from fields import *
 from exceptions import *
@@ -14,9 +15,91 @@ from utils import *
 from views import *
 
 def append_account_ptype_to_response(request, template, args):
-    ptype = ProductType.objects.get(classname = 'Notebook')
-    args['ptype'] = ptype
+    args['ptypes'] = ProductType.objects.all()
     return append_ads_to_response(request, template, args)
+    
+def facebook_login(request):
+    next = '/'
+    if 'next' in request.GET:
+        next = request.GET['next']
+        
+    try:
+        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
+        if facebook_cookie_name in request.COOKIES:
+            cookie = request.COOKIES[facebook_cookie_name]
+            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
+            uid = cookie_info['uid']
+            access_token = cookie_info['access_token']
+            
+            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
+            user_data = simplejson.load(urllib.urlopen(url))
+            
+            user = auth.authenticate(username = uid, email = user_data['email'], facebook_name = user_data['name'])
+            if user:
+                auth.login(request, user)
+            return HttpResponseRedirect(next)
+        else:
+            return HttpResponseRedirect(next)
+    except:
+        return HttpResponseRedirect(next)
+
+@login_required        
+def facebook_fusion(request):
+    next = '/account?refresh=true'
+        
+    try:
+        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
+        if facebook_cookie_name in request.COOKIES:
+            cookie = request.COOKIES[facebook_cookie_name]
+            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
+            uid = cookie_info['uid']
+            access_token = cookie_info['access_token']
+            
+            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
+            user_data = simplejson.load(urllib.urlopen(url))
+            
+            request.user.username = uid
+            request.user.email = user_data['email']
+            request.user.password = User.objects.make_random_password()
+            request.user.save()
+            
+            profile = request.user.get_profile()
+            profile.facebook_name = user_data['name']
+            profile.save()
+            
+            request.flash['message'] = 'Cuentas fusionadas exitosamente'
+
+            return HttpResponseRedirect(next)
+        else:
+            request.flash['error'] = 'Error fusionando cuentas'
+            return HttpResponseRedirect(next)
+    except:
+        request.flash['error'] = 'Error fusionando cuentas'
+        return HttpResponseRedirect(next)
+            
+def facebook_ajax_login(request):
+    response = {'code': 'ERROR'}
+    try:
+        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
+        if facebook_cookie_name in request.COOKIES:
+            cookie = request.COOKIES[facebook_cookie_name]
+            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
+            uid = cookie_info['uid']
+            access_token = cookie_info['access_token']
+            
+            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
+            user_data = simplejson.load(urllib.urlopen(url))
+            
+            user = auth.authenticate(username = uid, email = user_data['email'], facebook_name = user_data['name'])
+            if user:
+                auth.login(request, user)
+                response['code'] = 'OK'
+    except:
+        pass
+        
+    data = simplejson.dumps(response, indent=4)
+    return HttpResponse(data, mimetype='application/javascript')  
+    
 
 # Page to login to the account, everything is boilerplate
 def login(request):
@@ -44,6 +127,7 @@ def login(request):
 @login_required    
 def logout(request):
     auth.logout(request)
+    
     next_url = '/'
     if 'next' in request.GET:
         next_url = request.GET['next']
@@ -55,6 +139,10 @@ def subscriptions(request):
     return append_account_ptype_to_response(request, 'account/subscriptions.html', {
         'product_subscriptions': product_subscriptions,
     })
+    
+@login_required    
+def fuse_facebook_account(request):
+    return append_account_ptype_to_response(request, 'account/fuse_facebook_account.html', {})
     
 @login_required
 def validate_email(request):
@@ -301,6 +389,9 @@ def request_password_regeneration(request):
             
             if not user.is_active:
                 raise FormException('El correo del usuario no ha sido validado')
+                
+            if user.get_profile().facebook_name:
+                raise FormException('La cuenta está ligada a un perfil de Facebook, por favor use dicho perfil para ingresar haciendo click en "Entrar con Facebook"')
             
             send_password_regeneration_mail(user)
             

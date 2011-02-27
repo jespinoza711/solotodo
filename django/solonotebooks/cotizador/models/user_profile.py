@@ -8,9 +8,16 @@ class UserProfile(models.Model):
     confirmation_mails_sent = models.IntegerField(default = 0)
     change_mails_sent = models.IntegerField(default = 0)
     assigned_store = models.ForeignKey(Store, null = True, blank = True)
+    facebook_name = models.CharField(max_length = 255, blank = True, null = True)
 
     def __str__(self):  
           return "%s's profile" % self.user  
+          
+    def name(self):
+        if self.facebook_name:
+            return self.facebook_name
+        else:
+            return self.user.username
           
     class Meta:
         app_label = 'cotizador'

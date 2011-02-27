@@ -230,9 +230,9 @@ form.inline p { margin-bottom:0; }
 #nav-user {height: 27px;}
 #logout {padding-left: 8px; padding-top: 4px; font-weight: bold; color: #EEEEEE;}
 .toplink {color: #CCCCCC;}
-#login-form { padding: 0px;}
-input.login_input {margin: 3px;}
-div#login {padding-left: 8px;}
+#login-form { padding: 0 10px 0 0; float: left;}
+input.login_input {margin: 3px; width: 150px; }
+div#login {padding-left: 8px; float: left; width: 900px;}
 
 #nav-user ul {margin-top: 4px; margin-right: 0;}
 #nav-user ul li {float: left; color: #fff; text-shadow: #151516 0 1px 0;}

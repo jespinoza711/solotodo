@@ -59,7 +59,7 @@
     padding-top: 35px;
 }
 
-#mytable tr td {
+.mytable tbody tr td {
     background-color: #ffffff;
 }
 
@@ -83,10 +83,8 @@ h3.subtitle {
     margin-top: 10px;
 }
 
-hr.product_details_comment_separator {
-    clear: inherit;
-    width: 350px;
-    margin-top: 10px;
+br.product_details_comment_separator {
+    clear: both;
 }
 
 .comment_nickname {
@@ -236,6 +234,7 @@ hr.product_details_comment_separator {
 
 #content {
     padding-top: 10px;
+    padding-left: 10px;
 }
 
 .processor_image_container {
@@ -262,4 +261,26 @@ hr.product_details_comment_separator {
 }
 
 .processor_list_option {
+}
+
+#fb-root {
+    padding-top: 3px;
+    padding-left: 10px;
+}
+
+#login_table {
+    width: 350px;
+}
+
+.login_options {
+    padding-top: 10px;
+    font-size: 14px;
+}
+
+#facebook_recommendations {
+    margin-bottom: 10px;
+}
+
+#product_like {
+    margin-top: 10px;
 }
