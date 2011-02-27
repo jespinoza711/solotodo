@@ -5,6 +5,9 @@ class ScreenRefreshRate(models.Model):
     
     def __unicode__(self):
         return str(self.value) + ' Hz'
+        
+    def raw_text(self):
+        return unicode(self)
             
     class Meta:
         ordering = ['value']

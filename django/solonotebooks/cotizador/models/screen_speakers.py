@@ -9,6 +9,12 @@ class ScreenSpeakers(models.Model):
         else:
             return 'No posee'
             
+    def raw_text(self):
+        result = ''
+        if self.value:
+            result = '2x ' + str(self.value) + ' W'
+        return result
+            
     class Meta:
         ordering = ['value']
         app_label = 'cotizador'

@@ -5,6 +5,9 @@ class ScreenSizeFamily(models.Model):
     
     def __unicode__(self):
         return str(self.value) + '"'
+        
+    def raw_text(self):
+        return str(self.value)
             
     class Meta:
         ordering = ['value']

@@ -1,3 +1,4 @@
+#-*- coding: UTF-8 -*-
 from django.db import models
 from . import Product, ScreenLine, ScreenDisplay, ScreenType, ScreenSize, ScreenResolution, ScreenHasVideoPort, ScreenPanelType, ScreenSpeakers, ScreenResponseTime, ScreenRefreshRate, ScreenDigitalTuner
 
@@ -28,7 +29,24 @@ class Screen(Product):
         return unicode(self.line) + ' ' + self.name
         
     def raw_text(self):
-        result = 'Procesador CPU'
+        result = 'Pantalla'
+        if self.usb_ports:
+            result += ' USB'
+        if self.has_analog_tuner:
+            result += u' sintonizador analogo análogo'
+        result += ' ' + self.name
+        result += ' ' + self.digital_tuner.raw_text()
+        result += ' ' + self.response_time.raw_text()
+        result += ' ' + self.refresh_rate.raw_text()
+        result += ' ' + self.stype.raw_text()
+        result += ' ' + self.line.raw_text()
+        result += ' ' + self.display.raw_text()
+        result += ' ' + self.size.raw_text()
+        result += ' ' + self.resolution.raw_text()
+        result += ' ' + self.panel_type.raw_text()
+        result += ' ' + self.speakers.raw_text()
+        for port in self.video_ports.all():
+            result += ' ' + port.raw_text()
             
         return result
         
