@@ -68,11 +68,13 @@ def main():
             comment_elem.appendChild(elem)
             
             if comment.user:
-                text = xml.createTextNode(comment.user.username)
+                user = comment.user.username
             elif comment.nickname:
-                text = xml.createTextNode(unicode(comment.nickname))
+                user = comment.nickname
             else:
-                text = xml.createTextNode('Anonimo')
+                user = 'Anonimo'
+                
+            text = xml.createTextNode(user)
             elem = xml.createElement('wp:comment_author')
             elem.appendChild(text)        
             comment_elem.appendChild(elem)
@@ -80,7 +82,7 @@ def main():
             if comment.user:
                 text = xml.createTextNode(comment.user.email)
             else:
-                text = xml.createTextNode('foo@bar.com')
+                text = xml.createTextNode(user + '@example.com')
             elem = xml.createElement('wp:comment_author_email')
             elem.appendChild(text)        
             comment_elem.appendChild(elem)
