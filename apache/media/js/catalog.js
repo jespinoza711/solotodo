@@ -1,17 +1,7 @@
-var clear_search_field = true
-
 $(function() {
     // Show error and info messages
     $('#error_message').slideDown().delay(3000).slideUp()
     $('#info_message').slideDown().delay(3000).slideUp()
-
-    // If the user clicks for the first time the search bar, empty its contents
-    $('.input-search').click(function() {
-        if (clear_search_field) {
-            $('.input-search').val('')
-            clear_search_field = false
-        }
-    });
 
     // Generate the custom slider if exists
     if ($('.custom_range_select').length > 0) {
