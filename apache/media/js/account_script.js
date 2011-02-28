@@ -1,4 +1,14 @@
+var clear_search_field = true
+
 $(function() {
+    // If the user clicks for the first time the search bar, empty its contents
+    $('.input-search').click(function() {
+        if (clear_search_field) {
+            $('.input-search').val('')
+            clear_search_field = false
+        }
+    });
+
     $('.regenerate_link').click(function(event) {
         event.preventDefault()
     
