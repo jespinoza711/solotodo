@@ -1,13 +1,19 @@
 {% extends "manager/base.html" %}
 
-{% block title %}Crear entrada de producto - {{ site_name }}{% endblock %}
+{% block title %}Editar entrada de producto - {{ site_name }}{% endblock %}
 
 {% block manager_content %}
 
 <h2><a href="{{ shpe.url }}">{{ shpe }}</a></h2>
-<h3>
+<h4>
+    Tienda: {{ shpe.store }}
+</h4>
+<h4>
     Precio: {{ shpe.pretty_price }}
-</h3>
+</h4>
+<h4>
+    Disponibilidad: {% if shpe.is_available %} Disponible {% else %} No disponible {% endif %} / Visibilidad: {% if shpe.is_hidden %} No visible {% else %} Visible {% endif %}
+</h4>
 
 <form method="post" action="">
     <select id="id_product" name="product">
@@ -22,12 +28,15 @@
     </select>
         
     </input>
-    {{ shpe_form.store }}
     
     <p>
-        <a href="{% url solonotebooks.cotizador.views_manager.storehasproductentity_hide shpe.id %}">Esconder</a>
+        {% if shpe.is_hidden %}
+        <a href="{% url solonotebooks.cotizador.views_manager.storehasproductentity_show shpe.id %}">Hacer visible</a>
+        {% else %}
+        <a href="{% url solonotebooks.cotizador.views_manager.storehasproductentity_hide shpe.id %}">Hacer no visible</a>
+        {% endif %}
         |
-        <a href="{% url solonotebooks.cotizador.views_manager.storehasproductentity_refresh_price shpe.id %}">Refrescar precio</a>
+        <a href="{% url solonotebooks.cotizador.views_manager.storehasproductentity_refresh_price shpe.id %}">Refrescar precio y disponibilidad</a>
     </p>
     <p>
         <input type="submit" value="Guardar" />

@@ -78,7 +78,6 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
         form = StoreHasProductEntityEditForm(request.POST)
         if form.is_valid():
             product = form.cleaned_data['product']
-            store = form.cleaned_data['store']
             
             # Begin changes
             
@@ -128,6 +127,14 @@ def storehasproductentity_hide(request, store_has_product_entity_id):
     shpe.is_hidden = True
     shpe.save()
     return HttpResponseRedirect('/manager/new_entities/?refresh=true');
+    
+@manager_login_required
+def storehasproductentity_show(request, store_has_product_entity_id):
+    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
+    shpe.is_hidden = False
+    shpe.save()
+    url = reverse('solonotebooks.cotizador.views_manager.storehasproductentity_edit', args = [shpe.id])    
+    return HttpResponseRedirect(url);
     
 @manager_login_required
 def storehasproductentity_refresh_price(request, store_has_product_entity_id):

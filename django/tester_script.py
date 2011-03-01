@@ -2,7 +2,7 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
 from datetime import datetime
-from fetch_scripts import *
+from solonotebooks.fetch_scripts import *
 from common_fetch_methods import *
 import sys
 

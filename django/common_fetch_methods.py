@@ -16,54 +16,9 @@ def log_message(message):
 '''Method that takes a list of ProductData objects and the store they came from,
 checks whether they already exists, if they do, it checks for price differences,
 if not, it is added.  Everything is logged '''
-def save_products(products, s):
+def save_products(products, store):
     for product in products:
-        print 'Guardando ' + str(product)
-        print 'Buscando si tiene un registro existente'
-        try:
-            current_shpe = StoreHasProductEntity.objects.get(comparison_field = product.comparison_field)
-            print 'Si tiene registro existente, usandolo'
-        except StoreHasProductEntity.DoesNotExist:
-            print 'No tiene registro existente, creandolo'
-            current_shpe = StoreHasProductEntity()
-            current_shpe.url = product.url
-            current_shpe.custom_name = product.custom_name
-            current_shpe.comparison_field = product.comparison_field
-            current_shpe.shp = None
-            current_shpe.is_available = True
-            current_shpe.is_hidden = False
-            current_shpe.latest_price = product.price
-            current_shpe.save()
-            LogNewEntity.new(current_shpe).save()
-        
-        print 'Viendo si esta registrado como desaparecido'
-        if not current_shpe.is_available:
-            print 'Estaba desaparecido, registrando resucitacion'
-            LogReviveEntity.new(current_shpe).save()
-            current_shpe.is_available = True
-            
-        print 'Guardando estado del producto en tienda'
-        current_shpe.save()
-
-        # We keep track of prices for every day, and we need to avoid clashes
-        print 'Viendo si ya se solicito un catastro para hoy'
-        today_history = StoreProductHistory.objects.filter(date = date.today()).filter(registry = current_shpe)
-        if len(today_history) == 0:
-            print 'No hay registro de hoy, creandolo'
-            snh = StoreProductHistory()
-            snh.price = product.price
-            snh.date = date.today()
-            snh.registry = current_shpe
-            snh.save()    
-        else:
-            print 'Hay un registro existente, viendo si hay cambios de precio'
-            today_history = today_history[0]
-            if today_history.price != product.price:
-                print 'Hubo un cambio de precio'
-                today_history.price = product.price
-                today_history.save()
-                current_shpe.latest_price = product.price
-                current_shpe.save()
+        store.save_product(product)
                 
     
 ''' Management method that keeps everything coherent (e.g. updating the price of

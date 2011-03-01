@@ -69,7 +69,45 @@ class StoreHasProductEntity(models.Model):
             self.shp.update(recursive = True)
             
     def update_price(self):
-        pass
+        from solonotebooks.fetch_scripts import *
+        fetch_store = eval(self.store.classname + '()')
+        product = fetch_store.retrieve_product_data(self.url)
+        if product:
+            self.update_with_product(product)
+        else:
+            self.is_available = False
+        self.update(recursive = True)
+            
+    def update_with_product(self, product):
+        from . import StoreProductHistory
+        print 'Viendo si esta registrado como desaparecido'
+        if not self.is_available:
+            print 'Estaba desaparecido, registrando resucitacion'
+            LogReviveEntity.new(self).save()
+            self.is_available = True
+            
+        print 'Guardando estado del producto en tienda'
+        self.save()
+
+        # We keep track of prices for every day, and we need to avoid clashes
+        print 'Viendo si ya se solicito un catastro para hoy'
+        today_history = StoreProductHistory.objects.filter(date = date.today()).filter(registry = self)
+        if len(today_history) == 0:
+            print 'No hay registro de hoy, creandolo'
+            snh = StoreProductHistory()
+            snh.price = product.price
+            snh.date = date.today()
+            snh.registry = self
+            snh.save()    
+        else:
+            print 'Hay un registro existente, viendo si hay cambios de precio'
+            today_history = today_history[0]
+            if today_history.price != product.price:
+                print 'Hubo un cambio de precio'
+                today_history.price = product.price
+                today_history.save()
+                self.latest_price = product.price
+                self.save()
     
     class Meta:
         app_label = 'cotizador'

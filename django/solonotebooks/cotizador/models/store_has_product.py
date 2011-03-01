@@ -10,7 +10,7 @@ class StoreHasProduct(models.Model):
     shpe = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
     
     def get_store(self):
-        return self.shpe.store
+        return self.storehasproductentity_set.all()[0].store
     
     store = property(get_store)
     
@@ -28,7 +28,7 @@ class StoreHasProduct(models.Model):
             self.product.update()
     
     def __unicode__(self):
-        return unicode(self.store) + ' - ' + unicode(self.product)
+        return unicode(self.product)
         
     def pretty_price(self):
         return prettyPrice(self.latest_price)
