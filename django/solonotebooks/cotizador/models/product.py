@@ -93,7 +93,7 @@ class Product(models.Model):
         
     def update_week_discount(self):
         t = date.today()
-        d = timedelta(days = 7)
+        d = timedelta(days = 1)
         old_price = self.price_at(t - d)
         try:
             self.week_discount = int(100 * (old_price - self.min_price) / old_price)

@@ -14,11 +14,6 @@ class StoreHasProductEntity(models.Model):
 
     shp = models.ForeignKey(StoreHasProduct, null = True, blank = True)
     
-    # uncomment before script
-    # prevent_availability_change = models.BooleanField()
-    # store = models.ForeignKey(Store)
-    # notebook = models.ForeignKey(Notebook, null = True, blank = True)
-    
     def __unicode__(self):
         try:
             return unicode(self.shp.store) + ' - ' + self.custom_name

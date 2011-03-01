@@ -5,18 +5,28 @@
 {% block manager_content %}
 
 <h2><a href="{{ shpe.url }}">{{ shpe }}</a></h2>
+<h3>
+    Precio: {{ shpe.pretty_price }}
+</h3>
 
 <form method="post" action="">
     <select id="id_product" name="product">
         <option value="">---------</option>
         {% for option in options %}
-            <option value="{{ option.id }}">{{ option }}</option>
+            <option value="{{ option.id }}"
+            {% ifequal shpe.shp.product.id option.id %}
+             selected="selected" 
+            {% endifequal %}
+            >{{ option }}</option>
         {% endfor %}
     </select>
         
     </input>
     {{ shpe_form.store }}
     
+    <p>
+        <a href="/manager/hide_entity/{{ shpe.id }}">Esconder</a>
+    </p>
     <p>
         <input type="submit" value="Guardar" />
     </p>
