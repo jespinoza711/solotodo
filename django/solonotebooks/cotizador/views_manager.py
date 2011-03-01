@@ -105,10 +105,10 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             return HttpResponseRedirect('/manager/new_entities/?refresh=true')
     else:
         d = {}
-        for store in Store.objects.all():
-            if store.url in shpe.url:
-                d['store'] = store
-                break
+        
+        store = shpe.infer_store()
+        if store:
+            d['store'] = store
             
         form = StoreHasProductEntityEditForm(d)
         
@@ -121,13 +121,22 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
     })
         
 @manager_login_required
-def hide_entity(request, store_has_product_entity_id):
+def storehasproductentity_hide(request, store_has_product_entity_id):
     # Makes a model invisible to the "pending" page if it is stupid (e.g. iPad)
     # or doesn't apply (combos of products + printers, accesories, etc)
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     shpe.is_hidden = True
     shpe.save()
     return HttpResponseRedirect('/manager/new_entities/?refresh=true');
+    
+@manager_login_required
+def storehasproductentity_refresh_price(request, store_has_product_entity_id):
+    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
+    shpe.update_price()
+    shpe.save()
+    url = reverse('solonotebooks.cotizador.views_manager.storehasproductentity_edit', args = [shpe.id])
+    return HttpResponseRedirect(url)
+    
     
 @manager_login_required            
 def analyze_searches(request):

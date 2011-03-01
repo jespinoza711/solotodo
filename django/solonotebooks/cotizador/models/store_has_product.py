@@ -10,7 +10,8 @@ class StoreHasProduct(models.Model):
     shpe = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
     store = models.ForeignKey(Store)
     
-    def update(self):
+    def update(self, recursive = False):
+        print self
         shpes = self.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
         if shpes:
             self.shpe = shpes[0]
@@ -18,6 +19,9 @@ class StoreHasProduct(models.Model):
             self.shpe = None
             
         self.save()
+        
+        if self.product and recursive:
+            self.product.update()
     
     def __unicode__(self):
         return unicode(self.store) + ' - ' + unicode(self.product)
