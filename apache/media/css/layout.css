@@ -267,7 +267,7 @@ div#login {padding-left: 8px; float: left; width: 900px;}
 #areas-site ul li.sprite-catalogo-active {background: url(img/catalogo.png) no-repeat 12px -50px;}
 #areas-site ul li.sprite-blog-active {background: url(img/blog.png) no-repeat 24px -50px; background-position: center top;}
 
-.catalogo {margin-left: 26px;}
+.catalogo {margin-left: 26px; position: relative; top: -14px;}
 .catalogo li {
  float: left; 
  margin-right: 3px;
