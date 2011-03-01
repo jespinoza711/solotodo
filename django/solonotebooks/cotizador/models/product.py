@@ -58,6 +58,55 @@ class Product(models.Model):
         if self.similar_products == '0':
             self.load_similar_products()
             super(Product, self).save()
+            
+    def update(self):
+        from . import LogReviveProduct, LogChangeProductPrice, LogLostProduct, ProductPriceChange
+        print self
+        
+        new_price = self.storehasproduct_set.filter(shpe__isnull = False).aggregate(Min('shpe__latest_price'))['shpe__latest_price__min']
+        
+        if new_price:
+            print 'El producto tiene registros de disponibilidad'
+            
+            log_price_change = True
+            if not self.is_available:
+                LogReviveProduct.new(self).send_notification_mails()
+                log_price_change = False
+            
+            if new_price != self.min_price:
+                if log_price_change:
+                    LogChangeProductPrice.new(self, self.min_price, new_price).send_notification_mails()
+                ppc = ProductPriceChange()
+                ppc.product = self
+                ppc.price = new_price
+                ppc.date = date.today()
+                ppc.save()
+                self.min_price = new_price
+
+            self.is_available = True
+        else:
+            print 'El producto no tiene registros de disponibilidad'
+
+            if self.is_available:
+                 LogLostProduct.new(self).send_notification_mails()
+
+            self.is_available = False
+            
+        ppcs = self.productpricechange_set.all()
+        if len(ppcs) == 0:
+            ppc = ProductPriceChange()
+            ppc.product = self
+            ppc.price = self.min_price
+            ppc.date = date.today()
+            ppc.save()  
+            
+        self.long_description = self.raw_text()
+        self.update_week_discount()
+        self.update_week_visits()
+        
+        self.save()
+        self.generate_chart()
+        
     
     def get_polymorphic_instance(self):
         from solonotebooks.cotizador.models import *

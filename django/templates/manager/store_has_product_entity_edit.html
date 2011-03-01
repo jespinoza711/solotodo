@@ -25,7 +25,9 @@
     {{ shpe_form.store }}
     
     <p>
-        <a href="/manager/hide_entity/{{ shpe.id }}">Esconder</a>
+        <a href="{% url solonotebooks.cotizador.views_manager.storehasproductentity_hide shpe.id %}">Esconder</a>
+        |
+        <a href="{% url solonotebooks.cotizador.views_manager.storehasproductentity_refresh_price shpe.id %}">Refrescar precio</a>
     </p>
     <p>
         <input type="submit" value="Guardar" />

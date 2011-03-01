@@ -74,91 +74,16 @@ def update_availability_and_price():
     print 'Paso 1: Actualizando StoreHasProductEntities'
     shpes = StoreHasProductEntity.objects.all()
     for shpe in shpes:
-        print ''
-        print str(shpe)
-        if shpe.is_available and shpe.shp and not shpe.shp.prevent_availability_change:
-            print 'Buscando logs de registro'
-            last_logs = shpe.storeproducthistory_set.order_by('-date')
-            try:    
-                last_log = last_logs[0]
-                if not last_log.date == (date.today()):
-                    print 'Ultimo registro no es de hoy, dejando entrada no disponible'
-                    shpe.is_available = False
-                    LogLostEntity.new(shpe).save()
-                    shpe.save()
-                else:
-                    print 'Ultimo registro es de hoy, viendo si hay cambios'
-                    try:
-                        yesterday_log = last_logs[1]
-                        
-                        # The second condition helps when executing the "manual_update" script many times
-                        # in a single day, preventing repeated log messages
-                        if yesterday_log.price != last_log.price and last_log.price != shpe.latest_price:
-                            print 'Hubieron cambios de precio, registrando'
-                            shpe.latest_price = last_log.price
-                            shpe.save()
-                            LogChangeEntityPrice.new(shpe, yesterday_log.price, last_log.price).save()
-                        else:
-                            print 'No hay cambios'
-                    except IndexError:
-                        pass
-            except IndexError:
-                pass
-        shpe.save()
+        shpe.update()
         
     print 'Paso 2: Actualizando StoreHasProduct'
     for shp in StoreHasProduct.objects.all():
-        print shp
         shp.update()
         
     print 'Paso 3: Actualizando Productos'
 
     for product in Product.objects.all():
-        print product
-        
-        new_price = product.storehasproduct_set.filter(shpe__isnull = False).aggregate(Min('shpe__latest_price'))['shpe__latest_price__min']
-        
-        if new_price:
-            print 'El producto tiene registros de disponibilidad'
-            
-            log_price_change = True
-            if not product.is_available:
-                LogReviveProduct.new(product).send_notification_mails()
-                log_price_change = False
-            
-            if new_price != product.min_price:
-                if log_price_change:
-                    LogChangeProductPrice.new(product, product.min_price, new_price).send_notification_mails()
-                ppc = ProductPriceChange()
-                ppc.product = product
-                ppc.price = new_price
-                ppc.date = date.today()
-                ppc.save()
-                product.min_price = new_price
-
-            product.is_available = True
-        else:
-            print 'El producto no tiene registros de disponibilidad'
-
-            if product.is_available:
-                 LogLostProduct.new(product).send_notification_mails()
-
-            product.is_available = False
-            
-        ppcs = product.productpricechange_set.all()
-        if len(ppcs) == 0:
-            ppc = ProductPriceChange()
-            ppc.product = product
-            ppc.price = product.min_price
-            ppc.date = date.today()
-            ppc.save()  
-            
-        product.long_description = product.raw_text()
-        product.update_week_discount()
-        product.update_week_visits()
-        
-        product.save()
-        product.generate_chart()
+        product.update()
         
     # Other housekeeping stuff
     VideoCardGpu.update_all_tdmark_scores()
