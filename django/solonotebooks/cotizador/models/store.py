@@ -3,6 +3,7 @@ from sorl.thumbnail.fields import ImageWithThumbnailsField
 
 class Store(models.Model):
     name = models.CharField(max_length = 255)
+    classname = models.CharField(max_length = 255)
     url = models.URLField()
     picture = ImageWithThumbnailsField(
         thumbnail = { 'size': (140, 90), },                                          
