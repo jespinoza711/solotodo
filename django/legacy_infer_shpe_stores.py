@@ -15,9 +15,9 @@ def main():
             print str(shpe.id) + ' ' + str(shpe)
             print shpe.url
             shpe.delete()
-            
-        shpe.store = store
-        shpe.save()
+        else: 
+            shpe.store = store
+            shpe.save()
             
 
 if __name__ == '__main__':

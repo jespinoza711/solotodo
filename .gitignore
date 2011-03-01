@@ -13,3 +13,4 @@ apache/robots.txt
 *.pyc
 *.db
 .DS_Store
+.python-eggs
