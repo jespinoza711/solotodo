@@ -8,7 +8,11 @@ class StoreHasProduct(models.Model):
     prevent_availability_change = models.BooleanField()
     product = models.ForeignKey(Product, null = True, blank = True)
     shpe = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
-    store = models.ForeignKey(Store)
+    
+    def get_store(self):
+        return self.shpe.store
+    
+    store = property(get_store)
     
     def update(self, recursive = False):
         print self
