@@ -284,3 +284,12 @@ br.product_details_comment_separator {
 #product_like {
     margin-top: 10px;
 }
+
+.main-logo img {
+    position: relative;
+    top: -12px;
+}
+
+#combo-search {
+    padding-left: 45px;
+}
