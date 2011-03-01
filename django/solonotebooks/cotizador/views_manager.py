@@ -127,7 +127,7 @@ def hide_entity(request, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     shpe.is_hidden = True
     shpe.save()
-    return HttpResponseRedirect(request.META['HTTP_REFERER'] + '?refresh=true');
+    return HttpResponseRedirect('/manager/new_entities/?refresh=true');
     
 @manager_login_required            
 def analyze_searches(request):
