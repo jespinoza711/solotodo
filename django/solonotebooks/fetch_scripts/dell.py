@@ -85,7 +85,10 @@ class Dell:
         return productsData         
         
     def retrieveAlienwareProductData(self, productUrl, productName):
-        r = mechanize.urlopen(productUrl)
+        try:
+            r = mechanize.urlopen(productUrl)
+        except:
+            return None
         soup = BeautifulSoup(r.read())
         
         productsData = []
@@ -181,7 +184,9 @@ class Dell:
                 modelNames.append(alienwareModelLink.string)
 
             for i in range(len(modelUrls)):
-                productsData += self.retrieveAlienwareProductData(modelUrls[i], modelNames[i])
+                product = self.retrieveAlienwareProductData(modelUrls[i], modelNames[i])
+                if product:
+                    productsData += product
         
         # Now for the business (Vostro / Latitude / Precision)        
         url_extensions = [  

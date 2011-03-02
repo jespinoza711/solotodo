@@ -10,27 +10,30 @@ class PCFactory:
     name = 'PCFactory'
     
     def retrieve_product_data(self, product_link):
-        browser = mechanize.Browser()
-        baseData = browser.open(product_link).get_data()
-        baseSoup = BeautifulSoup(baseData)
-        product_data = ProductData()
-        
-        available_cells = baseSoup.findAll('table', { 'class' : 'ProductLine1' })[2].findAll('td')
-        if len(available_cells) != 1:
-            availability_string = available_cells[2].string
-            if availability_string == 'Agotado':      
-                return None
-        
-        titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
-        product_data.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
-        product_data.url = product_link
-        product_data.comparison_field = product_link
-        
-        priceSpan = baseSoup.find('span', { 'id' : 'simulador' })
-        product_data.price = int(priceSpan.string.replace('.', ''))
-        
-        print product_data
-        return product_data
+        try:
+            browser = mechanize.Browser()
+            baseData = browser.open(product_link).get_data()
+            baseSoup = BeautifulSoup(baseData)
+            product_data = ProductData()
+            
+            available_cells = baseSoup.findAll('table', { 'class' : 'ProductLine1' })[2].findAll('td')
+            if len(available_cells) != 1:
+                availability_string = available_cells[2].string
+                if availability_string == 'Agotado':      
+                    return None
+            
+            titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
+            product_data.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
+            product_data.url = product_link
+            product_data.comparison_field = product_link
+            
+            priceSpan = baseSoup.find('span', { 'id' : 'simulador' })
+            product_data.price = int(priceSpan.string.replace('.', ''))
+            
+            print product_data
+            return product_data
+        except:
+            return None
 
     # Main method
     def get_products(self):

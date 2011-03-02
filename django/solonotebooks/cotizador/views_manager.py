@@ -108,11 +108,8 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
 
             shpe.shp = shp
             shpe.save()
-            if created:
-                shp.shpe = shpe
-                shp.save()
-            else:
-                shp.update(recursive = True)
+                
+            shp.update(recursive = True)
             return HttpResponseRedirect('/manager/new_entities/?refresh=true')
     else:
         d = {}
