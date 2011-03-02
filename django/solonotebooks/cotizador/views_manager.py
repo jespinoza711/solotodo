@@ -84,12 +84,11 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             if shpe.shp:
                 shp = shpe.shp
                 shpe.shp = None
+                shpe.save()
                 if shp.storehasproductentity_set.count() == 1:
                     shp.delete()
-                    shpe.save()
                 else:
-                    shpe.save()
-                    shp.update()
+                    shp.update(recursive = True)
             
             # End changes
             
@@ -113,7 +112,7 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
                 shp.shpe = shpe
                 shp.save()
             else:
-                shp.update()
+                shp.update(recursive = True)
             return HttpResponseRedirect('/manager/new_entities/?refresh=true')
     else:
         d = {}
