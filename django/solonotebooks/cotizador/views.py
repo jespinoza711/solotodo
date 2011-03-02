@@ -109,7 +109,14 @@ def product_type_catalog(request, product_type_urlname):
 # View for showing a particular store with the products it offers    
 def store_details(request, store_id):
     store = get_object_or_404(Store, pk = store_id)
-    shps = StoreHasProduct.objects.filter(store = store).filter(shpe__isnull = False).order_by('shpe__latest_price')
+    
+    shps = []
+    
+    shpes = StoreHasProductEntity.objects.filter(store = store).filter(is_available = True).order_by('latest_price')
+    
+    for shpe in shpes:
+        if shpe.shp and shpe.shp not in shps:
+            shps.append(shpe.shp)
     
     for shp in shps:
         shp.product = shp.product.get_polymorphic_instance()
