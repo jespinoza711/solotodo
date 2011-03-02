@@ -60,7 +60,7 @@ class Product(models.Model):
             super(Product, self).save()
             
     def update(self):
-        from . import LogReviveProduct, LogChangeProductPrice, LogLostProduct, ProductPriceChange
+        from . import LogReviveProduct, LogChangeProductPrice, LogLostProduct, ProductPriceChange, LogReviveProduct
         print self
         
         new_price = self.storehasproduct_set.filter(shpe__isnull = False).aggregate(Min('shpe__latest_price'))['shpe__latest_price__min']

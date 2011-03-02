@@ -79,7 +79,7 @@ class StoreHasProductEntity(models.Model):
         self.update(recursive = True)
             
     def update_with_product(self, product):
-        from . import StoreProductHistory
+        from . import StoreProductHistory, LogReviveEntity
         print 'Viendo si esta registrado como desaparecido'
         if not self.is_available:
             print 'Estaba desaparecido, registrando resucitacion'
