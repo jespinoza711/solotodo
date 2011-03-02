@@ -112,7 +112,7 @@ def store_details(request, store_id):
     
     shps = []
     
-    shpes = StoreHasProductEntity.objects.filter(store = store).filter(is_available = True).order_by('latest_price')
+    shpes = StoreHasProductEntity.objects.filter(store = store).filter(is_available = True, is_hidden = False).order_by('latest_price')
     
     for shpe in shpes:
         if shpe.shp and shpe.shp not in shps:
