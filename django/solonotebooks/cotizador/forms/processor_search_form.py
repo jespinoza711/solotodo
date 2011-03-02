@@ -92,25 +92,25 @@ class ProcessorSearchForm(SearchForm):
     def generate_title_tag(self, key, pk_value):
         value = ''
         if key == 'brand':
-            value = 'Procesadors ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
+            value = 'Procesadores ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
         if key == 'family':
-            value = 'Procesadors ' + unicode(ProcessorFamily.objects.get(pk = pk_value))
+            value = 'Procesadores ' + unicode(ProcessorFamily.objects.get(pk = pk_value))
         if key == 'line':
             value = 'Procesadores ' + unicode(ProcessorLine.objects.get(pk = pk_value))
         if key == 'l2_cache':
-            value = 'Procesadors con ' + unicode(ProcessorL2Cache.objects.get(pk = pk_value)) + ' de caché L2'
+            value = 'Procesadores con ' + unicode(ProcessorL2Cache.objects.get(pk = pk_value)) + ' de caché L2'
         if key == 'l3_cache':
-            value = 'Procesadors con ' + unicode(ProcessorL3Cache.objects.get(pk = pk_value) + 'de caché L3')
+            value = 'Procesadores con ' + unicode(ProcessorL3Cache.objects.get(pk = pk_value) + 'de caché L3')
         if key == 'socket':
-            value = 'Procesadors con socket ' + unicode(ProcessorSocket.objects.get(pk = pk_value))
+            value = 'Procesadores con socket ' + unicode(ProcessorSocket.objects.get(pk = pk_value))
         if key == 'core_count':
-            value = 'Procesadors ' + unicode(ProcessorCoreCount.objects.get(pk = pk_value))
+            value = 'Procesadores ' + unicode(ProcessorCoreCount.objects.get(pk = pk_value))
         if key == 'core':
-            value = 'Procesadors con núcleo ' + unicode(ProcessorCore.objects.get(pk = pk_value))
+            value = 'Procesadores con núcleo ' + unicode(ProcessorCore.objects.get(pk = pk_value))
         if key == 'architecture':
-            value = 'Procesadors con arquitectura ' + unicode(ProcessorArchitecture.objects.get(pk = pk_value))
+            value = 'Procesadores con arquitectura ' + unicode(ProcessorArchitecture.objects.get(pk = pk_value))
         if key == 'manufacturing_process':
-            value = 'Procesadors de ' + unicode(ProcessorManufacturingProcess.objects.get(pk = pk_value))
+            value = 'Procesadores de ' + unicode(ProcessorManufacturingProcess.objects.get(pk = pk_value))
         if key == 'unlocked_multiplier':
             value = 'Procesadores con multiplicador ' + self.unlocked_multiplier_choices[pk_value][1]
         return value
