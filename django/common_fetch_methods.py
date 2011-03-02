@@ -58,7 +58,8 @@ def get_store_products(fetch_store):
         print e
         print('Error al obtener los productos de ' + store.name)
         log_message('Error al obtener los productos de ' + store.name + ': ' + str(e))
-        shps = StoreHasProduct.objects.filter(store = store)
-        for shp in shps:
-            shp.prevent_availability_change = True
-            shp.save()
+        shpes = StoreHasProductEntity.objects.filter(store = store)
+        for shpe in shpes:
+            if shpe.shp:
+                shpe.shp.prevent_availability_change = True
+                shpe.shp.save()

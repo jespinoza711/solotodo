@@ -14,6 +14,7 @@ class Store(models.Model):
         return unicode(self.name)
         
     def save_product(self, product):
+        from . import StoreHasProductEntity
         print 'Guardando ' + str(product)
         print 'Buscando si tiene un registro existente'
         try:
