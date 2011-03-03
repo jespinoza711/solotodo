@@ -13,8 +13,6 @@ from django.template.loader import render_to_string
 class Product(models.Model):
     name = models.CharField(max_length = 255)
     date_added = models.DateField()
-    
-    publicized_offer = models.ForeignKey('StoreHasProductEntity', null = True, blank = True, related_name = 'ntbk')
     ptype = models.ForeignKey(ProductType)
     
     shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'chosen_by')
