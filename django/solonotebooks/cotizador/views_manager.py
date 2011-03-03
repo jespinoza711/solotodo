@@ -85,7 +85,7 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
                 shp = shpe.shp
                 shpe.shp = None
                 shpe.save()
-                if shp.storehasproductentity_set.count() == 1:
+                if shp.storehasproductentity_set.count() == 0:
                     shp.delete()
                 else:
                     shp.update(recursive = True)

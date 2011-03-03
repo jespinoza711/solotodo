@@ -105,13 +105,13 @@ admin.site.register(VideoCardGpuPowerConnector)
 admin.site.register(VideoCardGpuManufacturingProcess)
             
 class ProductAdmin(admin.ModelAdmin):
-    exclude = ['publicized_offer']
+    exclude = ['shp']
     
 class NotebookAdmin(admin.ModelAdmin):
-    exclude = ['publicized_offer']
+    exclude = ['shp']
     
 class VideoCardAdmin(admin.ModelAdmin):
-    exclude = ['publicized_offer']
+    exclude = ['shp']
     list_display = ['pretty_display', 'core_clock', 'shader_clock', 'memory_clock']
     
 admin.site.register(Product, ProductAdmin)
@@ -141,7 +141,7 @@ admin.site.register(ProcessorFsb)
 admin.site.register(ProcessorGraphics)
 
 class ProcessorAdmin(admin.ModelAdmin):
-    exclude = ['publicized_offer']
+    exclude = ['shp']
     list_display = ['pretty_display', 'pcmark_id', 'pcmark_05_score', 'pcmark_vantage_score', 'passmark_score']
 
 admin.site.register(Processor, ProcessorAdmin)
@@ -164,6 +164,6 @@ admin.site.register(ScreenRefreshRate)
 admin.site.register(ScreenDigitalTuner)
 
 class ScreenAdmin(admin.ModelAdmin):
-    exclude = ['publicized_offer']
+    exclude = ['shp']
 
 admin.site.register(Screen, ScreenAdmin)
