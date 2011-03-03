@@ -49,7 +49,7 @@ class VideoCard(Product):
         
     @staticmethod
     def get_valid():
-        return VideoCard.objects.filter(is_available = True)
+        return VideoCard.objects.filter(shp__isnull = False)
     
     def clone_product(self):
         clone_prod = super(VideoCard, self).clone_product()

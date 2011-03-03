@@ -21,7 +21,7 @@
         {{ notebook.screen.pretty_display }}
     </td>
     <td>
-        {% if notebook.is_available %}
+        {% if notebook.shp %}
             <a href="{% url cotizador.views.product_details notebook.id %}">{{ notebook.pretty_min_price }}</a>
         {% else %}
             Equipo no disponible

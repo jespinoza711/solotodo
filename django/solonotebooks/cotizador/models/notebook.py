@@ -82,7 +82,7 @@ class Notebook(Product):
         
     def load_similar_products(self):
         threshold = 4
-        ntbks = Notebook.objects.filter(is_available = True).filter(~Q(id = self.id))
+        ntbks = Notebook.get_valid().filter(~Q(id = self.id))
         
         max_card_type = self.video_card.all().aggregate(Max('card_type'))['card_type__max']
         ntbks_gpu = ntbks.filter(video_card__card_type__id = max_card_type).distinct()
@@ -106,7 +106,7 @@ class Notebook(Product):
                 result_notebook[1] += 1
             if result_notebook[0].screen.is_touchscreen and self.screen.is_touchscreen:
                 result_notebook[1] += 5
-            result_notebook[1] -= abs(self.min_price - result_notebook[0].min_price) / 100000
+            result_notebook[1] -= abs(self.shp.shpe.latest_price - result_notebook[0].shp.shpe.latest_price) / 100000
             result_notebook[1] = -result_notebook[1]
         
         sorted_result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1))
@@ -118,7 +118,7 @@ class Notebook(Product):
         
     @staticmethod
     def get_valid():
-        return Notebook.objects.filter(is_available = True)
+        return Notebook.objects.filter(shp__isnull = False)
     
     def clone_product(self):
         clone_prod = super(Notebook, self).clone_product()

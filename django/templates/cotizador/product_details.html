@@ -85,7 +85,7 @@
                 </td>
                 <td>
                     <a href="" class="subscribe_link">
-                    {% if product.is_available %}
+                    {% if product.shp %}
                         Enviarme cambios de precio
                     {% else %}
                         Avisarme cuando esté disponible
@@ -114,7 +114,7 @@
                             <img src="/media/assets/subscribe-icon.png" />
                         </td>
                         <td>
-                            {% if product.is_available %}
+                            {% if product.shp %}
                                 Estás recibiendo los cambios de precio
                             {% else %}
                                 Te avisaremos cuando esté disponible
@@ -140,7 +140,7 @@
                         </td>
                         <td>
                             <a href="" class="subscribe_link">
-                            {% if product.is_available %}
+                            {% if product.shp %}
                                 Enviarme cambios de precio
                             {% else %}
                                 Avisarme cuando esté disponible

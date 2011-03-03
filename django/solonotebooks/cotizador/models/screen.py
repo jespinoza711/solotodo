@@ -56,7 +56,7 @@ class Screen(Product):
         
     @staticmethod
     def get_valid():
-        return Screen.objects.filter(is_available = True)
+        return Screen.objects.filter(shp__isnull = False)
     
     def clone_product(self):
         clone_prod = super(Screen, self).clone_product()

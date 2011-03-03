@@ -120,7 +120,7 @@ def store_details(request, store_id):
     
     for shp in shps:
         shp.product = shp.product.get_polymorphic_instance()
-        shp.product.min_price = shp.shpe.latest_price
+        shp.product.shp = shp
         
     return append_ads_to_response(request, 'cotizador/store_details.html', {
         'store': store,

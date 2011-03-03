@@ -139,9 +139,9 @@ class ProcessorSearchForm(SearchForm):
         if self.unlocked_multiplier:
             processors = processors.filter(has_unlocked_multiplier = self.unlocked_multiplier - 1)    
         if self.min_price:
-            processors = processors.filter(min_price__gte = int(self.min_price))
+            processors = processors.filter(shp__shpe__latest_price__gte = int(self.min_price))
         if self.max_price and self.max_price != int(self.price_choices[-1][0]):
-            processors = processors.filter(min_price__lte = int(self.max_price))
+            processors = processors.filter(shp__shpe__latest_price__lte = int(self.max_price))
             
         # Check the ordering orientation, if it is not set, each criteria uses 
         # sensible defaults (asc for price, desc for cpu performance, etc)
@@ -151,7 +151,7 @@ class ProcessorSearchForm(SearchForm):
         if self.ordering == 1:
             if ordering_direction == None:
                 ordering_direction = ''
-            processors = processors.order_by(ordering_direction + 'min_price')
+            processors = processors.order_by(ordering_direction + 'shp__shpe__latest_price')
         elif self.ordering == 2:
             if ordering_direction == None:
                 ordering_direction = '-'    

@@ -15,11 +15,13 @@ def main():
             shp = shps[0]
             if not product.is_available:
                 print str(shp.id) + ' ' + str(shp)
-            #product.shp = shp
-            #product.save()
         else:
+            shp = None
             if product.is_available:
                 print str(product.id) + ' ' + str(product)
+                
+        product.shp = shp
+        product.save()
                 
 if __name__ == '__main__':
     print datetime.now()
