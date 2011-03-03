@@ -306,10 +306,11 @@ def all_products(request):
 # someday...
 def store_product_redirect(request, store_product_id):
     store_product = get_object_or_404(StoreHasProductEntity, pk = store_product_id)
-    external_visit = ExternalVisit()
-    external_visit.shpe = store_product
-    external_visit.date = date.today()
-    external_visit.save()
+    if not request.user.is_staff:
+        external_visit = ExternalVisit()
+        external_visit.shpe = store_product
+        external_visit.date = date.today()
+        external_visit.save()
     return HttpResponseRedirect(store_product.url)
     
 # View that gets called when a user clicks an ad

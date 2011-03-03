@@ -92,19 +92,19 @@ class VideoCardSearchForm(SearchForm):
         if key == 'gpu_core_count':
             value = unicode(VideoCardGpuCoreCount.objects.get(pk = pk_value))
         if key == 'memory_quantity':
-            value = unicode(VideoCardMemoryQuantity.objects.get(pk = pk_value))
+            value = u'Cantidad de memoria mínima: ' + unicode(VideoCardMemoryQuantity.objects.get(pk = pk_value))
         if key == 'memory_type':
             value = unicode(VideoCardMemoryType.objects.get(pk = pk_value))
         if key == 'memory_bus_width':
-            value = unicode(VideoCardMemoryBusWidth.objects.get(pk = pk_value))
+            value = u'Bus de memoria mínimo: ' + unicode(VideoCardMemoryBusWidth.objects.get(pk = pk_value))
         if key == 'gpu_architecture':
             value = unicode(VideoCardGpuArchitecture.objects.get(pk = pk_value))
         if key == 'gpu_core_family':
             value = unicode(VideoCardGpuCoreFamily.objects.get(pk = pk_value))
         if key == 'gpu_dx_version':
-            value = 'DirectX ' + unicode(VideoCardGpuDirectxVersion.objects.get(pk = pk_value))
+            value = 'DirectX ' + unicode(VideoCardGpuDirectxVersion.objects.get(pk = pk_value)) + ' o superior'
         if key == 'gpu_ogl_version':
-            value = 'OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value))
+            value = 'OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value)) + ' o superior'
         if key == 'bus_name':
             value = unicode(VideoCardBusName.objects.get(pk = pk_value))
         if key == 'bus_lanes':
@@ -141,19 +141,19 @@ class VideoCardSearchForm(SearchForm):
         if key == 'gpu_core_count':
             value = 'Tarjetas de video ' + unicode(VideoCardGpuCoreCount.objects.get(pk = pk_value))
         if key == 'memory_quantity':
-            value = 'Tarjetas de video con ' + unicode(VideoCardMemoryQuantity.objects.get(pk = pk_value)) + ' de memoria'
+            value = 'Tarjetas de video con ' + unicode(VideoCardMemoryQuantity.objects.get(pk = pk_value)) + u' o más de memoria'
         if key == 'memory_type':
             value = 'Tarjetas de video con memoria ' + unicode(VideoCardMemoryType.objects.get(pk = pk_value))
         if key == 'memory_bus_width':
-            value = 'Tarjetas de video con memorias de ' + unicode(VideoCardMemoryBusWidth.objects.get(pk = pk_value))
+            value = 'Tarjetas de video con memorias de ' + unicode(VideoCardMemoryBusWidth.objects.get(pk = pk_value)) + u' o más'
         if key == 'gpu_architecture':
             value = 'Tarjetas de video ' + unicode(VideoCardGpuArchitecture.objects.get(pk = pk_value))
         if key == 'gpu_core_family':
             value = 'Tarjetas de video con núcleo ' + unicode(VideoCardGpuCoreFamily.objects.get(pk = pk_value))
         if key == 'gpu_dx_version':
-            value = 'Tarjetas de video DirectX ' + unicode(VideoCardGpuDirectxVersion.objects.get(pk = pk_value))
+            value = 'Tarjetas de video DirectX ' + unicode(VideoCardGpuDirectxVersion.objects.get(pk = pk_value))  + ' o superior'
         if key == 'gpu_ogl_version':
-            value = 'Tarjetas de video OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value))
+            value = 'Tarjetas de video OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value)) + ' o superior'
         if key == 'bus_name':
             value = 'Tarjetas de video con bus ' + unicode(VideoCardBusName.objects.get(pk = pk_value))
         if key == 'bus_lanes':

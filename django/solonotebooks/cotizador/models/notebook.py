@@ -106,7 +106,7 @@ class Notebook(Product):
                 result_notebook[1] += 1
             if result_notebook[0].screen.is_touchscreen and self.screen.is_touchscreen:
                 result_notebook[1] += 5
-            result_notebook[1] -= abs(self.shp.shpe.latest_price - result_notebook[0].shp.shpe.latest_price) / 100000
+            result_notebook[1] -= abs(self.latest_price() - result_notebook[0].latest_price()) / 100000
             result_notebook[1] = -result_notebook[1]
         
         sorted_result_notebooks = sorted(result_notebooks, key = operator.itemgetter(1))

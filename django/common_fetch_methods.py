@@ -38,7 +38,7 @@ def update_availability_and_price():
     print 'Paso 3: Actualizando Productos'
 
     for product in Product.objects.all():
-        product.update()
+        product.update(send_mails = True)
         
     # Other housekeeping stuff
     VideoCardGpu.update_all_tdmark_scores()
