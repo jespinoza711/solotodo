@@ -13,13 +13,11 @@ from django.template.loader import render_to_string
 class Product(models.Model):
     name = models.CharField(max_length = 255)
     date_added = models.DateField()
-    is_available = models.BooleanField()
     
     publicized_offer = models.ForeignKey('StoreHasProductEntity', null = True, blank = True, related_name = 'ntbk')
     ptype = models.ForeignKey(ProductType)
     
     shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'chosen_by')
-    min_price = models.IntegerField()
     week_visitor_count = models.IntegerField()
     week_discount = models.IntegerField()    
     
@@ -52,7 +50,7 @@ class Product(models.Model):
         
     @staticmethod
     def get_valid():
-        return Product.objects.filter(is_available = True)
+        return Product.objects.filter(shp__isnull = False)
     
     def save(self):
         super(Product, self).save()
@@ -64,40 +62,43 @@ class Product(models.Model):
         from . import LogReviveProduct, LogChangeProductPrice, LogLostProduct, ProductPriceChange, LogReviveProduct
         print self
         
-        new_price = self.storehasproduct_set.filter(shpe__isnull = False).aggregate(Min('shpe__latest_price'))['shpe__latest_price__min']
+        shps = self.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')
         
-        if new_price:
+        if shps:
+            shp = shps[0]
             print 'El producto tiene registros de disponibilidad'
             
             log_price_change = True
-            if not self.is_available:
+            if not self.shp:
                 LogReviveProduct.new(self).send_notification_mails()
                 log_price_change = False
             
-            if new_price != self.min_price:
+            if self.shp and self.shp.shpe and shp.shpe.latest_price != self.shp.shpe.latest_price:
                 if log_price_change:
-                    LogChangeProductPrice.new(self, self.min_price, new_price).send_notification_mails()
+                    LogChangeProductPrice.new(self, self.shp.shpe.latest_price, shp.shpe.latest_price).send_notification_mails()
                 ppc = ProductPriceChange()
                 ppc.product = self
-                ppc.price = new_price
+                ppc.price = shp.shpe.latest_price
                 ppc.date = date.today()
                 ppc.save()
-                self.min_price = new_price
 
-            self.is_available = True
+            self.shp = shp
         else:
             print 'El producto no tiene registros de disponibilidad'
 
-            if self.is_available:
+            if self.shp:
                  LogLostProduct.new(self).send_notification_mails()
 
-            self.is_available = False
+            self.shp = None
             
         ppcs = self.productpricechange_set.all()
         if len(ppcs) == 0:
             ppc = ProductPriceChange()
             ppc.product = self
-            ppc.price = self.min_price
+            if self.shp and self.shp.shpe:
+                ppc.price = self.shp.shpe.latest_price
+            else:
+                ppc.price = 0
             ppc.date = date.today()
             ppc.save()  
             
@@ -123,14 +124,10 @@ class Product(models.Model):
         return entity.raw_text()
         
     def pretty_min_price(self):
-        return prettyPrice(self.min_price)
-        
-    def create_miniature(self):
-        return { 
-            'name': str(self),
-            'min_price': self.min_price,
-            'url': '/notebooks/' + str(self.id)
-        }
+        if self.shp:
+            return prettyPrice(self.shp.shpe.latest_price)
+        else:
+            return 'No disponible'
         
     def price_at(self, date):
         from . import ProductPriceChange
@@ -138,15 +135,17 @@ class Product(models.Model):
         ppc = ProductPriceChange.objects.filter(notebook = self).filter(date__lte = date).order_by('-date')
         if ppc:
             return ppc[0].price
+        elif self.shp and self.shp.shpe:
+            return self.shp.shpe.latest_price
         else:
-            return self.min_price
+            return 0
         
     def update_week_discount(self):
         t = date.today()
         d = timedelta(days = 1)
         old_price = self.price_at(t - d)
         try:
-            self.week_discount = int(100 * (old_price - self.min_price) / old_price)
+            self.week_discount = int(100 * (old_price - self.shp.shpe.latest_price) / old_price)
         except:
             self.week_discount = 0;
             
@@ -252,7 +251,7 @@ class Product(models.Model):
         clone_prod.product_ptr.id = None
         clone_prod.product_ptr_id = None
         clone_prod.date_added = date.today()
-        clone_prod.is_available = False
+        clone_prod.shp = None
         clone_prod.name += ' (clone)'
         clone_prod.save()
         return clone_prod

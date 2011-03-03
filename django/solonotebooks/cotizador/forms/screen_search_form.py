@@ -157,9 +157,9 @@ class ScreenSearchForm(SearchForm):
         if self.digital_tuner:
             screens = screens.filter(digital_tuner = self.digital_tuner)
         if self.min_price:
-            screens = screens.filter(min_price__gte = int(self.min_price))
+            screens = screens.filter(shp__shpe__latest_price__gte = int(self.min_price))
         if self.max_price and self.max_price != int(self.price_choices[-1][0]):
-            screens = screens.filter(min_price__lte = int(self.max_price))
+            screens = screens.filter(shp__shpe__latest_price__lte = int(self.max_price))
         if self.video_port:
             screens = screens.filter(video_ports__port__id = self.video_port).distinct()
             
@@ -171,7 +171,7 @@ class ScreenSearchForm(SearchForm):
         if self.ordering == 1:
             if ordering_direction == None:
                 ordering_direction = ''
-            screens = screens.order_by(ordering_direction + 'min_price')
+            screens = screens.order_by(ordering_direction + 'shp__shpe__latest_price')
         elif self.ordering == 2:
             if ordering_direction == None:
                 ordering_direction = '-'

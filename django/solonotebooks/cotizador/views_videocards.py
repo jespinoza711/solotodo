@@ -12,7 +12,7 @@ def append_videocard_ptype_to_response(request, template, args):
          
 def gpu_details(request, gpu_id):
     gpu = get_object_or_404(VideoCardGpu, pk = gpu_id)
-    video_cards = gpu.videocard_set.filter(is_available = True).order_by('?')[:4]
+    video_cards = gpu.videocard_set.filter(shp__isnull = False).order_by('?')[:4]
     
     return append_videocard_ptype_to_response(request, 'cotizador/videocard_gpu_details.html', {
                 'gpu': gpu,

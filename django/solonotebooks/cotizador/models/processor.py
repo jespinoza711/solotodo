@@ -64,7 +64,7 @@ class Processor(Product):
         
     @staticmethod
     def get_valid():
-        return Processor.objects.filter(is_available = True)
+        return Processor.objects.filter(shp__isnull = False)
     
     def clone_product(self):
         clone_prod = super(Processor, self).clone_product()
