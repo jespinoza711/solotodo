@@ -6,8 +6,8 @@ import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
 from . import ProductData
 
-class TopPC:
-    name = 'TopPC'
+class Compumanque:
+    name = 'Compumanque'
 
     # Method that extracts the data of a specific product given its page
     def retrieve_product_data(self, productUrl):
@@ -15,9 +15,9 @@ class TopPC:
         data = br.open(productUrl).get_data()
         soup = BeautifulSoup(data)
 
-        title = soup.find('h2').string
+        title = soup.find('h1').string
         
-        price = int(soup.find('span', { 'id': 'old_price_display' }).string.replace('$', '').replace('.', ''))
+        price = int(soup.findAll('b')[1].parent.parent.findAll('td')[1].string.replace('$', '').replace('.', ''))
         
         productData = ProductData()
 
@@ -31,9 +31,9 @@ class TopPC:
 
     # Main method
     def get_products(self):
-        print 'Getting TopPC notebooks'
+        print 'Getting Compumanque notebooks'
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.toppc.cl/beta/category.php?n=50&id_category='
+        urlBase = 'http://72.249.5.151/~compucl/index.php?route=product/category&path='
         
         # Browser initialization
         browser = mechanize.Browser()
@@ -41,10 +41,12 @@ class TopPC:
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  '76',    # Tarjetas de video
-                            '5',     # Procesadores
-                            '61',    # Monitores y TV
-                            '153',   # Notebooks
+        url_extensions = [  '101_87',    # Tarjetas de video
+                            '19',     # Procesadores
+                            '45_97',    # Monitores
+                            '45_98',    # TV
+                            '106',   # Netbooks
+                            '50',     # Notebooks
                             ]
                             
         productLinks = []
@@ -54,10 +56,13 @@ class TopPC:
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
+            baseSoup = BeautifulSoup(baseData).find('table', { 'class' : 'list' })
+            
+            if not baseSoup:
+                continue
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
-            rawLinks = baseSoup.findAll('a', { 'class' : 'product_img_link' })
+            rawLinks = baseSoup.findAll('a')[::2]
             
             for rawLink in rawLinks:
                 link = rawLink['href']

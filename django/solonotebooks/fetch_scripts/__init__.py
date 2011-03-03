@@ -34,6 +34,7 @@ from rigam import Rigam
 from pc_ofertas import PCOfertas
 from pc_express import PCExpress
 from top_pc import TopPC
+from compumanque import Compumanque
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -70,4 +71,5 @@ __all__ = [ 'ProductData',
             'Rigam',
             'PCOfertas',
             'PCExpress',
-            'TopPC']
+            'TopPC',
+            'Compumanque',]
