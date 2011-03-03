@@ -5,7 +5,6 @@ from . import Product, Store
 from utils import prettyPrice
 
 class StoreHasProduct(models.Model):
-    prevent_availability_change = models.BooleanField()
     product = models.ForeignKey(Product, null = True, blank = True)
     shpe = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
     

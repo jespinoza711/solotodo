@@ -13,6 +13,7 @@ class StoreHasProductEntity(models.Model):
     latest_price = models.IntegerField()
     comparison_field = models.TextField()
     store = models.ForeignKey(Store)
+    prevent_availability_change = models.BooleanField()
 
     shp = models.ForeignKey(StoreHasProduct, null = True, blank = True)
     
@@ -35,35 +36,40 @@ class StoreHasProductEntity(models.Model):
         from . import LogLostEntity, LogChangeEntityPrice
         print ''
         print str(self)
-        if self.is_available and self.shp and not self.shp.prevent_availability_change:
-            print 'Buscando logs de registro'
-            last_logs = self.storeproducthistory_set.order_by('-date')
-            try:    
-                last_log = last_logs[0]
-                if not last_log.date == (date.today()):
-                    print 'Ultimo registro no es de hoy, dejando entrada no disponible'
-                    self.is_available = False
-                    LogLostEntity.new(self).save()
-                    self.save()
+        print 'Buscando logs de registro'
+        last_logs = self.storeproducthistory_set.order_by('-date')
+        if last_logs:    
+            last_log = last_logs[0]
+            if last_log.date != date.today():
+                print 'Ultimo registro no es de hoy'
+                if self.prevent_availability_change:
+                    print 'Registro esta protegido por error de fetching'
                 else:
-                    print 'Ultimo registro es de hoy, viendo si hay cambios'
-                    try:
-                        yesterday_log = last_logs[1]
-                        
-                        # The second condition helps when executing the "manual_update" script many times
-                        # in a single day, preventing repeated log messages
-                        if yesterday_log.price != last_log.price and last_log.price != self.latest_price:
-                            print 'Hubieron cambios de precio, registrando'
-                            self.latest_price = last_log.price
-                            self.save()
-                            LogChangeEntityPrice.new(self, yesterday_log.price, last_log.price).save()
-                        else:
-                            print 'No hay cambios'
-                    except IndexError:
-                        pass
-            except IndexError:
-                pass
-        self.save()
+                    print 'Revisando disponibilidad anterior'
+                    if self.is_available:
+                        print 'Antes estaba disponible, registrando en log'
+                        self.is_available = False
+                        LogLostEntity.new(self).save()
+                        self.save()
+                    else:
+                        print 'Antes no estaba disponible, no haciendo nada'
+            else:
+                print 'Ultimo registro es de hoy, viendo si hay cambios de precio entre ayer y hoy'
+                try:
+                    yesterday_log = last_logs[1]
+                    
+                    # The second condition helps when executing the "manual_update" script many times
+                    # in a single day, preventing repeated log messages
+                    if yesterday_log.price != last_log.price and last_log.price != self.latest_price:
+                        print 'Hubieron cambios de precio, registrando'
+                        self.latest_price = last_log.price
+                        self.save()
+                        LogChangeEntityPrice.new(self, yesterday_log.price, last_log.price).save()
+                    else:
+                        print 'No hubieron cambios'
+                except IndexError:
+                    pass
+            self.save()
         
         if self.shp and recursive:
             self.shp.update(recursive = True)

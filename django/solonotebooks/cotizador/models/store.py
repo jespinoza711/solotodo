@@ -35,6 +35,13 @@ class Store(models.Model):
             LogNewEntity.new(shpe).save()
             
         shpe.update_with_product(product)
+        
+    def set_shpe_prevent_availability_change_flag(self, flag):
+        from . import StoreHasProductEntity
+        shpes = StoreHasProductEntity.objects.filter(store = self)
+        for shpe in shpes:
+            shpe.prevent_availability_change = flag
+            shpe.save()
     
     class Meta:
         ordering = ['name']
