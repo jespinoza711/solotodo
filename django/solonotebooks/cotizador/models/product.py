@@ -18,6 +18,7 @@ class Product(models.Model):
     publicized_offer = models.ForeignKey('StoreHasProductEntity', null = True, blank = True, related_name = 'ntbk')
     ptype = models.ForeignKey(ProductType)
     
+    shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'chosen_by')
     min_price = models.IntegerField()
     week_visitor_count = models.IntegerField()
     week_discount = models.IntegerField()    
