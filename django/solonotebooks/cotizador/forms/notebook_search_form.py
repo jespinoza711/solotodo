@@ -84,13 +84,13 @@ class NotebookSearchForm(SearchForm):
         if key == 'processor':
             value = 'Procesador: ' + unicode(NotebookProcessor.objects.get(pk = pk_value))
         if key == 'ram_quantity':
-            value = unicode(NotebookRamQuantity.objects.get(pk = pk_value)) + ' de RAM'
+            value = unicode(NotebookRamQuantity.objects.get(pk = pk_value)) + u' o más de RAM'
         if key == 'ram_type':
             value = 'RAM ' + unicode(NotebookRamType.objects.get(pk = pk_value))
         if key == 'storage_type':
             value = 'Almacenamiento ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
-            value = unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
+            value = unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + u' o más de almacenamiento'
         if key == 'screen_size_family':
             value = 'Pantalla de ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))                
         if key == 'screen_resolution':
@@ -131,13 +131,13 @@ class NotebookSearchForm(SearchForm):
         if key == 'processor':
             value = 'Notebooks con procesadores ' + unicode(NotebookProcessor.objects.get(pk = pk_value))
         if key == 'ram_quantity':
-            value = 'Notebooks con ' + unicode(NotebookRamQuantity.objects.get(pk = pk_value)) + ' de RAM'
+            value = 'Notebooks con ' + unicode(NotebookRamQuantity.objects.get(pk = pk_value)) + u' o más de RAM'
         if key == 'ram_type':
             value = 'Notebooks con memoria RAM ' + unicode(NotebookRamType.objects.get(pk = pk_value))
         if key == 'storage_type':
             value = 'Notebooks con almacenamiento de tipo ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
-            value = 'Notebooks con ' + unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + ' de almacenamiento'
+            value = 'Notebooks con ' + unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + u' o más de almacenamiento'
         if key == 'screen_size_family':
             value = 'Notebooks con pantallas de ' + NotebookScreenSizeFamily.objects.get(pk = pk_value).titleText()
         if key == 'screen_resolution':

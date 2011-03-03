@@ -81,9 +81,9 @@ class ScreenSearchForm(SearchForm):
         if key == 'screen_type':
             value = unicode(ScreenType.objects.get(pk = pk_value))
         if key == 'min_size':
-            value = u'Tam. mínimo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
+            value = u'Tamaño mínimo: ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'max_size':
-            value = u'Tam. máximo de ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
+            value = u'Tamaño máximo: ' + unicode(ScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'resolution':
             value = u'Resolución mínima: ' + unicode(ScreenResolution.objects.get(pk = pk_value))
         if key == 'panel_type':
@@ -91,7 +91,7 @@ class ScreenSearchForm(SearchForm):
         if key == 'response_time':
             value = u'T. de respuesta max.: ' + unicode(ScreenResponseTime.objects.get(pk = pk_value))
         if key == 'refresh_rate':
-            value = u'T. de refresco mín.: ' + unicode(ScreenRefreshRate.objects.get(pk = pk_value))
+            value = u'T. de refresco mínima.: ' + unicode(ScreenRefreshRate.objects.get(pk = pk_value))
         if key == 'analog_tuner':
             choice = self.analog_tuner_choices[pk_value][1]
             value = u'Sintonizador análogo: ' + choice

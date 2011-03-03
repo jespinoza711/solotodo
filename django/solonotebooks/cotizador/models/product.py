@@ -1,6 +1,6 @@
 #-*- coding: UTF-8 -*-
 import operator
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
@@ -12,17 +12,15 @@ from django.template.loader import render_to_string
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
-    date_added = models.DateField()
+    date_added = models.DateTimeField(auto_now_add = True)
     ptype = models.ForeignKey(ProductType)
     
     shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'chosen_by')
-    week_visitor_count = models.IntegerField()
-    week_discount = models.IntegerField()    
-    
-    other = models.TextField()
-    long_description = models.TextField()
+    week_visitor_count = models.IntegerField(default = 0)
+    week_discount = models.IntegerField(default = 0)
+    long_description = models.TextField(default = ' ')
 
-    similar_products = models.CommaSeparatedIntegerField(max_length = 30)
+    similar_products = models.CommaSeparatedIntegerField(max_length = 30, default = '0')
     
     picture = ImageWithThumbnailsField(
         thumbnail = { 'size': (100, 100), },
@@ -49,6 +47,10 @@ class Product(models.Model):
     @staticmethod
     def get_valid():
         return Product.objects.filter(shp__isnull = False)
+        
+    def clean(self):
+        if not self.similar_products:
+            self.similar_products == '0'
     
     def save(self):
         super(Product, self).save()
@@ -56,7 +58,13 @@ class Product(models.Model):
             self.load_similar_products()
             super(Product, self).save()
             
-    def update(self):
+    def latest_price(self):
+        if self.shp and self.shp.shpe:
+            return self.shp.shpe.latest_price
+        else:
+            return 0
+            
+    def update(self, send_mails = True):
         from . import LogReviveProduct, LogChangeProductPrice, LogLostProduct, ProductPriceChange, LogReviveProduct
         print self
         
@@ -68,12 +76,12 @@ class Product(models.Model):
             
             log_price_change = True
             if not self.shp:
-                LogReviveProduct.new(self).send_notification_mails()
+                LogReviveProduct.new(self).send_notification_mails(send_mails)
                 log_price_change = False
             
             if self.shp and self.shp.shpe and shp.shpe.latest_price != self.shp.shpe.latest_price:
                 if log_price_change:
-                    LogChangeProductPrice.new(self, self.shp.shpe.latest_price, shp.shpe.latest_price).send_notification_mails()
+                    LogChangeProductPrice.new(self, self.shp.shpe.latest_price, shp.shpe.latest_price).send_notification_mails(send_mails)
                 ppc = ProductPriceChange()
                 ppc.product = self
                 ppc.price = shp.shpe.latest_price
@@ -85,7 +93,7 @@ class Product(models.Model):
             print 'El producto no tiene registros de disponibilidad'
 
             if self.shp:
-                 LogLostProduct.new(self).send_notification_mails()
+                 LogLostProduct.new(self).send_notification_mails(send_mails)
 
             self.shp = None
             
@@ -149,7 +157,7 @@ class Product(models.Model):
             
     def update_week_visits(self):
         t = date.today()
-        d = timedelta(days = 7)
+        d = timedelta(days = 1)
         self.week_visitor_count = len(self.productvisit_set.filter(date__gte = t - d))
         
     def generate_chart(self):
@@ -248,9 +256,11 @@ class Product(models.Model):
         clone_prod.id = None
         clone_prod.product_ptr.id = None
         clone_prod.product_ptr_id = None
-        clone_prod.date_added = date.today()
+        clone_prod.date_added = datetime.now()
         clone_prod.shp = None
         clone_prod.name += ' (clone)'
+        clone_prod.week_visitor_count = 0
+        clone_prod.week_discount = 0
         clone_prod.save()
         return clone_prod
     

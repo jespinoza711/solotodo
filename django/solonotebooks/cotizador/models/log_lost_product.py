@@ -21,8 +21,11 @@ class LogLostProduct(models.Model):
     def message(self):
         return str(self.product) + ' (<a href="/' + self.product.ptype.urlname + '/' + str(self.product.id) + '/">Link</a> / <a href="/admin/cotizador/' + self.product.ptype.adminurlname + '/' + str(self.product.id) + '/">Editar</a>)'
         
-    def send_notification_mails(self):
+    def send_notification_mails(self, send_mails):
         from . import MailLostProduct
+        
+        if not send_mails:
+            return
     
         active_subscriptions = ProductSubscription.objects.filter(product = self.product).filter(email_notifications = True).filter(user__is_active = True).filter(is_active = True)
         for subscription in active_subscriptions:
