@@ -33,6 +33,7 @@ from cintegral import Cintegral
 from rigam import Rigam
 from pc_ofertas import PCOfertas
 from pc_express import PCExpress
+from top_pc import TopPC
 
 __all__ = [ 'ProductData',
             'PCFactory',
@@ -68,4 +69,5 @@ __all__ = [ 'ProductData',
             'Cintegral',
             'Rigam',
             'PCOfertas',
-            'PCExpress']
+            'PCExpress',
+            'TopPC']
