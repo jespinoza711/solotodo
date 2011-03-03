@@ -10,12 +10,6 @@ site, it grabs every single model of the stores with fetchers and inserts
 them into the database, logging price changes, new models and disappearing
 models'''
 def main():
-
-    for shp in StoreHasProduct.objects.all():
-        print shp
-        shp.prevent_availability_change = False
-        shp.save()
-
     stores = [NotebookCenter(), PackardBell(), LaPolar(), Bym(), Clie(), Falabella(), ENotebook(), FullNotebook(), Paris(), PCFactory(), Sym(), TecnoCl(), Wei(), Sistemax(), Dell(), Webco(), Racle(), Magens(), GlobalMac(), Syd(), MacOnline(), Impulso(), Peta(), HPOnline(), PortatilChile(), TecnoGroup(), Ripley(), AbcDin(), Cintegral(), Rigam(), PCOfertas(), Bip(), RkNotebooks(), PCExpress(), TopPC(), Compumanque()]
     
     for store in stores:

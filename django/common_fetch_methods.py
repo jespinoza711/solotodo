@@ -44,13 +44,16 @@ def update_availability_and_price():
     VideoCardGpu.update_all_tdmark_scores()
     Processor.update_all_pcmark_scores()
         
-def get_store_products(fetch_store):
+def get_store_products(fetch_store, reset_prevent_availability_change = True):
     try:
         store = Store.objects.get(name = fetch_store.name)
     except Store.DoesNotExist:
         store = Store()
         store.name = fetch_store.name
         store.save()
+        
+    store.set_shpe_prevent_availability_change_flag(False)
+        
     try:
         products = fetch_store.get_products()
         save_products(products, store)
@@ -58,8 +61,4 @@ def get_store_products(fetch_store):
         print e
         print('Error al obtener los productos de ' + store.name)
         log_message('Error al obtener los productos de ' + store.name + ': ' + str(e))
-        shpes = StoreHasProductEntity.objects.filter(store = store)
-        for shpe in shpes:
-            if shpe.shp:
-                shpe.shp.prevent_availability_change = True
-                shpe.shp.save()
+        store.set_shpe_prevent_availability_change_flag(True)
