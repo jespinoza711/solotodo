@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Bip:
+class Bip(FetchStore):
     name = 'Bip'
+    use_existing_links = False
 
     # Method that extracts the <a> tags to products given the URL of the catalog page
     def extract_links(self, pageUrl):
@@ -50,8 +51,7 @@ class Bip:
         return productData
 
     # Main method
-    def get_products(self):
-        print 'Getting ' + self.name + ' products'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.bip.cl/ecommerce/'
         urlBuscarProductos = 'index.php?modulo=busca&'
@@ -86,5 +86,5 @@ class Bip:
                     product_links.append(urlBase + rawLink['href'])
                 
                 page_number += 1
-        
-        return ProductData.retrieve_products_data(self, product_links)
+                
+        return product_links

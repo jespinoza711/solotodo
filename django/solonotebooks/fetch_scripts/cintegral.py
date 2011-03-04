@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Cintegral:
+class Cintegral(FetchStore):
     name = 'Cintegral'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
@@ -29,23 +30,16 @@ class Cintegral:
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting ' + self.name + ' products'
-        # Basic data of the target webpage and the specific catalog
+    def retrieve_product_links(self):
         url_base = 'http://www.cintegral.cl/index.php'
-        
-        # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
         product_links = []
         
-        url_extensions = [  '84',   # Netbooks
-                            '9',    # Notebooks
-                            '14',   # Tarjetas de video
+        url_extensions = [  #'84',   # Netbooks
+                            #'9',    # Notebooks
+                            #'14',   # Tarjetas de video
                             '3',    # Procesadores
-                            '1',    # LCD
+                            #'1',    # LCD
                             ]
                             
         for url_extension in url_extensions:
@@ -54,12 +48,8 @@ class Cintegral:
             while True:
                 urlWebpage = url_base + '?op=cat&id=' + url_extension + '&pagina=' + str(page_number)
 
-                # Obtain and parse HTML information of the base webpage
                 base_data = browser.open(urlWebpage).get_data()
                 base_soup = BeautifulSoup(base_data)
-                
-
-                # Obtain the links to the other pages of the catalog (2, 3, ...)
                 links = base_soup.findAll('a', { 'class' : 'style4' })[:-4]
                 
                 if not links:
@@ -71,5 +61,5 @@ class Cintegral:
                     
                 page_number += 1
 
-        return ProductData.retrieve_products_data(self, product_links, use_existing_links = False)
+        return product_links
 
