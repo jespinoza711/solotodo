@@ -35,11 +35,11 @@ class Cintegral(FetchStore):
         browser = mechanize.Browser()
         product_links = []
         
-        url_extensions = [  #'84',   # Netbooks
-                            #'9',    # Notebooks
-                            #'14',   # Tarjetas de video
+        url_extensions = [  '84',   # Netbooks
+                            '9',    # Notebooks
+                            '14',   # Tarjetas de video
                             '3',    # Procesadores
-                            #'1',    # LCD
+                            '1',    # LCD
                             ]
                             
         for url_extension in url_extensions:
