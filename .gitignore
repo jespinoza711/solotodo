@@ -9,6 +9,7 @@ django/solonotebooks/settings.py
 apache/blog/wp-content/uploads/**/**/*
 apache/sitemap.xml
 apache/robots.txt
+django/*.txt
 *~
 *.pyc
 *.db

@@ -26,8 +26,12 @@ class Bip:
 
         productData = ProductData()
         
-        stock_info = soup.find('td', { 'class' : 'disp' }).contents
-        stock_string = ''.join(str(stock) for stock in stock_info)
+        stock_info = soup.find('td', { 'class' : 'disp' })
+        
+        if not stock_info:
+            return None
+        
+        stock_string = ''.join(str(stock) for stock in stock_info.contents)
         
         if 'Agotado' in stock_string:
             return None
@@ -43,21 +47,17 @@ class Bip:
         productData.url = productUrl
         productData.comparison_field = productData.url	    
 
-        print productData
         return productData
 
     # Main method
     def get_products(self):
-        print 'Getting Bip notebooks'
+        print 'Getting ' + self.name + ' products'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.bip.cl/ecommerce/'
         urlBuscarProductos = 'index.php?modulo=busca&'
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        productsData = []
         
         url_extensions = [  'categoria=191',                     # Netbooks
                             'categoria=166',                     # Notebooks
@@ -71,7 +71,7 @@ class Bip:
                             'categoria=19'                       # LCD
                             ]
                             
-        productLinks = []
+        product_links = []
                             
         for url_extension in url_extensions:
             page_number = 0
@@ -83,15 +83,8 @@ class Bip:
                 if not rawLinks:
                     break
                 for rawLink in rawLinks:
-                    productLinks.append(urlBase + rawLink['href'])
+                    product_links.append(urlBase + rawLink['href'])
                 
                 page_number += 1
         
-                
-        for productLink in productLinks:
-            prod = self.retrieve_product_data(productLink)
-            if prod:
-                productsData.append(prod)
-        
-        return productsData
-
+        return ProductData.retrieve_products_data(self, product_links)
