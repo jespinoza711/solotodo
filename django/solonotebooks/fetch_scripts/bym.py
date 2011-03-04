@@ -11,7 +11,10 @@ class Bym:
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        base_data = browser.open(product_link).get_data()
+        try:
+            base_data = browser.open(product_link).get_data()
+        except:
+            return None
         base_soup = BeautifulSoup(base_data)
         
         product_data = ProductData()
@@ -31,12 +34,11 @@ class Bym:
         product_data.url = product_link.split('&osCsid')[0]
         product_data.comparison_field = product_data.url	 
         
-        print product_data
         return product_data
 
     # Main method
     def get_products(self):
-        print 'Getting Bym notebooks'
+        print 'Getting ' + self.name + ' products'
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.ttchile.cl/'
         
@@ -44,7 +46,7 @@ class Bym:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        products_data = []
+        product_links = []
         
         url_extensions = [  
                             'subpro.php?idCat=21&idSubCat=20',  # Notebooks
@@ -70,13 +72,9 @@ class Bym:
                     break
                 
                 for productLink in productLinks:
-                    product_link = urlBase + productLink
-                    
-                    product = self.retrieve_product_data(product_link)
-                    if product:
-                        products_data.append(product)
+                    product_links.append(urlBase + productLink)
                 
                 page_number += 1
 
-        return products_data
+        return ProductData.retrieve_products_data(self, product_links, use_existing_links = True)
 

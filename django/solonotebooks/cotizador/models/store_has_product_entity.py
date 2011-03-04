@@ -28,6 +28,9 @@ class StoreHasProductEntity(models.Model):
             return unicode(self.shp.store) + ' - ' + self.custom_name
         except:
             return self.custom_name
+            
+    def dprint(self):
+        return str(self.id) + ' ' + unicode(self) + '\n' + self.url
         
     def pretty_price(self):
         return prettyPrice(self.latest_price)

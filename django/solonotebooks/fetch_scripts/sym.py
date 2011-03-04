@@ -87,10 +87,10 @@ class Sym:
                     
                 page_number += 1
                     
-            for productLink in productLinks:
-                prod = self.retrieve_product_data(productLink)
-                if prod:
-                    productsData.append(prod)
+        for productLink in productLinks:
+            prod = self.retrieve_product_data(productLink)
+            if prod:
+                productsData.append(prod)
                     
 
         return productsData

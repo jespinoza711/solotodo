@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import mechanize
+from mechanize import HTTPError
 import re
 import htmlentitydefs
 from BeautifulSoup import BeautifulSoup
@@ -23,8 +24,15 @@ class AbcDin:
     
     def retrieve_product_data(self, product_link):
         product_details_url = product_link.split('#')[1]
-        product_webpage = mechanize.urlopen(product_details_url)
+        try:
+            product_webpage = mechanize.urlopen(product_details_url)
+        except HTTPError, e:
+            return None
         product_soup = BeautifulSoup(product_webpage.read())
+        
+        av_span = product_soup.find('div', { 'id': 'caja-compra' }).find('span')
+        if av_span:
+            return None
         
         product_name = product_soup.find('td', { 'id': 'mainDescr' }).find('h2').contents[0].encode('ascii', 'ignore')
         try:
@@ -38,22 +46,17 @@ class AbcDin:
         product_data.price = product_price
         product_data.comparison_field = product_link
         
-        print product_data
-        
         return product_data
 
     # Main method
     def get_products(self):
-        print 'Getting AbcDin notebooks'
+        print 'Getting ' + self.name + ' products'
         
         cookies = mechanize.CookieJar()
         opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
         opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
                  ("From", "responsible.person@example.com")]
         mechanize.install_opener(opener)
-        
-        # Array containing the data for each product
-        products_data = []
         
         xml_resources = [
                     'notebooks',
@@ -78,9 +81,4 @@ class AbcDin:
                 link = 'https://www.abcdin.cl/abcdin/abcdin.nsf#https://www.abcdin.cl' + div.find('a')['href']
                 product_links.append(link)
                 
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            products_data.append(product)
-                
-        return products_data
-
+        return ProductData.retrieve_products_data(self, product_links, use_existing_links = True)
