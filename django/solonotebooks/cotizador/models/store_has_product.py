@@ -15,16 +15,24 @@ class StoreHasProduct(models.Model):
     
     def update(self, recursive = False):
         print self
-        shpes = self.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
-        if shpes:
-            self.shpe = shpes[0]
-        else:
-            self.shpe = None
-            
-        self.save()
+        product = self.product
         
-        if self.product and recursive:
-            self.product.update()
+        if self.storehasproductentity_set.count() == 0:
+            if product.shp == self:
+                product.shp = None
+                product.save()
+            self.delete()
+        else:
+            shpes = self.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
+            if shpes:
+                self.shpe = shpes[0]
+            else:
+                self.shpe = None
+                
+            self.save()
+        
+        if recursive:
+            product.update()
     
     def __unicode__(self):
         return unicode(self.product)
