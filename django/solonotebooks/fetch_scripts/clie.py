@@ -4,18 +4,26 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Clie:
+class Clie(FetchStore):
     name = 'Clie'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
+        availability_text = product_soup.findAll('td', { 'class': 'texto-neg-bold' })[-1].find('a').string.strip()
+        if availability_text[0] == '0':
+            return None
+        
         product_name = product_soup.find('td', { 'class': 'texto-neg-bold-ficha' }).string.split('&#8226;')[1].strip()
         product_price = int(product_soup.find('td', { 'background': 'images/ficha/bg_precio_normal_d.gif' }).find('a').string.replace('$', '').replace('.', ''))
+        
+        if not product_price:
+            return None
         
         product_data = ProductData()
         product_data.custom_name = product_name
@@ -23,12 +31,10 @@ class Clie:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting Clie notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.clie.cl/'
         urlBuscarProductos = '?ver=4&categoria_producto='
@@ -97,10 +103,6 @@ class Clie:
                     product_links.append(urlBase + link)
                     
                 num_page += 1
-                
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            products_data.append(product)
 
-        return products_data
+        return product_links
 

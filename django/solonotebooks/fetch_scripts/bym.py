@@ -4,17 +4,21 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Bym:
+class Bym(FetchStore):
     name = 'Bym'
+    use_existing_links = True
     
-    def retrieve_product_data(self, product_link):
+    def retrieve_product_data(self, product_link, already_tried = False):
         browser = mechanize.Browser()
         try:
             base_data = browser.open(product_link).get_data()
         except:
-            return None
+            if already_tried:
+                return None
+            else:
+                return self.retrieve_product_data(product_link, already_tried = True)
         base_soup = BeautifulSoup(base_data)
         
         product_data = ProductData()
@@ -36,16 +40,9 @@ class Bym:
         
         return product_data
 
-    # Main method
-    def get_products(self):
-        print 'Getting ' + self.name + ' products'
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.ttchile.cl/'
-        
-        # Browser initialization
+    def retrieve_product_links(self):
+        urlBase = 'http://www.ttchile.cl/'        
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
         product_links = []
         
         url_extensions = [  
@@ -61,8 +58,6 @@ class Bym:
             
             while True:
                 urlWebpage = urlBase + url_extension + '&pagina=' + str(page_number)
-
-                # Obtain and parse HTML information of the base webpage
                 base_data = browser.open(urlWebpage).get_data()
                 base_soup = BeautifulSoup(base_data)
                 
@@ -76,5 +71,5 @@ class Bym:
                 
                 page_number += 1
 
-        return ProductData.retrieve_products_data(self, product_links, use_existing_links = True)
+        return product_links
 

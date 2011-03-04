@@ -1,4 +1,5 @@
 from product_data import ProductData
+from fetch_store import FetchStore
 from pcfactory import PCFactory
 from wei import Wei
 from bip import Bip
@@ -36,7 +37,9 @@ from pc_express import PCExpress
 from top_pc import TopPC
 from compumanque import Compumanque
 
-__all__ = [ 'ProductData',
+__all__ = [ 
+            'ProductData',
+            'FetchStore',
             'PCFactory',
             'Wei',
             'Bip',

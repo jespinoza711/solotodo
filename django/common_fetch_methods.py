@@ -54,7 +54,11 @@ def get_store_products(fetch_store, update_shpes_on_finish = False):
     store.set_shpe_prevent_availability_change_flag(False)
         
     try:
-        products = fetch_store.get_products()
+        if update_shpes_on_finish:
+            for shpe in store.storehasproductentity_set.all():
+                shpe.delete_today_history()
+        
+        products = fetch_store.get_products()        
         save_products(products, store)
         
         if update_shpes_on_finish:

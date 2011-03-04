@@ -35,6 +35,14 @@ class StoreHasProductEntity(models.Model):
     def pretty_price(self):
         return prettyPrice(self.latest_price)
         
+    def delete(self):
+        shp = None
+        if self.shp:
+            shp = self.shp
+        super(StoreHasProductEntity, self).delete()
+        if shp:
+            shp.update(recursive = True)
+        
     def update(self, recursive = False):
         from . import LogLostEntity, LogChangeEntityPrice
         print ''
@@ -72,19 +80,33 @@ class StoreHasProductEntity(models.Model):
                         print 'No hubieron cambios'
                 except IndexError:
                     pass
-            self.save()
+        else:
+            if self.is_available:
+                self.is_available = False
+        self.save()
         
         if self.shp and recursive:
             self.shp.update(recursive = True)
             
-    def update_price(self):
+    def delete_today_history(self):
+        from . import StoreProductHistory
+        try:
+            sph = StoreProductHistory.objects.get(date = date.today(), registry = self)
+            sph.delete()
+        except StoreProductHistory.DoesNotExist:
+            pass
+            
+    def retrieve_product(self):
         from solonotebooks.fetch_scripts import *
         fetch_store = eval(self.store.classname + '()')
-        product = fetch_store.retrieve_product_data(self.url)
+        return fetch_store.retrieve_product_data(self.url)
+            
+    def update_price(self):
+        product = self.retrieve_product()
         if product:
             self.update_with_product(product)
         else:
-            self.is_available = False
+            self.delete_today_history()
         self.update(recursive = True)
             
     def update_with_product(self, product):

@@ -7,20 +7,19 @@ import htmlentitydefs
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
 def unescape(s):
     s = s.replace("&lt;", "<")
     s = s.replace("&gt;", ">")
     s = s.replace('&quot;', '"')
     s = s.replace('&apos;', "'")
-    # this has to be last:
     s = s.replace("&amp;", "&")
     return s
 
-
-class AbcDin:
+class AbcDin(FetchStore):
     name = 'AbcDin'
+    use_existing_links = True
     
     def retrieve_product_data(self, product_link):
         product_details_url = product_link.split('#')[1]
@@ -48,10 +47,7 @@ class AbcDin:
         
         return product_data
 
-    # Main method
-    def get_products(self):
-        print 'Getting ' + self.name + ' products'
-        
+    def retrieve_product_links(self):
         cookies = mechanize.CookieJar()
         opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
         opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
@@ -81,4 +77,4 @@ class AbcDin:
                 link = 'https://www.abcdin.cl/abcdin/abcdin.nsf#https://www.abcdin.cl' + div.find('a')['href']
                 product_links.append(link)
                 
-        return ProductData.retrieve_products_data(self, product_links, use_existing_links = True)
+        return product_links
