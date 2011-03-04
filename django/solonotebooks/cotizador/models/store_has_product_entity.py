@@ -92,8 +92,8 @@ class StoreHasProductEntity(models.Model):
         
         if self.custom_name != product.custom_name:
             print 'El nombre cambio:'
-            print 'De: ' + self.custom.name
-            print 'A: ' + product.custom.name
+            print 'De: ' + self.custom_name
+            print 'A: ' + product.custom_name
             self.custom_name = product.custom_name
         
         print 'Viendo si esta registrado como desaparecido'
