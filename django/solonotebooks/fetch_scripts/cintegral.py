@@ -17,18 +17,20 @@ class Cintegral:
         product_name = product_soup.find('td', { 'class': 'stylenomprod' }).string.encode('ascii', 'ignore').strip()
         product_price = int(product_soup.find('td', { 'class': 'styleprod' }).string.replace('$', '').replace('.', ''))
         
+        if not product_price:
+            return None
+        
         product_data = ProductData()
         product_data.custom_name = product_name
         product_data.price = product_price
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
     def get_products(self):
-        print 'Getting Cintegral notebooks'
+        print 'Getting ' + self.name + ' products'
         # Basic data of the target webpage and the specific catalog
         url_base = 'http://www.cintegral.cl/index.php'
         
@@ -68,10 +70,6 @@ class Cintegral:
                     product_links.append(link)
                     
                 page_number += 1
-        
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            products_data.append(product)
 
-        return products_data
+        return ProductData.retrieve_products_data(self, product_links, use_existing_links = False)
 

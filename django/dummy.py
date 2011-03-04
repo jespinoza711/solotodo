@@ -19,7 +19,7 @@ def main():
         print shpe.url
         p = fs.retrieve_product_data(shpe.url)
         if shpe.is_available and not p:
-            print a_shpe.dprint()
+            print shpe.dprint()
             print 'Should not be None!'
         elif not shpe.is_available and p:
             print shpe.dprint()
