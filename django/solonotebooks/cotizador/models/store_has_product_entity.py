@@ -89,6 +89,13 @@ class StoreHasProductEntity(models.Model):
             
     def update_with_product(self, product):
         from . import StoreProductHistory, LogReviveEntity
+        
+        if self.custom_name != product.custom_name:
+            print 'El nombre cambio:'
+            print 'De: ' + self.custom.name
+            print 'A: ' + product.custom.name
+            self.custom_name = product.custom_name
+        
         print 'Viendo si esta registrado como desaparecido'
         if not self.is_available:
             print 'Estaba desaparecido, registrando resucitacion'
@@ -98,7 +105,6 @@ class StoreHasProductEntity(models.Model):
         print 'Guardando estado del producto en tienda'
         self.save()
 
-        # We keep track of prices for every day, and we need to avoid clashes
         print 'Viendo si ya se solicito un catastro para hoy'
         today_history = StoreProductHistory.objects.filter(date = date.today()).filter(registry = self)
         if len(today_history) == 0:
