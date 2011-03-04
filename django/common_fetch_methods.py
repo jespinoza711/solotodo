@@ -36,7 +36,6 @@ def update_availability_and_price():
         shp.update()
         
     print 'Paso 3: Actualizando Productos'
-
     for product in Product.objects.all():
         product.update(send_mails = True)
         
@@ -44,7 +43,7 @@ def update_availability_and_price():
     VideoCardGpu.update_all_tdmark_scores()
     Processor.update_all_pcmark_scores()
         
-def get_store_products(fetch_store, reset_prevent_availability_change = True):
+def get_store_products(fetch_store, update_shpes_on_finish = False):
     try:
         store = Store.objects.get(name = fetch_store.name)
     except Store.DoesNotExist:
@@ -57,6 +56,11 @@ def get_store_products(fetch_store, reset_prevent_availability_change = True):
     try:
         products = fetch_store.get_products()
         save_products(products, store)
+        
+        if update_shpes_on_finish:
+            for shpe in store.storehasproductentity_set.all():
+                shpe.update(recursive = True)
+            
     except Exception, e:
         print e
         print('Error al obtener los productos de ' + store.name)
