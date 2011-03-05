@@ -30,7 +30,12 @@ class StoreHasProductEntity(models.Model):
             return self.custom_name
             
     def dprint(self):
-        return str(self.id) + ' ' + unicode(self) + '\n' + self.url
+        message = str(self.id) + ' ' + unicode(self) + '\n' + self.url + '\n'
+        if self.is_available:
+            message += 'Disponible'
+        else:
+            message += 'No disponible'
+        return message + '\n'
         
     def pretty_price(self):
         return prettyPrice(self.latest_price)

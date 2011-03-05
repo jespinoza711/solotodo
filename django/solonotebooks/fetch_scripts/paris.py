@@ -53,7 +53,7 @@ class Paris:
                     # Notebooks
                     'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51049202_18877035_si_2__18877035,50999203,51049192,51049202_',
                     # LCD
-                    'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056205_20096521_si_2__20096521,51056194,51056195,51056205_'
+                    #'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056205_20096521_si_2__20096521,51056194,51056195,51056205_'
                     ]
         
         product_links = []          
@@ -81,8 +81,11 @@ class Paris:
                 product_links.append(link)
 
         for product_link in product_links:
+            print product_link
+            '''
             product = self.retrieve_product_data(product_link)
             if product:
                 products_data.append(product)                
+            '''
 
         return products_data
