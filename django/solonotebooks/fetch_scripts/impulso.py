@@ -4,14 +4,18 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Impulso:
+class Impulso(FetchStore):
     name = 'Impulso'
+    use_existing_links = False
 
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
+        try:
+            product_data = browser.open(product_link).get_data()
+        except mechanize.HTTPError:
+            return None
         product_soup = BeautifulSoup(product_data)
         
         product_title = product_soup.find('h2').string
@@ -22,21 +26,17 @@ class Impulso:
         product_data.price = product_price
         product_data.url = product_link
         product_data.comparison_field = product_link
-        print product_data
         
         return product_data
 
-    def get_products(self):
-        print 'Getting Impulso notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://impulso.cl'
         urlBuscarProductos = '/prestashop/'
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        productsData = []
+
         product_links = []
         
         url_extensions = [  
@@ -62,11 +62,5 @@ class Impulso:
             for cell in prod_cells:
                 product_links.append(cell.find('a')['href'])
                 
-            
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                productsData.append(product)
-                
-        return productsData
+        return product_links
 

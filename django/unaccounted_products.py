@@ -20,7 +20,7 @@ def main():
 
         shpes = StoreHasProductEntity.objects.filter(store = store, is_available = False)
         for idx, shpe in enumerate(shpes):
-            print str(idx) + ' de ' + str(shpes.count())
+            print str(idx) + ' de ' + str(shpes.count()) + ': ' + shpe.url
             product = shpe.retrieve_product()
             if product:
                 print shpe.dprint()
