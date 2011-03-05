@@ -34,6 +34,14 @@ class Product(models.Model):
     def pretty_display(self):
         return unicode(self)
         
+    def dprint(self):
+        message = str(self.id) + ' ' + unicode(self) + '\n'
+        if self.shp:
+            message += 'Disponible'
+        else:
+            message += 'No disponible'
+        return message + '\n'
+        
     @staticmethod
     def get_all_ordered():
         from solonotebooks.cotizador.models import *

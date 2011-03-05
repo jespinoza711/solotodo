@@ -17,21 +17,13 @@ def main():
         
     for store in stores:
         fs = eval(store.classname + '()')
-        
-        '''
-        default_products = [product.url for product in fs.get_products()]
-        all_products = [product.url for product in fs.get_products(use_existing_links = True)]
-        
-        for link in all_products:
-            if link not in default_products:
-                unaccounted_links.append(link)
-        '''
+
         shpes = StoreHasProductEntity.objects.filter(store = store, is_available = False)
         for idx, shpe in enumerate(shpes):
             print str(idx) + ' de ' + str(shpes.count())
-            print shpe.dprint()
             product = shpe.retrieve_product()
             if product:
+                print shpe.dprint()
                 unaccounted_links.append(shpe.url)
             
     print '======================'

@@ -4,7 +4,10 @@ class NotebookStorageDriveRpm(models.Model):
     value = models.IntegerField()
     
     def __unicode__(self):
-        return unicode(self.value) + ' rpm'
+        result = unicode(self.value) + ' rpm'
+        if not self.value:
+            result += ' (SSD)'
+        return result
     
     class Meta:
         app_label = 'cotizador'
