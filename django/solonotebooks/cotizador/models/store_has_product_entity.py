@@ -113,12 +113,10 @@ class StoreHasProductEntity(models.Model):
         self.update(recursive = True)
             
     def update_with_product(self, product):
-        from . import StoreProductHistory, LogReviveEntity
+        from . import StoreProductHistory, LogReviveEntity, LogChangeEntityName
         
         if self.custom_name != product.custom_name:
-            print 'El nombre cambio:'
-            print 'De: ' + self.custom_name
-            print 'A: ' + product.custom_name
+            LogChangeEntityName.new(self, self.custom_name, product.custom_name)
             self.custom_name = product.custom_name
         
         print 'Viendo si esta registrado como desaparecido'

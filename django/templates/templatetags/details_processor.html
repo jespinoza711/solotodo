@@ -20,6 +20,8 @@
 <br />
 <strong>Voltajes: </strong> {{ processor.pretty_voltages }}
 <br />
+<strong>TDP: </strong> {{ processor.pretty_tdp }}
+<br />
 <strong>64-bit: </strong> {% if processor.is_64_bit %} Sí {% else %} No {% endif %}
 <br />
 <strong>SMP (Hyper-threading): </strong> {% if processor.has_smp %} Sí {% else %} No {% endif %}

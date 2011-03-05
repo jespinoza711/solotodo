@@ -5,13 +5,6 @@ from datetime import date, datetime, timedelta
 from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.utils import *
-
-# Method to write a raw string as a log message
-def log_message(message):
-    log_message = LogEntryMessage()
-    log_message.logEntry, created = LogEntry.objects.get_or_create(date = date.today())
-    log_message.message = message
-    log_message.save()
     
 '''Method that takes a list of ProductData objects and the store they came from,
 checks whether they already exists, if they do, it checks for price differences,
@@ -64,9 +57,20 @@ def get_store_products(fetch_store, update_shpes_on_finish = False):
         if update_shpes_on_finish:
             for shpe in store.storehasproductentity_set.all():
                 shpe.update(recursive = True)
+
+        try:                
+            log_error = LogFetchStoreError.objects.get(log_entry__date = date.today(), store = store)
+            log_error.delete()
+        except LogFetchStoreError.DoesNotExist, e:
+            pass
             
     except Exception, e:
         print e
         print('Error al obtener los productos de ' + store.name)
-        log_message('Error al obtener los productos de ' + store.name + ': ' + str(e))
+        
+        try:                
+            log_error = LogFetchStoreError.objects.get(log_entry__date = date.today(), store = store)
+        except LogFetchStoreError.DoesNotExist, ex:
+            LogFetchStoreError.new(store, str(e))
+        
         store.set_shpe_prevent_availability_change_flag(True)

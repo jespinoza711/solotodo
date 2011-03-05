@@ -9,6 +9,19 @@
 {% for log in last_logs %}
     <h3>{{ log.date }}</h3>
     
+    <h4>Cambios de nombre</h4>
+    
+    {% if log.logchangeentityname_set.all %}
+        <ul>
+        {% for log in log.logchangeentityname_set.all %}
+            <li>{{ log.message|safe }}</li>
+        {% endfor %}
+        </ul>    
+        <br />
+    {% else %}
+        <p>No se reportaron cambios de nombre</p>
+    {% endif %}
+    
     <h4>Nuevas entidades</h4>
     
     {% if log.lognewentity_set.all %}
@@ -17,6 +30,7 @@
             <li>{{ log_new_entity.message|safe }}</li>
         {% endfor %}
         </ul>    
+        <br />
     {% else %}
         <p>No se reportaron nuevas entidades</p>
     {% endif %}
@@ -29,6 +43,7 @@
             <li>{{ log_lost_entity.message|safe }}</li>
         {% endfor %}
         </ul>    
+        <br />
     {% else %}
         <p>No se reportaron pérdidas de entidades</p>
     {% endif %}
@@ -41,6 +56,7 @@
             <li>{{ log_revive_entity.message|safe }}</li>
         {% endfor %}
         </ul>    
+        <br />
     {% else %}
         <p>No se reportaron resucitaciones de entidades</p>
     {% endif %}    
@@ -53,6 +69,7 @@
             <li>{{ log_change_entity_price.message|safe }}</li>
         {% endfor %}
         </ul>    
+        <br />
     {% else %}
         <p>No se reportaron cambios de precio en las entidades</p>
     {% endif %}
@@ -65,6 +82,7 @@
             <li>{{ log_lost_product.message|safe }}</li>
         {% endfor %}
         </ul>    
+        <br />
     {% else %}
         <p>No se reportaron pérdidas de productos</p>
     {% endif %}
@@ -76,7 +94,8 @@
         {% for log_revive_product in log.logreviveproduct_set.all %}
             <li>{{ log_revive_product.message|safe }}</li>
         {% endfor %}
-        </ul>    
+        </ul>
+        <br />
     {% else %}
         <p>No se reportaron resucitaciones de productos</p>
     {% endif %}    
@@ -89,18 +108,20 @@
             <li>{{ log_change_product_price.message|safe }}</li>
         {% endfor %}
         </ul>    
+        <br />
     {% else %}
         <p>No se reportaron cambios de precio en los productos</p>
     {% endif %}
 
     <h4>Errores de recepción</h4>
     
-    {% if log.logentrymessage_set.all %}    
+    {% if log.logfetchstoreerror_set.all %}    
         <ul>
-            {% for log_entry in log.logentrymessage_set.all %}
-                <li>{{ log_entry|safe }}</li>
+            {% for log in log.logfetchstoreerror_set.all %}
+                <li>{{ log.print_message }}</li>
             {% endfor %}
         </ul>
+        <br />
     {% else %}
         <p>No se reportaron errores</p>
     {% endif %}        

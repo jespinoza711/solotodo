@@ -136,7 +136,13 @@ class Processor(Product):
             return 'Desconocido'
         else:
             return str(self.min_voltage) + ' - ' + str(self.max_voltage) + ' mV'
-        
+            
+    def pretty_tdp(self):
+        if not self.tdp:
+            return 'Desconocido'
+        else:
+            return str(self.tdp) + ' W'
+                    
     def pretty_frequency(self):
         return unicode(self.frequency) + ' MHz'
         

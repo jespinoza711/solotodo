@@ -54,6 +54,7 @@ from solonotebooks.cotizador.models.product_comment import ProductComment
 from solonotebooks.cotizador.models.product_picture import ProductPicture
 from solonotebooks.cotizador.models.store_product_history import StoreProductHistory
 from solonotebooks.cotizador.models.log_entry import LogEntry
+from solonotebooks.cotizador.models.log_change_entity_name import LogChangeEntityName
 from solonotebooks.cotizador.models.log_entry_message import LogEntryMessage
 from solonotebooks.cotizador.models.external_visit import ExternalVisit
 from solonotebooks.cotizador.models.advertisement_position import AdvertisementPosition
@@ -62,6 +63,7 @@ from solonotebooks.cotizador.models.advertisement_visit import AdvertisementVisi
 from solonotebooks.cotizador.models.search_registry import SearchRegistry
 from solonotebooks.cotizador.models.product_subscription import ProductSubscription
 from solonotebooks.cotizador.models.user_profile import UserProfile
+from solonotebooks.cotizador.models.log_fetch_store_error import LogFetchStoreError
 from solonotebooks.cotizador.models.log_new_entity import LogNewEntity
 from solonotebooks.cotizador.models.log_revive_entity import LogReviveEntity
 from solonotebooks.cotizador.models.log_lost_entity import LogLostEntity
@@ -197,6 +199,8 @@ __all__ = [
             'SearchRegistry',
             'ProductSubscription',
             'UserProfile',
+            'LogChangeEntityName',
+            'LogFetchStoreError',
             'LogNewEntity',
             'LogReviveEntity',
             'LogChangeEntityPrice',            

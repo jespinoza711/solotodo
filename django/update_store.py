@@ -13,4 +13,3 @@ def main():
 if __name__ == '__main__':
     print datetime.now()
     main()
-    
