@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
 class PortatilChile:
     name = 'PortatilChile'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
@@ -23,12 +24,10 @@ class PortatilChile:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting PortatilChile notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.portatilchile.cl/modules/rmms/'
         
@@ -52,10 +51,5 @@ class PortatilChile:
             link = urlBase + productCell.find('a')['href']
             product_links.append(link)
 
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
-
-        return products_data
+        return product_links
 

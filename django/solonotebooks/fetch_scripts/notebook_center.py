@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class NotebookCenter:
+class NotebookCenter(FetchStore):
     name = 'NotebookCenter'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
@@ -26,22 +27,17 @@ class NotebookCenter:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
 
     # Main method
-    def get_products(self):
-        print 'Getting NotebookCenter notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.notebookcenter.cl/'
         urlBuscarProductos = 'centrodetalle.php'
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
         
         url_extensions = [  '?id_categoria=308', # Macbook Air
                             '?id_categoria=307', # Macbook Pro
@@ -89,10 +85,4 @@ class NotebookCenter:
 
                 index += 1
 
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
-
-        return products_data
-
+        return product_links

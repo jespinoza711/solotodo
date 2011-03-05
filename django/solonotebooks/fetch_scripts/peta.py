@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Peta:
+class Peta(FetchStore):
     name = 'Peta'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link, already_tried = False):
         browser = mechanize.Browser()
@@ -29,20 +30,15 @@ class Peta:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting Peta notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.peta.cl/'
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
         
         url_extensions = [  'computadores-1/netbooks.html',
                             'computadores-1/notebooks.html',
@@ -85,11 +81,6 @@ class Peta:
                     break
                     
                 pageNumber += 1
-                
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
 
-        return products_data
+        return product_links
 

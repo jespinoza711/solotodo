@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup, ResultSet
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Paris:
+class Paris(FetchStore):
     name = 'Paris'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
@@ -34,26 +35,18 @@ class Paris:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
 
     # Main method
-    def get_products(self):
-        print 'Getting Paris notebooks'
-        # Basic data of the target webpage and the specific catalog
-        
-        # Browser initialization
+    def retrieve_product_links(self):
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
         
         urls = [
                     # Notebooks
                     'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51049202_18877035_si_2__18877035,50999203,51049192,51049202_',
                     # LCD
-                    #'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056205_20096521_si_2__20096521,51056194,51056195,51056205_'
+                    'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056205_20096521_si_2__20096521,51056194,51056195,51056205_'
                     ]
         
         product_links = []          
@@ -80,12 +73,4 @@ class Paris:
                 
                 product_links.append(link)
 
-        for product_link in product_links:
-            print product_link
-            '''
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
-            '''
-
-        return products_data
+        return product_links

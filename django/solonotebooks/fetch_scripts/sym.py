@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
 class Sym:
     name = 'Sym'
+    use_existing_links = False
 
     # Method that extracts the data of a specific product given its page
     def retrieve_product_data(self, productUrl):
@@ -31,21 +32,17 @@ class Sym:
         productData.price = price
         productData.url = productUrl
         productData.comparison_field = productData.url
-        print productData
         return productData
 
 
     # Main method
-    def get_products(self):
-        print 'Getting Sym notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.sym.cl/'
         
         # Browser initialization
         browser = mechanize.Browser()
         
-        # Array containing the data for each product
-        productsData = []
         
         url_extensions = [  '?cat=104',         # Notebooks
                             '?cat=32_68',       # Tarjetas de video AGP
@@ -86,12 +83,6 @@ class Sym:
                     break
                     
                 page_number += 1
-                    
-        for productLink in productLinks:
-            prod = self.retrieve_product_data(productLink)
-            if prod:
-                productsData.append(prod)
-                    
 
-        return productsData
+        return productLinks
 

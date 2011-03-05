@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Rigam:
+class Rigam(FetchStore):
     name = 'Rigam'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
@@ -23,20 +24,15 @@ class Rigam:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting Rigam notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.rigam.cl/catalogo/'
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
         
         url_extensions = [  'index.php?act=viewCat&catId=39',  # Notebooks
                             'index.php?act=viewCat&catId=60',   # Tarjetas de video
@@ -69,11 +65,6 @@ class Rigam:
                     product_links.append(urlBase + link['href'])
                     
                 page_number += 1
-                
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
 
-        return products_data
+        return product_links
 

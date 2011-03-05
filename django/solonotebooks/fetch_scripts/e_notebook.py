@@ -8,7 +8,7 @@ from . import ProductData, FetchStore
 
 class ENotebook(FetchStore):
     name = 'E-Notebook'
-    use_existing_links = True
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()

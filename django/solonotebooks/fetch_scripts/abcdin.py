@@ -19,7 +19,7 @@ def unescape(s):
 
 class AbcDin(FetchStore):
     name = 'AbcDin'
-    use_existing_links = True
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         product_details_url = product_link.split('#')[1]
