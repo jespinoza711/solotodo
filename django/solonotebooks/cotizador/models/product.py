@@ -31,9 +31,6 @@ class Product(models.Model):
         upload_to = 'notebook_pics',
         generate_on_save = True,)
         
-    def delete(self):
-        raise Exception('Wait, what?')
-        
     def pretty_display(self):
         return unicode(self)
         

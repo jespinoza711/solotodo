@@ -293,3 +293,9 @@ br.product_details_comment_separator {
 #combo-search {
     padding-left: 45px;
 }
+
+#product_link {
+    padding-left: 10px;
+    font-size: 14px;
+    
+}

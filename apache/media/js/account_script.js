@@ -1,6 +1,10 @@
 var clear_search_field = true
 
 $(function() {
+    // Show error and info messages
+    $('#error_message').slideDown().delay(3000).slideUp()
+    $('#info_message').slideDown().delay(3000).slideUp()
+
     // If the user clicks for the first time the search bar, empty its contents
     $('.input-search').click(function() {
         if (clear_search_field) {
@@ -41,7 +45,25 @@ $(function() {
         event.preventDefault()
         subscribe(authenticated_user, false, 0)
     })
+    
+    $('#id_product').change(function(event) {
+        event.preventDefault()
+        refresh_product_link()
+    })
+    
+    refresh_product_link()
 })
+
+function refresh_product_link() {
+    var ids = $('#id_product').val()
+    if (ids) {
+        url = '/products/' + ids
+    } else {
+        url = '/all_products'
+    }
+        
+    $('#product_link').attr('href', url)
+}
 
 function show_js_error(text) {
     $('#js_error_message').html(text).slideDown().delay(3000).slideUp()

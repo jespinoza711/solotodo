@@ -18,6 +18,7 @@ class NotebookSearchForm(SearchForm):
     ram_type = ClassChoiceField(NotebookRamType, 'Tipo', requires_advanced_controls = True)
     storage_type = ClassChoiceField(NotebookStorageDriveType, 'Tipo', requires_advanced_controls = True)
     storage_capacity = ClassChoiceField(NotebookStorageDriveCapacity, 'Cant. min.')
+    storage_rpm = ClassChoiceField(NotebookStorageDriveRpm, 'RPM', requires_advanced_controls = True)
     min_size, max_size = ClassChoiceField.generate_slider(NotebookScreenSizeFamily)
     screen_resolution = ClassChoiceField(NotebookScreenResolution, 'Resolución', requires_advanced_controls = True)
     operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Nombre')
@@ -52,7 +53,8 @@ class NotebookSearchForm(SearchForm):
                      'ram_type']],
                  ['Disco Duro',
                     ['storage_capacity',
-                     'storage_type']],
+                     'storage_type',
+                     'storage_rpm']],
                  ['Pantalla',
                     ['min_size',
                      'max_size',
@@ -99,6 +101,8 @@ class NotebookSearchForm(SearchForm):
             value = 'Almacenamiento ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
             value = unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + u' o más de almacenamiento'
+        if key == 'storage_rpm':
+            value = 'RPM: ' + unicode(NotebookStorageDriveRpm.objects.get(pk = pk_value))
         if key == 'min_size':
             value = u'Tamaño mínimo: ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'max_size':
@@ -148,6 +152,8 @@ class NotebookSearchForm(SearchForm):
             value = 'Notebooks con almacenamiento de tipo ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
             value = 'Notebooks con ' + unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + u' o más de almacenamiento'
+        if key == 'storage_rpm':
+            value = 'Notebooks con dicos duros de ' + unicode(NotebookStorageDriveRpm.objects.get(pk = pk_value))
         if key == 'min_size':
             value = u'Notebooks con tamaño mínimo de ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'max_size':
@@ -216,6 +222,9 @@ class NotebookSearchForm(SearchForm):
             
         if self.storage_type and self.advanced_controls:
             notebooks = notebooks.filter(storage_drive__drive_type__id = self.storage_type)
+            
+        if self.storage_rpm and self.advanced_controls:
+            notebooks = notebooks.filter(storage_drive__rpm__id = self.storage_rpm)
             
         if self.screen_resolution and self.advanced_controls:
             notebooks = notebooks.filter(screen__resolution__id = self.screen_resolution)
