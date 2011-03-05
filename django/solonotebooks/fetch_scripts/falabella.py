@@ -4,15 +4,20 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Falabella:
+class Falabella(FetchStore):
     name = 'Falabella'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
+        
+        avail_div = product_soup.find('div', { 'id' : 'mensajeSinStock' })
+        if avail_div:
+            return None
         
         product_name = product_soup.find('div', { 'id' : 'descripcion-corta' }).find('h1').string.encode('ascii', 'ignore')
         
@@ -49,24 +54,19 @@ class Falabella:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting Falabella notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         
         # Browser initialization
         browser = mechanize.Browser()
         
-        # Array containing the data for each product
-        products_data = []
-        
         url_schemas = [    'http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?cgmenbr=1891&cgrfnbr=2458576&cgpadre=2458457&cghijo=&cgnieto=2458576&division=[page]&orden=&ConFoto=1&pcomp1=&pcomp2=&pcomp3=&pcomp4=&pcomp5=&pcomp6=&pcomp7=&pcomp8=&pcomp9=&pcomp10=&cghijo1=2460493&nivel=1',
-                            'http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?sprod=0&ConFoto=1&cgmenbr=1891&nivel=1&cgrfnbr=2541581&sfot=0&cgpadre=2457964&cgnieto=2541581&cghijo1=2486170&division=[page]',
+                           'http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?sprod=0&ConFoto=1&cgmenbr=1891&nivel=1&cgrfnbr=2541581&sfot=0&cgpadre=2457964&cgnieto=2541581&cghijo1=2486170&division=[page]',
                             
- ]
+                      ]
         product_links = []
                             
         for url_schema in url_schemas:
@@ -87,12 +87,14 @@ class Falabella:
                 
                 for mosaicDiv in mosaicDivs:                        
                     url = 'http://www.falabella.com' + mosaicDiv.find('a')['href']
+                    base_url, args = url.split('?')
+                    d_args = dict([elem.split('=') for elem in args.split('&')])
+                    del d_args['division']
+                    url = base_url + '?' + '&'.join([key + '=' + value for key, value in d_args.items()])
+                    
                     product_links.append(url)
                     
                 page_number += 1
         
-        for product_link in product_links:
-            products_data.append(self.retrieve_product_data(product_link))
-        
-        return products_data
+        return product_links
 

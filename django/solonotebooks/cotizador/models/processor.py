@@ -33,12 +33,23 @@ class Processor(Product):
     
     # Interface methods
     
+    def clone_product(self):
+        clone_prod = super(Processor, self).clone_product()
+        clone_prod.pcmark_id = '0'
+        clone_prod.pcmark_05_score = 0
+        clone_prod.pcmark_vantage_score = 0
+        clone_prod.passmark_score = 0
+
+        clone_prod.save()
+        return clone_prod
+    
     def __unicode__(self):
         return unicode(self.line) + self.line.family.separator + self.name
         
     def raw_text(self):
         result = 'Procesador CPU'
         result += ' ' + self.name
+        result += ' ' + unicode(self)
         result += ' ' + str(self.frequency)
         if self.is_64_bit:
             result += ' 64-bit 64 bit bits'
@@ -65,12 +76,6 @@ class Processor(Product):
     @staticmethod
     def get_valid():
         return Processor.objects.filter(shp__isnull = False)
-    
-    def clone_product(self):
-        clone_prod = super(Processor, self).clone_product()
-
-        clone_prod.save()
-        return clone_prod
         
     # Mine
     

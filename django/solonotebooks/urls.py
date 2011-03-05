@@ -59,6 +59,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views_legacy',
     (r'^processor_line_families/$', 'all_processor_line_families'),
     (r'^video_card_line/(?P<video_card_line_id>\d+)/$', 'video_card_line_details'),
     (r'^video_card_line/$', 'video_card_line'),
+    (r'^store_notebook/(?P<store_notebook_id>\d+)/$', 'store_notebook_redirect'),
     )
     
 urlpatterns += patterns('solonotebooks.cotizador.views',

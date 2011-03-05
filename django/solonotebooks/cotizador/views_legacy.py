@@ -24,3 +24,7 @@ def video_card_line_details(request, video_card_line_id):
 def video_card_line(request):
     url = reverse('solonotebooks.cotizador.views_notebooks.video_card_line')
     return HttpResponseRedirect(url)
+    
+def store_notebook_redirect(request, store_notebook_id):
+    url = reverse('solonotebooks.cotizador.views.store_product_redirect', args = [store_notebook_id])
+    return HttpResponseRedirect(url)

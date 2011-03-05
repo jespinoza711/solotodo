@@ -39,6 +39,9 @@ class StoreHasProductEntity(models.Model):
         shp = None
         if self.shp:
             shp = self.shp
+            if shp.shpe == self:
+                shp.shpe = None
+                shp.save()
         super(StoreHasProductEntity, self).delete()
         if shp:
             shp.update(recursive = True)
