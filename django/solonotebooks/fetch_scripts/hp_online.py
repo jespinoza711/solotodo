@@ -4,17 +4,20 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class HPOnline:
+class HPOnline(FetchStore):
     name = 'HP Online'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
-        product_name = product_soup.find('span', { 'id': 'ctl00_templateContenido_detalle1_iuNombre' }).string.encode('ascii', 'ignore')
+        try:
+            product_name = product_soup.find('span', { 'id': 'ctl00_templateContenido_detalle1_iuNombre' }).string.encode('ascii', 'ignore')
+        except:
+            return None
         product_price = int(product_soup.find('div', { 'id': 'ctl00_templateContenido_detalle1_iuPanelML' }).string.split('$')[1].replace('.', ''))
         
         product_data = ProductData()
@@ -23,21 +26,16 @@ class HPOnline:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting HP Online notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://hponline.techdata.cl'
         urlBuscarProductos = '/personas/'
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
         
         url_extensions = [  'productos.aspx?cmd=Z2x4eA==',
                             'productos.aspx?cmd=ZWx4eA==',
@@ -56,10 +54,4 @@ class HPOnline:
             for ntbkCell in ntbkCells:
                 product_links.append(urlBase + urlBuscarProductos + ntbkCell.find('a')['href'])
                 
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
-
-                
-        return products_data
+        return product_links
