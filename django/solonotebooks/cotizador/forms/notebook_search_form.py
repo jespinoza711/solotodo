@@ -18,7 +18,7 @@ class NotebookSearchForm(SearchForm):
     ram_type = ClassChoiceField(NotebookRamType, 'Tipo', requires_advanced_controls = True)
     storage_type = ClassChoiceField(NotebookStorageDriveType, 'Tipo', requires_advanced_controls = True)
     storage_capacity = ClassChoiceField(NotebookStorageDriveCapacity, 'Cant. min.')
-    screen_size_family = ClassChoiceField(NotebookScreenSizeFamily, 'Tamaño')
+    min_size, max_size = ClassChoiceField.generate_slider(NotebookScreenSizeFamily)
     screen_resolution = ClassChoiceField(NotebookScreenResolution, 'Resolución', requires_advanced_controls = True)
     operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Nombre')
     video_card_brand = ClassChoiceField(NotebookVideoCardBrand, 'Marca', requires_advanced_controls = True)
@@ -54,7 +54,8 @@ class NotebookSearchForm(SearchForm):
                     ['storage_capacity',
                      'storage_type']],
                  ['Pantalla',
-                    ['screen_size_family',
+                    ['min_size',
+                     'max_size',
                      'screen_resolution',
                      'screen_touch']],
                  ['Tarjeta de video',
@@ -67,6 +68,13 @@ class NotebookSearchForm(SearchForm):
                      ]]
                      
         return self.parse_model(model)
+        
+    def __init__(self, qd):
+        if 'max_size' not in qd:
+            qd['max_size'] = NotebookScreenSizeFamily.objects.reverse()[0].id
+        if 'min_size' not in qd:
+            qd['min_size'] = NotebookScreenSizeFamily.objects.all()[0].id
+        super(NotebookSearchForm, self).__init__(qd)
         
     def main_category_string(self):
         return 'ntype'    
@@ -91,8 +99,10 @@ class NotebookSearchForm(SearchForm):
             value = 'Almacenamiento ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
             value = unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + u' o más de almacenamiento'
-        if key == 'screen_size_family':
-            value = 'Pantalla de ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))                
+        if key == 'min_size':
+            value = u'Tamaño mínimo: ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))
+        if key == 'max_size':
+            value = u'Tamaño máximo: ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'screen_resolution':
             value = 'Resolucion de ' + unicode(NotebookScreenResolution.objects.get(pk = pk_value))
         if key == 'operating_system':
@@ -138,8 +148,10 @@ class NotebookSearchForm(SearchForm):
             value = 'Notebooks con almacenamiento de tipo ' + unicode(NotebookStorageDriveType.objects.get(pk = pk_value))
         if key == 'storage_capacity':
             value = 'Notebooks con ' + unicode(NotebookStorageDriveCapacity.objects.get(pk = pk_value)) + u' o más de almacenamiento'
-        if key == 'screen_size_family':
-            value = 'Notebooks con pantallas de ' + NotebookScreenSizeFamily.objects.get(pk = pk_value).titleText()
+        if key == 'min_size':
+            value = u'Notebooks con tamaño mínimo de ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))
+        if key == 'max_size':
+            value = u'Notebooks con tamaño máximo de ' + unicode(NotebookScreenSizeFamily.objects.get(pk = pk_value))
         if key == 'screen_resolution':
             value = 'Notebooks con resolucion de ' + unicode(NotebookScreenResolution.objects.get(pk = pk_value))
         if key == 'operating_system':
@@ -181,8 +193,11 @@ class NotebookSearchForm(SearchForm):
         if self.storage_capacity:
             notebooks = notebooks.filter(storage_drive__capacity__value__gte = NotebookStorageDriveCapacity.objects.get(pk = self.storage_capacity).value).distinct()
             
-        if self.screen_size_family:
-            notebooks = notebooks.filter(screen__size__family__id = self.screen_size_family)
+        if self.min_size:
+            notebooks = notebooks.filter(screen__size__family__base_size__gte = NotebookScreenSizeFamily.objects.get(pk = self.min_size).base_size)
+            
+        if self.max_size:
+            notebooks = notebooks.filter(screen__size__family__base_size__lte = NotebookScreenSizeFamily.objects.get(pk = self.max_size).base_size)
             
         if self.video_card_type:
             notebooks = notebooks.filter(video_card__card_type__id = self.video_card_type).distinct()
