@@ -1,8 +1,4 @@
 $(function() {
-    // Show error and info messages
-    $('#error_message').slideDown().delay(3000).slideUp()
-    $('#info_message').slideDown().delay(3000).slideUp()
-
     // Generate the custom slider if exists
     if ($('.custom_range_select').length > 0) {
         $('.custom_range_select').selectToUISlider({
