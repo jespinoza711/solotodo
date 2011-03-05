@@ -15,6 +15,13 @@ class PackardBell(FetchStore):
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
+        try:
+            avail = int(product_soup.find('span', { 'class': 'unidades' }).string)
+            if not avail:
+                return None
+        except:
+            return None
+        
         product_name = product_soup.find('div', { 'class': 'tit_prod_det' }).string.encode('ascii', 'ignore').strip()
         try:
             product_price = int(product_soup.find('div', { 'class': 'precio_det' }).contents[0].replace('.', ''))
