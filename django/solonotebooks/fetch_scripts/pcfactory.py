@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class PCFactory:
+class PCFactory(FetchStore):
     name = 'PCFactory'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         try:
@@ -30,14 +31,12 @@ class PCFactory:
             priceSpan = baseSoup.find('span', { 'id' : 'simulador' })
             product_data.price = int(priceSpan.string.replace('.', ''))
             
-            print product_data
             return product_data
         except:
             return None
 
     # Main method
-    def get_products(self):
-        print 'Getting PCFactory notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.pcfactory.cl'
         urlBuscarProductos = '/'
@@ -98,10 +97,5 @@ class PCFactory:
                 
         pageLinks = list(set(pageLinks))
 
-        for link in pageLinks:
-            product = self.retrieve_product_data(link)
-            if product:
-                productsData.append(product)
-
-        return productsData
+        return pageLinks
 

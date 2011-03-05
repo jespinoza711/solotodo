@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class TopPC:
+class TopPC(FetchStore):
     name = 'TopPC'
+    use_existing_links = False
 
     # Method that extracts the data of a specific product given its page
     def retrieve_product_data(self, productUrl):
@@ -25,21 +26,16 @@ class TopPC:
         productData.price = price
         productData.url = productUrl
         productData.comparison_field = productData.url
-        print productData
         return productData
 
 
     # Main method
-    def get_products(self):
-        print 'Getting TopPC notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.toppc.cl/beta/category.php?n=50&id_category='
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        productsData = []
         
         url_extensions = [  '76',    # Tarjetas de video
                             '5',     # Procesadores
@@ -62,11 +58,6 @@ class TopPC:
             for rawLink in rawLinks:
                 link = rawLink['href']
                 productLinks.append(link)
-                    
-        for productLink in productLinks:
-            prod = self.retrieve_product_data(productLink)
-            if prod:
-                productsData.append(prod)
 
-        return productsData
+        return productLinks
 

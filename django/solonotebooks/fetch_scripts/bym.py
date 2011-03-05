@@ -8,7 +8,7 @@ from . import ProductData, FetchStore
 
 class Bym(FetchStore):
     name = 'Bym'
-    use_existing_links = True
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link, already_tried = False):
         browser = mechanize.Browser()

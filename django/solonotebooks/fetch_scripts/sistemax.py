@@ -4,10 +4,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Sistemax:
+class Sistemax(FetchStore):
     name = 'Sistemax'
+    use_existing_links = False
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
@@ -23,12 +24,10 @@ class Sistemax:
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        print product_data
         return product_data
 
     # Main method
-    def get_products(self):
-        print 'Getting Sistemax notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         baseUrl = 'http://www.sistemax.cl/webstore/'
         url_buscar_productos = 'index.php?op=seccion/id='
@@ -43,7 +42,6 @@ class Sistemax:
                 ]
                         
         # Array containing the data for each product
-        products_data = []
         product_links = []                
         for extension in extensions:
             urlWebpage = baseUrl + url_buscar_productos + extension + '&page=-1&listar=true'
@@ -57,14 +55,6 @@ class Sistemax:
             url_cells = info_cells[3::5]
             urls = [baseUrl + url_cell.contents[2]['href'] for url_cell in url_cells]
             product_links.extend(urls)
-                
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
-                
-        if not products_data:
-            raise Exception('No products found')
 
-        return products_data
+        return product_links
 

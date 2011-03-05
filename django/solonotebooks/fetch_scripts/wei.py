@@ -2,11 +2,11 @@ import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
-from . import ProductData
+from . import ProductData, FetchStore
 
-class Wei:
+class Wei(FetchStore):
     name = 'Wei'
-
+    use_existing_links = False
 
     # Method that extracts the data of a specific product given its page
     def retrieve_product_data(self, product_link):
@@ -32,14 +32,11 @@ class Wei:
         productData.url = product_link
         productData.comparison_field = productData.url
 
-        print productData
-
         return productData
 
 
     # Main method
-    def get_products(self):
-        print 'Getting Wei notebooks'
+    def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.wei.cl/catalogue/category.htm?action=subcategory&ccode='
         
@@ -47,7 +44,6 @@ class Wei:
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        products_data = []
         product_links = []
         
         category_urls = [
@@ -73,11 +69,7 @@ class Wei:
             product_links.extend([link['href'] for link in productLinks])
 
         product_links = list(set(product_links))
-        for product_link in product_links:
-            product = self.retrieve_product_data(product_link)
-            if product:
-                products_data.append(product)                
 
-        return products_data
+        return product_links
 
 
