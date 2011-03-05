@@ -4,7 +4,7 @@ class NotebookScreenSizeFamily(models.Model):
     base_size = models.IntegerField()
     
     def __unicode__(self):
-        return unicode(self.base_size) + ' - ' + unicode(self.base_size + 0.9) + '"'
+        return unicode(self.base_size) + '"'
         
     def titleText(self):
         return unicode(self.base_size) + ' a ' + unicode(self.base_size + 0.9) + ' pulgadas'
