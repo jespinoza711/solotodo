@@ -3,6 +3,7 @@ from . import InterfaceBrand
 
 class NotebookVideoCardBrand(models.Model):
     brand = models.ForeignKey(InterfaceBrand)
+    name = property(lambda self: self.brand.name)
     
     def __unicode__(self):
         return unicode(self.brand)

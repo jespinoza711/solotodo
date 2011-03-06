@@ -1,9 +1,12 @@
 from django.db import models
-from . import ScreenVideoPort
+from . import ScreenVideoPort, InterfaceVideoPort
 
 class ScreenHasVideoPort(models.Model):
     quantity = models.IntegerField()
-    port = models.ForeignKey(ScreenVideoPort)
+    old_port = models.ForeignKey(ScreenVideoPort)
+    #port = models.ForeignKey(InterfaceVideoPort)
+    
+    port = property (lambda self: self.old_port)
     
     def __unicode__(self):
         return str(self.quantity) + 'x ' + unicode(self.port)
@@ -12,5 +15,5 @@ class ScreenHasVideoPort(models.Model):
         return self.port.raw_text()
             
     class Meta:
-        ordering = ['port', 'quantity']
+        ordering = ['old_port', 'quantity']
         app_label = 'cotizador'
