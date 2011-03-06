@@ -1,4 +1,5 @@
 #__init__.py
+from solonotebooks.cotizador.models.interface_brand import InterfaceBrand
 from solonotebooks.cotizador.models.product_type import ProductType
 from solonotebooks.cotizador.models.notebook_processor_brand import NotebookProcessorBrand
 from solonotebooks.cotizador.models.notebook_processor_line_family import NotebookProcessorLineFamily
@@ -138,6 +139,7 @@ from solonotebooks.cotizador.models.screen_digital_tuner import ScreenDigitalTun
 from solonotebooks.cotizador.models.screen import Screen
 
 __all__ = [ 
+            'InterfaceBrand',
             'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',
             'NotebookProcessorLine', 

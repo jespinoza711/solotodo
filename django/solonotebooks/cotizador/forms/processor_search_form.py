@@ -69,11 +69,11 @@ class ProcessorSearchForm(SearchForm):
         if key == 'line':
             value = unicode(ProcessorLine.objects.get(pk = pk_value))
         if key == 'l2_cache':
-            value = unicode(ProcessorL2Cache.objects.get(pk = pk_value))
+            value = u'Caché L2: ' + unicode(ProcessorL2Cache.objects.get(pk = pk_value))
         if key == 'l3_cache':
-            value = unicode(ProcessorL3Cache.objects.get(pk = pk_value))
+            value = u'Caché L3: ' + unicode(ProcessorL3Cache.objects.get(pk = pk_value))
         if key == 'socket':
-            value = unicode(ProcessorSocket.objects.get(pk = pk_value))
+            value = 'Socket ' + unicode(ProcessorSocket.objects.get(pk = pk_value))
         if key == 'core_count':
             value = unicode(ProcessorCoreCount.objects.get(pk = pk_value))
         if key == 'core':
