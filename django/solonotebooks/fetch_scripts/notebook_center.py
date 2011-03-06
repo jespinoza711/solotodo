@@ -17,7 +17,7 @@ class NotebookCenter(FetchStore):
         
         product_subnames = [unicode(str(subpart), errors = 'ignore').strip() for subpart in product_soup.find('td', { 'class': 'menus3' }).findAll('div')[-1].contents]
         
-        product_name = ' '.join(product_subnames).strip()
+        product_name = ' '.join(product_subnames).strip().replace('<br />', '')
         
         product_price = int(product_soup.find('td', { 'width': '258' }).find('div').findAll('div')[1].contents[0].split('$')[1].split('IVA')[0].replace('.', ''))
         
