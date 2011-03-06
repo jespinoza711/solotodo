@@ -3,7 +3,6 @@ from . import InterfaceBrand
 
 class NotebookChipsetBrand(models.Model):
     brand = models.ForeignKey(InterfaceBrand)
-    name = property(lambda self: self.brand.name)
     
     def __unicode__(self):
         return unicode(self.brand)

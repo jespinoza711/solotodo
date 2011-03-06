@@ -21,7 +21,7 @@ class NotebookProcessorLineFamily(models.Model):
         return result
     
     def __unicode__(self):
-        return self.brand.name + ' ' + self.name
+        return unicode(self.brand) + ' ' + self.name
     
     class Meta:
         app_label = 'cotizador'
