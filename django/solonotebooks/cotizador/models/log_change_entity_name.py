@@ -23,7 +23,7 @@ class LogChangeEntityName(models.Model):
         return str(self.log_entry.date) + ' - ' + str(self.entity)
         
     def message(self):
-        message = str(self.entity.id) + ' de ' + str(self.old_name) + ' a ' + str(self.new_name)
+        message = str(self.entity.id) + ' (' + str(self.entity.store)+ ')' + ' de ' + str(self.old_name) + ' a ' + str(self.new_name)
         message += ' (<a href="/manager/storehasproductentity/' + str(self.entity.id) + '">Editar</a>'
         if self.entity.shp:
             message += ' / <a href="/products/' + str(self.entity.shp.product.id) + '">Link a producto</a>'

@@ -9,6 +9,19 @@
 {% for log in last_logs %}
     <h3>{{ log.date }}</h3>
     
+    <h4>Errores de recepción</h4>
+    
+    {% if log.logfetchstoreerror_set.all %}    
+        <ul>
+            {% for log in log.logfetchstoreerror_set.all %}
+                <li>{{ log.print_message }}</li>
+            {% endfor %}
+        </ul>
+        <br />
+    {% else %}
+        <p>No se reportaron errores</p>
+    {% endif %}
+    
     <h4>Cambios de nombre</h4>
     
     {% if log.logchangeentityname_set.all %}
@@ -112,19 +125,6 @@
     {% else %}
         <p>No se reportaron cambios de precio en los productos</p>
     {% endif %}
-
-    <h4>Errores de recepción</h4>
-    
-    {% if log.logfetchstoreerror_set.all %}    
-        <ul>
-            {% for log in log.logfetchstoreerror_set.all %}
-                <li>{{ log.print_message }}</li>
-            {% endfor %}
-        </ul>
-        <br />
-    {% else %}
-        <p>No se reportaron errores</p>
-    {% endif %}        
 {% endfor %}
 
 {% endblock %}
