@@ -6,7 +6,7 @@ import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
-class PortatilChile:
+class PortatilChile(FetchStore):
     name = 'PortatilChile'
     use_existing_links = False
     
