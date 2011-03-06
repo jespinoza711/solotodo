@@ -10,6 +10,8 @@ admin.site.register(SearchRegistry)
 admin.site.register(ExternalVisit)
 admin.site.register(Store)
 
+admin.site.register(InterfaceBrand)
+
 admin.site.register(ProductType)
 admin.site.register(ProductComment)
 admin.site.register(ProductPicture)
