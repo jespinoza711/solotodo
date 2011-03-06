@@ -35,9 +35,7 @@ class PCOfertas(FetchStore):
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
+        product_links = []
         
         url_extensions = [  '74',   # Notebook
                             '75',   # Netbook

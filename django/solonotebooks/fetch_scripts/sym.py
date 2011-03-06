@@ -6,7 +6,7 @@ import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
-class Sym:
+class Sym(FetchStore):
     name = 'Sym'
     use_existing_links = False
 
