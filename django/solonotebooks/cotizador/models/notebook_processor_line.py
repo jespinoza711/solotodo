@@ -6,7 +6,7 @@ class NotebookProcessorLine(models.Model):
     family = models.ForeignKey(NotebookProcessorLineFamily)
     
     def __unicode__(self):
-        return self.family.brand.name + ' ' + self.name
+        return unicode(self.family.brand) + ' ' + self.name
         
     def raw_text(self):
         return self.family.raw_text() + ' ' + self.name
