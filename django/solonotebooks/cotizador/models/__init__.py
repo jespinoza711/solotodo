@@ -5,6 +5,7 @@ from solonotebooks.cotizador.models.interface_card_bus_name import InterfaceCard
 from solonotebooks.cotizador.models.interface_card_bus_lane import InterfaceCardBusLane
 from interface_card_bus import InterfaceCardBus
 from interface_socket import InterfaceSocket
+from interface_power_connector import InterfacePowerConnector
 from solonotebooks.cotizador.models.product_type import ProductType
 from solonotebooks.cotizador.models.notebook_processor_brand import NotebookProcessorBrand
 from solonotebooks.cotizador.models.notebook_processor_line_family import NotebookProcessorLineFamily
@@ -102,6 +103,8 @@ from solonotebooks.cotizador.models.video_card_memory_type import VideoCardMemor
 from solonotebooks.cotizador.models.video_card_memory_quantity import VideoCardMemoryQuantity
 from solonotebooks.cotizador.models.video_card_memory_bus_width import VideoCardMemoryBusWidth
 from solonotebooks.cotizador.models.video_card_gpu_core_count import VideoCardGpuCoreCount
+from video_card_power_connector import VideoCardPowerConnector
+from video_card_has_power_connector import VideoCardHasPowerConnector
 from solonotebooks.cotizador.models.video_card_gpu_power_connector import VideoCardGpuPowerConnector
 from solonotebooks.cotizador.models.video_card_gpu_manufacturing_process import VideoCardGpuManufacturingProcess
 from solonotebooks.cotizador.models.video_card_gpu import VideoCardGpu
@@ -146,6 +149,7 @@ __all__ = [
             'InterfaceVideoPort',
             'InterfaceCardBus',
             'InterfaceSocket',
+            'InterfacePowerConnector',
             'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',
             'NotebookProcessorLine', 
@@ -224,6 +228,8 @@ __all__ = [
             'ProductVisit',       
             'ProductType',
             'VideoCardBrand',
+            'VideoCardPowerConnector',
+            'VideoCardHasPowerConnector',
             'VideoCardGpuBrand',
             'VideoCardGpuFamily',
             'VideoCardGpuLine',

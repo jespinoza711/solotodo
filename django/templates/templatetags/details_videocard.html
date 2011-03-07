@@ -23,8 +23,17 @@
 <br/>    
 <strong>Slots: </strong> {{ videocard.slot_type }}
 <br/>    
-<strong>Conectores de poder: </strong> {{ videocard.gpu.power_connectors }}
-<br />    
+<strong>Conectores de poder: </strong>
+{% if videocard.gpu.power_conns.all %}
+<ul class="sub_ul">
+    {% for connector in videocard.gpu.power_conns.all %}
+        <li>{{ connector }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
 <strong>Puertos de video: </strong>
 <ul class="sub_ul">
     {% for port in videocard.video_ports.all %}

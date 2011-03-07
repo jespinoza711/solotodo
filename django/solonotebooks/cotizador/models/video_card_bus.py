@@ -1,5 +1,5 @@
 from django.db import models
-from solonotebooks.cotizador.models import InterfaceCardBusName, InterfaceCardBusLane, InterfaceCardBus
+from solonotebooks.cotizador.models import InterfaceCardBus
 
 class VideoCardBus(models.Model):
     bus = models.ForeignKey(InterfaceCardBus)
