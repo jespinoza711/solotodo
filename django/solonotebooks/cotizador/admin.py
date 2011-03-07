@@ -13,6 +13,7 @@ admin.site.register(Store)
 admin.site.register(InterfaceBrand)
 admin.site.register(InterfaceVideoPort)
 admin.site.register(InterfaceCardBus)
+admin.site.register(InterfaceSocket)
 
 admin.site.register(ProductType)
 admin.site.register(ProductComment)
