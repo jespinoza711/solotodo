@@ -11,6 +11,7 @@ admin.site.register(ExternalVisit)
 admin.site.register(Store)
 
 admin.site.register(InterfaceBrand)
+admin.site.register(InterfaceVideoPort)
 
 admin.site.register(ProductType)
 admin.site.register(ProductComment)
@@ -173,3 +174,4 @@ class ScreenAdmin(admin.ModelAdmin):
     exclude = excludes
 
 admin.site.register(Screen, ScreenAdmin)
+
