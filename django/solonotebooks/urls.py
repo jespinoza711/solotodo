@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
+handler500 = 'solonotebooks.cotizador.views.index'
+
 urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOC_ROOT}),
