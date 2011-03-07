@@ -1,11 +1,10 @@
 from django.db import models
-from solonotebooks.cotizador.models import InterfaceCardBusName, InterfaceCardBusLane, InterfaceCardBus
+from solonotebooks.cotizador.models import InterfaceCardBusName, InterfaceCardBusLane
 
-class VideoCardBus(models.Model):
+class InterfaceCardBus(models.Model):
     name = models.ForeignKey(InterfaceCardBusName)
     lane = models.ForeignKey(InterfaceCardBusLane)
     version = models.DecimalField(max_digits = 2, decimal_places = 1)
-    bus = models.ForeignKey(InterfaceCardBus)
     
     def __unicode__(self):
         str_name = unicode(self.name) 
@@ -21,5 +20,4 @@ class VideoCardBus(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Video card bus'
         ordering = ['name', 'version', 'lane']

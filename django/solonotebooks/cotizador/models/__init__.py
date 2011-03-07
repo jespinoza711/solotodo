@@ -1,6 +1,9 @@
 #__init__.py
 from solonotebooks.cotizador.models.interface_brand import InterfaceBrand
 from solonotebooks.cotizador.models.interface_video_port import InterfaceVideoPort
+from solonotebooks.cotizador.models.interface_card_bus_name import InterfaceCardBusName
+from solonotebooks.cotizador.models.interface_card_bus_lane import InterfaceCardBusLane
+from interface_card_bus import InterfaceCardBus
 from solonotebooks.cotizador.models.product_type import ProductType
 from solonotebooks.cotizador.models.notebook_processor_brand import NotebookProcessorBrand
 from solonotebooks.cotizador.models.notebook_processor_line_family import NotebookProcessorLineFamily
@@ -87,8 +90,6 @@ from solonotebooks.cotizador.models.video_card_gpu_core_family import VideoCardG
 from solonotebooks.cotizador.models.video_card_gpu_core import VideoCardGpuCore
 from solonotebooks.cotizador.models.video_card_port import VideoCardPort
 from solonotebooks.cotizador.models.video_card_has_port import VideoCardHasPort
-from solonotebooks.cotizador.models.video_card_bus_name import VideoCardBusName
-from solonotebooks.cotizador.models.video_card_bus_lane import VideoCardBusLane
 from solonotebooks.cotizador.models.video_card_bus import VideoCardBus
 from solonotebooks.cotizador.models.video_card_gpu_directx_version import VideoCardGpuDirectxVersion
 from solonotebooks.cotizador.models.video_card_gpu_opengl_version import VideoCardGpuOpenglVersion
@@ -142,6 +143,7 @@ from solonotebooks.cotizador.models.screen import Screen
 __all__ = [ 
             'InterfaceBrand',
             'InterfaceVideoPort',
+            'InterfaceCardBus',
             'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',
             'NotebookProcessorLine', 
@@ -228,8 +230,8 @@ __all__ = [
             'VideoCardGpuCore',
             'VideoCardPort',
             'VideoCardHasPort',
-            'VideoCardBusName',
-            'VideoCardBusLane',
+            'InterfaceCardBusName',
+            'InterfaceCardBusLane',
             'VideoCardBus',
             'VideoCardGpuDirectxVersion',
             'VideoCardGpuOpenglVersion',

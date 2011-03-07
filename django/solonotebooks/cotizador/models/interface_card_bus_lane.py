@@ -1,6 +1,6 @@
 from django.db import models
 
-class VideoCardBusLane(models.Model):
+class InterfaceCardBusLane(models.Model):
     value = models.IntegerField()
     
     def __unicode__(self):
@@ -11,5 +11,4 @@ class VideoCardBusLane(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Video card bus lane'
         ordering = ['value']
