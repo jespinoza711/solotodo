@@ -8,30 +8,20 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'InterfaceVideoPort'
-        db.create_table('cotizador_interfacevideoport', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-        ))
-        db.send_create_signal('cotizador', ['InterfaceVideoPort'])
+        # Adding field 'ScreenVideoPort.port'
+        db.add_column('cotizador_screenvideoport', 'port', self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['cotizador.InterfaceVideoPort']), keep_default=False)
 
-        # Deleting field 'ScreenHasVideoPort.port'
-        db.rename_column('cotizador_screenhasvideoport', 'port_id', 'old_port_id')
-
-        # Adding field 'VideoCardHasPort.old_port'
-        db.rename_column('cotizador_videocardhasport', 'port_id', 'old_port_id')
+        # Adding field 'VideoCardPort.port'
+        db.add_column('cotizador_videocardport', 'port', self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['cotizador.InterfaceVideoPort']), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Deleting model 'InterfaceVideoPort'
-        db.delete_table('cotizador_interfacevideoport')
+        # Deleting field 'ScreenVideoPort.port'
+        db.delete_column('cotizador_screenvideoport', 'port_id')
 
-        # Deleting field 'ScreenHasVideoPort.port'
-        db.rename_column('cotizador_screenhasvideoport', 'old_port_id', 'port_id')
-
-        # Adding field 'VideoCardHasPort.old_port'
-        db.rename_column('cotizador_videocardhasport', 'old_port_id', 'port_id')
+        # Deleting field 'VideoCardPort.port'
+        db.delete_column('cotizador_videocardport', 'port_id')
 
 
     models = {
@@ -741,7 +731,7 @@ class Migration(SchemaMigration):
         'cotizador.screenhasvideoport': {
             'Meta': {'object_name': 'ScreenHasVideoPort'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'old_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.ScreenVideoPort']"}),
+            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.ScreenVideoPort']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {})
         },
         'cotizador.screenline': {
@@ -798,7 +788,8 @@ class Migration(SchemaMigration):
         'cotizador.screenvideoport': {
             'Meta': {'object_name': 'ScreenVideoPort'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.InterfaceVideoPort']"})
         },
         'cotizador.searchregistry': {
             'Meta': {'object_name': 'SearchRegistry'},
@@ -979,7 +970,7 @@ class Migration(SchemaMigration):
         'cotizador.videocardhasport': {
             'Meta': {'object_name': 'VideoCardHasPort'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'old_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.VideoCardPort']"}),
+            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.VideoCardPort']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {})
         },
         'cotizador.videocardmemorybuswidth': {
@@ -1000,7 +991,8 @@ class Migration(SchemaMigration):
         'cotizador.videocardport': {
             'Meta': {'object_name': 'VideoCardPort'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.InterfaceVideoPort']"})
         },
         'cotizador.videocardprofile': {
             'Meta': {'object_name': 'VideoCardProfile'},

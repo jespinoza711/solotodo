@@ -8,20 +8,18 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'ScreenHasVideoPort.port'
-        db.add_column('cotizador_screenhasvideoport', 'port', self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['cotizador.InterfaceVideoPort']), keep_default=False)
-
-        # Adding field 'VideoCardHasPort.port'
-        db.add_column('cotizador_videocardhasport', 'port', self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['cotizador.InterfaceVideoPort']), keep_default=False)
+        # Adding model 'InterfaceVideoPort'
+        db.create_table('cotizador_interfacevideoport', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+        ))
+        db.send_create_signal('cotizador', ['InterfaceVideoPort'])
 
 
     def backwards(self, orm):
         
-        # Deleting field 'ScreenHasVideoPort.port'
-        db.delete_column('cotizador_screenhasvideoport', 'port_id')
-
-        # Deleting field 'VideoCardHasPort.port'
-        db.delete_column('cotizador_videocardhasport', 'port_id')
+        # Deleting model 'InterfaceVideoPort'
+        db.delete_table('cotizador_interfacevideoport')
 
 
     models = {
@@ -731,8 +729,7 @@ class Migration(SchemaMigration):
         'cotizador.screenhasvideoport': {
             'Meta': {'object_name': 'ScreenHasVideoPort'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'old_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.ScreenVideoPort']"}),
-            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.InterfaceVideoPort']"}),
+            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.ScreenVideoPort']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {})
         },
         'cotizador.screenline': {
@@ -970,8 +967,7 @@ class Migration(SchemaMigration):
         'cotizador.videocardhasport': {
             'Meta': {'object_name': 'VideoCardHasPort'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'old_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.VideoCardPort']"}),
-            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.InterfaceVideoPort']"}),
+            'port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cotizador.VideoCardPort']"}),
             'quantity': ('django.db.models.fields.IntegerField', [], {})
         },
         'cotizador.videocardmemorybuswidth': {
