@@ -1,7 +1,7 @@
 from django.db import models
 import mechanize
 from BeautifulSoup import BeautifulSoup
-from . import VideoCardGpuManufacturingProcess, VideoCardGpuCore, VideoCardGpuLine, VideoCardGpuDirectxVersion, VideoCardGpuOpenglVersion, VideoCardGpuPowerConnector, VideoCardGpuCoreCount, VideoCardHasPowerConnector
+from . import VideoCardGpuManufacturingProcess, VideoCardGpuCore, VideoCardGpuLine, VideoCardGpuDirectxVersion, VideoCardGpuOpenglVersion, VideoCardGpuCoreCount, VideoCardHasPowerConnector
 
 class VideoCardGpu(models.Model):
     name = models.CharField(max_length = 255)
@@ -26,7 +26,6 @@ class VideoCardGpu(models.Model):
     line = models.ForeignKey(VideoCardGpuLine)
     dx_version = models.ForeignKey(VideoCardGpuDirectxVersion)
     ogl_version = models.ForeignKey(VideoCardGpuOpenglVersion)
-    power_connectors = models.ForeignKey(VideoCardGpuPowerConnector)
     core_count = models.ForeignKey(VideoCardGpuCoreCount)
     power_conns = models.ManyToManyField(VideoCardHasPowerConnector, blank = True, null = True)
     
