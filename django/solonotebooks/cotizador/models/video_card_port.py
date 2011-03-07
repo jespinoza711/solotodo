@@ -1,13 +1,15 @@
 from django.db import models
+from . import InterfaceVideoPort
 
 class VideoCardPort(models.Model):
     name = models.CharField(max_length = 255)
+    port = models.ForeignKey(InterfaceVideoPort)
     
     def __unicode__(self):
-        return self.name
+        return unicode(self.port)
         
     def raw_text(self):
-        return self.name        
+        return unicode(self.port)
     
     class Meta:
         app_label = 'cotizador'
