@@ -200,9 +200,9 @@ class VideoCardSearchForm(SearchForm):
         if self.gpu_ogl_version and self.advanced_controls:
             video_cards = video_cards.filter(gpu__ogl_version__value__gte = VideoCardGpuOpenglVersion.objects.get(pk = self.gpu_ogl_version).value)
         if self.bus_name:
-            video_cards = video_cards.filter(bus__name = self.bus_name)
+            video_cards = video_cards.filter(bus__bus__name = self.bus_name)
         if self.bus_lanes and self.advanced_controls:
-            video_cards = video_cards.filter(bus__lane = self.bus_lanes).filter(bus__name__show_version_and_lanes = True)
+            video_cards = video_cards.filter(bus__bus__lane = self.bus_lanes).filter(bus__bus__name__show_version_and_lanes = True)
         if self.bus and self.advanced_controls:
             video_cards = video_cards.filter(bus = self.bus)
         if self.profile:

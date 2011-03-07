@@ -1,10 +1,8 @@
 from django.db import models
-from . import InterfaceSocket
 
-class ProcessorSocket(models.Model):
+class InterfaceSocket(models.Model):
     num_pins = models.IntegerField()
     name = models.CharField(max_length = 255)
-    socket = models.ForeignKey(InterfaceSocket)
     
     def __unicode__(self):
         return self.name

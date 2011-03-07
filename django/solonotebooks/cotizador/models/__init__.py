@@ -4,6 +4,7 @@ from solonotebooks.cotizador.models.interface_video_port import InterfaceVideoPo
 from solonotebooks.cotizador.models.interface_card_bus_name import InterfaceCardBusName
 from solonotebooks.cotizador.models.interface_card_bus_lane import InterfaceCardBusLane
 from interface_card_bus import InterfaceCardBus
+from interface_socket import InterfaceSocket
 from solonotebooks.cotizador.models.product_type import ProductType
 from solonotebooks.cotizador.models.notebook_processor_brand import NotebookProcessorBrand
 from solonotebooks.cotizador.models.notebook_processor_line_family import NotebookProcessorLineFamily
@@ -144,6 +145,7 @@ __all__ = [
             'InterfaceBrand',
             'InterfaceVideoPort',
             'InterfaceCardBus',
+            'InterfaceSocket',
             'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',
             'NotebookProcessorLine', 
