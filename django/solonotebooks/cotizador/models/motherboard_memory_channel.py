@@ -1,6 +1,7 @@
 from django.db import models
 
-class NotebookCardReader(models.Model):
+class MotherboardMemoryChannel(models.Model):
+    value = models.IntegerField()
     name = models.CharField(max_length = 255)
     
     def __unicode__(self):
@@ -10,6 +11,5 @@ class NotebookCardReader(models.Model):
         return unicode(self)
     
     class Meta:
+        ordering = ['value']
         app_label = 'cotizador'
-        verbose_name = 'Notebook card reader'
-        ordering = ['name']

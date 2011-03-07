@@ -47,7 +47,7 @@ class Notebook(Product):
     # Interface methods
         
     def raw_text(self):
-        result = ''
+        result = super(Notebook, self).base_raw_text()
         if (self.is_ram_dual_channel):
             result += ' ram dual channel'
         if (self.has_bluetooth):
@@ -58,23 +58,7 @@ class Notebook(Product):
             result += ' firewire 1394'
         if (self.has_fingerprint_reader):
             result += ' fingerprint reader huella digital'
-        result += ' bateria ' + str(self.battery_cells) + ' celdas '
-        result += ' ' + self.line.raw_text()
-        result += ' ' + self.name
-        result += ' ' + self.processor.raw_text()
-        result += ' ' + self.lan.raw_text()
-        result += ' ' + self.screen.raw_text()
-        result += ' ' + self.operating_system.raw_text()
-        result += ' ' + self.ram_type.raw_text()
-        result += ' ' + self.ram_frequency.raw_text()
-        result += ' ' + self.ram_quantity.raw_text()
-        result += ' ' + self.chipset.raw_text()
-        for video_card in self.video_card.all():
-            result += ' ' + video_card.raw_text()
-        for video_port in self.video_port.all():
-            result += ' ' + video_port.raw_text()
-        for storage_drive in self.storage_drive.all():
-            result += ' ' + storage_drive.raw_text()            
+        result += ' bateria ' + str(self.battery_cells) + ' celdas ' 
         return result
         
     def __unicode__(self):
@@ -119,21 +103,6 @@ class Notebook(Product):
     @staticmethod
     def get_valid():
         return Notebook.objects.filter(shp__isnull = False)
-    
-    def clone_product(self):
-        clone_prod = super(Notebook, self).clone_product()
-
-        for video_card in self.video_card.all():
-            clone_prod.video_card.add(video_card)
-
-        for video_port in self.video_port.all():
-            clone_prod.video_port.add(video_port)
-
-        for storage_drive in self.storage_drive.all():
-            clone_prod.storage_drive.add(storage_drive)
-
-        clone_prod.save()
-        return clone_prod
         
     # Custom methods
         

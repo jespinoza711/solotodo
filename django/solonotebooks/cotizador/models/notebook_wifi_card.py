@@ -8,6 +8,9 @@ class NotebookWifiCard(models.Model):
     
     def __unicode__(self):
         return unicode(self.brand) + ' ' + self.name + ' (' + unicode(self.norm) + ')'
+        
+    def raw_text(self):
+        return unicode(self)
     
     class Meta:
         app_label = 'cotizador'

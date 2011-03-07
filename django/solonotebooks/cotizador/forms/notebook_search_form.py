@@ -123,10 +123,6 @@ class NotebookSearchForm(SearchForm):
             value = ['Sin', 'Con'][pk_value - 1] + ' pantalla táctil'
         if key == 'ntype':
             value = unicode(NotebookType.objects.get(pk = pk_value))
-        if key == 'min_price':
-            value = 'Precio minimo: ' + utils.prettyPrice(pk_value)
-        if key == 'max_price':
-            value = 'Precio maximo: ' + utils.prettyPrice(pk_value)
         return value
         
     # Method that, given a key (e.g.: notebook_brand, processor, etc) and a
@@ -174,10 +170,6 @@ class NotebookSearchForm(SearchForm):
             value = 'Notebooks ' + ['sin', 'con'][pk_value - 1] + ' pantalla táctil'
         if key == 'ntype':
             value = unicode(NotebookType.objects.get(pk = pk_value))
-        if key == 'min_price':
-            value = 'Notebooks con un precio mínimo de ' + utils.prettyPrice(pk_value)
-        if key == 'max_price':
-            value = 'Notebooks con un precio máximo de ' + utils.prettyPrice(pk_value)
         return value        
         
     def filter_products(self, notebooks):

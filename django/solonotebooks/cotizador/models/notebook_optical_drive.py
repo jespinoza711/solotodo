@@ -5,6 +5,9 @@ class NotebookOpticalDrive(models.Model):
     
     def __unicode__(self):
         return self.name
+        
+    def raw_text(self):
+        return unicode(self)
     
     class Meta:
         app_label = 'cotizador'

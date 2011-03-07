@@ -1,0 +1,62 @@
+<h1>{{ motherboard }}</h1>
+<h3 class="subtitle">Especificaciones esenciales</h3>
+<strong>Fabricante: </strong> {{ motherboard.brand }}
+<br />
+<strong>Socket: </strong> {{ motherboard.chipset.northbridge.family.socket }}
+<br />
+<strong>Chipset: </strong> {{ motherboard.chipset }}
+<br />
+<strong>Slots memorias: </strong> {{ motherboard.pretty_memory_types }}
+<br />
+<strong>Canales memoria: </strong> {{ motherboard.memory_channels }}
+<br />
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Formato: </strong> {{ motherboard.format }}
+<br />
+<strong>Gráficos integrados: </strong> {{ motherboard.chipset.northbridge.graphics }}
+<br />  
+<strong>Audio integrado: </strong> {{ motherboard.audio_channels }}
+<br />  
+<strong>Puertos de video: </strong> {{ motherboard.pretty_video_ports }}
+<br/>    
+<strong>Puertos de energía: </strong> {{ motherboard.pretty_power_connectors }}
+<br/> 
+<strong>Soporte SLI: </strong> {{ motherboard.pretty_sli }}
+<br/> 
+<strong>Soporte CrossFire: </strong> {{ motherboard.pretty_cf }}
+<br/> 
+<strong>Soporte RAID: </strong> {{ motherboard.pretty_raid }}
+<br/> 
+<strong>Conectores: </strong>
+{% if motherboard.buses.all %}
+<ul class="sub_ul">
+    {% for bus in motherboard.buses.all %}
+        <li>{{ bus }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
+<strong>Puertos: </strong>
+{% if motherboard.ports.all %}
+<ul class="sub_ul">
+    {% for port in motherboard.ports.all %}
+        <li>{{ port }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
+<strong>Expansiones: </strong>
+{% if motherboard.card_buses.all %}
+<ul class="sub_ul">
+    {% for card_bus in motherboard.card_buses.all %}
+        <li>{{ card_bus }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}

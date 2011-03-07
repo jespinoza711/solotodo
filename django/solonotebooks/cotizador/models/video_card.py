@@ -25,21 +25,7 @@ class VideoCard(Product):
         return unicode(self.brand) + ' ' + self.gpu.name + ' (' + self.name + ')'
         
     def raw_text(self):
-        result = 'Tarjeta de video VGA GPU'
-        result += ' ' + self.name
-        result += ' ' + self.gpu.raw_text()
-        result += ' ' + self.memory_bus_width.raw_text()
-        result += ' ' + self.memory_quantity.raw_text()
-        result += ' ' + self.memory_type.raw_text()
-        result += ' ' + self.brand.raw_text()
-        result += ' ' + self.bus.raw_text()
-        result += ' ' + self.profile.raw_text()
-        result += ' ' + self.slot_type.raw_text()
-        result += ' ' + self.refrigeration.raw_text()
-        
-        for port in self.video_ports.all():
-            result += ' ' + port.raw_text()
-            
+        result = super(VideoCard, self).base_raw_text()
         return result
         
     def load_similar_products(self):
@@ -50,15 +36,6 @@ class VideoCard(Product):
     @staticmethod
     def get_valid():
         return VideoCard.objects.filter(shp__isnull = False)
-    
-    def clone_product(self):
-        clone_prod = super(VideoCard, self).clone_product()
-
-        for video_port in self.video_ports.all():
-            clone_prod.video_ports.add(video_port)
-
-        clone_prod.save()
-        return clone_prod
         
     # custom methods
     
