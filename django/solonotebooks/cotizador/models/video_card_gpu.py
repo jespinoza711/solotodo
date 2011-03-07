@@ -1,7 +1,7 @@
 from django.db import models
 import mechanize
 from BeautifulSoup import BeautifulSoup
-from solonotebooks.cotizador.models import VideoCardGpuManufacturingProcess, VideoCardGpuCore, VideoCardGpuLine, VideoCardGpuDirectxVersion, VideoCardGpuOpenglVersion, VideoCardGpuPowerConnector, VideoCardGpuCoreCount
+from . import VideoCardGpuManufacturingProcess, VideoCardGpuCore, VideoCardGpuLine, VideoCardGpuDirectxVersion, VideoCardGpuOpenglVersion, VideoCardGpuPowerConnector, VideoCardGpuCoreCount, VideoCardHasPowerConnector
 
 class VideoCardGpu(models.Model):
     name = models.CharField(max_length = 255)
@@ -28,6 +28,7 @@ class VideoCardGpu(models.Model):
     ogl_version = models.ForeignKey(VideoCardGpuOpenglVersion)
     power_connectors = models.ForeignKey(VideoCardGpuPowerConnector)
     core_count = models.ForeignKey(VideoCardGpuCoreCount)
+    power_conns = models.ManyToManyField(VideoCardHasPowerConnector, blank = True, null = True)
     
     def __unicode__(self):
         return unicode(self.line.family) + ' ' + self.name
@@ -51,7 +52,8 @@ class VideoCardGpu(models.Model):
         result += ' ' + self.line.raw_text()
         result += ' ' + self.dx_version.raw_text()
         result += ' ' + self.ogl_version.raw_text()
-        result += ' ' + self.power_connectors.raw_text()
+        for conn in self.power_conns.all():
+            result += ' ' + conn.raw_text()
         result += ' ' + self.core_count.raw_text()
         
         return result
