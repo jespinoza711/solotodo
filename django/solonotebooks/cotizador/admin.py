@@ -111,7 +111,6 @@ admin.site.register(VideoCardMemoryType)
 admin.site.register(VideoCardMemoryQuantity)
 admin.site.register(VideoCardMemoryBusWidth)
 admin.site.register(VideoCardGpuCoreCount)
-admin.site.register(VideoCardGpuPowerConnector)
 admin.site.register(VideoCardGpuManufacturingProcess)
 
 excludes = ['shp', 'week_visitor_count', 'week_discount', 'long_description', 'similar_products']

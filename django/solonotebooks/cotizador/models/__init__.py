@@ -105,7 +105,6 @@ from solonotebooks.cotizador.models.video_card_memory_bus_width import VideoCard
 from solonotebooks.cotizador.models.video_card_gpu_core_count import VideoCardGpuCoreCount
 from video_card_power_connector import VideoCardPowerConnector
 from video_card_has_power_connector import VideoCardHasPowerConnector
-from solonotebooks.cotizador.models.video_card_gpu_power_connector import VideoCardGpuPowerConnector
 from solonotebooks.cotizador.models.video_card_gpu_manufacturing_process import VideoCardGpuManufacturingProcess
 from solonotebooks.cotizador.models.video_card_gpu import VideoCardGpu
 from solonotebooks.cotizador.models.video_card import VideoCard
@@ -250,7 +249,6 @@ __all__ = [
             'VideoCardMemoryQuantity',
             'VideoCardMemoryBusWidth',
             'VideoCardGpuCoreCount',
-            'VideoCardGpuPowerConnector',
             'VideoCardGpuManufacturingProcess',
             'VideoCardGpu',
             'VideoCard',
