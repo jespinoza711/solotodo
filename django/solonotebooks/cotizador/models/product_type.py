@@ -8,6 +8,7 @@ class ProductType(models.Model):
     displayname = models.CharField(max_length = 255)
     adminurlname = models.CharField(max_length = 255)
     indexname = models.CharField(max_length = 255)
+    ordering = models.IntegerField()
     
     def get_class(self):
         from . import *
@@ -16,10 +17,14 @@ class ProductType(models.Model):
     def __unicode__(self):
         return unicode(self.classname)
         
+    def raw_text(self):
+        return self.classname + ' ' + self.urlname + ' ' + self.displayname + ' ' + self.adminurlname + ' ' + self.indexname
+        
     @staticmethod
     def default():
         return ProductType.objects.get(urlname = 'notebooks')
     
     class Meta:
+        ordering = ['ordering']
         app_label = 'cotizador'
         verbose_name = 'Product type'

@@ -15,6 +15,9 @@ admin.site.register(InterfaceVideoPort)
 admin.site.register(InterfaceCardBus)
 admin.site.register(InterfaceSocket)
 admin.site.register(InterfacePowerConnector)
+admin.site.register(InterfacePort)
+admin.site.register(InterfaceMemoryType)
+admin.site.register(InterfaceBus)
 
 admin.site.register(ProductType)
 admin.site.register(ProductComment)
@@ -179,3 +182,31 @@ class ScreenAdmin(admin.ModelAdmin):
 
 admin.site.register(Screen, ScreenAdmin)
 
+admin.site.register(MotherboardBrand)
+admin.site.register(MotherboardGraphics)
+admin.site.register(MotherboardSocket)
+admin.site.register(MotherboardSouthbridge)
+admin.site.register(MotherboardChipsetBrand)
+admin.site.register(MotherboardNorthbridgeFamily)
+admin.site.register(MotherboardNorthbridge)
+admin.site.register(MotherboardChipset)
+admin.site.register(MotherboardPort)
+admin.site.register(MotherboardHasPort)
+admin.site.register(MotherboardFormat)
+admin.site.register(MotherboardMemoryType)
+admin.site.register(MotherboardHasMemoryType)
+admin.site.register(MotherboardCardBus)
+admin.site.register(MotherboardHasCardBus)
+admin.site.register(MotherboardBus)
+admin.site.register(MotherboardHasBus)
+admin.site.register(MotherboardVideoPort)
+admin.site.register(MotherboardHasVideoPort)
+admin.site.register(MotherboardPowerConnector)
+admin.site.register(MotherboardHasPowerConnector)
+admin.site.register(MotherboardMemoryChannel)
+admin.site.register(MotherboardAudioChannels)
+
+class MotherboardAdmin(admin.ModelAdmin):
+    exclude = excludes
+    
+admin.site.register(Motherboard, MotherboardAdmin)

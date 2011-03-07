@@ -47,8 +47,7 @@ class Processor(Product):
         return unicode(self.line) + self.line.family.separator + self.name
         
     def raw_text(self):
-        result = 'Procesador CPU'
-        result += ' ' + self.name
+        result = super(Processor, self).base_raw_text()
         result += ' ' + unicode(self)
         result += ' ' + str(self.frequency)
         if self.is_64_bit:
@@ -57,15 +56,7 @@ class Processor(Product):
             result += ' virtualization virtualizacion VT'
         if self.has_smp:
             result += ' smp simultaneous multi processing hyper threading hyperthreading hyper-threading HT'
-        result += ' ' + self.l2_cache.raw_text()
-        result += ' ' + self.l3_cache.raw_text()
-        result += ' ' + self.socket.raw_text()
-        result += ' ' + self.line.raw_text()
-        result += ' ' + self.core_count.raw_text()
-        result += ' ' + self.core.raw_text()
-        result += ' ' + self.multiplier.raw_text()
-        result += ' ' + self.fsb.raw_text()
-            
+        
         return result
         
     def load_similar_products(self):

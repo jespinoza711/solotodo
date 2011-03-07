@@ -1,7 +1,9 @@
 from django.db import models
 
-class NotebookCardReader(models.Model):
+class MotherboardFormat(models.Model):
     name = models.CharField(max_length = 255)
+    width = models.IntegerField()
+    height = models.IntegerField()
     
     def __unicode__(self):
         return self.name
@@ -11,5 +13,3 @@ class NotebookCardReader(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        verbose_name = 'Notebook card reader'
-        ordering = ['name']

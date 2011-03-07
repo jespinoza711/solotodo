@@ -29,25 +29,11 @@ class Screen(Product):
         return unicode(self.line) + ' ' + self.name
         
     def raw_text(self):
-        result = 'Pantalla'
+        result = super(Screen, self).base_raw_text()
         if self.usb_ports:
             result += ' USB'
         if self.has_analog_tuner:
             result += u' sintonizador analogo análogo'
-        result += ' ' + self.name
-        result += ' ' + self.digital_tuner.raw_text()
-        result += ' ' + self.response_time.raw_text()
-        result += ' ' + self.refresh_rate.raw_text()
-        result += ' ' + self.stype.raw_text()
-        result += ' ' + self.line.raw_text()
-        result += ' ' + self.display.raw_text()
-        result += ' ' + self.size.raw_text()
-        result += ' ' + self.resolution.raw_text()
-        result += ' ' + self.panel_type.raw_text()
-        result += ' ' + self.speakers.raw_text()
-        for port in self.video_ports.all():
-            result += ' ' + port.raw_text()
-            
         return result
         
     def load_similar_products(self):
@@ -57,15 +43,6 @@ class Screen(Product):
     @staticmethod
     def get_valid():
         return Screen.objects.filter(shp__isnull = False)
-    
-    def clone_product(self):
-        clone_prod = super(Screen, self).clone_product()
-        
-        for video_port in self.video_ports.all():
-            clone_prod.video_ports.add(video_port)
-
-        clone_prod.save()
-        return clone_prod
         
     # Custom methods
     

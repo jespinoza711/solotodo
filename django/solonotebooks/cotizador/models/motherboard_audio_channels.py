@@ -1,6 +1,6 @@
 from django.db import models
 
-class NotebookCardReader(models.Model):
+class MotherboardAudioChannels(models.Model):
     name = models.CharField(max_length = 255)
     
     def __unicode__(self):
@@ -10,6 +10,5 @@ class NotebookCardReader(models.Model):
         return unicode(self)
     
     class Meta:
-        app_label = 'cotizador'
-        verbose_name = 'Notebook card reader'
         ordering = ['name']
+        app_label = 'cotizador'

@@ -8,6 +8,9 @@ class NotebookPowerAdapter(models.Model):
             return unicode(self.power) + ' W'
         else:
             return 'Desconocido'
+            
+    def raw_text(self):
+        return unicode(self)
     
     class Meta:
         app_label = 'cotizador'

@@ -34,6 +34,25 @@ class Product(models.Model):
     def pretty_display(self):
         return unicode(self)
         
+    def base_raw_text(self):
+        result = self.name
+        for field in self._meta.fields:
+            if field.__class__.__name__ == 'ForeignKey':
+                name = field.get_attname().replace('_id', '')
+                if name == 'shp':
+                    continue
+                result += ' ' + getattr(self, name).raw_text()
+            elif field.__class__.__name__ == 'CharField':
+                result += ' ' + getattr(self, field.get_attname())
+            
+        for m2mfield in self._meta.get_m2m_with_model():
+            m2mfieldname = m2mfield[0].name
+            many_related_manager = getattr(self, m2mfieldname)
+            for entry in many_related_manager.all():
+                result += ' ' + entry.raw_text()
+                
+        return result
+                
     def dprint(self):
         message = str(self.id) + ' ' + unicode(self) + '\n'
         if self.shp:
@@ -269,6 +288,16 @@ class Product(models.Model):
         clone_prod.name += ' (clone)'
         clone_prod.week_visitor_count = 0
         clone_prod.week_discount = 0
+        
+        clone_prod.save()
+        
+        for m2mfield in self._meta.get_m2m_with_model():
+            m2mfieldname = m2mfield[0].name
+            orig_many_related_manager = getattr(self, m2mfieldname)
+            clone_many_related_manager = getattr(clone_prod, m2mfieldname)
+            for entry in orig_many_related_manager.all():
+                clone_many_related_manager.add(entry)
+
         clone_prod.save()
         return clone_prod
     

@@ -4,6 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 handler500 = 'solonotebooks.cotizador.views.index'
+handler404 = 'solonotebooks.cotizador.views.index'
 
 urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',

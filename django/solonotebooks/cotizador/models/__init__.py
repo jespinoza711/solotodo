@@ -5,6 +5,9 @@ from solonotebooks.cotizador.models.interface_card_bus_name import InterfaceCard
 from solonotebooks.cotizador.models.interface_card_bus_lane import InterfaceCardBusLane
 from interface_card_bus import InterfaceCardBus
 from interface_socket import InterfaceSocket
+from interface_port import InterfacePort
+from interface_memory_type import InterfaceMemoryType
+from interface_bus import InterfaceBus
 from interface_power_connector import InterfacePowerConnector
 from solonotebooks.cotizador.models.product_type import ProductType
 from solonotebooks.cotizador.models.notebook_processor_brand import NotebookProcessorBrand
@@ -143,11 +146,39 @@ from solonotebooks.cotizador.models.screen_refresh_rate import ScreenRefreshRate
 from solonotebooks.cotizador.models.screen_digital_tuner import ScreenDigitalTuner
 from solonotebooks.cotizador.models.screen import Screen
 
+from motherboard_brand import MotherboardBrand
+from motherboard_graphics import MotherboardGraphics
+from motherboard_socket import MotherboardSocket
+from motherboard_southbridge import MotherboardSouthbridge
+from motherboard_chipset_brand import MotherboardChipsetBrand
+from motherboard_northbridge_family import MotherboardNorthbridgeFamily
+from motherboard_northbridge import MotherboardNorthbridge
+from motherboard_chipset import MotherboardChipset
+from motherboard_port import MotherboardPort
+from motherboard_has_port import MotherboardHasPort
+from motherboard_video_port import MotherboardVideoPort
+from motherboard_has_video_port import MotherboardHasVideoPort
+from motherboard_format import MotherboardFormat
+from motherboard_memory_type import MotherboardMemoryType
+from motherboard_has_memory_type import MotherboardHasMemoryType
+from motherboard_card_bus import MotherboardCardBus
+from motherboard_has_card_bus import MotherboardHasCardBus
+from motherboard_bus import MotherboardBus
+from motherboard_has_bus import MotherboardHasBus
+from motherboard_power_connector import MotherboardPowerConnector
+from motherboard_has_power_connector import MotherboardHasPowerConnector
+from motherboard_memory_channel import MotherboardMemoryChannel
+from motherboard_audio_channels import MotherboardAudioChannels
+from motherboard import Motherboard
+
 __all__ = [ 
             'InterfaceBrand',
             'InterfaceVideoPort',
             'InterfaceCardBus',
             'InterfaceSocket',
+            'InterfacePort',
+            'InterfaceMemoryType',
+            'InterfaceBus',
             'InterfacePowerConnector',
             'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',
@@ -285,4 +316,28 @@ __all__ = [
             'ScreenRefreshRate',
             'ScreenDigitalTuner',
             'Screen',
+            'MotherboardBrand',
+            'MotherboardGraphics',
+            'MotherboardSocket',
+            'MotherboardSouthbridge',
+            'MotherboardChipsetBrand',
+            'MotherboardNorthbridgeFamily',
+            'MotherboardNorthbridge',
+            'MotherboardChipset',
+            'MotherboardPort',
+            'MotherboardHasPort',
+            'MotherboardFormat',
+            'MotherboardMemoryType',
+            'MotherboardHasMemoryType',
+            'MotherboardCardBus',
+            'MotherboardHasCardBus',
+            'MotherboardBus',
+            'MotherboardHasBus',
+            'MotherboardVideoPort',
+            'MotherboardHasVideoPort',
+            'MotherboardPowerConnector',
+            'MotherboardHasPowerConnector',
+            'MotherboardMemoryChannel',
+            'MotherboardAudioChannels',
+            'Motherboard',
             ]
