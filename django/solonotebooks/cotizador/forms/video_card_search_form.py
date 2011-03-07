@@ -22,8 +22,8 @@ class VideoCardSearchForm(SearchForm):
     gpu_core_family = ClassChoiceField(VideoCardGpuCoreFamily, 'Familia')
     gpu_dx_version = ClassChoiceField(VideoCardGpuDirectxVersion, 'DX mín.', requires_advanced_controls = True)
     gpu_ogl_version = ClassChoiceField(VideoCardGpuOpenglVersion, 'OGl mín.', requires_advanced_controls = True)
-    bus_name = ClassChoiceField(VideoCardBusName, 'Nombre')
-    bus_lanes = ClassChoiceField(VideoCardBusLane, 'Lanes', requires_advanced_controls = True)
+    bus_name = ClassChoiceField(InterfaceCardBusName, 'Nombre')
+    bus_lanes = ClassChoiceField(InterfaceCardBusLane, 'Lanes', requires_advanced_controls = True)
     bus = ClassChoiceField(VideoCardBus, 'Bus', requires_advanced_controls = True)
     profile = ClassChoiceField(VideoCardProfile, 'Perfil')
     refrigeration = ClassChoiceField(VideoCardRefrigeration, 'Cooling', requires_advanced_controls = True)
@@ -106,9 +106,9 @@ class VideoCardSearchForm(SearchForm):
         if key == 'gpu_ogl_version':
             value = 'OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value)) + ' o superior'
         if key == 'bus_name':
-            value = unicode(VideoCardBusName.objects.get(pk = pk_value))
+            value = unicode(InterfaceCardBusName.objects.get(pk = pk_value))
         if key == 'bus_lanes':
-            value = 'Bus ' + unicode(VideoCardBusLane.objects.get(pk = pk_value))
+            value = 'Bus ' + unicode(InterfaceCardBusLane.objects.get(pk = pk_value))
         if key == 'bus':
             value = unicode(VideoCardBus.objects.get(pk = pk_value))
         if key == 'profile':
@@ -155,9 +155,9 @@ class VideoCardSearchForm(SearchForm):
         if key == 'gpu_ogl_version':
             value = 'Tarjetas de video OpenGL ' + unicode(VideoCardGpuOpenglVersion.objects.get(pk = pk_value)) + ' o superior'
         if key == 'bus_name':
-            value = 'Tarjetas de video con bus ' + unicode(VideoCardBusName.objects.get(pk = pk_value))
+            value = 'Tarjetas de video con bus ' + unicode(InterfaceCardBusName.objects.get(pk = pk_value))
         if key == 'bus_lanes':
-            value = 'Tarjetas de video con bus de ' + unicode(VideoCardBusLane.objects.get(pk = pk_value)) + ' lanes'
+            value = 'Tarjetas de video con bus de ' + unicode(InterfaceCardBusLane.objects.get(pk = pk_value)) + ' lanes'
         if key == 'bus':
             value = 'Tarjetas de video con bus ' + unicode(VideoCardBus.objects.get(pk = pk_value))
         if key == 'profile':
