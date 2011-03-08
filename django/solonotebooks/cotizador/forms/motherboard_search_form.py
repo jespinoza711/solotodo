@@ -10,7 +10,7 @@ from . import SearchForm
 
 class MotherboardSearchForm(SearchForm):
     brand = ClassChoiceField(MotherboardBrand, 'Marca', in_quick_search = True, quick_search_name = 'Marca')
-    chipset_brand = ClassChoiceField(MotherboardChipsetBrand, 'Chipset', in_quick_search = True, quick_search_name = 'Plataforma')
+    socket_brand = ClassChoiceField(InterfaceSocketBrand, 'Plataforma', in_quick_search = True, quick_search_name = 'Plataforma')
     northbridge = ClassChoiceField(MotherboardNorthbridge, 'Chipset', in_quick_search = True, quick_search_name = 'Chipset')
     socket = ClassChoiceField(MotherboardSocket, 'Socket', in_quick_search = True, quick_search_name = 'Socket')
     format = ClassChoiceField(MotherboardFormat, 'Formato', requires_advanced_controls = True)
@@ -35,7 +35,7 @@ class MotherboardSearchForm(SearchForm):
     def generate_interface_model(self):
         model = [['Datos generales',
                     ['brand',
-                     'chipset_brand',
+                     'socket_brand',
                      'northbridge',
                      'socket',
                      'format',]],
@@ -56,8 +56,8 @@ class MotherboardSearchForm(SearchForm):
         value = ''
         if key == 'brand':
             value = unicode(MotherboardBrand.objects.get(pk = pk_value))
-        if key == 'chipset_brand':
-            value = 'Plataforma ' + unicode(MotherboardChipsetBrand.objects.get(pk = pk_value))
+        if key == 'socket_brand':
+            value = 'Plataforma ' + unicode(InterfaceSocketBrand.objects.get(pk = pk_value))
         if key == 'northbridge':
             value = 'Chipset ' + unicode(MotherboardNorthbridge.objects.get(pk = pk_value))            
         if key == 'socket':
@@ -81,8 +81,8 @@ class MotherboardSearchForm(SearchForm):
         value = ''
         if key == 'brand':
             value = 'Placas madre ' + unicode(MotherboardBrand.objects.get(pk = pk_value))
-        if key == 'chipset_brand':
-            value = 'Placas madre con plataforma ' + unicode(MotherboardChipsetBrand.objects.get(pk = pk_value))
+        if key == 'socket_brand':
+            value = 'Placas madre con plataforma ' + unicode(InterfaceSocketBrand.objects.get(pk = pk_value))
         if key == 'northbridge':
             value = 'Placas madre con chipset ' + unicode(MotherboardNorthbridge.objects.get(pk = pk_value))
         if key == 'socket':
@@ -105,8 +105,8 @@ class MotherboardSearchForm(SearchForm):
     def filter_products(self, motherboards):
         if self.brand:
             motherboards = motherboards.filter(brand = self.brand)
-        if self.chipset_brand:
-            motherboards = motherboards.filter(chipset__northbridge__family__brand = self.chipset_brand)
+        if self.socket_brand:
+            motherboards = motherboards.filter(chipset__northbridge__family__socket__socket__brand = self.socket_brand)
         if self.northbridge:
             motherboards = motherboards.filter(chipset__northbridge = self.northbridge)
         if self.socket:

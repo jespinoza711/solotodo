@@ -1,8 +1,10 @@
 from django.db import models
+from . import InterfaceSocketBrand
 
 class InterfaceSocket(models.Model):
     num_pins = models.IntegerField()
     name = models.CharField(max_length = 255)
+    brand = models.ForeignKey(InterfaceSocketBrand)
     
     def __unicode__(self):
         return self.name
@@ -11,5 +13,5 @@ class InterfaceSocket(models.Model):
         return unicode(self)
     
     class Meta:
-        ordering = ['name']
+        ordering = ['brand', 'name']
         app_label = 'cotizador'
