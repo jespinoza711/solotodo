@@ -51,6 +51,8 @@ class Bym(FetchStore):
                             'catpro.php?idCat=25',              # Procesadores AMD
                             'catpro.php?idCat=26',              # Procesadores Intel
                             'catpro.php?idCat=18',              # LCD
+                            'catpro.php?idCat=23',              # MB AMD
+                            'catpro.php?idCat=24',              # MB Intel
                             ]
                             
         for url_extension in url_extensions:
