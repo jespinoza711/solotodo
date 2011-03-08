@@ -4,6 +4,7 @@ from solonotebooks.cotizador.models.interface_video_port import InterfaceVideoPo
 from solonotebooks.cotizador.models.interface_card_bus_name import InterfaceCardBusName
 from solonotebooks.cotizador.models.interface_card_bus_lane import InterfaceCardBusLane
 from interface_card_bus import InterfaceCardBus
+from interface_socket_brand import InterfaceSocketBrand
 from interface_socket import InterfaceSocket
 from interface_port import InterfacePort
 from interface_memory_type import InterfaceMemoryType
@@ -175,6 +176,7 @@ __all__ = [
             'InterfaceBrand',
             'InterfaceVideoPort',
             'InterfaceCardBus',
+            'InterfaceSocketBrand',
             'InterfaceSocket',
             'InterfacePort',
             'InterfaceMemoryType',
