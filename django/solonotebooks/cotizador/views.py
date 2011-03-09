@@ -363,8 +363,8 @@ def product_details(request, product_id):
     # Find the stores with this product available
     stores_with_product_available = product.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')
         
-    similar_products_ids = product.similar_products.split(',')
-    similar_products = [Product.objects.get(pk = product_id) for product_id in similar_products_ids if product_id and int(product_id)]
+    #similar_products_ids = product.similar_products.split(',')
+    #similar_products = [Product.objects.get(pk = product_id) for product_id in similar_products_ids if product_id and int(product_id)]
     
     try:
         product_subscription = ProductSubscription.objects.filter(user = request.user, product = product, is_active = True)[0]
@@ -377,7 +377,7 @@ def product_details(request, product_id):
         'product_prices': stores_with_product_available,
         'product_comments': product.productcomment_set.filter(validated = True).order_by('id'),
         'posted_comment': posted_comment,
-        'similar_products': similar_products,
+        #'similar_products': similar_products,
         'subscription': product_subscription,
         'ptype': product.ptype
         })
