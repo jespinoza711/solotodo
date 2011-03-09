@@ -117,12 +117,9 @@ admin.site.register(VideoCardMemoryBusWidth)
 admin.site.register(VideoCardGpuCoreCount)
 admin.site.register(VideoCardGpuManufacturingProcess)
 
-excludes = ['shp', 'week_visitor_count', 'week_discount', 'long_description', 'similar_products']
+excludes = ['ptype', 'shp', 'week_visitor_count', 'week_discount', 'long_description', 'similar_products']
             
 class ProductAdmin(admin.ModelAdmin):
-    exclude = excludes
-    
-class NotebookAdmin(admin.ModelAdmin):
     exclude = excludes
     
 class VideoCardAdmin(admin.ModelAdmin):
@@ -130,7 +127,7 @@ class VideoCardAdmin(admin.ModelAdmin):
     list_display = ['pretty_display', 'core_clock', 'shader_clock', 'memory_clock']
     
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Notebook, NotebookAdmin)
+admin.site.register(Notebook, ProductAdmin)
 admin.site.register(VideoCard, VideoCardAdmin)
 
 class VideoCardGpuAdmin(admin.ModelAdmin):
@@ -177,11 +174,7 @@ admin.site.register(ScreenSpeakers)
 admin.site.register(ScreenResponseTime)
 admin.site.register(ScreenRefreshRate)
 admin.site.register(ScreenDigitalTuner)
-
-class ScreenAdmin(admin.ModelAdmin):
-    exclude = excludes
-
-admin.site.register(Screen, ScreenAdmin)
+admin.site.register(Screen, ProductAdmin)
 
 admin.site.register(MotherboardBrand)
 admin.site.register(MotherboardGraphics)
@@ -206,8 +199,4 @@ admin.site.register(MotherboardPowerConnector)
 admin.site.register(MotherboardHasPowerConnector)
 admin.site.register(MotherboardMemoryChannel)
 admin.site.register(MotherboardAudioChannels)
-
-class MotherboardAdmin(admin.ModelAdmin):
-    exclude = excludes
-    
-admin.site.register(Motherboard, MotherboardAdmin)
+admin.site.register(Motherboard, ProductAdmin)

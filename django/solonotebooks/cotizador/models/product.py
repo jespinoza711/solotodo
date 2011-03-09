@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 class Product(models.Model):
     name = models.CharField(max_length = 255)
     date_added = models.DateTimeField(auto_now_add = True)
-    ptype = models.ForeignKey(ProductType)
+    ptype = models.ForeignKey(ProductType, blank = True, null = True)
     
     shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'chosen_by')
     week_visitor_count = models.IntegerField(default = 0)
@@ -76,6 +76,7 @@ class Product(models.Model):
         return Product.objects.filter(shp__isnull = False)
         
     def clean(self):
+        self.ptype = ProductType.objects.get(classname = self.__class__.__name__)
         if not self.similar_products:
             self.similar_products == '0'
     

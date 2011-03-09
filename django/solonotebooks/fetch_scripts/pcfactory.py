@@ -19,9 +19,10 @@ class PCFactory(FetchStore):
             
             available_cells = baseSoup.findAll('table', { 'class' : 'ProductLine1' })[2].findAll('td')
             if len(available_cells) != 1:
-                availability_string = available_cells[2].string
-                if availability_string == 'Agotado':      
-                    return None
+                availability_cells = available_cells[2::2]
+                for cell in availability_cells:
+                    if cell.string == 'Agotado':      
+                        return None
             
             titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
             product_data.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')

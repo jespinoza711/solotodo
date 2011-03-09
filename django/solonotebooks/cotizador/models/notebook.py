@@ -81,7 +81,8 @@ class Notebook(Product):
         
         for result_notebook in result_notebooks:
             if result_notebook[0] in ntbks_gpu:
-                result_notebook[1] += max_card_type * max_card_type
+                # result_notebook[1] += max_card_type * max_card_type
+                pass
             if result_notebook[0] in ntbks_cpu:
                 result_notebook[1] += 1
             if result_notebook[0] in ntbks_lcd:
