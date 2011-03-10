@@ -43,6 +43,10 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
     (r'^account/remove_subscription/(?P<subscription_id>\d+)/$', 'remove_subscription'),
 )
 
+urlpatterns += patterns('solonotebooks.cotizador.views_advertisement',
+    (r'^advertisement/$', 'index'),
+)
+
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/$', 'news'),
     (r'^manager/news/$', 'news'),

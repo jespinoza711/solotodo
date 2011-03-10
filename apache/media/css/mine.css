@@ -299,3 +299,24 @@ br.product_details_comment_separator {
     font-size: 14px;
     
 }
+
+.advertisement_list input {
+}
+
+#free_products {
+    float: left;
+}
+
+#reserved_products {
+    float: right;
+}
+
+#advertisement_buttons {
+    text-align: center;
+}
+
+.advertisement_list {
+    height: 500px;
+    overflow:auto;
+    width: 350px;
+}
