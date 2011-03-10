@@ -1,0 +1,80 @@
+{% extends "base_no_product_type.html" %}
+
+{% block content %}
+    <div id="result_set">
+        <h2>Gestor de publicidad de {{ store }}</h2>
+        
+        <div id="free_products" class="advertisement_list">
+            <h4>Productos disponibles</h4>
+            {% if free_products %}
+                <ul>
+                    {% for product_pair in free_products %}
+                        <li><input type="checkbox" /> <a href="#">{{ product_pair.1 }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay productos disponibles</p>
+            {% endif %}
+        </div>
+        
+        <div id="reserved_products" class="advertisement_list">
+            <h4>Productos reservados</h4>
+            {% if reserved_products %}
+                <ul>
+                    {% for product_pair in reserved_products %}
+                        <li><input type="checkbox" /> <a href="#">{{ product_pair.1 }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay productos reservados</p>
+            {% endif %}
+        </div>
+        
+        <div id="advertisement_buttons">
+            <input type="button" value=">> Reservar >>" />
+            <br />
+            <input type="button" value="<< Liberar <<" />
+        </div>
+        
+        <br class="clear" />
+        <br />
+        <hr />
+        
+        <h4>Equipos no indexables</h4>
+        {% if non_indexable_shpes %}
+            <ul>
+                {% for shpe in non_indexable_shpes %}
+                    <li><a href="{{ shpe.url }}">{{ shpe.custom_name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Todos los equipos son indexables</p>
+        {% endif %}
+        <br />
+        
+        <h4>Equipos aún no indexados</h4>
+        {% if non_indexed_shpes %}
+            <ul>
+                {% for shpe in non_indexed_shpes %}
+                    <li><a href="{{ shpe.url }}">{{ shpe.custom_name }}</a></li>
+                {% endfor %}
+            </ul>        
+        {% else %}
+            <p>Todos los equipos están indexados</p>
+        {% endif %}
+        
+        <h4>Equipos ya reservados por otras tiendas</h4>
+        {% if unavailable_products %}
+            <ul>
+                {% for product_pair in unavailable_products %}
+                    <li>{{ product_pair.1 }} (
+                        <a href ="{% url solonotebooks.cotizador.views.product_details product_pair.1.id %}"> Link en Solotodo</a> 
+                        / 
+                        <a href ="{{ product_pair.0.url }}"> Link en {{ store }}</a> )</li>
+                {% endfor %}
+            </ul>        
+        {% else %}
+            <p>Todos los equipos están disponibles</p>
+        {% endif %}
+    </div>
+{% endblock %}

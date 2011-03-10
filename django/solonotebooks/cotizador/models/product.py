@@ -16,6 +16,7 @@ class Product(models.Model):
     ptype = models.ForeignKey(ProductType, blank = True, null = True)
     
     shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'chosen_by')
+    sponsored_shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'sponsored_product')
     week_visitor_count = models.IntegerField(default = 0)
     week_discount = models.IntegerField(default = 0)
     long_description = models.TextField(default = ' ')
