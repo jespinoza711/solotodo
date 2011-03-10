@@ -452,7 +452,7 @@ div#login {padding-left: 8px; float: left; width: 900px;}
 -------------------------------------------------------------- */
 
 #cat-index {margin: 20px 0 20px 20px;}
-.producto-li {margin-bottom: 20px;}
+.producto-li {margin-bottom: 5px; padding: 8px;}
 
 .thumb-juego, .thumb-hogar, .thumb-oficina, .thumb-netbooks, .thumb-videocard {width:90px; float: left; }
 .thumb-juego img, .thumb-hogar img, .thumb-oficina img, .thumb-netbooks img, .thumb-videocard img {margin: 1px 0 0 1px;}
@@ -475,13 +475,16 @@ div#login {padding-left: 8px; float: left; width: 900px;}
 
 .content-producto {
  display:block;
- margin-left: 20px;
- width: 500px;
+ margin-left: 25px;
+ width: 480px;
  float: left;
  font-size: 12px;
  line-height: 16px;
  float: left;
- border-bottom: 1px solid #d8d8d8;
+}
+
+.sponsored-result {
+    border: 1px dashed #345679
 }
 
 .content-producto a, .content-producto-c a { color: #013257; font-size: 14px; font-weight: bold; line-height: 1;}
