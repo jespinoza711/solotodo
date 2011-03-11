@@ -26,6 +26,14 @@
     margin-top: 10px;
 }
 
+.advertisement_details_sidebar {
+    float: right;
+    width: 450px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+
 .product_details_specs {
     padding: 10px;
 }
@@ -319,4 +327,12 @@ br.product_details_comment_separator {
     height: 500px;
     overflow:auto;
     width: 350px;
+}
+
+.advertisement_counter {
+    margin-top: 10px;
+}
+
+#advertisement_image {
+    text-align: center;
 }
