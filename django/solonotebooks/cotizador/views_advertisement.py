@@ -50,7 +50,8 @@ def index(request):
     non_indexed_shpes = shpes.filter(shp__isnull = True)
     shpes = shpes.filter(shp__isnull = False)
     
-    product_pairs = list(set([(shpe, shpe.shp.product) for shpe in shpes if shpe.shp.product.ptype.classname == 'Notebook']))
+    product_pairs = list(set([(shpe.shp, shpe.shp.product) for shpe in shpes if shpe.shp.product.ptype.classname == 'Notebook']))
+    product_pairs = sorted(product_pairs, key = lambda pair: unicode(pair[1]))
     
     unavailable_products = []
     reserved_products = []
@@ -60,8 +61,8 @@ def index(request):
         product = product_pair[1]
         if not product.sponsored_shp:
             free_products.append(product_pair)
-        elif product.shp.shpe.store == store:
-            used_products.append(product_pair)
+        elif product.sponsored_shp.shpe.store == store:
+            reserved_products.append(product_pair)
         else:
             unavailable_products.append(product_pair)            
     
@@ -75,3 +76,50 @@ def index(request):
     })
     
     
+@store_user_required
+def reserve_slots(request):
+    store = request.user.get_profile().assigned_store
+    shp_ids = request.POST.getlist('selected_products[]')
+    shps = [StoreHasProduct.objects.get(pk = shp_id) for shp_id in shp_ids]
+    for shp in shps:
+        if shp.shpe.store != store:
+            raise Exception
+        if shp.product.sponsored_shp:
+            raise Exception
+    reserved_shps_count = Product.objects.filter(sponsored_shp__shpe__store = store).count()
+    if len(shps) + reserved_shps_count > store.sponsor_cap:
+        request.flash['error'] = 'Limite de anuncios excedido'
+        return HttpResponseRedirect('/advertisement?refresh=true')
+    for shp in shps:
+        shp.product.sponsored_shp = shp
+        shp.product.save()
+    request.flash['message'] = 'Suscripciones agregadas'
+    return HttpResponseRedirect('/advertisement?refresh=true')
+    
+@store_user_required
+def free_slots(request):
+    store = request.user.get_profile().assigned_store
+    shp_ids = request.POST.getlist('selected_products[]')
+    shps = [StoreHasProduct.objects.get(pk = shp_id) for shp_id in shp_ids]
+    for shp in shps:
+        if not shp.product.sponsored_shp:
+            raise Exception
+        if shp.product.sponsored_shp.shpe.store != store:
+            raise Exception
+    for shp in shps:
+        shp.product.sponsored_shp = None
+        shp.product.save()
+    request.flash['message'] = 'Suscripciones liberadas'
+    return HttpResponseRedirect('/advertisement?refresh=true')
+    
+@store_user_required
+def slot_details(request, shp_id):
+    store = request.user.get_profile().assigned_store
+    shp = StoreHasProduct.objects.get(pk = shp_id)
+    if shp.shpe.store != store:
+        raise Exception
+    return append_advertisement_ptype_to_response(request, 'advertisement/slot_details.html', {
+        'store': store,
+        'shp': shp,
+        'product': shp.product,
+    })

@@ -1,0 +1,24 @@
+{% extends "base_no_product_type.html" %}
+
+{% block title %}
+    Datos de {{ product }}
+{% endblock %}
+
+{% block header_content %}
+<script type="text/javascript" src="/media/js/advertisement.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="result_set">
+    <div class="advertisement_details_sidebar">
+        <div class="product_details_images">
+            <div id="advertisement_image">{{ product.picture.extra_thumbnails_tag.large }}</div>
+        </div>
+        <br class="clear" />
+        
+    </div>
+    <div class="product_details_specs">
+        {{ product.render_details }}
+    </div>
+</div>
+{% endblock %}

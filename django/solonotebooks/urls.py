@@ -45,6 +45,9 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
 
 urlpatterns += patterns('solonotebooks.cotizador.views_advertisement',
     (r'^advertisement/$', 'index'),
+    (r'^advertisement/reserve_slots/$', 'reserve_slots'),
+    (r'^advertisement/free_slots/$', 'free_slots'),
+    (r'^advertisement/slot/(?P<shp_id>\d+)/$', 'slot_details'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',
