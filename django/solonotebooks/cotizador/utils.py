@@ -120,3 +120,108 @@ def concat_dictionary(d):
         return '?' + '&'.join(vals)
     else:
         return ''
+        
+def generate_timelapse_chart(data_streams, legends, filename, title):
+    import cairo
+    import pycha.line
+    from copy import deepcopy
+    
+    main_data_stream = data_streams[0]
+    
+    values = [v for k, v in main_data_stream]
+    
+    maxi = max(values)
+    r = (main_data_stream[0][0].toordinal(), main_data_stream[-1][0].toordinal())
+    
+    chart_data_set = [(legends[idx], [(k.toordinal(), v) for k, v in l]) for idx, l in enumerate(data_streams)]
+        
+    dataSet = chart_data_set
+
+    options = {
+        'axis': {
+            'x': {
+                'ticks': [dict(v = k.toordinal(), label = str(k.day) + '/' + str(k.month)) for k, v in main_data_stream],
+                'range': r
+            },
+            'y': {
+                'tickCount': 4,
+                'range': (0, maxi * 1.2)
+            }
+        },
+        'background': {
+            'color': '#eeeeff',
+            'lineColor': '#444444',
+            'baseColor': '#FFFFFF',
+        },
+        'colorScheme': {
+            'name': 'gradient',
+            'args': {
+                'initialColor': 'blue',
+            },
+        },
+        'legend': {
+            #'hide': True,
+        },
+        'padding': {
+            'left': 60,
+            'bottom': 20,
+            'right': 10,
+        },
+        'title': title
+    }
+    
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 850, 400)
+    chart = pycha.line.LineChart(surface, options)
+
+    chart.addDataset(dataSet)
+    chart.render()
+
+    surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + filename)
+    
+def generate_pie_chart(data, filename, title):
+    import cairo
+    import pycha.pie
+    from copy import deepcopy
+        
+    dataSet = [(entry[0], [[0, entry[1]]]) for entry in data]
+
+    options = {
+        'axis': {
+            'x': {
+                #'ticks': [dict(v = k.toordinal(), label = str(k.day) + '/' + str(k.month)) for k, v in main_data_stream],
+                #'range': r
+            },
+            'y': {
+                'tickCount': 4,
+                #'range': (0, maxi * 1.2)
+            }
+        },
+        'background': {
+            'color': '#eeeeff',
+            'lineColor': '#444444',
+            'baseColor': '#FFFFFF',
+        },
+        'colorScheme': {
+            'name': 'rainbow', 
+            'args': 
+                {'initialColor': 'red'}
+        },
+        'legend': {
+            #'hide': True,
+        },
+        'padding': {
+            #'left': 60,
+            #'bottom': 20,
+            #'right': 10,
+        },
+        'title': title
+    }
+    
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 890, 500)
+    chart = pycha.pie.PieChart(surface, options)
+
+    chart.addDataset(dataSet)
+    chart.render()
+
+    surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + filename)
+    
