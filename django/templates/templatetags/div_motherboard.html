@@ -1,31 +1,8 @@
-<div class="producto-li">
-    <div class="thumb-videocard thumb-product">
-	    <a href="{% url cotizador.views.product_details motherboard.id %}" title="{{ motherboard }}">
-		    {{ motherboard.picture.thumbnail_tag }}<br />
-	    </a>
-	    <p></p>	
-    </div>
-    <div class="content-producto">
-	    <a href="{% url cotizador.views.product_details motherboard.id %}">{{ motherboard }}</a> {% if motherboard.matching %} ({{ motherboard.matching|floatformat }}%) {% endif %}
-	    <br />
-	    <ul class="info-producto left">
-		    <li><strong>Marca:</strong> {{ motherboard.brand }}</li>
-		    <li><strong>Socket:</strong> {{ motherboard.chipset.northbridge.family.socket }}</li>
-		    <li><strong>Chipset:</strong> {{ motherboard.chipset }}</li>
-		    <li><strong>Memorias:</strong> {{ motherboard.pretty_memory_types }}</li>
-	    </ul>
-	    <ul class="precio-producto right">
-		    <li>
-		        <a href="{% url cotizador.views.product_details motherboard.id %}">{{ motherboard.pretty_min_price }}</a>
-	        </li>
-		    {% if motherboard.week_discount >= 10 %}
-		        <li class="mas-barato">
-		            <strong>Bajó {{ motherboard.week_discount }}%!</strong>
-                </li>
-		    {% endif %}
-	    </ul>
-	    <br class="clear" />
-	    <!--<a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> -->
-    </div>
-    <br class="clear" />
-</div> <!-- end producto li -->
+{% extends "templatetags/div_base.html" %}
+
+{% block specs %}
+<li><strong>Marca:</strong> {{ product.brand }}</li>
+<li><strong>Socket:</strong> {{ product.chipset.northbridge.family.socket }}</li>
+<li><strong>Chipset:</strong> {{ product.chipset }}</li>
+<li><strong>Memorias:</strong> {{ product.pretty_memory_types }}</li>
+{% endblock %}

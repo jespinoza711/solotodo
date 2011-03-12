@@ -8,6 +8,7 @@ admin.site.register(Advertisement)
 admin.site.register(AdvertisementVisit)
 admin.site.register(SearchRegistry)
 admin.site.register(ExternalVisit)
+admin.site.register(SponsoredVisit)
 admin.site.register(Store)
 
 admin.site.register(InterfaceBrand)

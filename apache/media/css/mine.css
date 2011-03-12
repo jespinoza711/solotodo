@@ -349,3 +349,13 @@ br.product_details_comment_separator {
 .advertisement_fact {
     font-size: 14px;
 }
+
+.sponsored-li {
+    border: 1px dashed #4E7DA5;
+}
+
+.sponsored-result-text {
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 10px;
+}
