@@ -82,7 +82,22 @@ def product_type_catalog(request, product_type_urlname):
     if last_result_index > num_results:
         last_result_index = num_results
     result_products = result_products[first_result_index - 1 : last_result_index]
-
+    
+    all_sponsored_products = product_type_class.get_valid().filter(sponsored_shp__isnull = False)
+    filtered_sponsored_products = search_form.filter_products(all_sponsored_products)
+    selected_sponsored_products = []
+    for product in filtered_sponsored_products:
+        if product not in result_products:
+            selected_sponsored_products.append(product)
+            if len(selected_sponsored_products) == search_form.page_number * 2:
+                break
+    if len(selected_sponsored_products) == search_form.page_number * 2:
+        selected_sponsored_products = selected_sponsored_products[-2::]
+        for product in selected_sponsored_products:
+            product.is_sponsored = True
+        result_products.insert(2, selected_sponsored_products[0])
+        result_products.insert(6, selected_sponsored_products[1])
+        
     d = dict(search_form.price_choices)
     
     return append_ads_to_response(request, 'cotizador/catalog.html', {
@@ -312,6 +327,14 @@ def store_product_redirect(request, store_product_id):
         external_visit.date = date.today()
         external_visit.save()
     return HttpResponseRedirect(store_product.url)
+    
+def sponsored_product_redirect(request, shp_id):
+    shp = get_object_or_404(StoreHasProduct, pk = shp_id)
+    if not request.user.is_staff:
+        sponsored_visit = SponsoredVisit()
+        sponsored_visit.shp = shp
+        sponsored_visit.save()
+    return HttpResponseRedirect(shp.shpe.url)
     
 # View that gets called when a user clicks an ad
 def ad_visited(request, advertisement_id):

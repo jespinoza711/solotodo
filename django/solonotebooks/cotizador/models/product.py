@@ -9,6 +9,7 @@ from copy import deepcopy
 from utils import prettyPrice
 from solonotebooks import settings
 from django.template.loader import render_to_string
+from django.core.urlresolvers import reverse
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
@@ -34,6 +35,12 @@ class Product(models.Model):
         
     def pretty_display(self):
         return unicode(self)
+        
+    def determine_url(self):
+        if hasattr(self, 'is_sponsored'):
+            return reverse('solonotebooks.cotizador.views.sponsored_product_redirect', args = [self.sponsored_shp.id])
+        else:
+            return reverse('solonotebooks.cotizador.views.product_details', args = [self.id])
         
     def base_raw_text(self):
         result = self.name
@@ -88,7 +95,9 @@ class Product(models.Model):
             super(Product, self).save()
             
     def latest_price(self):
-        if self.shp and self.shp.shpe:
+        if hasattr(self, 'is_sponsored'):
+            return self.sponsored_shp.shpe.latest_price
+        elif self.shp and self.shp.shpe:
             return self.shp.shpe.latest_price
         else:
             return 0
@@ -135,7 +144,10 @@ class Product(models.Model):
             else:
                 ppc.price = 0
             ppc.date = date.today()
-            ppc.save()  
+            ppc.save()
+        
+        if not self.sponsored_shp.shpe:
+            self.sponsored_shp = None
             
         self.long_description = self.raw_text()
         self.update_week_discount()
@@ -160,7 +172,7 @@ class Product(models.Model):
         
     def pretty_min_price(self):
         if self.shp:
-            return prettyPrice(self.shp.shpe.latest_price)
+            return prettyPrice(self.latest_price())
         else:
             return 'No disponible'
         
@@ -256,7 +268,7 @@ class Product(models.Model):
             entity = entity.get_polymorphic_instance()
         
         template_file = 'templatetags/div_' + self.ptype.adminurlname + '.html'
-        return render_to_string(template_file, { self.ptype.adminurlname: entity })
+        return render_to_string(template_file, { 'product': entity })
         
     def render_similar(self):
         entity = self

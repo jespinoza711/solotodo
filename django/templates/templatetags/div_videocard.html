@@ -1,31 +1,8 @@
-<div class="producto-li">
-    <div class="thumb-videocard thumb-product">
-	    <a href="{% url cotizador.views.product_details videocard.id %}" title="{{ videocard }}">
-		    {{ videocard.picture.thumbnail_tag }}<br />
-	    </a>
-	    <p>{{ videocard.ntype.name }}</p>	
-    </div>
-    <div class="content-producto">
-	    <a href="{% url cotizador.views.product_details videocard.id %}">{{ videocard }}</a> {% if videocard.matching %} ({{ videocard.matching|floatformat }}%) {% endif %}
-	    <br />
-	    <ul class="info-producto left">
-		    <li><strong>GPU:</strong> {{ videocard.gpu }}</li>
-		    <li><strong>Memoria:</strong> {{ videocard.pretty_memory }}</li>
-		    <li><strong>Frecuencias:</strong> {{ videocard.pretty_frequencies }}</li>
-		    <li><strong>Bus:</strong> {{ videocard.bus }}</li>
-	    </ul>
-	    <ul class="precio-producto right">
-		    <li>
-		        <a href="{% url cotizador.views.product_details videocard.id %}">{{ videocard.pretty_min_price }}</a>
-	        </li>
-		    {% if videocard.week_discount >= 10 %}
-		        <li class="mas-barato">
-		            <strong>Bajó {{ videocard.week_discount }}%!</strong>
-                </li>
-		    {% endif %}
-	    </ul>
-	    <br class="clear" />
-	    <!--<a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> -->
-    </div>
-    <br class="clear" />
-</div> <!-- end producto li -->
+{% extends "templatetags/div_base.html" %}
+
+{% block specs %}
+<li><strong>GPU:</strong> {{ product.gpu }}</li>
+<li><strong>Memoria:</strong> {{ product.pretty_memory }}</li>
+<li><strong>Frecuencias:</strong> {{ product.pretty_frequencies }}</li>
+<li><strong>Bus:</strong> {{ product.bus }}</li>
+{% endblock %}

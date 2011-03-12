@@ -1,0 +1,33 @@
+<div class="{% if product.is_sponsored %}sponsored-li{% endif %} producto-li">
+    <div class="thumb-videocard thumb-product">
+	    <a href="{{ product.determine_url }}" title="{{ product }}">
+		    {{ product.picture.thumbnail_tag }}<br />
+	    </a>
+	    <!--<p>{{ product.ntype.name }}</p>	-->
+    </div>
+    <div class="content-producto">
+	    <a href="{{ product.determine_url }}">{{ product }}</a> {% if product.matching %} ({{ product.matching|floatformat }}%) {% endif %}
+	    <br />
+	    <ul class="info-producto left">
+		    {% block specs %}
+		    {% endblock %}
+	    </ul>
+	    <ul class="precio-producto right">
+		    <li>
+		        <a href="{{ product.determine_url }}">{{ product.pretty_min_price }}</a>
+	        </li>
+	        {% if product.is_sponsored %}
+	            <p class="sponsored-result-text">Resultado patrocinado</p>
+	        {% else %}
+		        {% if product.week_discount >= 10 %}
+		            <li class="mas-barato">
+		                <strong>Bajó {{ product.week_discount }}%!</strong>
+                    </li>
+		        {% endif %}
+            {% endif %}		    
+	    </ul>
+	    <br class="clear" />
+	    <!--<a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> -->
+    </div>
+    <br class="clear" />
+</div> <!-- end producto li -->

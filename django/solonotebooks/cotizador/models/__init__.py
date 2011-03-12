@@ -68,6 +68,7 @@ from solonotebooks.cotizador.models.log_entry import LogEntry
 from solonotebooks.cotizador.models.log_change_entity_name import LogChangeEntityName
 from solonotebooks.cotizador.models.log_entry_message import LogEntryMessage
 from solonotebooks.cotizador.models.external_visit import ExternalVisit
+from solonotebooks.cotizador.models.sponsored_visit import SponsoredVisit
 from solonotebooks.cotizador.models.advertisement_position import AdvertisementPosition
 from solonotebooks.cotizador.models.advertisement import Advertisement
 from solonotebooks.cotizador.models.advertisement_visit import AdvertisementVisit
@@ -237,6 +238,7 @@ __all__ = [
             'NotebookProcessorManufacturing',
             'NotebookProcessorFamily',
             'ExternalVisit',
+            'SponsoredVisit',
             'AdvertisementPosition',
             'Advertisement',
             'AdvertisementVisit',

@@ -201,6 +201,26 @@ def slot_details(request, shp_id):
     chart_data = [(unicode(Store.objects.get(pk = pair['shn__store'])), pair['id__count']) for pair in raw_data]
     
     generate_pie_chart(chart_data, 'unit_' + str(shp.id) + '_03.png', u'Distribución de clicks entre tiendas')
+    
+    # Fourth chart
+    
+    raw_data = SponsoredVisit.objects.filter(shp = shp, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
+    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
+    
+    sdate = start_date
+    step_date = timedelta(days = 1)
+    
+    while sdate <= end_date:
+        if sdate not in chart_data:
+            chart_data[sdate] = 0
+        sdate += step_date
+    
+    chart_data = chart_data.items()
+    chart_data = sorted(chart_data, key = lambda pair: pair[0])
+    
+    sponsored_visit_count = sum([e[1] for e in chart_data])
+
+    generate_timelapse_chart([chart_data], [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
         
     return append_advertisement_ptype_to_response(request, 'advertisement/slot_details.html', {
         'store': store,
@@ -211,5 +231,6 @@ def slot_details(request, shp_id):
         'product_prices': product.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price'),
         'product_visit_count': product_visit_count,
         'store_external_visit_count': store_external_visit_count,
-        'all_external_visit_count': all_external_visit_count
+        'all_external_visit_count': all_external_visit_count,
+        'sponsored_visit_count': sponsored_visit_count,
     })
