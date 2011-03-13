@@ -39,6 +39,7 @@ class Sistemax(FetchStore):
                 '58',       # Procesadores AMD
                 '59',       # Procesadores Intel
                 '25',       # Monitores
+                '82',       # Mac / iPod
                 ]
                         
         # Array containing the data for each product
