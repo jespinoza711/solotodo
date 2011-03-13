@@ -1,31 +1,8 @@
-<div class="producto-li">
-    <div class="thumb-videocard thumb-product">
-	    <a href="{% url cotizador.views.product_details notebook.id %}" title="{{ notebook }}">
-		    {{ notebook.picture.thumbnail_tag }}<br />
-	    </a>
-	    <!--<p>{{ notebook.ntype.name }}</p>	-->
-    </div>
-    <div class="content-producto">
-	    <a href="{% url cotizador.views.product_details notebook.id %}">{{ notebook }}</a> {% if notebook.matching %} ({{ notebook.matching|floatformat }}%) {% endif %}
-	    <br />
-	    <ul class="info-producto left">
-		    <li><strong>Procesador:</strong> {{ notebook.processor.pretty_print }}</li>
-		    <li><strong>RAM:</strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})</li>
-		    <li><strong>Disco Duro:</strong> {{ notebook.storage_drive.all.0 }}</li>
-		    <li><strong>Pantalla:</strong> {{ notebook.screen.pretty_display }}</li>
-	    </ul>
-	    <ul class="precio-producto right">
-		    <li>
-		        <a href="{% url cotizador.views.product_details notebook.id %}">{{ notebook.pretty_min_price }}</a>
-	        </li>
-		    {% if notebook.week_discount >= 10 %}
-		        <li class="mas-barato">
-		            <strong>Bajó {{ notebook.week_discount }}%!</strong>
-                </li>
-		    {% endif %}
-	    </ul>
-	    <br class="clear" />
-	    <!--<a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> -->
-    </div>
-    <br class="clear" />
-</div> <!-- end producto li -->
+{% extends "templatetags/div_base.html" %}
+
+{% block specs %}
+<li><strong>Procesador:</strong> {{ product.processor.pretty_print }}</li>
+<li><strong>RAM:</strong> {{ product.ram_quantity }} ({{product.ram_type}}-{{product.ram_frequency.value}})</li>
+<li><strong>Disco Duro:</strong> {{ product.storage_drive.all.0 }}</li>
+<li><strong>Pantalla:</strong> {{ product.screen.pretty_display }}</li>
+{% endblock %}

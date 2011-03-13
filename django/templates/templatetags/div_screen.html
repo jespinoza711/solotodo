@@ -1,31 +1,8 @@
-<div class="producto-li">
-    <div class="thumb-videocard thumb-product">
-	    <a href="{% url cotizador.views.product_details screen.id %}" title="{{ screen }}">
-		    {{ screen.picture.thumbnail_tag }}<br />
-	    </a>
-	    <p></p>	
-    </div>
-    <div class="content-producto">
-	    <a href="{% url cotizador.views.product_details screen.id %}">{{ screen }}</a> {% if screen.matching %} ({{ screen.matching|floatformat }}%) {% endif %}
-	    <br />
-	    <ul class="info-producto left">
-		    <li><strong>Categoría:</strong> {{ screen.stype }}</li>
-		    <li><strong>Tamaño:</strong> {{ screen.size }}</li>
-		    <li><strong>Resolución:</strong> {{ screen.resolution }}</li>
-		    <li><strong>Contraste:</strong> {{ screen.pretty_contrast }}</li>
-	    </ul>
-	    <ul class="precio-producto right">
-		    <li>
-		        <a href="{% url cotizador.views.product_details screen.id %}">{{ screen.pretty_min_price }}</a>
-	        </li>
-		    {% if screen.week_discount >= 10 %}
-		        <li class="mas-barato">
-		            <strong>Bajó {{ screen.week_discount }}%!</strong>
-                </li>
-		    {% endif %}
-	    </ul>
-	    <br class="clear" />
-	    <!--<a href="#" class="right findex" title="Agregar a Favoritos">agregar</a> -->
-    </div>
-    <br class="clear" />
-</div> <!-- end producto li -->
+{% extends "templatetags/div_base.html" %}
+
+{% block specs %}
+<li><strong>Categoría:</strong> {{ product.stype }}</li>
+<li><strong>Tamaño:</strong> {{ product.size }}</li>
+<li><strong>Resolución:</strong> {{ product.resolution }}</li>
+<li><strong>Contraste:</strong> {{ product.pretty_contrast }}</li>
+{% endblock %}

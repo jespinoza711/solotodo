@@ -1,0 +1,93 @@
+{% extends "base_no_product_type.html" %}
+
+{% block title %}
+    Datos de {{ product }}
+{% endblock %}
+
+{% block header_content %}
+<script type="text/javascript" src="/media/js/advertisement.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<p><a href="{% url solonotebooks.cotizador.views_advertisement.index %}"><strong>&lt;&lt; Volver a administrador</strong></a></p>
+
+<div id="advertisement_tabs">
+	<ul>
+		<li><a href="#tabs-1">Información del producto</a></li>
+		<li><a href="#tabs-2">Estadísticas</a></li>
+	</ul>
+	<div id="tabs-1">
+        <div class="product_details_sidebar">
+            <div class="product_details_images">
+                <div id="advertisement_image">{{ product.picture.extra_thumbnails_tag.large }}</div>
+            </div>
+            <br class="clear" />
+            <div class="price_table_container">
+                <table class="table_product_detail_prices mytable">
+                    <tr>
+                        <th>Tienda</th>
+                        <th>Precio</th>
+                    </tr>
+                    {% ifequal product_prices|length 0 %}
+                      <tr>
+                        <td colspan="2" class="product_availability_message">
+                          Este producto no está disponible actualmente
+                        </td>
+                      </tr>
+                    {% else %}
+                      {% for product_price in product_prices %}
+                          <tr>
+                              <td>
+                                  <a href="/store_product/{{product_price.shpe.id}}" rel="nofollow">{{ product_price.store.picture.thumbnail_tag }}</a>
+                              </td>
+                              <td>
+                                  <a href="/store_product/{{product_price.shpe.id}}" rel="nofollow">{{ product_price.shpe.pretty_price }}</a>
+                              </td>
+                          </tr>
+                      {% endfor %}
+                    {% endifequal %}
+                </table>
+            </div>
+        </div>
+        <div class="product_details_specs">
+            {{ product.render_details }}
+        </div>
+        <br class="clear" />
+	</div>
+	<div id="tabs-2">
+		<form method="get" id="advertisement_slot_form" action="#tabs-2">
+            Desde: {{ form.start_date }} &nbsp;&nbsp;Hasta: {{ form.end_date }}
+            <input type="submit" value="Actualizar" />
+        </form>
+        <br />
+        <div id="sub_advertisement_tabs">
+	        <ul>
+		        <li><a href="#subtabs-1">Número de visitas</a></li>
+		        <li><a href="#subtabs-2">Número de clicks a tiendas</a></li>
+		        <li><a href="#subtabs-3">Distribución de clicks entre tiendas</a></li>
+		        <li><a href="#subtabs-4">Resultados campaña publicitaria</a></li>
+	        </ul>
+	        <div id="subtabs-1">
+	            <img src="/media/pics/charts/unit_{{ shp.id }}_01.png?generator={{tag}}" />
+	            <br />&nbsp;<br />
+	            <p class="advertisement_fact">Número total de visitas en el periodo: {{ product_visit_count }}</p>
+	        </div>
+	        <div id="subtabs-2">
+                <img src="/media/pics/charts/unit_{{ shp.id }}_02.png?generator={{tag}}" />
+                <br />&nbsp;<br />
+	            <p class="advertisement_fact">Número total de clicks a tiendas en el periodo: {{ all_external_visit_count }}</p>
+	            <p class="advertisement_fact">Número de clicks a {{ store }} en el periodo: {{ store_external_visit_count }}</p>
+	        </div>
+	        <div id="subtabs-3">
+                <img src="/media/pics/charts/unit_{{ shp.id }}_03.png?generator={{tag}}" />
+	        </div>
+	        <div id="subtabs-4">
+                <img src="/media/pics/charts/unit_{{ shp.id }}_04.png?generator={{tag}}" />
+	            <br />&nbsp;<br />
+	            <p class="advertisement_fact">Número total de visitas patrocinadas en el periodo: {{ sponsored_visit_count }}</p>
+	        </div>
+        </div>
+	</div>
+</div>
+{% endblock %}

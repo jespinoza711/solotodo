@@ -43,6 +43,13 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
     (r'^account/remove_subscription/(?P<subscription_id>\d+)/$', 'remove_subscription'),
 )
 
+urlpatterns += patterns('solonotebooks.cotizador.views_advertisement',
+    (r'^advertisement/$', 'index'),
+    (r'^advertisement/reserve_slots/$', 'reserve_slots'),
+    (r'^advertisement/free_slots/$', 'free_slots'),
+    (r'^advertisement/slot/(?P<shp_id>\d+)/$', 'slot_details'),
+)
+
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/$', 'news'),
     (r'^manager/news/$', 'news'),
@@ -69,6 +76,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^$', 'index'),
     (r'^products/(?P<product_id>\d+)/$', 'product_details'),
     (r'^store_product/(?P<store_product_id>\d+)/$', 'store_product_redirect'),
+    (r'^sponsored_product/(?P<shp_id>\d+)/$', 'sponsored_product_redirect'),
     (r'^stores/$', 'store_index'),
     (r'^stores/(?P<store_id>\d+)/$', 'store_details'),
     (r'^all_products/$', 'all_products'),
