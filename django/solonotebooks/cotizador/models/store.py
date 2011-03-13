@@ -5,6 +5,7 @@ class Store(models.Model):
     name = models.CharField(max_length = 255)
     classname = models.CharField(max_length = 255)
     url = models.URLField()
+    sponsor_cap = models.IntegerField(default = 0)
     picture = ImageWithThumbnailsField(
         thumbnail = { 'size': (140, 90), },                                          
         upload_to = 'store_logos',

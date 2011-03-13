@@ -21,6 +21,9 @@ class StoreHasProduct(models.Model):
             if product.shp == self:
                 product.shp = None
                 product.save()
+            if product.sponsored_shp == self:
+                product.sponsored_shp = None
+                product.save()
             self.delete()
         else:
             shpes = self.storehasproductentity_set.filter(is_available = True).filter(is_hidden = False).order_by('latest_price')
