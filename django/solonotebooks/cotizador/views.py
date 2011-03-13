@@ -91,12 +91,13 @@ def product_type_catalog(request, product_type_urlname):
             selected_sponsored_products.append(product)
             if len(selected_sponsored_products) == search_form.page_number * 2:
                 break
-    if len(selected_sponsored_products) == search_form.page_number * 2:
-        selected_sponsored_products = selected_sponsored_products[-2::]
+    if len(selected_sponsored_products) > (search_form.page_number - 1) * 2:
+        selected_sponsored_products = selected_sponsored_products[(search_form.page_number - 1) * 2::]
         for product in selected_sponsored_products:
             product.is_sponsored = True
         result_products.insert(2, selected_sponsored_products[0])
-        result_products.insert(6, selected_sponsored_products[1])
+        if len(result_products) == 2:
+            result_products.insert(6, selected_sponsored_products[1])
         
     d = dict(search_form.price_choices)
     
