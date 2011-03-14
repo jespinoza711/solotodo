@@ -40,6 +40,7 @@ class Cintegral(FetchStore):
                             '14',   # Tarjetas de video
                             '3',    # Procesadores
                             '1',    # LCD
+                            '6',    # Placas madre
                             ]
                             
         for url_extension in url_extensions:
