@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.utils import *
+import sys, traceback
     
 '''Method that takes a list of ProductData objects and the store they came from,
 checks whether they already exists, if they do, it checks for price differences,
@@ -65,6 +66,7 @@ def get_store_products(fetch_store, update_shpes_on_finish = False):
             pass
             
     except Exception, e:
+        traceback.print_exc(file=sys.stdout)
         print e
         print('Error al obtener los productos de ' + store.name)
         

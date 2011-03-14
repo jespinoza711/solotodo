@@ -47,7 +47,7 @@ class Product(models.Model):
         for field in self._meta.fields:
             if field.__class__.__name__ == 'ForeignKey':
                 name = field.get_attname().replace('_id', '')
-                if name == 'shp':
+                if name == 'shp' or name == 'sponsored_shp':
                     continue
                 result += ' ' + getattr(self, name).raw_text()
             elif field.__class__.__name__ == 'CharField':
@@ -146,7 +146,7 @@ class Product(models.Model):
             ppc.date = date.today()
             ppc.save()
         
-        if not self.sponsored_shp.shpe:
+        if self.sponsored_shp and not self.sponsored_shp.shpe:
             self.sponsored_shp = None
             
         self.long_description = self.raw_text()
