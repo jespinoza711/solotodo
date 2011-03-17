@@ -16,6 +16,10 @@ def main():
         
         if shpe.shp:
             print shpe.shp.product.dprint()
+
+        print 'Actualizando'
+        shpe.update_with_product(prod)
+        shpe.update(recursive = True)
     else:
         print 'No disponible'
                 

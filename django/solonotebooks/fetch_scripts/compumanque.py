@@ -37,6 +37,7 @@ class Compumanque(FetchStore):
                             '45_98',    # TV
                             '106',   # Netbooks
                             '50',     # Notebooks
+                            '79',      # Placas madre
                             ]
                             
         product_links = []

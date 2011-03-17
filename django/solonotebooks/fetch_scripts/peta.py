@@ -45,6 +45,7 @@ class Peta(FetchStore):
                             'peta-cl/tarjetas-de-video.html',
                             'peta-cl/procesadores.html',
                             'peta-cl/monitores.html',
+                            'audio-y-video-1/televisores.html',
                             ]
                           
         product_links = []                            
