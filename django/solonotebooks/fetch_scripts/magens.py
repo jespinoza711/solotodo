@@ -59,6 +59,7 @@ class Magens(FetchStore):
             'intel-s775-c-1_32.html',
             'server-c-1_30.html',
             'monitores-televisores-c-13.html',
+            'placas-madre-c-2.html',
         ]
                 
         product_links = []            

@@ -30,7 +30,7 @@ def append_advertisement_ptype_to_response(request, template, args):
 
 def store_user_required(f):
     def wrap(request, *args, **kwargs):
-        if not request.user.get_profile().assigned_store:
+        if not request.user.get_profile() or not request.user.get_profile().assigned_store:
             request.flash['error'] = 'Por favor inicie sesión primero'
             return HttpResponseRedirect('/')
         else:
