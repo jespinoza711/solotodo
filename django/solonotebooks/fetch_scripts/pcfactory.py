@@ -82,6 +82,10 @@ class PCFactory(FetchStore):
 
                 ntbkLinks = baseSoup.findAll('a', { 'class' : 'vinculoNombreProd' })
                 trigger = False
+                
+                if not ntbkLinks:
+                    break
+                    
                 for ntbkLink in ntbkLinks:
                     link = urlBase + ntbkLink['href']
                     link = link.encode('ascii', 'ignore')
