@@ -17,17 +17,24 @@ class Paris(FetchStore):
         
         product_name = product_soup.find('h1', { 'class': 'txtDcsFch ubiDscFch' }).string.encode('ascii', 'ignore')
         
-        product_price = None
+        product_prices = []
+        
         try:
             product_price = int(product_soup.find('div', { 'class': 'prcNrmlFc' }).find('b').string.split('$')[1].replace('.', ''))
+            product_prices.append(product_price)
         except:
             pass
             
-        if not product_price:
-            try:
-                product_price = int(product_soup.find('div', { 'class': 'prcIntFch2' }).find('b').string.split('$')[1].replace('.', ''))
-            except:
-                pass
+        try:
+            product_price = int(product_soup.find('div', { 'class': 'prcIntFch2' }).find('b').string.split('$')[1].replace('.', ''))
+            product_prices.append(product_price)
+        except:
+            pass
+            
+        if not product_prices:
+            raise Exception
+            
+        product_price = min(product_prices)
         
         product_data = ProductData()
         product_data.custom_name = product_name

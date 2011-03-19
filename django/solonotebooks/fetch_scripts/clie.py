@@ -20,7 +20,7 @@ class Clie(FetchStore):
             return None
         
         product_name = product_soup.find('td', { 'class': 'texto-neg-bold-ficha' }).string.split('&#8226;')[1].strip()
-        product_price = int(product_soup.find('td', { 'background': 'images/ficha/bg_precio_normal_d.gif' }).find('a').string.replace('$', '').replace('.', ''))
+        product_price = int(product_soup.find('td', { 'background': 'images/ficha/bg_efectivo_d.gif' }).find('a').string.replace('$', '').replace('.', ''))
         
         if not product_price:
             return None

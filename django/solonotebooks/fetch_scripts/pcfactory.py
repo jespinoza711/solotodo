@@ -29,8 +29,8 @@ class PCFactory(FetchStore):
             product_data.url = product_link
             product_data.comparison_field = product_link
             
-            priceSpan = baseSoup.find('span', { 'id' : 'simulador' })
-            product_data.price = int(priceSpan.string.replace('.', ''))
+            price_data = int(baseSoup.find('select', { 'class' : 'PCFdropFicha' }).findAll('option')[1]['value'].replace('.', ''))
+            product_data.price = price_data
             
             return product_data
         except:

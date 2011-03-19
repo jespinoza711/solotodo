@@ -25,7 +25,7 @@ class Wei(FetchStore):
         titleSpans = soup.findAll("div", { "class" : "TXTSM" })
         title = titleSpans[0].string.strip()
 
-        priceCells = soup.findAll("td", { "class" : "TXTB" })
+        priceCells = soup.findAll('td', { 'class' : 'TXTRBIG' })
         price = int(priceCells[1].string.strip().replace(',', ''))
         productData.custom_name = title.encode('ascii','ignore')
         productData.price = price

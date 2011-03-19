@@ -16,7 +16,7 @@ class Sistemax(FetchStore):
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.findAll('h2')[3].find('font').string.encode('ascii', 'ignore')
-        product_price = int(product_soup.findAll('span', { 'class': 'style18' })[1].string)
+        product_price = int(product_soup.findAll('span', { 'class': 'style18' })[0].string)
         
         product_data = ProductData()
         product_data.custom_name = product_name

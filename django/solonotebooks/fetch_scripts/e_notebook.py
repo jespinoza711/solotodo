@@ -21,7 +21,7 @@ class ENotebook(FetchStore):
             product_name = product_cells[0].find('h1').contents[0]
         except IndexError:
             return None
-        price_cell = product_cells[2]
+        price_cell = product_cells[1]
         
         try:
             product_price = int(price_cell.find('span', { 'class' : 'productSpecialPrice' }).string.replace('$', '').replace('.', ''))

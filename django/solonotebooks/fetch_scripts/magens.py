@@ -20,7 +20,7 @@ class Magens(FetchStore):
             return None
         
         product_name = product_soup.find('div', { 'class': 'titleContent' }).string.encode('ascii', 'ignore')
-        product_price = int(product_soup.find('div', { 'class': 'precioDetalle' }).string.split('$')[1].replace(',', ''))
+        product_price = int(product_soup.findAll('div', { 'class': 'precioDetalle' })[1].string.split('$')[1].replace(',', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name

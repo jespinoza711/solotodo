@@ -19,7 +19,7 @@ class PCExpress(FetchStore):
 
         title = soup.findAll('b')[2].string
         
-        price = int(soup.find('font', {'size':'3'}).find('span').contents[1].string.replace('$', '').replace(',', ''))
+        price = int(soup.find('font', {'size':'3'}).find('span').find('span').find('b').string.replace('$', '').replace(',', ''))
 
         productData.custom_name = title
         productData.price = price

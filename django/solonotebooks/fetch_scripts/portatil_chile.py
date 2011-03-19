@@ -16,7 +16,7 @@ class PortatilChile(FetchStore):
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.find('th', { 'colspan': '2' }).string.encode('ascii', 'ignore').split('"')[1]
-        product_price = int(product_soup.find('table', { 'cellspacing': '1' }).find('table').findAll('td')[5].find('strong').string.replace('.', '').replace('&nbsp;', '').replace('$', '').strip())
+        product_price = int(product_soup.find('table', { 'cellspacing': '1' }).find('table').findAll('td')[3].find('strong').string.replace('.', '').replace('&nbsp;', '').replace('$', '').strip())
         
         product_data = ProductData()
         product_data.custom_name = product_name

@@ -16,7 +16,7 @@ class LaPolar(FetchStore):
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.find('div', { 'class': 'LetraDetalleProducto' }).string.encode('ascii', 'ignore')
-        product_price = int(product_soup.find('div', { 'id': 'fichaPrecioNormal' }).find('span').string.split('$')[1].split('pesos')[0].replace('.', ''))
+        product_price = int(product_soup.find('span', { 'class': 'PrecioDetalleRojo' }).string.split('$')[1].split('pesos')[0].replace('.', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name
@@ -33,8 +33,8 @@ class LaPolar(FetchStore):
         urlBase = 'http://www.lapolar.cl'
         urlBuscarProductos = '/internet/catalogo/listados/'
         urlExtensions = [
-                            'tecnologia/computacion/notebook/', 
-                            'tecnologia/computacion/netbook/',
+                            'electronica/computacion/notebook', 
+                            'electronica/computacion/netbook',
                             'electrohogar/tv_video/led/',
                             'electrohogar/tv_video/lcd/',]
        

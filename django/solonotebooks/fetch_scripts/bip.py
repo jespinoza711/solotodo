@@ -41,7 +41,7 @@ class Bip(FetchStore):
         title = titleSpan.string.strip()
 
         priceCell = soup.findAll("td", { "class" : "prc8" })
-        price = int(str(priceCell[1].string).replace('.', '').replace('$', '').strip())
+        price = int(str(priceCell[0].string).replace('.', '').replace('$', '').strip())
 
         productData.custom_name = title.encode('ascii','ignore').strip()
         productData.price = price

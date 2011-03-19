@@ -18,7 +18,7 @@ class TopPC(FetchStore):
 
         title = soup.find('h2').string
         
-        price = int(soup.find('span', { 'id': 'old_price_display' }).string.replace('$', '').replace('.', ''))
+        price = int(soup.find('span', { 'id': 'our_price_display' }).string.replace('$', '').replace('.', ''))
         
         productData = ProductData()
 
