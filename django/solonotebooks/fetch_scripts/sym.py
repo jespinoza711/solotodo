@@ -26,7 +26,7 @@ class Sym(FetchStore):
         titleSpan = soup.find("h1")
         title = str(titleSpan.string).strip()
         
-        price = int(soup.find('div', { 'id': 'product-info' }).find('ul').findAll('li')[-1].contents[1].replace('$', '').replace('.', ''))
+        price = int(soup.find('span', { 'class': 'red' }).find('strong').string.replace('$', '').replace('.', ''))
 
         productData.custom_name = title
         productData.price = price

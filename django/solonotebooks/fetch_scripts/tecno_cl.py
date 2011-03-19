@@ -16,7 +16,7 @@ class TecnoCl(FetchStore):
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.find('strong').string.strip().encode('ascii', 'ignore')
-        product_price = int(product_soup.findAll('table', { 'bgcolor': '#f1f1f1' })[2].findAll('td')[4].string.strip().replace('$', '').replace('.', ''))
+        product_price = int(product_soup.findAll('table', { 'bgcolor': '#f1f1f1' })[2].findAll('td')[2].string.strip().replace('$', '').replace('.', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name

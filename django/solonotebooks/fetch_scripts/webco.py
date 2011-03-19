@@ -16,7 +16,7 @@ class Webco(FetchStore):
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.find('h1').contents[0].encode('ascii', 'ignore')
-        product_price = int(product_soup.find('h2').find('a').string.replace('.', '').replace('$', ''))
+        product_price = int(product_soup.findAll('h2')[1].string.replace('.', '').replace('$', '').replace('cash', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name

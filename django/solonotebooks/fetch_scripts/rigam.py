@@ -21,7 +21,7 @@ class Rigam(FetchStore):
                 return None
         
         product_name = product_soup.find('td', { 'class': 'cy2' }).find('strong').contents[0].encode('ascii', 'ignore')
-        product_price = int(product_soup.find('span', { 'class': 'txtOldPrice' }).string.replace('$', '').replace('.', ''))
+        product_price = int(product_soup.find('span', { 'class': 'cy3' }).string.replace('$', '').replace('.', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name

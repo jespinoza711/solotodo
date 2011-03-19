@@ -17,7 +17,7 @@ class PCOfertas(FetchStore):
         
         
         product_name = product_soup.find('h4', { 'class': 'Estilo5' }).string.encode('ascii', 'ignore')
-        product_price = int(product_soup.find('span', { 'class': 'Estilo4' }).parent.parent.parent.findAll('td')[3].find('span').string.replace('$', '').replace(',', ''))
+        product_price = int(product_soup.find('span', { 'class': 'Estilo4' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name

@@ -18,7 +18,7 @@ class Racle(FetchStore):
             product_name = product_soup.findAll('h1')[1].string.encode('ascii', 'ignore').strip()
         except:
             return None
-        product_price = int(product_soup.find('span', { 'class': 'productPrice' }).string.replace('.', '').replace('$', '').replace(' ', '').strip())
+        product_price = int(product_soup.find('span', { 'class': 'precio_efectivo' }).string.split(':')[1].replace('.', '').replace('$', '').replace(' ', '').strip())
         
         product_data = ProductData()
         product_data.custom_name = product_name

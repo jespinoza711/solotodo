@@ -17,21 +17,25 @@ class Ripley(FetchStore):
         
         product_name = product_soup.find('span', { 'class': 'textogrisbold' }).string.encode('ascii', 'ignore')
         
-        product_price = None
+        product_prices = []
+        
         
         try:
             product_price = int(product_soup.find('span', { 'class': 'normalHOME' }).string.replace('$', '').replace('.', ''))
+            product_prices.append(product_price)
         except:
             pass
             
-        if not product_price:
-            try:
-                product_price = int(product_soup.find('div', { 'class': 'textodetallesrojo' }).find('div').string.split('$')[1].replace('.', ''))
-            except:
-                pass
+        try:
+            product_price = int(product_soup.find('div', { 'class': 'textodetallesrojo' }).find('div').string.split('$')[1].replace('.', ''))
+            product_prices.append(product_price)
+        except:
+            pass
                 
-        if not product_price:
+        if not product_prices:
             raise Exception
+            
+        product_price = min(product_prices)
         
         product_data = ProductData()
         product_data.custom_name = product_name

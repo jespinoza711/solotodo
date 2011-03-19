@@ -29,7 +29,7 @@ class Bym(FetchStore):
         
         title = base_soup.find('div', { 'class' : 'textTituloProducto'}).string.strip()
         
-        prices = base_soup.findAll('div', { 'class' : 'textOtrosPrecios' })
+        prices = base_soup.findAll('div', { 'class' : 'textPrecioContado' })
         price = prices[0].string
         price = int(price.replace('.', '').replace('$', ''))
 
