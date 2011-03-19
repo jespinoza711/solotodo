@@ -15,6 +15,11 @@ class Rigam(FetchStore):
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
+        availability = product_soup.find('b', { 'style': 'color:red;' })
+        if availability:
+            if 'PRODUCTO AGOTADO' in availability.string:
+                return None
+        
         product_name = product_soup.find('td', { 'class': 'cy2' }).find('strong').contents[0].encode('ascii', 'ignore')
         product_price = int(product_soup.find('span', { 'class': 'txtOldPrice' }).string.replace('$', '').replace('.', ''))
         
