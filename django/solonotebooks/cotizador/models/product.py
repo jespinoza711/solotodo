@@ -179,7 +179,7 @@ class Product(models.Model):
     def price_at(self, date):
         from . import ProductPriceChange
     
-        ppc = ProductPriceChange.objects.filter(notebook = self).filter(date__lte = date).order_by('-date')
+        ppc = ProductPriceChange.objects.filter(notebook = self).filter(date__gte = date).order_by('date')
         if ppc:
             return ppc[0].price
         elif self.shp and self.shp.shpe:
