@@ -31,18 +31,18 @@ class Compumanque(FetchStore):
         urlBase = 'http://72.249.5.151/~compucl/index.php?route=product/category&path='
         browser = mechanize.Browser()
         
-        url_extensions = [  '101_87',    # Tarjetas de video
-                            '19',     # Procesadores
-                            '45_97',    # Monitores
-                            '45_98',    # TV
-                            '106',   # Netbooks
-                            '50',     # Notebooks
-                            '79',      # Placas madre
+        url_extensions = [  ['101_87', 'VideoCard'],    # Tarjetas de video
+                            ['19', 'Processor'],     # Procesadores
+                            ['45_97', 'Screen'],    # Monitores
+                            ['45_98', 'Screen'],    # TV
+                            ['106', 'Notebook'],   # Netbooks
+                            ['50', 'Notebook'],     # Notebooks
+                            ['79', 'Motherboard'],      # Placas madre
                             ]
                             
         product_links = []
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
 
             baseData = browser.open(urlWebpage).get_data()
@@ -55,7 +55,7 @@ class Compumanque(FetchStore):
             
             for rawLink in rawLinks:
                 link = rawLink['href']
-                product_links.append(link)
+                product_links.append([link, ptype])
                     
         return product_links
 

@@ -39,14 +39,14 @@ class Syd(FetchStore):
         # Array containing the data for each product
         products_data = []
         
-        url_extensions = [  '/computadoras/macbook_pro',
-                            '/computadoras/macbook',
-                            '/computadoras/macbook_air',
-                            '/computadoras/monitores',
+        url_extensions = [  ['/computadoras/macbook_pro', 'Notebook'],
+                            ['/computadoras/macbook', 'Notebook'],
+                            ['/computadoras/macbook_air', 'Notebook'],
+                            ['/computadoras/monitores', 'Screen'],
                             ]
         
         product_links = []                    
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension + '/?op=all&crit='
 
             baseData = browser.open(urlWebpage).get_data()
@@ -57,7 +57,7 @@ class Syd(FetchStore):
 
             for i in range(len(titles)):
                 link = titles[i].find('a')
-                product_links.append(urlBase + urlBuscarProductos + url_extension + '/' + link['href'])
+                product_links.append([urlBase + urlBuscarProductos + url_extension + '/' + link['href'], ptype])
 
         return product_links
 

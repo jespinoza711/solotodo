@@ -33,10 +33,11 @@ class LaPolar(FetchStore):
         urlBase = 'http://www.lapolar.cl'
         urlBuscarProductos = '/internet/catalogo/listados/'
         urlExtensions = [
-                            'electronica/computacion/notebook', 
-                            'electronica/computacion/netbook',
-                            'electrohogar/tv_video/led/',
-                            'electrohogar/tv_video/lcd/',]
+                            ['electronica/computacion/notebook/', 'Notebook'], 
+                            ['electronica/computacion/netbook/', 'Notebook'],
+                            ['electrohogar/tv_video/led/', 'Screen'],
+                            ['electrohogar/tv_video/lcd/', 'Screen'],
+                            ]
        
         # Browser initialization
         browser = mechanize.Browser()
@@ -44,7 +45,7 @@ class LaPolar(FetchStore):
         # Array containing the data for each product
         product_links = []
         products_data = []
-        for urlExtension in urlExtensions:
+        for urlExtension, ptype in urlExtensions:
             page = 1;
             while(True):
                 urlWebpage = urlBase + urlBuscarProductos + urlExtension + str(page)
@@ -69,7 +70,7 @@ class LaPolar(FetchStore):
                     for productCell in productCells:
                         titleField = productCell.find("div", {'class': 'letraNormalBold'})
                         link = titleField.find("a")['href']
-                        product_links.append(link)
+                        product_links.append([link, ptype])
                 page = page + 1
 
         return product_links

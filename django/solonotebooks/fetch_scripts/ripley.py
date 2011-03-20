@@ -52,16 +52,17 @@ class Ripley(FetchStore):
         urlBase = 'http://www.ripley.cl/webapp/wcs/stores/servlet/'
         
         category_urls = [
-            'categoria-TVRipley-10051-001772-130000-ESP-N--',   # Notebooks
-            'categoria-TVRipley-10051-013040-230000-ESP-N',     # LCDs
+            ['categoria-TVRipley-10051-001772-130000-ESP-N--', 'Notebook'],   # Notebooks
+            ['categoria-TVRipley-10051-013040-230000-ESP-N', 'Screen'],     # LCDs
                         ]
         
         # Browser initialization
         browser = mechanize.Browser()
         
         product_links = []
+        links = []
         
-        for category_url in category_urls:
+        for category_url, ptype in category_urls:
             j = 1                    
             while True:
                 urlWebpage = urlBase + category_url + '?curPg=' + str(j)
@@ -83,11 +84,12 @@ class Ripley(FetchStore):
                 for p in productParagraphs:
                     url = urlBase + p.find('a')['href']
                     
-                    if url in product_links:
+                    if url in links:
                         break_flag = True
                         break
                         
-                    product_links.append(url)
+                    links.append(url)
+                    product_links.append([url, ptype])
                     
                 if break_flag:
                     break

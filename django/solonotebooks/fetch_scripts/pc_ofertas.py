@@ -37,14 +37,14 @@ class PCOfertas(FetchStore):
         browser = mechanize.Browser()
         product_links = []
         
-        url_extensions = [  '74',   # Notebook
-                            '75',   # Netbook
-                            '87',   # Tarjetas de video
-                            '18',   # Procesadores
-                            '28',   # Monitores
+        url_extensions = [  ['74', 'Notebook'],   # Notebook
+                            ['75', 'Notebook'],   # Netbook
+                            ['87', 'VideoCard'],   # Tarjetas de video
+                            ['18', 'Processor'],   # Procesadores
+                            ['28', 'Screen'],   # Monitores
                             ]
         
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
 
             # Obtain and parse HTML information of the base webpage
@@ -60,7 +60,7 @@ class PCOfertas(FetchStore):
                 link = product_cell.findAll('a')
                 if not link:
                     break
-                product_links.append(link[1]['href'])
+                product_links.append([link[1]['href'], ptype])
 
         return product_links
 

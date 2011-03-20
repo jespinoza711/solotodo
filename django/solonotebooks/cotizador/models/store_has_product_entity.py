@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Min, Max, Q
 from sorl.thumbnail.fields import ImageWithThumbnailsField
-from . import Product, Store, StoreHasProduct
+from . import Product, Store, StoreHasProduct, ProductType
 from utils import prettyPrice
 from datetime import date
 
@@ -16,6 +16,7 @@ class StoreHasProductEntity(models.Model):
     prevent_availability_change = models.BooleanField()
 
     shp = models.ForeignKey(StoreHasProduct, null = True, blank = True)
+    ptype = models.ForeignKey(ProductType, null = True, blank = True)
     
     def infer_store(self):
         for store in Store.objects.all():

@@ -45,19 +45,19 @@ class Wei(FetchStore):
         
         # Array containing the data for each product
         product_links = []
+        links = []
         
         category_urls = [
-                    'NB&sccode=79',      # Notebooks
-                    'TV&sccode=133',     # Tarjetas de video AGP
-                    'TV&sccode=134',     # Tarjetas de video PCI Express
-                    'CP&sccode=57',     # Procesadores AMD
-                    'CP&sccode=58',     # Procesadores Intel
-                    'MO&sccode=162',    # LCD TV
-                    'MO&sccode=19',     # Monitores LCD
-                    
+                    ['NB&sccode=79', 'Notebook'],      # Notebooks
+                    ['TV&sccode=133', 'VideoCard'],     # Tarjetas de video AGP
+                    ['TV&sccode=134', 'VideoCard'],     # Tarjetas de video PCI Express
+                    ['CP&sccode=57', 'Processor'],     # Procesadores AMD
+                    ['CP&sccode=58', 'Processor'],     # Procesadores Intel
+                    ['MO&sccode=162', 'Screen'],    # LCD TV
+                    ['MO&sccode=19', 'Screen'],     # Monitores LCD
                         ]
                             
-        for category_url in category_urls:
+        for category_url, ptype in category_urls:
             urlWebpage = urlBase + category_url
 
             # Obtain and parse HTML information of the base webpage
@@ -66,9 +66,12 @@ class Wei(FetchStore):
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
             productLinks = baseSoup.find('table', { 'cellpadding': '5'}).findAll("a", { "class" : "TXTSMNU" })
-            product_links.extend([link['href'] for link in productLinks])
-
-        product_links = list(set(product_links))
+            for link in productLinks:
+                link = link['href']
+                if link in links:
+                    continue
+                links.append(link)
+                product_links.append([link, ptype])
 
         return product_links
 

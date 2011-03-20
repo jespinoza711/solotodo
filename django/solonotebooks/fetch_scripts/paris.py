@@ -51,13 +51,13 @@ class Paris(FetchStore):
         
         urls = [
                     # Notebooks
-                    'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51049202_18877035_si_2__18877035,50999203,51049192,51049202_',
+                    ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51049202_18877035_si_2__18877035,50999203,51049192,51049202_', 'Notebook'],
                     # LCD
-                    'http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056205_20096521_si_2__20096521,51056194,51056195,51056205_'
+                    ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056205_20096521_si_2__20096521,51056194,51056195,51056205_', 'Screen'],
                     ]
         
         product_links = []          
-        for url in urls:
+        for url, ptype in urls:
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(url).get_data()
@@ -78,6 +78,6 @@ class Paris(FetchStore):
                 linkId = int(divDesc.find('a')['id'].replace('prod', '')) + 1
                 link = 'http://www.paris.cl/webapp/wcs/stores/servlet/productLP_10001_40000000577_-5_51049202_18877035_' + str(linkId) + '_18877035,50999203,51049192,51049202__listProd'
                 
-                product_links.append(link)
+                product_links.append([link, ptype])
 
         return product_links

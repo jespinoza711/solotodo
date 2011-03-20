@@ -39,13 +39,13 @@ class Racle(FetchStore):
         urlSearch = '/ventas/'            
 
         urlExtensions = [
-                            'tienda/netbook', 
-                            'tienda/notebook',
-                            'tienda/monitor',
-                            'tieda/moitor-led',
+                            ['tienda/netbook', 'Notebook'], 
+                            ['tienda/notebook', 'Notebook'],
+                            ['tienda/monitor', 'Screen'],
+                            ['tieda/moitor-led', 'Screen'],
                         ]
         product_links = []
-        for urlExtension in urlExtensions:
+        for urlExtension, ptype in urlExtensions:
             urlWebpage = urlBase + urlSearch + urlExtension + '?limit=50&limitstart=0'
 
             # Obtain and parse HTML information of the base webpage
@@ -57,7 +57,7 @@ class Racle(FetchStore):
             
             for productDetailCell in productDetailsCells:
                 productLink = productDetailCell.find('a', { 'class' : 'producto_titulo' })
-                product_links.append(urlBase + productLink['href'].split('?')[0])
+                product_links.append([urlBase + productLink['href'].split('?')[0], ptype])
             
         return product_links
 

@@ -37,13 +37,13 @@ class HPOnline(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  'productos.aspx?cmd=Z2x4eA==',
-                            'productos.aspx?cmd=ZWx4eA==',
-                            'remates.aspx',
+        url_extensions = [  ['productos.aspx?cmd=Z2x4eA==', 'Notebook'],
+                            ['productos.aspx?cmd=ZWx4eA==', 'Notebook'],
+                            ['remates.aspx', 'Notebook'],
                             ]
                           
         product_links = []                            
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
             baseData = browser.open(urlWebpage).get_data()
@@ -52,6 +52,6 @@ class HPOnline(FetchStore):
             ntbkCells = baseSoup.findAll('div', { 'class' : 'grid_item' })
             
             for ntbkCell in ntbkCells:
-                product_links.append(urlBase + urlBuscarProductos + ntbkCell.find('a')['href'])
+                product_links.append([urlBase + urlBuscarProductos + ntbkCell.find('a')['href'], ptype])
                 
         return product_links

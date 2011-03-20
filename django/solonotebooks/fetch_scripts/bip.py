@@ -59,22 +59,22 @@ class Bip(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  'categoria=191',                     # Netbooks
-                            'categoria=166',                     # Notebooks
-                            'categoria=118&categoria_papa=97',   # Tarjetas de video
-                            'categoria=99&categoria_papa=111',   # Proces Intel 775
-                            'categoria=339&categoria_papa=111',  # Proces Intel 1155
-                            'categoria=262&categoria_papa=111',  # Proces Intel 1156
-                            'categoria=263&categoria_papa=111',  # Proces Intel 1366
-                            'categoria=100&categoria_papa=111',  # Proces AMD AM2
-                            'categoria=242&categoria_papa=111',  # Proces AMD AM3
-                            'categoria=19',                      # LCD
-                            'categoria=108',                     # Placas madre
+        url_extensions = [  ['categoria=191', 'Notebook'],                      # Netbooks
+                            ['categoria=166', 'Notebook'],                      # Notebooks
+                            ['categoria=118&categoria_papa=97', 'VideoCard'],   # Tarjetas de video
+                            ['categoria=99&categoria_papa=111', 'Processor'],   # Proces Intel 775
+                            ['categoria=339&categoria_papa=111', 'Processor'],  # Proces Intel 1155
+                            ['categoria=262&categoria_papa=111', 'Processor'],  # Proces Intel 1156
+                            ['categoria=263&categoria_papa=111', 'Processor'],  # Proces Intel 1366
+                            ['categoria=100&categoria_papa=111', 'Processor'],  # Proces AMD AM2
+                            ['categoria=242&categoria_papa=111', 'Processor'],  # Proces AMD AM3
+                            ['categoria=19', 'Screen'],                         # LCD
+                            ['categoria=108', 'Motherboard'],                   # Placas madre
                             ]
                             
         product_links = []
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             page_number = 0
             
             while True:
@@ -84,7 +84,7 @@ class Bip(FetchStore):
                 if not rawLinks:
                     break
                 for rawLink in rawLinks:
-                    product_links.append(urlBase + rawLink['href'])
+                    product_links.append([urlBase + rawLink['href'], ptype])
                 
                 page_number += 1
                 

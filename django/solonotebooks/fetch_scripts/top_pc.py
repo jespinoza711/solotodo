@@ -37,15 +37,15 @@ class TopPC(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  '76',    # Tarjetas de video
-                            '5',     # Procesadores
-                            '61',    # Monitores y TV
-                            '153',   # Notebooks
+        url_extensions = [  ['76', 'VideoCard'],    # Tarjetas de video
+                            ['5', 'Processor'],     # Procesadores
+                            ['61', 'Screen'],    # Monitores y TV
+                            ['153', 'Notebook'],   # Notebooks
                             ]
                             
         productLinks = []
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
 
             # Obtain and parse HTML information of the base webpage
@@ -57,7 +57,7 @@ class TopPC(FetchStore):
             
             for rawLink in rawLinks:
                 link = rawLink['href']
-                productLinks.append(link)
+                productLinks.append([link, ptype])
 
         return productLinks
 

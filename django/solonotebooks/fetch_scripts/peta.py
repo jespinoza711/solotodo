@@ -40,16 +40,17 @@ class Peta(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  'computadores-1/netbooks.html',
-                            'computadores-1/notebooks.html',
-                            'peta-cl/tarjetas-de-video.html',
-                            'peta-cl/procesadores.html',
-                            'peta-cl/monitores.html',
-                            'audio-y-video-1/televisores.html',
+        url_extensions = [  ['computadores-1/netbooks.html', 'Notebook'],
+                            ['computadores-1/notebooks.html', 'Notebook'],
+                            ['peta-cl/tarjetas-de-video.html', 'VideoCard'],
+                            ['peta-cl/procesadores.html', 'Processor'],
+                            ['peta-cl/monitores.html', 'Screen'],
+                            ['audio-y-video-1/televisores.html', 'Screen'],
                             ]
                           
-        product_links = []                            
-        for url_extension in url_extensions:
+        product_links = []
+        links = []                            
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
             pageNumber = 1
                 
@@ -73,10 +74,11 @@ class Peta(FetchStore):
                         break
                         
                     link = link['href']
-                    if link in product_links:
+                    if link in links:
                         trigger = True
                         break
-                    product_links.append(link)
+                    links.append(link)
+                    product_links.append([link, ptype])
                     
                 if trigger:
                     break

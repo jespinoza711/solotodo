@@ -37,13 +37,13 @@ class MacOnline(FetchStore):
         browser = mechanize.Browser()
         product_links = []
         
-        url_extensions = [  '178-MacBook.html',
-                            '379-MacBook%20Pro.html',
-                            '384-New_MacBook_Air.html',
-                            '288-{niece[child[URL_NAME_CAT]}.html',
+        url_extensions = [  ['178-MacBook.html', 'Notebook'],
+                            ['379-MacBook%20Pro.html', 'Notebook'],
+                            ['384-New_MacBook_Air.html', 'Notebook'],
+                            ['288-{niece[child[URL_NAME_CAT]}.html', 'Screen'],
                             ]
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             page_number = 0
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '?pagina=' + str(page_number)
@@ -64,7 +64,7 @@ class MacOnline(FetchStore):
                     if link in product_links:
                         continue
                     
-                    product_links.append(link)
+                    product_links.append([link, ptype])
                     
                 page_number += 1
 

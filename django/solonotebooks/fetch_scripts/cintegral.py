@@ -35,15 +35,15 @@ class Cintegral(FetchStore):
         browser = mechanize.Browser()
         product_links = []
         
-        url_extensions = [  '84',   # Netbooks
-                            '9',    # Notebooks
-                            '14',   # Tarjetas de video
-                            '3',    # Procesadores
-                            '1',    # LCD
-                            '6',    # Placas madre
+        url_extensions = [  ['84', 'Notebook'],  # Netbooks
+                            ['9', 'Notebook'],   # Notebooks
+                            ['14', 'VideoCard'],  # Tarjetas de video
+                            ['3', 'Processor'],   # Procesadores
+                            ['1', 'Screen'],   # LCD
+                            ['6', 'Motherboard'],   # Placas madre
                             ]
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             page_number = 1
         
             while True:
@@ -58,7 +58,7 @@ class Cintegral(FetchStore):
                 
                 for i in range(len(links)):
                     link = url_base + links[i]['href']
-                    product_links.append(link)
+                    product_links.append([link, ptype])
                     
                 page_number += 1
 

@@ -36,27 +36,27 @@ class TecnoGroup(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  '2_35',
-                            '2_81',
-                            '2_117',
-                            '2_33',
-                            '2_43',
-                            '2_10',
-                            '2_11',
-                            '2_13',
-                            '2_34',
-                            '4_44',
-                            '4_139',
-                            '4_47',
-                            '4_48',
-                            '4_49',
-                            '4_109',
-                            '4_45',
-                            '4_46',
+        url_extensions = [  ['2_35', 'Notebook'],
+                            ['2_81', 'Notebook'],
+                            ['2_117', 'Notebook'],
+                            ['2_33', 'Notebook'],
+                            ['2_43', 'Notebook'],
+                            ['2_10', 'Notebook'],
+                            ['2_11', 'Notebook'],
+                            ['2_13', 'Notebook'],
+                            ['2_34', 'Notebook'],
+                            ['4_44', 'Notebook'],
+                            ['4_139', 'Notebook'],
+                            ['4_47', 'Notebook'],
+                            ['4_48', 'Notebook'],
+                            ['4_49', 'Notebook'],
+                            ['4_109', 'Notebook'],
+                            ['4_45', 'Notebook'],
+                            ['4_46', 'Notebook'],
                             ]
         
         product_links = []                  
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
             baseData = browser.open(urlWebpage).get_data()
@@ -73,7 +73,7 @@ class TecnoGroup(FetchStore):
                 priceSpan = priceSpans[i]
 
                 url = nameLink['href'].split('&osCsid')[0]
-                product_links.append(url)
+                product_links.append([url, ptype])
 
         return product_links
 

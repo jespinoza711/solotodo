@@ -40,12 +40,12 @@ class Impulso(FetchStore):
         product_links = []
         
         url_extensions = [  
-                            '32-notebooks',
-                            '35-netbooks',
-                            '37-tablets',
+                            ['32-notebooks', 'Notebook'],
+                            ['35-netbooks', 'Notebook'],
+                            ['37-tablets', 'Notebook'],
                             ]
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
             # Obtain and parse HTML information of the base webpage
@@ -60,7 +60,7 @@ class Impulso(FetchStore):
             prod_cells = prod_list.findAll('li')
 
             for cell in prod_cells:
-                product_links.append(cell.find('a')['href'])
+                product_links.append([cell.find('a')['href'], ptype])
                 
         return product_links
 
