@@ -50,6 +50,12 @@ class PCExpress(FetchStore):
                             ['73_128', 'Screen'],   # LCD
                             ['73_129', 'Screen'],   # LCD/TV
                             ['73_171', 'Screen'],   # LED
+                            ['60_88', 'Motherboard'],   # Placas madre AM2
+                            ['60_89', 'Motherboard'],   # Placas madre AM3
+                            ['60_90', 'Motherboard'],   # Placas madre 775
+                            ['60_194', 'Motherboard'],   # Placas madre 1155
+                            ['60_91', 'Motherboard'],   # Placas madre 1156
+                            ['60_186', 'Motherboard'],   # Placas madre 1366
                         ]
                             
         product_links = []
