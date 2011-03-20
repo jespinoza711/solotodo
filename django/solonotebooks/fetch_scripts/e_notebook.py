@@ -72,14 +72,14 @@ class ENotebook(FetchStore):
         browser = mechanize.Browser()
         
         url_extensions = [
-                            'it-index-n-notebooks-cP-1.html',
-                            'it-index-n-monitores_televisores_lcd-cP-22.html',
+                            ['it-index-n-notebooks-cP-1.html', 'Notebook'],
+                            ['it-index-n-monitores_televisores_lcd-cP-22.html', 'Notebook'],
                         ]
                         
         extra_pagelinks = [ ]
                         
         pageLinks = []
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
             baseData = browser.open(urlWebpage).get_data()
@@ -91,21 +91,23 @@ class ENotebook(FetchStore):
             for pn in pageNavigator:
                 link = pn.find("a")
                 try:
-                    pageLinks.append(link['href'].split('?osCsid')[0])
+                    pageLinks.append([link['href'].split('?osCsid')[0], ptype])
                 except:
                     continue
         
-        for page_link in extra_pagelinks:
-            pageLinks.append(urlBase + urlBuscarProductos + page_link)
+        for page_link, ptype in extra_pagelinks:
+            pageLinks.append([urlBase + urlBuscarProductos + page_link, ptype])
         
         product_link_pages = []
-        for pageLink in pageLinks:
+        for pageLink, ptype in pageLinks:
             links = self.extract_product_pages(pageLink)
-            product_link_pages.extend(links)
+            for link in links:
+                product_link_pages.append([link, ptype])
             
         product_links = []
-        for product_link_page in product_link_pages:
-            product_links.extend(self.extract_product_links(product_link_page))
+        for product_link_page, ptype in product_link_pages:
+            for link in self.extract_product_links(product_link_page):
+                product_links.append([link, ptype])
                 
         return product_links
 

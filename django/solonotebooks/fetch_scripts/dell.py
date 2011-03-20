@@ -66,7 +66,7 @@ class Dell(FetchStore):
                     priceTag = priceDiv.find('span', {'class': 'pricing_sale_price'})
                 if not priceTag:
                     continue 
-                product_links.append(url)
+                product_links.append([url, 'Notebook'])
             else:
                 product_links.extend(self.retrieve_home_links(url))
 
@@ -92,7 +92,7 @@ class Dell(FetchStore):
             if url[0] == '/':
                 url = self.urlBase + url
 
-            product_links.append(url)
+            product_links.append([url, 'Notebook'])
 
         return product_links
         
@@ -105,13 +105,18 @@ class Dell(FetchStore):
         product_links = []
         cotizadorLinks = soup.findAll('a', { 'class' : 'lnk' })
         
+        local_links = []
+        
         for cotizadorLink in cotizadorLinks:
             productUrl = cotizadorLink['href']
             if 'configure' not in productUrl:
                 continue
-               
-            product_links.append(productUrl)
-        return list(set(product_links))
+            if productUrl in local_links:
+                continue
+                
+            local_links.append(productUrl)
+            product_links.append([productUrl, 'Notebook'])
+        return product_links
 
     def retrieve_product_links(self):
         cookies = mechanize.CookieJar()
@@ -197,9 +202,9 @@ class Dell(FetchStore):
                 url = latitudeCell.parent.find('a')['href']
                 if 'dell.com' not in url:
                     url = self.urlBase + url
-                    product_links.append(self.retrieve_configure_link(url))
+                    product_links.append([self.retrieve_configure_link(url), 'Notebook'])
                 else:
-                    product_links.append(url)
+                    product_links.append([url, 'Notebook'])
 
             precisionLink = self.urlBase + categoryLinks[2]['href']
             r = mechanize.urlopen(precisionLink)
@@ -218,7 +223,7 @@ class Dell(FetchStore):
                 priceSpan = priceCells[i].find('span', {'class': 'pricing_retail_nodiscount_price'})
                 if not priceSpan:
                     continue
-                product_links.append(self.retrieve_configure_link(url))
+                product_links.append([self.retrieve_configure_link(url), 'Notebook'])
         
         # Monitores        
         url_extensions = [  
@@ -238,11 +243,9 @@ class Dell(FetchStore):
             names = baseSoup.findAll('span', {'class': 'title_emph'})[3:num_prods + 3]
             names = [name.contents[0] for name in names]
             links = baseSoup.findAll('a', {'class': 'lnk'})
-            final_links = []
             for link in links:
                 if 'configure' in link['href']:
-                    final_links.append(link['href'])
-            product_links.extend(final_links[:num_prods])
+                    product_links.append([link['href'], 'Screen'])
             
         return product_links
 

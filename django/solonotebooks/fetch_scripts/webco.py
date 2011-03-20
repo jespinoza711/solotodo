@@ -38,23 +38,23 @@ class Webco(FetchStore):
         products_data = []
         
         url_extensions = [  # Netbooks
-                            'n_new_productos.asp?CATEGORIA={761FD739-2D0F-4177-8AE0-C641D6F16502}',
+                            ['n_new_productos.asp?CATEGORIA={761FD739-2D0F-4177-8AE0-C641D6F16502}', 'Notebook'],
                             # Notebooks
-                            'n_new_productos.asp?CATEGORIA={D70BBB30-F5E9-4246-B812-A939C8777429}',
+                            ['n_new_productos.asp?CATEGORIA={D70BBB30-F5E9-4246-B812-A939C8777429}', 'Notebook'],
                             # Tarjetas de video
-                            'n_new_productos.asp?CATEGORIA={FFE74755-6E24-4958-A066-F75670943D3E}',
+                            ['n_new_productos.asp?CATEGORIA={FFE74755-6E24-4958-A066-F75670943D3E}', 'VideoCard'],
                             # Procesadores AMD
-                            'n_new_productos.asp?CATEGORIA={AA5D5535-B127-4AEE-8583-4529F66DE4D7}#ct_39',
+                            ['n_new_productos.asp?CATEGORIA={AA5D5535-B127-4AEE-8583-4529F66DE4D7}#ct_39', 'Processor'],
                             # Procesadores Intel
-                            'n_new_productos.asp?CATEGORIA={5701C20F-03E6-430E-8CCF-01EE820BEDF8}#ct_39',
+                            ['n_new_productos.asp?CATEGORIA={5701C20F-03E6-430E-8CCF-01EE820BEDF8}#ct_39', 'Processor'],
                             # LCD TV
-                            'n_new_productos.asp?CATEGORIA={E49A199E-214A-4658-99AA-7E6220434D8D}#ct_32',
+                            ['n_new_productos.asp?CATEGORIA={E49A199E-214A-4658-99AA-7E6220434D8D}#ct_32', 'Screen'],
                             # LCD
-                            'n_new_productos.asp?CATEGORIA={79A1AF72-4B4D-4368-9205-FC0D646A1145}#ct_32',
+                            ['n_new_productos.asp?CATEGORIA={79A1AF72-4B4D-4368-9205-FC0D646A1145}#ct_32', 'Screen'],
                             ]
         
         product_links = []                    
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
@@ -64,7 +64,7 @@ class Webco(FetchStore):
             for productImage in productImages:
                 productData = ProductData()
                 try:
-                    product_links.append(urlBase + productImage.parent['href'])
+                    product_links.append([urlBase + productImage.parent['href'], ptype])
                 except:
                     continue
 

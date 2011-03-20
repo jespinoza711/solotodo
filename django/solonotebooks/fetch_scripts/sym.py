@@ -44,17 +44,18 @@ class Sym(FetchStore):
         browser = mechanize.Browser()
         
         
-        url_extensions = [  '?cat=104',         # Notebooks
-                            '?cat=32_68',       # Tarjetas de video AGP
-                            '?cat=32_69',       # Tarjetas de video PCIe
-                            '?cat=50',          # Procesadores Intel
-                            '?cat=25',          # Procesadores AMD
-                            '?cat=81',          # Monitores LCD
+        url_extensions = [  ['?cat=104', 'Notebook'],         # Notebooks
+                            ['?cat=32_68', 'VideoCard'],       # Tarjetas de video AGP
+                            ['?cat=32_69', 'VideoCard'],       # Tarjetas de video PCIe
+                            ['?cat=50', 'Processor'],          # Procesadores Intel
+                            ['?cat=25', 'Processor'],          # Procesadores AMD
+                            ['?cat=81', 'Screen'],          # Monitores LCD
                             ]
                             
         productLinks = []
+        links = []
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             page_number = 1
             
             while True:
@@ -74,10 +75,11 @@ class Sym(FetchStore):
                 
                 for rawLink in rawLinks:
                     link = rawLink.find("h2").find("a")['href']
-                    if link in productLinks:
+                    if link in links:
                         break_flag = True
                         break 
-                    productLinks.append(link)
+                    links.append(link)
+                    productLinks.append([link, ptype])
                     
                 if break_flag:
                     break

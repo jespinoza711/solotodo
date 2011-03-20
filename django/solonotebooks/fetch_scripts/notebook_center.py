@@ -34,36 +34,36 @@ class NotebookCenter(FetchStore):
     def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.notebookcenter.cl/'
-        urlBuscarProductos = 'centrodetalle.php'
+        urlBuscarProductos = 'centrodetalle.php?id_categoria='
         
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  '?id_categoria=308', # Macbook Air
-                            '?id_categoria=307', # Macbook Pro
-                            '?id_categoria=403', # Netbook HP
-                            '?id_categoria=404', # Netbook Lenovo
-                            '?id_categoria=405', # Netbook Packard Bell
-                            '?id_categoria=406', # Netbook Samsung
-                            '?id_categoria=429', # Netbook Sony
-                            '?id_categoria=440', # Netbook Viewsonic
-                            '?id_categoria=61',  # Notebook Acer
-                            '?id_categoria=251', # Notebook Dell
-                            '?id_categoria=505', # Notebook Gamer
-                            '?id_categoria=57',  # Notebook HP
-                            '?id_categoria=64',  # Notebook Lenovo
-                            '?id_categoria=342', # Notebook MSI
-                            '?id_categoria=58',  # Notebook Packard Bell
-                            '?id_categoria=418', # Notebook Samsung
-                            '?id_categoria=212', # Notebook Sony
-                            '?id_categoria=63',  # Notebook Toshiba
-                            '?id_categoria=534', # Notebook Viewsonic
-                            '?id_categoria=275', # Monitores Apple
-                            '?id_categoria=162', # Monitores LCD
+        url_extensions = [  ['308', 'Notebook'],  # Macbook Air
+                            ['307', 'Notebook'],  # Macbook Pro
+                            ['403', 'Notebook'],  # Netbook HP
+                            ['404', 'Notebook'],  # Netbook Lenovo
+                            ['405', 'Notebook'],  # Netbook Packard Bell
+                            ['406', 'Notebook'],  # Netbook Samsung
+                            ['429', 'Notebook'],  # Netbook Sony
+                            ['440', 'Notebook'],  # Netbook Viewsonic
+                            ['61', 'Notebook'],   # Notebook Acer
+                            ['251', 'Notebook'],  # Notebook Dell
+                            ['505', 'Notebook'],  # Notebook Gamer
+                            ['57', 'Notebook'],   # Notebook HP
+                            ['64', 'Notebook'],   # Notebook Lenovo
+                            ['342', 'Notebook'],  # Notebook MSI
+                            ['58', 'Notebook'],   # Notebook Packard Bell
+                            ['418', 'Notebook'],  # Notebook Samsung
+                            ['212', 'Notebook'],  # Notebook Sony
+                            ['63', 'Notebook'],   # Notebook Toshiba
+                            ['534', 'Notebook'],  # Notebook Viewsonic
+                            ['275', 'Screen'],  # Monitores Apple
+                            ['162', 'Screen'],  # Monitores LCD
                             ]
                           
         product_links = []  
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             index = 1
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '&indice=' + str(index)
@@ -81,7 +81,7 @@ class NotebookCenter(FetchStore):
                 for rawLink in rawLinks:
                     link = urlBase + rawLink['href']
                     link = link.split('&id_categoria')[0]
-                    product_links.append(link)
+                    product_links.append([link, ptype])
 
                 index += 1
 

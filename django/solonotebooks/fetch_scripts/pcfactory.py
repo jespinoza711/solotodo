@@ -49,26 +49,27 @@ class PCFactory(FetchStore):
         productsData = []
         
         url_extensions = [  
-                            '?papa=24&categoria=424',   # Notebooks 7 a 11
-                            '?papa=24&categoria=449',   # Notebooks 12 a 13
-                            '?papa=24&categoria=410',   # Notebooks 14
-                            '?papa=24&categoria=437',   # Notebooks 15
-                            '?papa=24&categoria=436',   # Notebooks 16 y +
-                            '?papa=334&categoria=40',   # VGA AGP
-                            '?papa=334&categoria=378',  # VGA PCIe Nvidia
-                            '?papa=334&categoria=454',  # VGA PCIe ATI
-                            '?papa=334&categoria=455',  # VGA Profesionales
-                            '?papa=272&categoria=409',  # CPU Server
-                            '?papa=272&categoria=465',  # CPU AM3
-                            '?papa=272&categoria=388',  # CPU 775
-                            '?papa=272&categoria=468',  # CPU 1156
-                            '?papa=272&categoria=446',  # CPU 1366
-                            '?papa=256&categoria=250',  # Monitores LCD
-                            '?papa=256&categoria=260',  # Televisores LCD
+                            ['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 11
+                            ['?papa=24&categoria=449', 'Notebook'],   # Notebooks 12 a 13
+                            ['?papa=24&categoria=410', 'Notebook'],   # Notebooks 14
+                            ['?papa=24&categoria=437', 'Notebook'],   # Notebooks 15
+                            ['?papa=24&categoria=436', 'Notebook'],   # Notebooks 16 y +
+                            ['?papa=334&categoria=40', 'VideoCard'],   # VGA AGP
+                            ['?papa=334&categoria=378', 'VideoCard'],  # VGA PCIe Nvidia
+                            ['?papa=334&categoria=454', 'VideoCard'],  # VGA PCIe ATI
+                            ['?papa=334&categoria=455', 'VideoCard'],  # VGA Profesionales
+                            ['?papa=272&categoria=409', 'Processor'],  # CPU Server
+                            ['?papa=272&categoria=465', 'Processor'],  # CPU AM3
+                            ['?papa=272&categoria=388', 'Processor'],  # CPU 775
+                            ['?papa=272&categoria=468', 'Processor'],  # CPU 1156
+                            ['?papa=272&categoria=446', 'Processor'],  # CPU 1366
+                            ['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
+                            ['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
                             ]
                           
-        pageLinks = []                            
-        for url_extension in url_extensions:
+        pageLinks = []
+        links = []                            
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
             pageNumber = 1
             
@@ -95,12 +96,14 @@ class PCFactory(FetchStore):
                     localLinks.append(link)
                     
                 if trigger:
-                    pageLinks.extend(localLinks)
+                    for link in localLinks:
+                        if link in links:
+                            continue
+                        links.append(link)
+                        pageLinks.append([link, ptype])
                     break
                     
                 pageNumber += 1
-                
-        pageLinks = list(set(pageLinks))
 
         return pageLinks
 

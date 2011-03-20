@@ -33,18 +33,18 @@ class Sistemax(FetchStore):
         url_buscar_productos = 'index.php?op=seccion/id='
         
         extensions = [
-                '112',      # Netbooks
-                '27',       # Notebooks
-                '35',       # Tarjetas de video
-                '58',       # Procesadores AMD
-                '59',       # Procesadores Intel
-                '25',       # Monitores
-                '82',       # Mac / iPod
+                ['112', 'Notebook'],      # Netbooks
+                ['27', 'Notebook'],       # Notebooks
+                ['35', 'VideoCard'],       # Tarjetas de video
+                ['58', 'Processor'],       # Procesadores AMD
+                ['59', 'Processor'],       # Procesadores Intel
+                ['25', 'Screen'],       # Monitores
+                ['82', 'Notebook'],       # Mac / iPod
                 ]
                         
         # Array containing the data for each product
         product_links = []                
-        for extension in extensions:
+        for extension, ptype in extensions:
             urlWebpage = baseUrl + url_buscar_productos + extension + '&page=-1&listar=true'
             
             browser = mechanize.Browser()
@@ -55,7 +55,8 @@ class Sistemax(FetchStore):
             
             url_cells = info_cells[3::5]
             urls = [baseUrl + url_cell.contents[2]['href'] for url_cell in url_cells]
-            product_links.extend(urls)
+            for url in urls:
+                product_links.append([url, ptype])
 
         return product_links
 

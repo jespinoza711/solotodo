@@ -41,11 +41,11 @@ class FullNotebook(FetchStore):
         product_links = []
         
         url_extensions = [  
-                    'notebooks',
-                    'monitores',
+                    ['notebooks', 'Notebook'],
+                    ['monitores', 'Notebook'],
                     ]
         
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             # Primero necesitamos el numero de paginas
             firstUrl = urlBase + urlBuscarProductos + url_extension + '/page/1'
             baseData = browser.open(firstUrl).get_data()
@@ -61,7 +61,7 @@ class FullNotebook(FetchStore):
                 
                 rawLinks = baseSoup.findAll("div", { 'class':'cliente'})
                 for rawLink in rawLinks:
-                    product_links.append(rawLink.find("a")['href'].encode('ascii', 'ignore'))
+                    product_links.append([rawLink.find("a")['href'].encode('ascii', 'ignore'), ptype])
                     
 
         return product_links

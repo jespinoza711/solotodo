@@ -35,11 +35,11 @@ class RkNotebooks(FetchStore):
         browser = mechanize.Browser()
         
         url_extensions = [
-                           '7',
+                           ['7', 'Notebook'],
                             ]
         
         product_links = []                
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
 
             baseData = browser.open(urlWebpage).get_data()
@@ -48,7 +48,7 @@ class RkNotebooks(FetchStore):
             titles = baseSoup.findAll('h3')
 
             for i in range(len(titles)):
-                product_links.append(titles[i].find('a')['href'])
+                product_links.append([titles[i].find('a')['href'], ptype])
 
         return product_links
 

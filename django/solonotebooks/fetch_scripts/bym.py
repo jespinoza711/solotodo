@@ -46,16 +46,16 @@ class Bym(FetchStore):
         product_links = []
         
         url_extensions = [  
-                            'subpro.php?idCat=21&idSubCat=20',  # Notebooks
-                            'catpro.php?idCat=31',              # Tarjetas de video
-                            'catpro.php?idCat=25',              # Procesadores AMD
-                            'catpro.php?idCat=26',              # Procesadores Intel
-                            'catpro.php?idCat=18',              # LCD
-                            'catpro.php?idCat=23',              # MB AMD
-                            'catpro.php?idCat=24',              # MB Intel
+                            ['subpro.php?idCat=21&idSubCat=20', 'Notebook'],  # Notebooks
+                            ['catpro.php?idCat=31', 'VideoCard'],              # Tarjetas de video
+                            ['catpro.php?idCat=25', 'Processor'],             # Procesadores AMD
+                            ['catpro.php?idCat=26', 'Processor'],             # Procesadores Intel
+                            ['catpro.php?idCat=18', 'Screen'],             # LCD
+                            ['catpro.php?idCat=23', 'Motherboard'],             # MB AMD
+                            ['catpro.php?idCat=24', 'Motherboard'],             # MB Intel
                             ]
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             page_number = 1
             
             while True:
@@ -69,7 +69,7 @@ class Bym(FetchStore):
                     break
                 
                 for productLink in productLinks:
-                    product_links.append(urlBase + productLink)
+                    product_links.append([urlBase + productLink, ptype])
                 
                 page_number += 1
 

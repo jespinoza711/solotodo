@@ -15,7 +15,7 @@ class Store(models.Model):
         return unicode(self.name)
         
     def save_product(self, product):
-        from . import StoreHasProductEntity, LogNewEntity
+        from . import StoreHasProductEntity, LogNewEntity, ProductType
         print 'Guardando ' + str(product)
         print 'Buscando si tiene un registro existente'
         try:
@@ -32,6 +32,11 @@ class Store(models.Model):
             shpe.is_hidden = False
             shpe.latest_price = product.price
             shpe.store = self
+            try:
+                ptype = ProductType.objects.get(classname = product.ptype)
+                shpe.ptype = ptype
+            except:
+                pass
             shpe.save()
             LogNewEntity.new(shpe).save()
             

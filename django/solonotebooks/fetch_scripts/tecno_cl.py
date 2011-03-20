@@ -36,20 +36,20 @@ class TecnoCl(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  'productos.asp?cat=8',
-                            'productos.asp?cat=259',
-                            'productos.asp?cat=85',
-                            'productos.asp?cat=50',
-                            'productos.asp?cat=244',    # Procesadores AMD
-                            'productos.asp?cat=251',    # Procesadores Intel
-                            'productos.asp?cat=217',    # LCD 15
-                            'productos.asp?cat=40',     # LCD 17
-                            'productos.asp?cat=218',    # LCD 19+
-                            'productos.asp?cat=87',    # LCDTV
+        url_extensions = [  ['productos.asp?cat=8', 'Notebook'],
+                            ['productos.asp?cat=259', 'Notebook'],
+                            ['productos.asp?cat=85', 'Notebook'],
+                            ['productos.asp?cat=50', 'Notebook'],
+                            ['productos.asp?cat=244', 'Processor'],    # Procesadores AMD
+                            ['productos.asp?cat=251', 'Processor'],    # Procesadores Intel
+                            ['productos.asp?cat=217', 'Screen'],    # LCD 15
+                            ['productos.asp?cat=40', 'Screen'],     # LCD 17
+                            ['productos.asp?cat=218', 'Screen'],    # LCD 19+
+                            ['productos.asp?cat=87', 'Screen'],    # LCDTV
                             ]
         
         product_links = []                    
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
 
             # Obtain and parse HTML information of the base webpage
@@ -63,7 +63,7 @@ class TecnoCl(FetchStore):
             productNames = []
             
             for rawProductLink in rawProductLinks:
-                product_links.append(urlBase + urlBuscarProductos + rawProductLink['href'])
+                product_links.append([urlBase + urlBuscarProductos + rawProductLink['href'], ptype])
 
         return product_links
 

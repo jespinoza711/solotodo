@@ -37,24 +37,24 @@ class PCExpress(FetchStore):
         browser = mechanize.Browser()
         
         url_extensions = [  
-                            '75_136',   # Notebooks
-                            '83_157',   # Tarjetas de video AGP
-                            '83_158',   # Tarjetas de video PCIe AMD
-                            '83_159',   # Tarjetas de video PCIe Nvidia
-                            '61_85',    # Procesadores AM2
-                            '61_84',    # Procesadores AM3
-                            '61_86',    # Procesadores 775
-                            '61_193',   # Procesadores 1155
-                            '61_87',    # Procesadores 1156
-                            '61_165',   # Procesadores 1366
-                            '73_128',   # LCD
-                            '73_129',   # LCD/TV
-                            '73_171',   # LED
+                            ['75_136', 'Notebook'],   # Notebooks
+                            ['83_157', 'VideoCard'],   # Tarjetas de video AGP
+                            ['83_158', 'VideoCard'],   # Tarjetas de video PCIe AMD
+                            ['83_159', 'VideoCard'],   # Tarjetas de video PCIe Nvidia
+                            ['61_85', 'Processor'],    # Procesadores AM2
+                            ['61_84', 'Processor'],    # Procesadores AM3
+                            ['61_86', 'Processor'],    # Procesadores 775
+                            ['61_193', 'Processor'],   # Procesadores 1155
+                            ['61_87', 'Processor'],    # Procesadores 1156
+                            ['61_165', 'Processor'],   # Procesadores 1366
+                            ['73_128', 'Screen'],   # LCD
+                            ['73_129', 'Screen'],   # LCD/TV
+                            ['73_171', 'Screen'],   # LED
                         ]
                             
         product_links = []
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
 
             # Obtain and parse HTML information of the base webpage
@@ -67,7 +67,7 @@ class PCExpress(FetchStore):
             
             for td_product in td_products:
                 link = td_product.find('a')['href']
-                product_links.append(link)
+                product_links.append([link, ptype])
                     
         return product_links
 

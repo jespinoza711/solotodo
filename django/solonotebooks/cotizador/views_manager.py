@@ -117,7 +117,10 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
             
         form = StoreHasProductEntityEditForm(d)
         
-    options = Product.get_all_ordered()
+    if shpe.ptype:
+        options = shpe.ptype.get_class().objects.all()
+    else:
+        options = Product.get_all_ordered()
         
     return append_manager_ptype_to_response(request, 'manager/store_has_product_entity_edit.html', {
         'shpe_form': form,
@@ -134,6 +137,15 @@ def storehasproductentity_hide(request, store_has_product_entity_id):
     shpe.save()
     shpe.update(recursive = True)
     return HttpResponseRedirect('/manager/new_entities/?refresh=true');
+    
+@manager_login_required
+def storehasproductentity_change_ptype(request, store_has_product_entity_id):
+    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
+    ptype = ProductType.objects.get(classname = request.GET['classname'])
+    shpe.ptype = ptype
+    shpe.save()
+    url = reverse('solonotebooks.cotizador.views_manager.storehasproductentity_edit', args = [shpe.id])
+    return HttpResponseRedirect(url);
     
 @manager_login_required
 def storehasproductentity_show(request, store_has_product_entity_id):

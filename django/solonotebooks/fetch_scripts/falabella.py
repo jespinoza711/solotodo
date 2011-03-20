@@ -67,13 +67,13 @@ class Falabella(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_schemas = [    'http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?cgmenbr=1891&cgrfnbr=2458576&cgpadre=2458457&cghijo=&cgnieto=2458576&division=[page]&orden=&ConFoto=1&pcomp1=&pcomp2=&pcomp3=&pcomp4=&pcomp5=&pcomp6=&pcomp7=&pcomp8=&pcomp9=&pcomp10=&cghijo1=2460493&nivel=1',
-                           'http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?sprod=0&ConFoto=1&cgmenbr=1891&nivel=1&cgrfnbr=2541581&sfot=0&cgpadre=2457964&cgnieto=2541581&cghijo1=2486170&division=[page]',
+        url_schemas = [    ['http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?cgmenbr=1891&cgrfnbr=2458576&cgpadre=2458457&cghijo=&cgnieto=2458576&division=[page]&orden=&ConFoto=1&pcomp1=&pcomp2=&pcomp3=&pcomp4=&pcomp5=&pcomp6=&pcomp7=&pcomp8=&pcomp9=&pcomp10=&cghijo1=2460493&nivel=1', 'Notebook'],
+                           ['http://www.falabella.com/webapp/commerce/command/ExecMacro/falabella/macros/list_prod.d2w/report?sprod=0&ConFoto=1&cgmenbr=1891&nivel=1&cgrfnbr=2541581&sfot=0&cgpadre=2457964&cgnieto=2541581&cghijo1=2486170&division=[page]', 'Screen'],
                             
                       ]
         product_links = []
                             
-        for url_schema in url_schemas:
+        for url_schema, ptype in url_schemas:
             page_number = 0
             
             while True:
@@ -96,7 +96,7 @@ class Falabella(FetchStore):
                     del d_args['division']
                     url = base_url + '?' + '&'.join([key + '=' + value for key, value in d_args.items()])
                     
-                    product_links.append(url)
+                    product_links.append([url, ptype])
                     
                 page_number += 1
         

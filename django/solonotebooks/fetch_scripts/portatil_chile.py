@@ -49,7 +49,7 @@ class PortatilChile(FetchStore):
         
         for productCell in productCells:
             link = urlBase + productCell.find('a')['href']
-            product_links.append(link)
+            product_links.append([link, 'Notebook'])
 
         return product_links
 

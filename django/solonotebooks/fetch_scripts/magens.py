@@ -44,26 +44,26 @@ class Magens(FetchStore):
         products_data = []
         
         url_extensions = [  
-            'notebooks-netbooks-netbooks-11-c-15_199.html',
-            'notebooks-netbooks-notebooks-12-13-c-15_202.html',
-            'notebooks-netbooks-notebooks-14-c-15_203.html',
-            'notebooks-netbooks-notebooks-15-c-15_204.html',
-            'notebooks-netbooks-notebooks-16-mas-c-15_205.html',
-            'video-c-24_128.html',
-            'video-pcie-c-24_130.html',
-            'video-pcie-nvidia-c-24_129.html',
-            'video-profesionales-c-24_131.html',
-            'sam2-c-1_196.html',
-            'sam3-c-1_31.html',
-            'intel-s1156-c-1_197.html',
-            'intel-s775-c-1_32.html',
-            'server-c-1_30.html',
-            'monitores-televisores-c-13.html',
-            'placas-madre-c-2.html',
+            ['notebooks-netbooks-netbooks-11-c-15_199.html', 'Notebook'], 
+            ['notebooks-netbooks-notebooks-12-13-c-15_202.html', 'Notebook'], 
+            ['notebooks-netbooks-notebooks-14-c-15_203.html', 'Notebook'], 
+            ['notebooks-netbooks-notebooks-15-c-15_204.html', 'Notebook'], 
+            ['notebooks-netbooks-notebooks-16-mas-c-15_205.html', 'Notebook'], 
+            ['video-c-24_128.html', 'VideoCard'], 
+            ['video-pcie-c-24_130.html', 'VideoCard'], 
+            ['video-pcie-nvidia-c-24_129.html', 'VideoCard'], 
+            ['video-profesionales-c-24_131.html', 'VideoCard'], 
+            ['sam2-c-1_196.html', 'Processor'], 
+            ['sam3-c-1_31.html', 'Processor'], 
+            ['intel-s1156-c-1_197.html', 'Processor'], 
+            ['intel-s775-c-1_32.html', 'Processor'], 
+            ['server-c-1_30.html', 'Processor'], 
+            ['monitores-televisores-c-13.html', 'Screen'], 
+            ['placas-madre-c-2.html', 'Motherboard'], 
         ]
                 
         product_links = []            
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=100'
 
             # Obtain and parse HTML information of the base webpage
@@ -74,7 +74,7 @@ class Magens(FetchStore):
             priceSpans = baseSoup.findAll('span', { 'class': 'text12Green' })[::2]
             for i in range(len(nameDivs)):
                 link = nameDivs[i].find('a')
-                product_links.append(link['href'].split('?osCsid')[0])
+                product_links.append([link['href'].split('?osCsid')[0], ptype])
             
         return product_links
 

@@ -46,12 +46,12 @@ class PackardBell(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  '116-Netbook.html',
-                            '112-Notebook.html',
+        url_extensions = [  ['116-Netbook.html', 'Notebook'],
+                            ['112-Notebook.html', 'Notebook'],
                             ]
                             
         product_links = []          
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlCatalog + url_extension
 
             # Obtain and parse HTML information of the base webpage
@@ -61,7 +61,7 @@ class PackardBell(FetchStore):
             
             for i in range(len(imgTags)):
                 link = imgTags[i]['onclick'].replace('javascript:location.href=\'', '').replace('\'', '')
-                product_links.append(link)
+                product_links.append([link, ptype])
                 
         return product_links
 

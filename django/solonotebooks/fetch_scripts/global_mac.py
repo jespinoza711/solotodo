@@ -38,14 +38,14 @@ class GlobalMac(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  'Apple/MacBook',
-                            'Apple/MacBook%20Pro',
-                            'Hardware/Monitores%20LCD',
-                            'Apple/Cinema%20Display',
+        url_extensions = [  ['Apple/MacBook', 'Notebook'],
+                            ['Apple/MacBook%20Pro', 'Notebook'],
+                            ['Hardware/Monitores%20LCD', 'Screen'],
+                            ['Apple/Cinema%20Display', 'Screen'],
                             ]
         product_links = []
                             
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
@@ -58,7 +58,7 @@ class GlobalMac(FetchStore):
                 if link == None:
                 	continue
                 	
-            	product_links.append(urlBase + link['href'])
+            	product_links.append([urlBase + link['href'], ptype])
             	
         return product_links
 

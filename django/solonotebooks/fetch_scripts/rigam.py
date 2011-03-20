@@ -39,15 +39,15 @@ class Rigam(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  'index.php?act=viewCat&catId=39',  # Notebooks
-                            'index.php?act=viewCat&catId=60',   # Tarjetas de video
-                            'index.php?act=viewCat&catId=40',   # Procesadores AMD
-                            'index.php?act=viewCat&catId=2',    # Procesadores Intel
-                            'index.php?act=viewCat&catId=54',   # Monitores
+        url_extensions = [  ['index.php?act=viewCat&catId=39', 'Notebook'],   # Notebooks
+                            ['index.php?act=viewCat&catId=60', 'VideoCard'],    # Tarjetas de video
+                            ['index.php?act=viewCat&catId=40', 'Processor'],   # Procesadores AMD
+                            ['index.php?act=viewCat&catId=2', 'Processor'],     # Procesadores Intel
+                            ['index.php?act=viewCat&catId=54', 'Screen'],    # Monitores
                             ]
         
         product_links = []                    
-        for url_extension in url_extensions:
+        for url_extension, ptype in url_extensions:
             page_number = 0
             
             while True:
@@ -67,7 +67,7 @@ class Rigam(FetchStore):
                 
                 for product_row in product_rows:
                     link = product_row.find('a', { 'class' : 'txtDefault' })
-                    product_links.append(urlBase + link['href'])
+                    product_links.append([urlBase + link['href'], ptype])
                     
                 page_number += 1
 

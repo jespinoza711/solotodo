@@ -55,14 +55,14 @@ class AbcDin(FetchStore):
         mechanize.install_opener(opener)
         
         xml_resources = [
-                    'notebooks',
-                    'netbooks',
-                    'LCD',
+                    ['notebooks', 'Notebook'],
+                    ['netbooks', 'Notebook'],
+                    ['LCD', 'Screen'],
                         ]
                         
         product_links = []
                         
-        for xml_resource in xml_resources:
+        for xml_resource, ptype in xml_resources:
             # Obtain and parse HTML information of the base webpage
             base_data = mechanize.urlopen('https://www.abcdin.cl/abcdin/catabcdin.nsf/%28webProductosxAZ%29?readviewentries&restricttocategory=' + xml_resource)
             base_soup = BeautifulSoup(base_data.read())
@@ -75,6 +75,6 @@ class AbcDin(FetchStore):
                 temp_soup = BeautifulSoup(ntbk_data)
                 div = temp_soup.find('div')
                 link = 'https://www.abcdin.cl/abcdin/abcdin.nsf#https://www.abcdin.cl' + div.find('a')['href']
-                product_links.append(link)
+                product_links.append([link, ptype])
                 
         return product_links
