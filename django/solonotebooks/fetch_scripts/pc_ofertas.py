@@ -31,7 +31,6 @@ class PCOfertas(FetchStore):
         return product_data
         
     def recursive_retrieve_product_links(self, url):
-        print url
         browser = mechanize.Browser()
         baseData = browser.open(url).get_data()
         baseSoup = BeautifulSoup(baseData)
@@ -72,7 +71,6 @@ class PCOfertas(FetchStore):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.pcofertas.cl/index.php?route=product/category&path='
         
-        links = []
         product_links = []
         
         url_extensions = [  
@@ -86,8 +84,10 @@ class PCOfertas(FetchStore):
         
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
-            links.extend(self.recursive_retrieve_product_links(urlWebpage))
-            
+            links = self.recursive_retrieve_product_links(urlWebpage)
+
+            links = list(set(links))
+                
             for link in links:
                 product_links.append([link, ptype])
 
