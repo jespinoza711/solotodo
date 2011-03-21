@@ -46,6 +46,7 @@ class Peta(FetchStore):
                             ['peta-cl/procesadores.html', 'Processor'],
                             ['peta-cl/monitores.html', 'Screen'],
                             ['audio-y-video-1/televisores.html', 'Screen'],
+                            ['peta-cl/placas-madre-1.html', 'Motherboard'],
                             ]
                           
         product_links = []

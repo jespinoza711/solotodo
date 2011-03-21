@@ -44,6 +44,8 @@ class Rigam(FetchStore):
                             ['index.php?act=viewCat&catId=40', 'Processor'],   # Procesadores AMD
                             ['index.php?act=viewCat&catId=2', 'Processor'],     # Procesadores Intel
                             ['index.php?act=viewCat&catId=54', 'Screen'],    # Monitores
+                            ['index.php?act=viewCat&catId=3', 'Motherboard'], # MB AMD
+                            ['index.php?act=viewCat&catId=52', 'Motherboard'], # MB Intel
                             ]
         
         product_links = []                    
