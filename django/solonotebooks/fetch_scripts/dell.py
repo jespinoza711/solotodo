@@ -229,10 +229,17 @@ class Dell(FetchStore):
         url_extensions = [  
             '/content/products/compare.aspx/19_22widescreen?c=cl&cs=cldhs1&l=es&s=dhs',
             '/content/products/compare.aspx/23_30widescreen?c=cl&cs=cldhs1&l=es&s=dhs',
+            '/content/products/compare.aspx/23_30widescreen?c=cl&cs=cldhs1&l=es&s=dhs',
+            '/cl/es/empresas/Monitores/19_15widescreen/cp.aspx?refid=19_15widescreen&s=bsd&cs=clbsdt1',
+            '/cl/es/empresas/Monitores/22_20widescreen/cp.aspx?refid=22_20widescreen&s=bsd&cs=clbsdt1',
+            '/cl/es/empresas/Monitores/30_24widescreen/cp.aspx?refid=30_24widescreen&s=bsd&cs=clbsdt1',
+            '/cl/es/empresas/Monitores/20_19flatpanel/cp.aspx?refid=20_19flatpanel&s=bsd&cs=clbsdt1',
+            
                          ]
                             
         for url_extension in url_extensions:
             urlWebpage = self.urlBase + url_extension
+            print urlWebpage
             
             r = mechanize.urlopen(urlWebpage)
             baseSoup = BeautifulSoup(r.read())
