@@ -371,9 +371,10 @@ def product_details(request, product_id):
             product_comment.save()
             return HttpResponseRedirect(request.META['HTTP_REFERER'] + '?refresh=true');
     else:
-        nv = ProductVisit()
-        nv.product = product
-        nv.save()
+        if not request.user.is_staff:
+            nv = ProductVisit()
+            nv.product = product
+            nv.save()
         commentForm = ProductCommentForm()
 
     posted_comment = False

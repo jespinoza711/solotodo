@@ -9,6 +9,9 @@ from . import ProductData, FetchStore
 class PCOfertas(FetchStore):
     name = 'PC Ofertas'
     use_existing_links = False
+    blacklist = [
+        'http://www.pcofertas.cl/index.php?route=product/category&path=74_147', # Memoria notebook
+    ]
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
@@ -26,6 +29,42 @@ class PCOfertas(FetchStore):
         product_data.comparison_field = product_link
         
         return product_data
+        
+    def recursive_retrieve_product_links(self, url):
+        print url
+        browser = mechanize.Browser()
+        baseData = browser.open(url).get_data()
+        baseSoup = BeautifulSoup(baseData)
+        product_links = []
+        
+        products_table = baseSoup.findAll('table', { 'class' : 'list' })
+        if not products_table:
+            return []
+        elif len(products_table) == 2:
+            # Page with categories
+            
+            # First get the products on the page
+            products_anchor_tags = products_table[1].findAll('a')[::3]
+            for anchor_tag in products_anchor_tags:
+                link = anchor_tag['href']
+                product_links.append(link)
+            
+            # Then the ones on sub categories
+            category_links = products_table[0].findAll('a')[::2]
+            for anchor_tag in category_links:
+                link = anchor_tag['href']
+                if link not in self.blacklist:
+                    product_links.extend(self.recursive_retrieve_product_links(link))
+        else:
+            # Page mayy have only products or only category links
+            products_anchor_tags = products_table[0].findAll('a')[::3]
+            for anchor_tag in products_anchor_tags:
+                link = anchor_tag['href']
+                if 'product_id' in link:
+                    product_links.append(link)
+                else:
+                    product_links.extend(self.recursive_retrieve_product_links(link))
+        return product_links
 
 
     # Main method
@@ -33,34 +72,24 @@ class PCOfertas(FetchStore):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.pcofertas.cl/index.php?route=product/category&path='
         
-        # Browser initialization
-        browser = mechanize.Browser()
+        links = []
         product_links = []
         
-        url_extensions = [  ['74', 'Notebook'],   # Notebook
+        url_extensions = [  
+                            ['74', 'Notebook'],   # Notebook
                             ['75', 'Notebook'],   # Netbook
                             ['87', 'VideoCard'],   # Tarjetas de video
                             ['18', 'Processor'],   # Procesadores
                             ['28', 'Screen'],   # Monitores
+                            ['108', 'Motherboard'],   # Monitores
                             ]
         
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
-
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
-
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            products_table = baseSoup.findAll('table', { 'class' : 'list' })[-1]
+            links.extend(self.recursive_retrieve_product_links(urlWebpage))
             
-            product_cells = products_table.findAll('td')
-            
-            for product_cell in product_cells:
-                link = product_cell.findAll('a')
-                if not link:
-                    break
-                product_links.append([link[1]['href'], ptype])
+            for link in links:
+                product_links.append([link, ptype])
 
         return product_links
 
