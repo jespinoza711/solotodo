@@ -14,4 +14,4 @@ class MotherboardNorthbridgeFamily(models.Model):
     
     class Meta:
         app_label = 'cotizador'
-        ordering = ['brand']
+        ordering = ['brand', 'name']

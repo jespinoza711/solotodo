@@ -65,6 +65,10 @@ class PCFactory(FetchStore):
                             ['?papa=272&categoria=446', 'Processor'],  # CPU 1366
                             ['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
                             ['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
+                            ['?papa=292&categoria=473', 'Motherboard'],  # MB AM3
+                            ['?papa=292&categoria=392', 'Motherboard'],  # MB 775
+                            ['?papa=292&categoria=467', 'Motherboard'],  # MB 1156
+                            ['?papa=292&categoria=447', 'Motherboard'],  # MB 1366
                             ]
                           
         pageLinks = []

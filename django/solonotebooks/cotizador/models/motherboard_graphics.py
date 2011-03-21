@@ -10,4 +10,5 @@ class MotherboardGraphics(models.Model):
         return unicode(self)
     
     class Meta:
+        ordering = ['name']
         app_label = 'cotizador'
