@@ -50,6 +50,8 @@ class Sym(FetchStore):
                             ['?cat=50', 'Processor'],          # Procesadores Intel
                             ['?cat=25', 'Processor'],          # Procesadores AMD
                             ['?cat=81', 'Screen'],          # Monitores LCD
+                            ['?cat=26', 'Motherboard'],     # MB AMD
+                            ['?cat=49', 'Motherboard'],     # MB Intel
                             ]
                             
         productLinks = []
