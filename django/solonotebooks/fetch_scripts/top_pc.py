@@ -41,6 +41,7 @@ class TopPC(FetchStore):
                             ['5', 'Processor'],     # Procesadores
                             ['61', 'Screen'],    # Monitores y TV
                             ['153', 'Notebook'],   # Notebooks
+                            ['8', 'Motherboard'],   # MB
                             ]
                             
         productLinks = []
