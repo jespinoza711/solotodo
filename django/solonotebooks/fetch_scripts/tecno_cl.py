@@ -46,6 +46,8 @@ class TecnoCl(FetchStore):
                             ['productos.asp?cat=40', 'Screen'],     # LCD 17
                             ['productos.asp?cat=218', 'Screen'],    # LCD 19+
                             ['productos.asp?cat=87', 'Screen'],    # LCDTV
+                            ['productos.asp?cat=46', 'Motherboard'],    # Mb AMD
+                            ['productos.asp?cat=252', 'Motherboard'],    # Mb Intel
                             ]
         
         product_links = []                    
