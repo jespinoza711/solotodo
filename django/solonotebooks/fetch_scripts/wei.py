@@ -55,6 +55,8 @@ class Wei(FetchStore):
                     ['CP&sccode=58', 'Processor'],     # Procesadores Intel
                     ['MO&sccode=162', 'Screen'],    # LCD TV
                     ['MO&sccode=19', 'Screen'],     # Monitores LCD
+                    ['MB&sccode=23', 'Motherboard'],     # MB AMD
+                    ['MB&sccode=24', 'Motherboard'],     # MB Intel
                         ]
                             
         for category_url, ptype in category_urls:
