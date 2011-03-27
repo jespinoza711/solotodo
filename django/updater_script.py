@@ -2,15 +2,20 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
 from datetime import datetime
-from solonotebooks.fetch_scripts import *
+from solonotebooks import fetch_scripts
 from common_fetch_methods import *
+import inspect
 
 '''Main and all-powerful updater script, probably the backbone of the whole
 site, it grabs every single model of the stores with fetchers and inserts
 them into the database, logging price changes, new models and disappearing
 models'''
 def main():
-    stores = [NotebookCenter(), PackardBell(), LaPolar(), Bym(), Clie(), Falabella(), ENotebook(), FullNotebook(), Paris(), PCFactory(), Sym(), TecnoCl(), Wei(), Sistemax(), Dell(), Webco(), Racle(), Magens(), GlobalMac(), Syd(), MacOnline(), Impulso(), Peta(), HPOnline(), PortatilChile(), TecnoGroup(), Ripley(), AbcDin(), Cintegral(), Rigam(), PCOfertas(), Bip(), RkNotebooks(), PCExpress(), TopPC(), Compumanque()]
+    blacklist = ['FetchStore', 'ProductData', 'TecnoGroup', 'Cintegral']
+
+    classnames = [classname for classname in dir(fetch_scripts) if inspect.isclass(getattr(fetch_scripts, classname)) and classname not in blacklist]
+    
+    stores = [eval('fetch_scripts.' + c + '()') for c in classnames]
     
     for store in stores:
         get_store_products(store)

@@ -1,0 +1,19 @@
+{% extends "store/base.html" %}
+
+{% block title %}
+    Dashboard de {{ store }} - {{ site_name }}
+{% endblock %}
+
+{% block header_content %}
+<script type="text/javascript" src="/media/js/store.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="result_set">
+        <h2>Dashboard de {{ store }}</h2>
+        
+        <p>
+            Bienvenido al dashboard de gestión de su tienda, desde acá podrá ver el estado de indexación de SoloTodo para su tienda
+        </p>
+    </div>
+{% endblock %}

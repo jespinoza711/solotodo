@@ -38,7 +38,10 @@ class StoreHasProduct(models.Model):
             product.update()
     
     def __unicode__(self):
-        return unicode(self.product)
+        result = unicode(self.product)
+        if self.store:
+            result = str(self.store) + ' - ' + result
+        return result
         
     def pretty_price(self):
         return prettyPrice(self.latest_price)

@@ -39,9 +39,16 @@ def store_user_required(f):
     wrap.__doc__ = f.__doc__
     wrap.__name__ = f.__name__
     return wrap
+
+@store_user_required    
+def index(request):
+    store = request.user.get_profile().assigned_store
+    return append_advertisement_ptype_to_response(request, 'store/index.html', {
+        'store': store,
+    })
     
 @store_user_required
-def index(request):
+def advertisement(request):
     store = request.user.get_profile().assigned_store
     shpes = StoreHasProductEntity.objects.filter(store = store, is_available = True)
     
@@ -67,7 +74,7 @@ def index(request):
         else:
             unavailable_products.append(product_pair)            
     
-    return append_advertisement_ptype_to_response(request, 'advertisement/index.html', {
+    return append_advertisement_ptype_to_response(request, 'store/advertisement.html', {
         'store': store,
         'non_indexable_shpes': non_indexable_shpes,
         'non_indexed_shpes': non_indexed_shpes,
@@ -222,7 +229,7 @@ def slot_details(request, shp_id):
 
     generate_timelapse_chart([chart_data], [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
         
-    return append_advertisement_ptype_to_response(request, 'advertisement/slot_details.html', {
+    return append_advertisement_ptype_to_response(request, 'store/slot_details.html', {
         'store': store,
         'shp': shp,
         'product': shp.product,
