@@ -360,3 +360,18 @@ br.product_details_comment_separator {
     margin-top: 10px;
     color: green;
 }
+
+.manager_menu {
+}
+
+.manager_menu li {
+    float: left;
+    font-size: 13px;
+    background-color: #E5E5E5;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+.manager_menu li a {
+    color: black;
+}

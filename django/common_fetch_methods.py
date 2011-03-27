@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 from django.db.models import Min, Max
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.utils import *
+from logger import Logger
 import sys, traceback
     
 '''Method that takes a list of ProductData objects and the store they came from,
@@ -38,6 +39,9 @@ def update_availability_and_price():
     Processor.update_all_pcmark_scores()
         
 def get_store_products(fetch_store, update_shpes_on_finish = False):
+    logger = Logger(sys.stdout, '/tmp/' + fetch_store.name + '_fetch.txt')
+    sys.stdout = logger
+    
     try:
         store = Store.objects.get(name = fetch_store.name)
     except Store.DoesNotExist:
@@ -53,6 +57,8 @@ def get_store_products(fetch_store, update_shpes_on_finish = False):
                 shpe.delete_today_history()
         
         products = fetch_store.get_products()        
+        
+        logger.change_log_file('/tmp/' + fetch_store.name + '_update.txt')
         save_products(products, store)
         
         if update_shpes_on_finish:
@@ -76,3 +82,5 @@ def get_store_products(fetch_store, update_shpes_on_finish = False):
             LogFetchStoreError.new(store, str(e))
         
         store.set_shpe_prevent_availability_change_flag(True)
+        
+    sys.stdout = logger.default_stdout()

@@ -9,7 +9,7 @@ from solonotebooks.cotizador.models import *
 
 class FetchStore:
     def get_products(self):
-        print 'Getting ' + self.name + ' products'
+        print 'Obteniendo productos de ' + self.name
         product_links = self.retrieve_product_links()
         
         return self.retrieve_products_data(product_links)
@@ -31,7 +31,8 @@ class FetchStore:
                 print product
                 products_data.append(product)
             else:
-                print 'No disponible'
+                print 'No disponible\n'
+                
                 invalid_links.append(product_link)
             
         print 'Links no disponibles: ' + str(len(invalid_links))
