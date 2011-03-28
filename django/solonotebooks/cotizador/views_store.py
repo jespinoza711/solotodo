@@ -78,7 +78,7 @@ def registry(request):
     except:
         result_text = 'No hay información de la última indexación de ' + str(store)
         
-    pending_shpes = store.storehasproductentity_set.filter(shp__isnull = True, is_available = True)
+    pending_shpes = store.storehasproductentity_set.filter(shp__isnull = True, is_available = True, is_hidden = False)
     non_idx_shpes = store.storehasproductentity_set.filter(is_hidden = True, is_available = True)
             
     return append_advertisement_ptype_to_response(request, 'store/registry.html', {
