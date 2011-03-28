@@ -1,0 +1,37 @@
+{% extends "store/base.html" %}
+
+{% block title %}
+    Datos de "{{ shpe }}" - {{ site_name }}
+{% endblock %}
+
+{% block content %}
+    <div id="result_set" class="bigger_text">
+        <h2><a href="{{ shpe.url }}">{{ shpe }}</a></h2>
+        
+        {% if shpe.is_hidden %}
+            <p>
+            El equipo no fue indexado por una de las siguientes razones:
+            </p>
+            <ul>
+                <li>* Los datos en su página no bastan para identificarlo</li>
+                <li>* Los datos en su página son contradictorios</li>
+                <li>* Es parte de un combo de productos</li>
+                <li>* No pertenece a ninguna de las categorías actuales de SoloTodo</li>
+                <li>* Es un producto de liquidación / usado / open box</li>
+            </ul>
+            <br />
+            
+            <p>
+            Si cree que debió ser indexado o bien ya corrigió el problema, por favor contáctese con nosotros.
+            </p>
+        {% else %}
+            <p>
+            El equipo aún no ha sido indexado, por favor espere entre 24 y 48 horas para permitirnos hacer este proceso.
+            </p>            
+            
+            <p>
+            Si la indexación de este equipo es importante, por favor contáctese con nosotros directamente.
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

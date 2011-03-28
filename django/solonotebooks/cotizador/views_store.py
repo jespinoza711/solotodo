@@ -47,6 +47,49 @@ def index(request):
         'store': store,
     })
     
+@store_user_required    
+def registry(request):
+    store = request.user.get_profile().assigned_store
+    
+    form = SearchShpeForm(request.GET)
+    error_message = ''
+    if request.GET and form.is_valid():
+        url = form.cleaned_data['url']
+        
+        try:
+            shpe = StoreHasProductEntity.objects.get(url = url)
+        except StoreHasProductEntity.DoesNotExist, e:
+            shpe = store.fetch_product_data(url)
+        
+        if shpe:
+            follow_url = reverse('solonotebooks.cotizador.views_store.entity_details', args = [shpe.id])
+            return HttpResponseRedirect(follow_url)
+        else:
+            error_message = 'No se pudo obtener la información de la URL ingresada'
+    else:    
+        form = SearchShpeForm()
+        
+    try:
+        filename = 'logs/' + store.classname + '_fetch.txt'
+        f = open(filename)
+        result_text = ''
+        for line in f.readlines():
+            result_text += line
+    except:
+        result_text = 'No hay información de la última indexación de ' + str(store)
+        
+    pending_shpes = store.storehasproductentity_set.filter(shp__isnull = True, is_available = True)
+    non_idx_shpes = store.storehasproductentity_set.filter(is_hidden = True, is_available = True)
+            
+    return append_advertisement_ptype_to_response(request, 'store/registry.html', {
+        'store': store,
+        'result_text': result_text,
+        'form': form,
+        'error_message': error_message,
+        'pending_shpes': pending_shpes,
+        'non_idx_shpes': non_idx_shpes,
+    })
+    
 @store_user_required
 def advertisement(request):
     store = request.user.get_profile().assigned_store
@@ -97,12 +140,12 @@ def reserve_slots(request):
     reserved_shps_count = Product.objects.filter(sponsored_shp__shpe__store = store).count()
     if len(shps) + reserved_shps_count > store.sponsor_cap:
         request.flash['error'] = 'Limite de anuncios excedido'
-        return HttpResponseRedirect('/advertisement?refresh=true')
+        return HttpResponseRedirect('/store/advertisement/?refresh=true')
     for shp in shps:
         shp.product.sponsored_shp = shp
         shp.product.save()
     request.flash['message'] = 'Suscripciones agregadas'
-    return HttpResponseRedirect('/advertisement?refresh=true')
+    return HttpResponseRedirect('/store/advertisement/?refresh=true')
     
 @store_user_required
 def free_slots(request):
@@ -118,12 +161,30 @@ def free_slots(request):
         shp.product.sponsored_shp = None
         shp.product.save()
     request.flash['message'] = 'Suscripciones liberadas'
-    return HttpResponseRedirect('/advertisement?refresh=true')
+    return HttpResponseRedirect('/store/advertisement/?refresh=true')
     
 @store_user_required
-def slot_details(request, shp_id):
+def entity_details(request, shpe_id):
     store = request.user.get_profile().assigned_store
-    shp = StoreHasProduct.objects.get(pk = shp_id)
+    shpe = StoreHasProductEntity.objects.get(pk = shpe_id)
+    
+    if shpe.store != store:
+        url = reverse('solonotebooks.cotizador.views_store.index')
+        return HttpResponseRedirect(url)
+    
+    if shpe.is_hidden or not shpe.shp:
+        return append_advertisement_ptype_to_response(request, 'store/entity_details_no_data.html', {
+            'store': store,
+            'shpe': shpe,
+        })
+        
+    shp = StoreHasProduct.objects.get(pk = shpe.shp.id)
+    
+    other_shpes = shp.storehasproductentity_set.filter(is_available = True).order_by('latest_price')
+    if other_shpes.count() == 1:
+        other_shpes = None
+    
+    
     product = shp.product
     if shp.shpe.store != store:
         raise Exception
@@ -142,96 +203,104 @@ def slot_details(request, shp_id):
         if start_date >= end_date:
             url = reverse('solonotebooks.cotizador.views_advertisement.slot_details', args = [shp.id])
             return HttpResponseRedirect(url)
+    
+    if store.sponsor_cap:    
+        # First chart
         
-    # First chart
-    
-    raw_data = ProductVisit.objects.filter(notebook = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).extra(select = {'d': 'CAST(date AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
-    chart_data = dict([(entry['d'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
-    
-    product_visit_count = sum([e[1] for e in chart_data])
-
-    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'unit_' + str(shp.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
-    
-    # Second chart
-    
-    raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
-    
-    all_external_visit_count = sum([e[1] for e in chart_data])
-    
-    schart_data = [chart_data]
-    
-    raw_data = ExternalVisit.objects.filter(shn__shp__product = product, shn__store = store, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
-
-    store_external_visit_count = sum([e[1] for e in chart_data])
-
-    schart_data.append(chart_data)
-    generate_timelapse_chart(schart_data, ['Clicks totales', 'Clicks a ' + unicode(store)], 'unit_' + str(shp.id) + '_02.png', u'Número de clicks a tiendas')
-    
-    # Third chart
-    
-    raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('shn__store').annotate(Count('id'))
-    chart_data = [(unicode(Store.objects.get(pk = pair['shn__store'])), pair['id__count']) for pair in raw_data]
-    
-    generate_pie_chart(chart_data, 'unit_' + str(shp.id) + '_03.png', u'Distribución de clicks entre tiendas')
-    
-    # Fourth chart
-    
-    raw_data = SponsoredVisit.objects.filter(shp = shp, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
-    
-    sponsored_visit_count = sum([e[1] for e in chart_data])
-
-    generate_timelapse_chart([chart_data], [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
+        raw_data = ProductVisit.objects.filter(notebook = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).extra(select = {'d': 'CAST(date AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
+        chart_data = dict([(entry['d'], entry['id__count']) for entry in raw_data])
         
-    return append_advertisement_ptype_to_response(request, 'store/slot_details.html', {
+        sdate = start_date
+        step_date = timedelta(days = 1)
+        
+        while sdate <= end_date:
+            if sdate not in chart_data:
+                chart_data[sdate] = 0
+            sdate += step_date
+        
+        chart_data = chart_data.items()
+        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        
+        product_visit_count = sum([e[1] for e in chart_data])
+
+        generate_timelapse_chart([chart_data], [u'Número de visitas'], 'unit_' + str(shp.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
+        
+        # Second chart
+        
+        raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
+        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
+        
+        sdate = start_date
+        step_date = timedelta(days = 1)
+        
+        while sdate <= end_date:
+            if sdate not in chart_data:
+                chart_data[sdate] = 0
+            sdate += step_date
+        
+        chart_data = chart_data.items()
+        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        
+        all_external_visit_count = sum([e[1] for e in chart_data])
+        
+        schart_data = [chart_data]
+        
+        raw_data = ExternalVisit.objects.filter(shn__shp__product = product, shn__store = store, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
+        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
+        
+        sdate = start_date
+        step_date = timedelta(days = 1)
+        
+        while sdate <= end_date:
+            if sdate not in chart_data:
+                chart_data[sdate] = 0
+            sdate += step_date
+        
+        chart_data = chart_data.items()
+        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+
+        store_external_visit_count = sum([e[1] for e in chart_data])
+
+        schart_data.append(chart_data)
+        generate_timelapse_chart(schart_data, ['Clicks totales', 'Clicks a ' + unicode(store)], 'unit_' + str(shp.id) + '_02.png', u'Número de clicks a tiendas')
+        
+        # Third chart
+        
+        raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('shn__store').annotate(Count('id'))
+        chart_data = [(unicode(Store.objects.get(pk = pair['shn__store'])), pair['id__count']) for pair in raw_data]
+        
+        generate_pie_chart(chart_data, 'unit_' + str(shp.id) + '_03.png', u'Distribución de clicks entre tiendas')
+        
+        # Fourth chart
+        
+        raw_data = SponsoredVisit.objects.filter(shp = shp, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
+        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
+        
+        sdate = start_date
+        step_date = timedelta(days = 1)
+        
+        while sdate <= end_date:
+            if sdate not in chart_data:
+                chart_data[sdate] = 0
+            sdate += step_date
+        
+        chart_data = chart_data.items()
+        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        
+        sponsored_visit_count = sum([e[1] for e in chart_data])
+
+        generate_timelapse_chart([chart_data], [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
+    else:
+        product_visit_count = 0
+        store_external_visit_count = 0
+        all_external_visit_count = 0
+        sponsored_visit_count = 0
+        
+    return append_advertisement_ptype_to_response(request, 'store/entity_details.html', {
         'store': store,
+        'shpe': shpe,
         'shp': shp,
+        'other_shpes': other_shpes,
         'product': shp.product,
         'form': form,
         'tag': datetime.now().toordinal(),
@@ -241,3 +310,20 @@ def slot_details(request, shp_id):
         'all_external_visit_count': all_external_visit_count,
         'sponsored_visit_count': sponsored_visit_count,
     })
+    
+@store_user_required
+def entity_refresh_price(request, shpe_id):
+    store = request.user.get_profile().assigned_store
+    shpe = StoreHasProductEntity.objects.get(pk = shpe_id)
+    
+    if shpe.store != store:
+        url = reverse('solonotebooks.cotizador.views_store.index')
+        return HttpResponseRedirect(url)
+        
+    shpe.update_price()
+    shpe.save()
+    
+    request.flash['message'] = 'Precio actualizado'
+    
+    url = reverse('solonotebooks.cotizador.views_store.entity_details', args = [shpe.id])
+    return HttpResponseRedirect(url)

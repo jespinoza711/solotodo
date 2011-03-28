@@ -45,10 +45,12 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
 
 urlpatterns += patterns('solonotebooks.cotizador.views_store',
     (r'^store/$', 'index'),
+    (r'^store/registry/$', 'registry'),
+    (r'^store/entities/(?P<shpe_id>\d+)/$', 'entity_details'),
+    (r'^store/entities/(?P<shpe_id>\d+)/refresh_price/$', 'entity_refresh_price'),
     (r'^store/advertisement/$', 'advertisement'),
-    (r'^store/advertisemet/reserve_slots/$', 'reserve_slots'),
+    (r'^store/advertisement/reserve_slots/$', 'reserve_slots'),
     (r'^store/advertisement/free_slots/$', 'free_slots'),
-    (r'^store/advertisement/slot/(?P<shp_id>\d+)/$', 'slot_details'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',

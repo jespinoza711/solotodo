@@ -375,3 +375,17 @@ br.product_details_comment_separator {
 .manager_menu li a {
     color: black;
 }
+
+.bigger_text {
+    font-size: 14px;
+}
+
+#shpe_search_form input[type='text'] {
+    width: 600px;
+}
+
+.store_error {
+    font-weight: bold;
+    font-size: 10px;
+    color: red;
+}

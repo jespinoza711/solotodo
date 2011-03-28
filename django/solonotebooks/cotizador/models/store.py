@@ -14,6 +14,20 @@ class Store(models.Model):
     def __unicode__(self):
         return unicode(self.name)
         
+    def fetch_product_data(self, url):
+        from solonotebooks.fetch_scripts import *
+        from . import StoreHasProductEntity
+        fetch_store = eval(self.classname + '()')
+        product = fetch_store.retrieve_product_data(url)
+        if not product:
+            return None
+        else:
+            shpes = StoreHasProductEntity.objects.filter(custom_name = product.custom_name, store = self)
+            if shpes:
+                return shpes[0]
+            else:
+                return None
+        
     def save_product(self, product):
         from . import StoreHasProductEntity, LogNewEntity, ProductType
         print 'Guardando ' + str(product)
