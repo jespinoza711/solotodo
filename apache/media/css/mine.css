@@ -389,3 +389,7 @@ br.product_details_comment_separator {
     font-size: 10px;
     color: red;
 }
+
+.ui-tabs-panel a {
+    text-decoration: underline;
+}

@@ -14,7 +14,8 @@
 	</ul>
 	<div id="tabs-1">
 	    <h2><a href="{{ shpe.url }}" style="text-decoration:underline;">{{ shpe }}</a></h2>
-        <b>Disponibilidad:</b> Disponible <br />
+        <b>Identificador:</b> {{ shpe.id }} <br />
+        <b>Disponibilidad en {{ store }}:</b> {% if not shpe.is_available %} No {% endif %} Disponible <br />
         <b>Último precio:</b> {{ shpe.pretty_price }} (<a style="text-decoration:underline;" href="{% url solonotebooks.cotizador.views_store.entity_refresh_price shpe.id %}">Actualizar precio</a>) <br />
         <br />
         
@@ -32,6 +33,10 @@
         
 	</div>
 	<div id="tabs-2">
+	    <p>
+	        <b>Indentificador de producto:</b> {{ product.id }} <br />
+            <a href="{% url solonotebooks.cotizador.views.product_details product.id %}">Link público en SoloTodo</a>
+        </p>
         <div class="product_details_sidebar">
             <div class="product_details_images">
                 <div id="advertisement_image">{{ product.picture.extra_thumbnails_tag.large }}</div>

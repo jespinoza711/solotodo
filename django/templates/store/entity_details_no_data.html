@@ -8,6 +8,11 @@
     <div id="result_set" class="bigger_text">
         <h2><a href="{{ shpe.url }}">{{ shpe }}</a></h2>
         
+        <b>Identificador:</b> {{ shpe.id }} <br />
+        <b>Disponibilidad en {{ store }}:</b> {% if not shpe.is_available %} No {% endif %} Disponible <br />
+        <b>Último precio:</b> {{ shpe.pretty_price }} (<a style="text-decoration:underline;" href="{% url solonotebooks.cotizador.views_store.entity_refresh_price shpe.id %}">Actualizar precio</a>) <br />
+        <br />
+        
         {% if shpe.is_hidden %}
             <p>
             El equipo no fue indexado por una de las siguientes razones:

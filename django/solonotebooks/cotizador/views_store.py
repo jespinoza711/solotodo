@@ -186,8 +186,6 @@ def entity_details(request, shpe_id):
     
     
     product = shp.product
-    if shp.shpe.store != store:
-        raise Exception
     
     form = AdvertisementSlotDetailsForm(request.GET)
     if not form.is_valid():
