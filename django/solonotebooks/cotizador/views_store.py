@@ -70,12 +70,12 @@ def registry(request):
         form = SearchShpeForm()
         
     try:
-        filename = 'logs/' + store.classname + '_fetch.txt'
+        filename = settings.LOG_DIRECTORY + store.classname + '_fetch.txt'
         f = open(filename)
         result_text = ''
         for line in f.readlines():
             result_text += line
-    except:
+    except Exception, e :
         result_text = 'No hay información de la última indexación de ' + str(store)
         
     pending_shpes = store.storehasproductentity_set.filter(shp__isnull = True, is_available = True, is_hidden = False)
