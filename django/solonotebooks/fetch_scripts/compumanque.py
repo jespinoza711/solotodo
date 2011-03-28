@@ -12,11 +12,17 @@ class Compumanque(FetchStore):
 
     def retrieve_product_data(self, productUrl):
         br = mechanize.Browser()
-        data = br.open(productUrl).get_data()
+        try:
+            data = br.open(productUrl).get_data()
+        except:
+            return None
         soup = BeautifulSoup(data)
 
-        title = soup.find('h1').string
-        price = int(soup.findAll('b')[1].parent.parent.findAll('td')[1].string.replace('$', '').replace('.', ''))
+        try:
+            title = soup.find('h1').string
+            price = int(soup.findAll('b')[1].parent.parent.findAll('td')[1].string.replace('$', '').replace('.', ''))
+        except:
+            return None
         
         productData = ProductData()
 

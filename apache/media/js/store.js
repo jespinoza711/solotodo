@@ -11,4 +11,6 @@ $(function() {
     
     $('#advertisement_tabs').tabs();
     $('#sub_advertisement_tabs').tabs();
+    
+    $('#registry_tabs').tabs();
 })

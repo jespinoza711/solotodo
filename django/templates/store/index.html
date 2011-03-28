@@ -4,16 +4,24 @@
     Dashboard de {{ store }} - {{ site_name }}
 {% endblock %}
 
-{% block header_content %}
-<script type="text/javascript" src="/media/js/store.js"></script>
-{% endblock %}
-
 {% block content %}
-    <div id="result_set">
+    <div id="result_set" class="bigger_text">
         <h2>Dashboard de {{ store }}</h2>
         
         <p>
-            Bienvenido al dashboard de gestión de su tienda, desde acá podrá ver el estado de indexación de SoloTodo para su tienda
+            Bienvenido al dashboard de gestión de su tienda, desde acá podrá acceder a los servicios que ofrece SoloTodo y que le resultarán útiles para gestionar y optimizar la ubicación de sus productos en nuestros resultados de búsqueda.
         </p>
+        <h3>    
+            Opciones disponibles:
+        </h3>
+        <p>
+            <a href="{% url solonotebooks.cotizador.views_store.registry %}"><b>Registros:</b></a> Revise los resultados de la última indexación de SoloTodo de su sitio y vea el estátus de sus productos individuales.
+        </p>
+        <p>
+            <a href="{% url solonotebooks.cotizador.views_store.advertisement %}"><b>Gestor de publicidad:</b></a> Mejore el posicionamiento de sus productos y evite la comparación de precios con su competencia con un simple sistema de publicidad que puede estar funcionando en 5 minutos.
+        </p>
+        <!--<p>
+            <b>Buscador personalizado: </b> Aproveche el potente motor de SoloTodo para buscar productos dentro de su propia tienda, ideal para consultas rápidas de clientes o para evaluar su portafolio de productos.
+        </p>-->
     </div>
 {% endblock %}

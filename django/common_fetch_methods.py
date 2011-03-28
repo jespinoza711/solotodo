@@ -39,7 +39,7 @@ def update_availability_and_price():
     Processor.update_all_pcmark_scores()
         
 def get_store_products(fetch_store, update_shpes_on_finish = False):
-    logger = Logger(sys.stdout, '/tmp/' + fetch_store.name + '_fetch.txt')
+    logger = Logger(sys.stdout, 'solonotebooks/logs/' + fetch_store.name + '_fetch.txt')
     sys.stdout = logger
     
     try:
@@ -58,7 +58,7 @@ def get_store_products(fetch_store, update_shpes_on_finish = False):
         
         products = fetch_store.get_products()        
         
-        logger.change_log_file('/tmp/' + fetch_store.name + '_update.txt')
+        logger.change_log_file('solonotebooks/logs/' + fetch_store.name + '_update.txt')
         save_products(products, store)
         
         if update_shpes_on_finish:
