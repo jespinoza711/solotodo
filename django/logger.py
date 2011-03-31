@@ -5,6 +5,7 @@ but still allow them to be printed on the screen.
 
 import sys
 import time
+from solonotebooks import settings
 
 class Logger:
     def __init__(self, stdout, filename):
