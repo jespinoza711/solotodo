@@ -9,7 +9,10 @@ class StoreHasProduct(models.Model):
     shpe = models.ForeignKey('StoreHasProductEntity', null = True, blank = True)
     
     def get_store(self):
-        return self.storehasproductentity_set.all()[0].store
+        try:
+            return self.storehasproductentity_set.all()[0].store
+        except:
+            return None
     
     store = property(get_store)
     
