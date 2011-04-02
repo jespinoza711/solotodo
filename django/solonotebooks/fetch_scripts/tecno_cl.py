@@ -10,9 +10,15 @@ class TecnoCl(FetchStore):
     name = 'Tecno.cl'
     use_existing_links = False
     
-    def retrieve_product_data(self, product_link):
+    def retrieve_product_data(self, product_link, already_tried = False):
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
+        try:
+            product_data = browser.open(product_link).get_data()
+        except:
+            if already_tried:
+                return None
+            else:
+                return self.retrieve_product_data(product_link, already_tried = True)
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.find('strong').string.strip().encode('ascii', 'ignore')

@@ -20,11 +20,16 @@ class Paris(FetchStore):
         product_prices = []
         
         try:
+            product_price = int(product_soup.find('div', { 'class': 'txtPrecioPrin' }).find('b').contents[0].split('$')[1].replace('.', ''))
+            print product_price
+            product_prices.append(product_price)
+        except:
+            pass
+        try:
             product_price = int(product_soup.find('div', { 'class': 'prcNrmlFc' }).find('b').string.split('$')[1].replace('.', ''))
             product_prices.append(product_price)
         except:
             pass
-            
         try:
             product_price = int(product_soup.find('div', { 'class': 'prcIntFch2' }).find('b').string.split('$')[1].replace('.', ''))
             product_prices.append(product_price)
