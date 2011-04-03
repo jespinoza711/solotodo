@@ -173,6 +173,27 @@ from motherboard_memory_channel import MotherboardMemoryChannel
 from motherboard_audio_channels import MotherboardAudioChannels
 from motherboard import Motherboard
 
+from cell_company import CellCompany
+from cell_pricing_plan import CellPricingPlan
+from cell_pricing import CellPricing
+from cell_pricing_tier import CellPricingTier
+from cellphone_form_factor import CellphoneFormFactor
+from cellphone_category import CellphoneCategory
+from cellphone_graphics import CellphoneGraphics
+from cellphone_ram import CellphoneRam
+from cellphone_manufacturer import CellphoneManufacturer
+from cellphone_operating_system import CellphoneOperatingSystem
+from cellphone_keyboard import CellphoneKeyboard
+from cellphone_camera import CellphoneCamera
+from cellphone_card_reader import CellphoneCardReader
+from cellphone_screen_size import CellphoneScreenSize
+from cellphone_screen_resolution import CellphoneScreenResolution
+from cellphone_screen_colors import CellphoneScreenColors
+from cellphone_screen import CellphoneScreen
+from cellphone_processor import CellphoneProcessor
+from cellphone import Cellphone
+from cell import Cell
+
 __all__ = [ 
             'InterfaceBrand',
             'InterfaceVideoPort',
@@ -344,4 +365,24 @@ __all__ = [
             'MotherboardMemoryChannel',
             'MotherboardAudioChannels',
             'Motherboard',
+            'CellCompany',
+            'CellPricingPlan',
+            'CellPricing',
+            'CellPricingTier',
+            'CellphoneFormFactor',
+            'CellphoneCategory',
+            'CellphoneGraphics',
+            'CellphoneRam',
+            'CellphoneManufacturer',
+            'CellphoneOperatingSystem',
+            'CellphoneKeyboard',
+            'CellphoneCamera',
+            'CellphoneCardReader',
+            'CellphoneScreenSize',
+            'CellphoneScreenResolution',
+            'CellphoneScreenColors',
+            'CellphoneScreen',
+            'CellphoneProcessor',
+            'Cellphone',
+            'Cell',
             ]

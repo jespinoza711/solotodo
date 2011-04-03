@@ -69,6 +69,10 @@ class Product(models.Model):
             message += 'No disponible'
         return message + '\n'
         
+    @classmethod
+    def custom_update():
+        pass
+        
     @staticmethod
     def get_all_ordered():
         from solonotebooks.cotizador.models import *

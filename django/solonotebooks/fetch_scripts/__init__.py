@@ -36,6 +36,7 @@ from pc_ofertas import PCOfertas
 from pc_express import PCExpress
 from top_pc import TopPC
 from compumanque import Compumanque
+from movistar import Movistar
 
 __all__ = [ 
             'ProductData',
@@ -75,4 +76,6 @@ __all__ = [
             'PCOfertas',
             'PCExpress',
             'TopPC',
-            'Compumanque',]
+            'Compumanque',
+            'Movistar',
+        ]

@@ -33,6 +33,10 @@ class VideoCard(Product):
         video_cards = VideoCard.get_valid().filter(gpu = self.gpu).filter(~Q(id = self.id)).order_by('?')[:threshold]
         self.similar_products = ','.join([str(video_card.id) for video_card in video_cards])
         
+    @classmethod
+    def custom_update():
+        VideoCardGpu.update_all_tdmark_scores()
+        
     @staticmethod
     def get_valid():
         return VideoCard.objects.filter(shp__isnull = False)

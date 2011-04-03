@@ -9,6 +9,7 @@ from video_card_search_form import VideoCardSearchForm
 from processor_search_form import ProcessorSearchForm
 from screen_search_form import ScreenSearchForm
 from motherboard_search_form import MotherboardSearchForm
+from cell_search_form import CellSearchForm
 from advertisement_slot_details_form import AdvertisementSlotDetailsForm
 from search_shpe_form import SearchShpeForm
 
@@ -26,4 +27,5 @@ __all__ = [
             'MotherboardSearchForm',
             'AdvertisementSlotDetailsForm',
             'SearchShpeForm',
+            'CellSearchForm',
             ]

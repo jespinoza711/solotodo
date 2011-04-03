@@ -11,11 +11,15 @@ class Store(models.Model):
         upload_to = 'store_logos',
         generate_on_save = True,)
     
+    def fetch_store(self):
+        from solonotebooks.fetch_scripts import *
+        return eval(self.classname + '()')
+    
     def __unicode__(self):
         return unicode(self.name)
         
+        
     def fetch_product_data(self, url):
-        from solonotebooks.fetch_scripts import *
         from . import StoreHasProductEntity
         fetch_store = eval(self.classname + '()')
         product = fetch_store.retrieve_product_data(url)
