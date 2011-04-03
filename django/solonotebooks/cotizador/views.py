@@ -394,9 +394,12 @@ def product_details(request, product_id):
         product_subscription = ProductSubscription.objects.filter(user = request.user, product = product, is_active = True)[0]
     except:
         product_subscription = None
+        
+    template_file = 'templatetags/details_' + product.ptype.adminurlname + '.html'
     
-    return append_ads_to_response(request, 'cotizador/product_details.html', {
+    base_data = {
         'product': product,
+        product.ptype.adminurlname: product,
         'comment_form': commentForm,
         'product_prices': stores_with_product_available,
         'product_comments': product.productcomment_set.filter(validated = True).order_by('id'),
@@ -404,4 +407,9 @@ def product_details(request, product_id):
         #'similar_products': similar_products,
         'subscription': product_subscription,
         'ptype': product.ptype
-        })
+        }
+        
+    extra_data = product.extra_data(request)
+    base_data.update(extra_data)
+    
+    return append_ads_to_response(request, template_file, base_data)

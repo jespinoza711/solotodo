@@ -5,6 +5,7 @@ class CellPricingPlan(models.Model):
     company = models.ForeignKey(CellCompany)
     name = models.CharField(max_length = 255)
     price = models.IntegerField()
+    ordering = models.IntegerField(default = 2)
     includes_data = models.BooleanField()
     
     @classmethod
@@ -17,8 +18,8 @@ class CellPricingPlan(models.Model):
         return cpp
     
     def __unicode__(self):
-        return unicode(self.company) + ' - ' + self.name + ' (' + str(self.price) + ')'
+        return unicode(self.company) + ' - ' + self.name
     
     class Meta:
         app_label = 'cotizador'
-        ordering = ['id']
+        ordering = ['ordering', 'id']

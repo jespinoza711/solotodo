@@ -10,10 +10,13 @@ class Cell(Product):
     best_price = models.IntegerField()
     
     def raw_text(self):
-        return ''
+        result = ''
+        result += ' ' + self.pricing.raw_text()
+        result += ' ' + self.phone.raw_text()
+        return result
 
     def __unicode__(self):
-        return str(self.phone)
+        return str(self.phone) + ' (' + str(self.pricing.company) + ')' 
         
     def load_similar_products(self):
         pass
@@ -21,6 +24,36 @@ class Cell(Product):
     @staticmethod
     def get_valid():
         return Cell.objects.filter(shp__isnull = False)
+        
+    def pretty_connectivity(self):
+        result = []
+        phone = self.phone
+        
+        if phone.has_bluetooth:
+            result.append('Bluetooth')
+        if phone.has_wifi:
+            result.append('WiFi')
+        if phone.has_3g:
+            result.append('3G')
+        if phone.has_gps:
+            result.append('GPS')
+            
+        if result:
+            return ' / '.join(result)
+        else:
+            return 'No posee'
+            
+    def extra_data(self, request):
+        tiers = CellPricingTier.objects.filter(pricing__cell = self)
+        result = {
+            'phone': self.phone,
+            'tiers': tiers,
+        }
+        
+        if 'tier_id' in request.GET:
+            result['tier_id'] = int(request.GET['tier_id'])
+            
+        return result
         
     @classmethod
     def custom_update(self):
@@ -43,16 +76,26 @@ class Cell(Product):
                 cell_company.fetch_store.calculate_tiers(shpe, cell_plans, pricing)
                 
         for cell in Cell.objects.all():
-            tiers = CellPricingTier.objects.filter(pricing__cell = cell).filter(plan__price__gt = 0, cellphone_price__gt = 0).order_by('cellphone_price')
-            if not tiers:
-                tiers = CellPricingTier.objects.filter(pricing__cell = cell).filter(plan__price = 0).order_by('cellphone_price')
-                
-            if tiers:
-                cell.best_price = tiers[0].cellphone_price
-            else:
-                cell.best_price = 0
-            
+            cell.custom_local_update()
             cell.save()
+            
+    def custom_local_update(self):
+        tiers = CellPricingTier.objects.filter(pricing__cell = self).filter(plan__price__gt = 0, cellphone_price__gt = 0).order_by('cellphone_price')
+        if not tiers:
+            tiers = CellPricingTier.objects.filter(pricing__cell = self).filter(plan__price = 0).order_by('cellphone_price')
+            
+        if tiers:
+            self.best_price = tiers[0].cellphone_price
+        else:
+            self.best_price = 0
+            
+    def latest_price(self):
+        if hasattr(self, 'is_sponsored'):
+            return self.sponsored_shp.shpe.latest_price
+        elif hasattr(self, 'price'):
+            return self.price
+        else:
+            return self.best_price
     
     class Meta:
         ordering = ['name']

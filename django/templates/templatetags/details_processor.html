@@ -1,3 +1,6 @@
+{% extends "cotizador/product_details.html" %}
+
+{% block product_details %}
 <h1>{{ processor }}</h1>
 <h3 class="subtitle">Especificaciones principales</h3>
 <strong>Frecuencia: </strong> {{ processor.pretty_frequency }}
@@ -41,3 +44,5 @@
         No posee frecuencias turbo
     {% endif %}
 <br />
+
+{% endblock %}

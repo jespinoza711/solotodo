@@ -5,7 +5,7 @@ class CellphoneCamera(models.Model):
     
     def __unicode__(self):
         if self.mp:
-            return str(self.value) + ' MP'
+            return str(self.mp) + ' MP'
         else:
             return 'No posee'
         

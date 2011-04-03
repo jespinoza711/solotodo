@@ -1,3 +1,6 @@
+{% extends "cotizador/product_details.html" %}
+
+{% block product_details %}
 <h1>{{ motherboard }}</h1>
 <h3 class="subtitle">Especificaciones esenciales</h3>
 <strong>Fabricante: </strong> {{ motherboard.brand }}
@@ -60,3 +63,5 @@
     No posee
     <br />
 {% endif %}
+
+{% endblock %}

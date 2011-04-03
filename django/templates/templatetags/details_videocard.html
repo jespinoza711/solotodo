@@ -1,3 +1,6 @@
+{% extends "cotizador/product_details.html" %}
+
+{% block product_details %}
 <h1>{{ videocard }}</h1>
 <h3 class="subtitle">Especificaciones esenciales</h3>
 <strong>Fabricante: </strong> {{ videocard.brand }}
@@ -40,3 +43,5 @@
         <li>{{ port }}</li>
     {% endfor %}
 </ul>
+
+{% endblock %}
