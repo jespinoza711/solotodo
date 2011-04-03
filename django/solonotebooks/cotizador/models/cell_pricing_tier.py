@@ -11,6 +11,9 @@ class CellPricingTier(models.Model):
     six_month_pricing = models.IntegerField()
     twelve_month_pricing = models.IntegerField()
     
+    def calculate_plan_price(self):
+        return self.plan.price + self.monthly_quota
+    
     def __unicode__(self):
         return str(self.plan)
         
