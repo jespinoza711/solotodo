@@ -78,7 +78,7 @@ class Product(models.Model):
         return message + '\n'
         
     @classmethod
-    def custom_update():
+    def custom_update(self):
         pass
         
     @staticmethod
