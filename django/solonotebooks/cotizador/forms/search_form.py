@@ -106,7 +106,6 @@ class SearchForm(forms.Form):
 
     def get_quick_search_fields(self):
         quick_search_fields = []
-        class_whitelist = [ClassChoiceField, CustomChoiceField]
         
         for field_name, field in self.fields.items():
             try:

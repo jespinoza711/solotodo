@@ -37,8 +37,8 @@ def update_availability_and_price():
         product.update(send_mails = True)
         
     # Other housekeeping stuff
-    VideoCardGpu.update_all_tdmark_scores()
-    Processor.update_all_pcmark_scores()
+    for ptype in ProductType.objects.all():
+        ptype.get_class().custom_update()
         
 def get_store_products(fetch_store, update_shpes_on_finish = False):
     logger = Logger(sys.stdout, settings.LOG_DIRECTORY + fetch_store.name + '_fetch.txt')

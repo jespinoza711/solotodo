@@ -64,6 +64,10 @@ class Processor(Product):
         processors = Processor.get_valid().filter(core = self.core).filter(line = self.line).filter(~Q(id = self.id)).order_by('?')[:threshold]
         self.similar_products = ','.join([str(processor.id) for processor in processors])
         
+    @classmethod
+    def custom_update():
+        Processor.update_all_pcmark_scores()
+        
     @staticmethod
     def get_valid():
         return Processor.objects.filter(shp__isnull = False)
