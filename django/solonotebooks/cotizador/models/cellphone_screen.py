@@ -9,9 +9,10 @@ class CellphoneScreen(models.Model):
     is_touch = models.BooleanField()
     
     def __unicode__(self):
-        result = str(self.size) + ' (' + str(self.resolution) + ')'
+        result = str(self.size)
         if self.is_touch:
-            result += u' táctil'
+            result += u' tactil'
+        result += ' (' + str(self.resolution) + ')'
         return result
         
     def raw_text(self):

@@ -1,0 +1,99 @@
+{% extends "cotizador/product_details.html" %}
+
+{% block sidebar %}
+    <script type="text/javascript">
+        var tiers = new Array()
+        {% for tier in tiers %}
+            var tier_details = new Array()
+            tier_details['cellphone_price'] = {{ tier.cellphone_price }}
+            tier_details['plan_price'] = {{ tier.plan.price }}
+            tier_details['plan_data'] = {% if tier.plan.includes_data %} 'Sí' {% else %} 'No' {% endif %}
+            tier_details['three_month_pricing'] = {{ tier.three_month_pricing }}
+            tier_details['six_month_pricing'] = {{ tier.six_month_pricing }}
+            tier_details['twelve_month_pricing'] = {{ tier.twelve_month_pricing }}
+            tier_details['shpe_id'] = '{{ tier.shpe.id }}'
+            tiers['{{ tier.id }}'] = tier_details
+        {% endfor %}
+    </script>
+
+    {{ product.picture.extra_thumbnails_tag.large }}
+    <br />
+    <br />
+    <h4>
+        Seleccione un plan disponible para este celular
+    </h4>
+    <select id="tiers-select">
+        {% for tier in tiers %}
+            {% ifequal tier.id tier_id %}
+                <option selected="selected" value="{{ tier.id }}">{{ tier.compressed_name }}</option>
+            {% else %}
+                <option value="{{ tier.id }}">{{ tier.compressed_name }}</option>
+            {% endifequal %}
+        {% endfor %}
+    </select>
+    <br />
+    <br />
+    <div id="cell_tier_details">
+        <b>Precio equipo:</b> <span id="cellphone_price_span"></span> <br />
+        <b>Precio plan:</b> <span id="plan_price_span"></span> <br />
+        <b>¿Plan incluye datos?:</b> <span id="plan_data_span"></span> <br />
+        
+        <br />
+        
+        <b>Precio a 3 meses:</b> <span id="three_month_price_span"></span> <br />
+        <b>Precio a 6 meses:</b> <span id="six_month_price_span"></span> <br />
+        <b>Precio a 12 meses:</b> <span id="twelve_month_price_span"></span> <br />
+        
+        <br />
+        <b><a id="cell_external_link" href="">Link al producto en {{ cellphone.pricing.company }}</a></b>
+    </div>
+{% endblock %}
+
+{% block product_details %}
+<h1>{{ cellphone }}</h1>
+<h3 class="subtitle">Especificaciones principales</h3>
+<strong>Pantalla: </strong> {{ phone.screen }}
+<br />
+<strong>Factor forma: </strong> {{ phone.form_factor }}
+<br />
+<strong>Categoría: </strong> {{ phone.category }}
+<br />
+<strong>Sistema operativo: </strong> {{ phone.operating_system }}
+<br />
+
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Teclado: </strong> {{ phone.keyboard }}
+<br />
+<strong>Cámara: </strong> {{ phone.camera }}
+<br />
+<strong>Peso: </strong> {{ phone.pretty_weight }}
+<br />
+<strong>Tamaño: </strong> {{ phone.pretty_dimensions }}
+<br />
+<strong>Memoria interna: </strong> {{ phone.pretty_internal_memory }}
+<br />
+<strong>Batería: </strong> {{ phone.pretty_battery }}
+<br />
+<strong>Lector de tarjetas: </strong> {{ phone.card_reader }}
+<br />
+<strong>Extras: </strong>
+    <ul class="sub_ul">
+        <li><i>Bluetooth</i>: {% if phone.has_bluetooth %} Sí {% else %} No {% endif %}</li>
+        <li><i>WiFi</i>: {% if phone.has_wifi %} Sí {% else %} No {% endif %}</li>
+        <li><i>3G</i>: {% if phone.has_3g %} Sí {% else %} No {% endif %}</li>
+        <li><i>GPS</i>: {% if phone.has_gps %} Sí {% else %} No {% endif %}</li>
+        <li><i>Graba video</i>: {% if phone.records_video %} Sí {% else %} No {% endif %}</li>
+        <li><i>Reproduce MP3</i>: {% if phone.plays_mp3 %} Sí {% else %} No {% endif %}</li>
+        <li><i>Salida de audífonos</i>: {% if phone.has_headphones_output %} Sí {% else %} No {% endif %}</li>
+    </ul>
+<br />
+
+<h3 class="subtitle">Especificaciones avanzadas</h3>
+<strong>RAM: </strong> {{ phone.ram }}
+<br />
+<strong>Procesador: </strong> {% if phone.processor %} {{ phone.processor }} {% else %} Desconocido {% endif %}
+<br />
+
+<strong>Gráficos: </strong> {% if phone.graphics %} {{ phone.graphics }} {% else %} Desconocido {% endif %}
+<br />
+{% endblock %}

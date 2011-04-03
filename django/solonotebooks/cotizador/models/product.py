@@ -33,6 +33,9 @@ class Product(models.Model):
         upload_to = 'notebook_pics',
         generate_on_save = True,)
         
+    def extra_data(self, request):
+        return {}
+        
     def pretty_display(self):
         return unicode(self)
         
@@ -40,7 +43,12 @@ class Product(models.Model):
         if hasattr(self, 'is_sponsored'):
             return reverse('solonotebooks.cotizador.views.sponsored_product_redirect', args = [self.sponsored_shp.id])
         else:
-            return reverse('solonotebooks.cotizador.views.product_details', args = [self.id])
+            args = ''
+            if hasattr(self, 'url_args'):
+                vals = ['%s=%s' % (k, v) for k, v in self.url_args.items()]
+                args = '?' + '&'.join(vals)
+                
+            return reverse('solonotebooks.cotizador.views.product_details', args = [self.id]) + args
         
     def base_raw_text(self):
         result = self.name
@@ -57,7 +65,7 @@ class Product(models.Model):
             m2mfieldname = m2mfield[0].name
             many_related_manager = getattr(self, m2mfieldname)
             for entry in many_related_manager.all():
-                result += ' ' + entry.raw_text()
+                result += ' ' + unicode(entry.raw_text())
                 
         return result
                 
@@ -159,6 +167,13 @@ class Product(models.Model):
         
         self.save()
         self.generate_chart()
+        
+        pol_prod = self.get_polymorphic_instance()
+        pol_prod.custom_local_update()
+        pol_prod.save()
+        
+    def custom_local_update(self):
+        pass
         
     
     def get_polymorphic_instance(self):

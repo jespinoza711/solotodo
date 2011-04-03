@@ -37,6 +37,7 @@ from pc_express import PCExpress
 from top_pc import TopPC
 from compumanque import Compumanque
 from movistar import Movistar
+from entel import Entel
 
 __all__ = [ 
             'ProductData',
@@ -78,4 +79,5 @@ __all__ = [
             'TopPC',
             'Compumanque',
             'Movistar',
+            'Entel',
         ]

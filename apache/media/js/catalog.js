@@ -62,4 +62,42 @@ $(function() {
             $('#id_advanced_controls').val(0);
         }
     });
+    
+    $('#tiers-select').change(update_tier_selection)
+    $('#tiers-select').keypress(update_tier_selection)
+    if ($('#tiers-select').length > 0) {
+        update_tier_selection()
+    }
 })
+
+function update_tier_selection2() {
+    console.log('press')
+}
+
+function update_tier_selection() {
+    var tier = tiers[$('#tiers-select').val()]
+    $('span#cellphone_price_span').html(format_currency(tier['cellphone_price']))
+    $('span#plan_price_span').html(format_currency(tier['plan_price']))
+    $('span#plan_data_span').html(tier['plan_data'])
+    $('span#three_month_price_span').html(format_currency(tier['three_month_pricing']))
+    $('span#six_month_price_span').html(format_currency(tier['six_month_pricing']))
+    $('span#twelve_month_price_span').html(format_currency(tier['twelve_month_pricing']))
+    $('a#cell_external_link').attr('href', '/store_product/' + tier['shpe_id'])
+}
+
+function format_currency(amount)
+{
+    return addCommas(amount.toString())
+}
+
+function addCommas( strValue ) {
+    var objRegExp = new RegExp('(-?[0-9]+)([0-9]{3})');
+
+    //check for match to search criteria
+    while(objRegExp.test(strValue)) {
+    //replace original string with first group match,
+    //a comma, then second group match
+    strValue = strValue.replace(objRegExp, '$1.$2');
+    }
+    return strValue;
+}

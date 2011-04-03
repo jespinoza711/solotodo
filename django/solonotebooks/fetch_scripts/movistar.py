@@ -168,6 +168,7 @@ class Movistar(FetchStore):
                 plan = CellPricingPlan()
                 plan.price = 0
                 plan.name = 'Prepago'
+                plan.ordering = 1
                 plan.includes_data = False
                 plan.company = company
                 plan.save()

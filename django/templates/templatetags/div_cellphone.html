@@ -1,0 +1,8 @@
+{% extends "templatetags/div_base.html" %}
+
+{% block specs %}
+<li><strong>Pantalla:</strong> {{ product.phone.screen }}</li>
+<li><strong>Cámara:</strong> {{ product.phone.camera }}</li>
+<li><strong>Extras:</strong> {{ product.pretty_connectivity }}</li>
+<li><strong>Compañía:</strong> {{ product.pricing.company }}</li>
+{% endblock %}

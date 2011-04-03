@@ -22,15 +22,13 @@ class CellSearchForm(SearchForm):
     
     plan_price_choices = SearchForm.generate_price_range(0, 60000, 5000)
     plan_price_min, plan_price_max = CustomChoiceField.generate_slider(plan_price_choices)
-    #plan_price_min = CustomChoiceField(choices = plan_price_choices).set_name('min')
-    #plan_price_max = CustomChoiceField(choices = plan_price_choices).set_name('max')
     
     manufacturer = ClassChoiceField(CellphoneManufacturer, 'Marca', in_quick_search = True, quick_search_name = 'Marca')
     category = ClassChoiceField(CellphoneCategory, 'Categoría')
     form_factor = ClassChoiceField(CellphoneFormFactor, 'Estilo')
     camera = ClassChoiceField(CellphoneCamera, 'Cámara')
-    keyboard = ClassChoiceField(CellphoneCategory, 'Teclado')
-    operating_system = ClassChoiceField(CellphoneOperatingSystem, 'Sist. Op.')
+    keyboard = ClassChoiceField(CellphoneKeyboard, 'Teclado', requires_advanced_controls = True)
+    operating_system = ClassChoiceField(CellphoneOperatingSystem, 'Sist. Op.', requires_advanced_controls = True)
     
     screen_size = ClassChoiceField(CellphoneScreenSize, 'Tam. mín.')
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
@@ -39,18 +37,18 @@ class CellSearchForm(SearchForm):
     comm_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     has_3g = CustomChoiceField(choices = comm_choices).set_name('3G')
     has_bluetooth = CustomChoiceField(choices = comm_choices).set_name('Bluetooth')
-    has_wifi = CustomChoiceField(choices = comm_choices).set_name('WiFi')
-    has_gps = CustomChoiceField(choices = comm_choices).set_name('GPS')
+    has_wifi = CustomChoiceField(choices = comm_choices).set_name('WiFi').does_require_advanced_controls()
+    has_gps = CustomChoiceField(choices = comm_choices).set_name('GPS').does_require_advanced_controls()
     
     ram = ClassChoiceField(CellphoneRam, 'RAM')
-    processor = ClassChoiceField(CellphoneProcessor, 'Procesador')
-    graphics = ClassChoiceField(CellphoneGraphics, 'Gráficos')
+    processor = ClassChoiceField(CellphoneProcessor, 'Procesador', requires_advanced_controls = True)
+    graphics = ClassChoiceField(CellphoneGraphics, 'Gráficos', requires_advanced_controls = True)
     
     ordering_choices = (
         ('1', 'Precio equipo'), 
-        ('2', 'Costo a 3 meses'),
-        ('3', 'Costo a 6 meses'), 
-        ('4', 'Costo a 12 meses'))
+        ('2', 'Costo proyectado a 3 meses'),
+        ('3', 'Costo proyectado a 6 meses'), 
+        ('4', 'Costo proyectado a 12 meses'))
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
         
@@ -60,13 +58,14 @@ class CellSearchForm(SearchForm):
     max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
         
     def generate_interface_model(self):
-        model = [['Datos plan',
+        model = [['Información del plan',
                     ['plan_company',
                      'plan_type',
-                     'plan_data',
-                     'plan_price_min',
+                     'plan_data',]],
+                 ['Precio del plan',
+                    ['plan_price_min',
                      'plan_price_max']],
-                 ['Datos celular',
+                 ['Datos del celular',
                     ['manufacturer',
                      'category',
                      'form_factor',
@@ -74,7 +73,7 @@ class CellSearchForm(SearchForm):
                      'keyboard',
                      'operating_system',
                      ]],
-                 ['Comunicaciones',
+                 ['Extras del celular',
                     ['has_3g',
                      'has_bluetooth',
                      'has_wifi',
@@ -101,87 +100,161 @@ class CellSearchForm(SearchForm):
 
     def get_key_data_value(self, key, pk_value):
         value = ''
-        if key == 'brand':
-            value = unicode(ProcessorBrand.objects.get(pk = pk_value))
-        if key == 'family':
-            value = unicode(ProcessorFamily.objects.get(pk = pk_value))
-        if key == 'line':
-            value = unicode(ProcessorLine.objects.get(pk = pk_value))
-        if key == 'l2_cache':
-            value = u'Caché L2: ' + unicode(ProcessorL2Cache.objects.get(pk = pk_value))
-        if key == 'l3_cache':
-            value = u'Caché L3: ' + unicode(ProcessorL3Cache.objects.get(pk = pk_value))
-        if key == 'socket':
-            value = 'Socket ' + unicode(ProcessorSocket.objects.get(pk = pk_value))
-        if key == 'core_count':
-            value = unicode(ProcessorCoreCount.objects.get(pk = pk_value))
-        if key == 'core':
-            value = unicode(ProcessorCore.objects.get(pk = pk_value))
-        if key == 'architecture':
-            value = unicode(ProcessorArchitecture.objects.get(pk = pk_value))
-        if key == 'manufacturing_process':
-            value = unicode(ProcessorManufacturingProcess.objects.get(pk = pk_value))
-        if key == 'unlocked_multiplier':
-            value = 'Multiplicador ' + self.unlocked_multiplier_choices[pk_value][1]
+        if key == 'plan_company':
+            value = unicode(CellCompany.objects.get(pk = pk_value))
+        if key == 'plan_type':
+            value = unicode(self.plan_type_choices[pk_value][1])
+        if key == 'plan_data':
+            value = 'Planes ' + ['sin', 'con'][pk_value - 1] + ' datos'
+        if key == 'plan_price_min':
+            value = u'Planes desde ' + utils.prettyPrice(pk_value)
+        if key == 'plan_price_max':
+            value = u'Planes hasta ' + utils.prettyPrice(pk_value)
+        if key == 'manufacturer':
+            value = unicode(CellphoneManufacturer.objects.get(pk = pk_value))
+        if key == 'category':
+            value = unicode(CellphoneCategory.objects.get(pk = pk_value))
+        if key == 'form_factor':
+            value = unicode(CellphoneFormFactor.objects.get(pk = pk_value))
+        if key == 'camera':
+            value = u'Cámara de ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
+        if key == 'keyboard':
+            value = 'Teclado ' + unicode(CellphoneManufacturer.objects.get(pk = pk_value))
+        if key == 'operating_system':
+            value = 'Sistema operativo ' + unicode(CellphoneOperatingSystem.objects.get(pk = pk_value))
+        if key == 'screen_size':
+            value = 'Pantalla desde ' + unicode(CellphoneScreenSize.objects.get(pk = pk_value))
+        if key == 'screen_touch':
+            value = ['Sin', 'Con'][pk_value - 1] + u' pantalla táctil'
+        if key == 'has_3g':
+            value = ['Sin', 'Con'][pk_value - 1] + u' 3G'
+        if key == 'has_bluetooth':
+            value = ['Sin', 'Con'][pk_value - 1] + u' Bluetooth'
+        if key == 'has_wifi':
+            value = ['Sin', 'Con'][pk_value - 1] + u' WiFi'
+        if key == 'has_gps':
+            value = ['Sin', 'Con'][pk_value - 1] + u' GPS'
+        if key == 'ram':
+            value = 'RAM desde ' + unicode(CellphoneRam.objects.get(pk = pk_value))
+        if key == 'processor':
+            value = 'Procesador ' + unicode(CellphoneProcessor.objects.get(pk = pk_value))
+        if key == 'graphics':
+            value = u'Gráficos ' + unicode(CellphoneGraphics.objects.get(pk = pk_value))
         return value
         
-    # Method that, given a key (e.g.: notebook_brand, processor, etc) and a
-    # particular value for that key (usually a foreign key int), generates
-    # a sensible message to alert of the current use of that filter
     def generate_title_tag(self, key, pk_value):
         value = ''
-        if key == 'brand':
-            value = 'Procesadores ' + unicode(ProcessorBrand.objects.get(pk = pk_value))
-        if key == 'family':
-            value = 'Procesadores ' + unicode(ProcessorFamily.objects.get(pk = pk_value))
-        if key == 'line':
-            value = 'Procesadores ' + unicode(ProcessorLine.objects.get(pk = pk_value))
-        if key == 'l2_cache':
-            value = 'Procesadores con ' + unicode(ProcessorL2Cache.objects.get(pk = pk_value)) + ' de caché L2'
-        if key == 'l3_cache':
-            value = 'Procesadores con ' + unicode(ProcessorL3Cache.objects.get(pk = pk_value) + 'de caché L3')
-        if key == 'socket':
-            value = 'Procesadores con socket ' + unicode(ProcessorSocket.objects.get(pk = pk_value))
-        if key == 'core_count':
-            value = 'Procesadores ' + unicode(ProcessorCoreCount.objects.get(pk = pk_value))
-        if key == 'core':
-            value = 'Procesadores con núcleo ' + unicode(ProcessorCore.objects.get(pk = pk_value))
-        if key == 'architecture':
-            value = 'Procesadores con arquitectura ' + unicode(ProcessorArchitecture.objects.get(pk = pk_value))
-        if key == 'manufacturing_process':
-            value = 'Procesadores de ' + unicode(ProcessorManufacturingProcess.objects.get(pk = pk_value))
-        if key == 'unlocked_multiplier':
-            value = 'Procesadores con multiplicador ' + self.unlocked_multiplier_choices[pk_value][1]
+        if key == 'plan_company':
+            value = 'Celulares con planes ' + unicode(CellCompany.objects.get(pk = pk_value))
+        if key == 'plan_type':
+            value = 'Celulares con planes a ' + unicode(self.plan_type_choices[pk_value][1])
+        if key == 'plan_data':
+            value = 'Celulares ' + ['sin', 'con'][pk_value - 1] + ' plan de datos'
+        if key == 'plan_price_min':
+            value = u'Celulares con planes desde ' + utils.prettyPrice(pk_value)
+        if key == 'plan_price_max':
+            value = u'Celulares con planes hasta ' + utils.prettyPrice(pk_value)
+        if key == 'manufacturer':
+            value = 'Celulares ' + unicode(CellphoneManufacturer.objects.get(pk = pk_value))
+        if key == 'category':
+            value = unicode(CellphoneCategory.objects.get(pk = pk_value))
+        if key == 'form_factor':
+            value = 'Celulares ' + unicode(CellphoneFormFactor.objects.get(pk = pk_value))
+        if key == 'camera':
+            value = u'Celulares con cámara de ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
+        if key == 'keyboard':
+            value = 'Celulares con teclado ' + unicode(CellphoneManufacturer.objects.get(pk = pk_value))
+        if key == 'operating_system':
+            value = 'Celulares con sistema operativo ' + unicode(CellphoneOperatingSystem.objects.get(pk = pk_value))
+        if key == 'screen_size':
+            value = 'Celulares con pantalla desde ' + unicode(CellphoneScreenSize.objects.get(pk = pk_value))
+        if key == 'screen_touch':
+            value = 'Celulares ' + ['sin', 'con'][pk_value - 1] + u' pantalla táctil'
+        if key == 'has_3g':
+            value = 'Celulares ' + ['sin', 'con'][pk_value - 1] + u' 3G'
+        if key == 'has_bluetooth':
+            value = 'Celulares ' + ['sin', 'con'][pk_value - 1] + u' Bluetooth'
+        if key == 'has_wifi':
+            value = 'Celulares ' + ['sin', 'con'][pk_value - 1] + + u' WiFi'
+        if key == 'has_gps':
+            value = 'Celulares ' + ['sin', 'con'][pk_value - 1] + u' GPS'
+        if key == 'ram':
+            value = 'Celulares con RAM desde ' + unicode(CellphoneRam.objects.get(pk = pk_value))
+        if key == 'processor':
+            value = 'Celulares con procesador ' + unicode(CellphoneProcessor.objects.get(pk = pk_value))
+        if key == 'graphics':
+            value = 'Celulares con gráficos ' + unicode(CellphoneGraphics.objects.get(pk = pk_value))
         return value
         
     def filter_products(self, cells):
-        '''
-        if self.brand:
-            processors = processors.filter(line__family__brand = self.brand)
-        if self.family:
-            processors = processors.filter(line__family = self.family)
-        if self.line and self.advanced_controls:
-            processors = processors.filter(line = self.line)
-        if self.l2_cache and self.advanced_controls:
-            processors = processors.filter(l2_cache = self.l2_cache)
-        if self.l3_cache and self.advanced_controls:
-            processors = processors.filter(l3_cache = self.l3_cache)
-        if self.socket and self.advanced_controls:
-            processors = processors.filter(socket = self.socket)
-        if self.core_count:
-            processors = processors.filter(core_count = self.core_count)
-        if self.core:
-            processors = processors.filter(core = self.core)
-        if self.architecture:
-            processors = processors.filter(core__architecture = self.architecture)
-        if self.manufacturing_process and self.advanced_controls:
-            processors = processors.filter(core__manufacturing_process = self.manufacturing_process)
-        if self.unlocked_multiplier:
-            processors = processors.filter(has_unlocked_multiplier = self.unlocked_multiplier - 1)    
+        tiers = CellPricingTier.objects
+        if self.plan_company:
+            tiers = tiers.filter(pricing__company = self.plan_company)
+        if self.plan_type:
+            if self.plan_type == 1:
+                tiers = tiers.filter(plan__price = 0)
+            else:
+                tiers = tiers.filter(plan__price__gt = 0)
+        if self.plan_data:
+            if self.plan_data == 1:
+                tiers = tiers.filter(plan__includes_data = False)
+            else:
+                tiers = tiers.filter(plan__includes_data = True)
+        if self.plan_price_min:
+            tiers = tiers.filter(plan__price__gte = self.plan_price_min)
+            #raise Exception
+        if self.plan_price_max:
+            tiers = tiers.filter(plan__price__lte = self.plan_price_max)
+        if self.manufacturer:
+            tiers = tiers.filter(pricing__cell__phone__manufacturer = self.manufacturer)
+        if self.category:
+            tiers = tiers.filter(pricing__cell__phone__category = self.category)
+        if self.form_factor:
+            tiers = tiers.filter(pricing__cell__phone__form_factor = self.form_factor)
+        if self.camera:
+            tiers = tiers.filter(pricing__cell__phone__camera = self.camera)
+        if self.keyboard and self.advanced_controls:
+            tiers = tiers.filter(pricing__cell__phone__keyboard = self.keyboard)
+        if self.operating_system and self.advanced_controls:
+            tiers = tiers.filter(pricing__cell__phone__operating_system = self.operating_system)
+        if self.screen_size:
+            tiers = tiers.filter(pricing__cell__phone__screen__size__value__gte = self.screen_size.value)
+        if self.screen_touch:
+            if self.screen_touch == 1:
+                tiers = tiers.filter(pricing__cell__phone__screen__is_touch = False)
+            else:
+                tiers = tiers.filter(pricing__cell__phone__screen__is_touch = True)
+        if self.has_3g:
+            if self.has_3g == 1:
+                tiers = tiers.filter(pricing__cell__phone__has_3g = False)
+            else:
+                tiers = tiers.filter(pricing__cell__phone__has_3g = True)
+        if self.has_bluetooth:
+            if self.has_bluetooth == 1:
+                tiers = tiers.filter(pricing__cell__phone__has_bluetooth = False)
+            else:
+                tiers = tiers.filter(pricing__cell__phone__has_bluetooth = True)
+        if self.has_wifi and self.advanced_controls:
+            if self.has_wifi == 1:
+                tiers = tiers.filter(pricing__cell__phone__has_wifi = False)
+            else:
+                tiers = tiers.filter(pricing__cell__phone__has_wifi = True)
+        if self.has_gps and self.advanced_controls:
+            if self.has_gps == 1:
+                tiers = tiers.filter(pricing__cell__phone__has_gps = False)
+            else:
+                tiers = tiers.filter(pricing__cell__phone__has_gps = True)
+        if self.ram:
+            tiers = tiers.filter(pricing__cell__phone__ram__value__gte = CellphoneRam.objects.get(pk = self.ram).value)
+        if self.processor and self.advanced_controls:
+            tiers = tiers.filter(pricing__cell__phone__processor = self.processor)
+        if self.graphics and self.advanced_controls:
+            tiers = tiers.filter(pricing__cell__phone__graphics = self.graphics)
+        
         if self.min_price:
-            processors = processors.filter(shp__shpe__latest_price__gte = int(self.min_price))
+            tiers = tiers.filter(cellphone_price__gte = int(self.min_price))
         if self.max_price and self.max_price != int(self.price_choices[-1][0]):
-            processors = processors.filter(shp__shpe__latest_price__lte = int(self.max_price))
+            tiers = tiers.filter(cellphone_price__lte = int(self.max_price))
             
         # Check the ordering orientation, if it is not set, each criteria uses 
         # sensible defaults (asc for price, desc for cpu performance, etc)
@@ -191,28 +264,37 @@ class CellSearchForm(SearchForm):
         if self.ordering == 1:
             if ordering_direction == None:
                 ordering_direction = ''
-            processors = processors.order_by(ordering_direction + 'shp__shpe__latest_price')
+            price_field = 'cellphone_price'
+            tiers = tiers.order_by(ordering_direction + price_field)
         elif self.ordering == 2:
             if ordering_direction == None:
-                ordering_direction = '-'    
-            processors = processors.order_by(ordering_direction + 'passmark_score')
+                ordering_direction = ''    
+            price_field = 'three_month_pricing'
+            tiers = tiers.order_by(ordering_direction + price_field)
         elif self.ordering == 3:
             if ordering_direction == None:
-                ordering_direction = '-'    
-            processors = processors.order_by(ordering_direction + 'pcmark_05_score')
-        elif self.ordering == 4:
-            if ordering_direction == None:
-                ordering_direction = '-'    
-            processors = processors.order_by(ordering_direction + 'pcmark_vantage_score')
-        elif self.ordering == 5:
-            if ordering_direction == None:
-                ordering_direction = '-'    
-            processors = processors.order_by(ordering_direction + 'frequency')
+                ordering_direction = ''    
+            price_field = 'six_month_pricing'
+            tiers = tiers.order_by(ordering_direction + price_field)
         else:
             if ordering_direction == None:
                 ordering_direction = ''    
-            processors = processors.order_by(ordering_direction + 'tdp')
-        '''
+            price_field = 'twelve_month_pricing'
+            tiers = tiers.order_by(ordering_direction + price_field)
             
-        return cells
+        final_cells = []
+        cells = list(cells)
+        
+        for tier in tiers:
+            try:
+                cell = tier.pricing.cell
+            except Cell.DoesNotExist:
+                continue
+            if cell and cell in cells and cell not in final_cells:
+                price = getattr(tier, price_field)
+                cell.price = price
+                cell.url_args = {'tier_id': tier.id}
+                final_cells.append(cell)
+            
+        return final_cells
         

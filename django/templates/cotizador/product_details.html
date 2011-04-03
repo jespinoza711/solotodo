@@ -36,6 +36,7 @@
 {% block catalog_content %}
 
 <div class="product_details_sidebar">
+    {% block sidebar %}
     <div class="product_details_images">
         <div id="image_container"></div>
         <ul class="gallery">
@@ -160,9 +161,11 @@
             {% endif %}
         {% endif %}
     </div>
+    {% endblock %}
 </div>
 <div class="product_details_specs">
-    {{ product.render_details }}
+    {% block product_details %}
+    {% endblock %}
     
     <p id="product_like">
     <fb:like href="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}" show_faces="true" width="350"></fb:like>

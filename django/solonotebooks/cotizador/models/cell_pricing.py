@@ -7,7 +7,7 @@ class CellPricing(models.Model):
     url = models.CharField(max_length = 255)
     
     def raw_text(self):
-        return raw_text(self.company) + ' ' + self.name
+        return self.company.raw_text() + ' ' + self.name
     
     def __unicode__(self):
         return str(self.company) + ' - ' + self.name

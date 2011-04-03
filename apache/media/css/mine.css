@@ -393,3 +393,7 @@ br.product_details_comment_separator {
 .ui-tabs-panel a {
     text-decoration: underline;
 }
+
+div#cell_tier_details {
+    font-size: 16px;
+}
