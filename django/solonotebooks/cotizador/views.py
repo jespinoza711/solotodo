@@ -24,7 +24,7 @@ from utils import *
     
 # Main landing page (/)    
 def index(request):
-    ptypes = ProductType.objects.all()
+    ptypes = ProductType.get_valid()
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
     result_products = highlighted_products_form.apply_filter(Product.get_valid())[:10]
     
@@ -231,7 +231,7 @@ def search(request):
         'left_page': left_page,
         'right_page': right_page,        
         'ptype': ptype,
-        'ptypes': ProductType.objects.all()
+        'ptypes': ProductType.get_valid()
     })
     
 def append_ads_to_response(request, template, args):
@@ -301,7 +301,7 @@ def append_user_to_response(request, template, args):
 # View for displaying every single product in the DB
 def all_products(request):
     result = []
-    product_types = ProductType.objects.all()
+    product_types = ProductType.objects.get_valid()
     
     for product_type in product_types:
         step = []

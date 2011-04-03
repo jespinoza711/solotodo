@@ -84,7 +84,7 @@ class Product(models.Model):
     @staticmethod
     def get_all_ordered():
         from solonotebooks.cotizador.models import *
-        pts = ProductType.objects.all()
+        pts = ProductType.objects.get_valid()
         result = []
         for pt in pts:
             c = eval(pt.classname)

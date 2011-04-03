@@ -8,7 +8,11 @@ class ProductType(models.Model):
     displayname = models.CharField(max_length = 255)
     adminurlname = models.CharField(max_length = 255)
     indexname = models.CharField(max_length = 255)
-    ordering = models.IntegerField()
+    ordering = models.IntegerField()    
+    
+    @classmethod
+    def get_valid(self):
+        return ProductType.objects.filter(ordering__gt = 0)
     
     def get_class(self):
         from . import *
