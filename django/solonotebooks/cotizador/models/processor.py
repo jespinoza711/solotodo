@@ -65,7 +65,7 @@ class Processor(Product):
         self.similar_products = ','.join([str(processor.id) for processor in processors])
         
     @classmethod
-    def custom_update():
+    def custom_update(self):
         Processor.update_all_pcmark_scores()
         
     @staticmethod

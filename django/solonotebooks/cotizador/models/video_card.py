@@ -34,7 +34,7 @@ class VideoCard(Product):
         self.similar_products = ','.join([str(video_card.id) for video_card in video_cards])
         
     @classmethod
-    def custom_update():
+    def custom_update(self):
         VideoCardGpu.update_all_tdmark_scores()
         
     @staticmethod
