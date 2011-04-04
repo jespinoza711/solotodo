@@ -301,7 +301,7 @@ def append_user_to_response(request, template, args):
 # View for displaying every single product in the DB
 def all_products(request):
     result = []
-    product_types = ProductType.objects.get_valid()
+    product_types = ProductType.get_valid()
     
     for product_type in product_types:
         step = []
