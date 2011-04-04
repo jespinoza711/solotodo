@@ -47,6 +47,49 @@
         <br />
         <b><a id="cell_external_link" href="">Link al producto en {{ cellphone.pricing.company }}</a></b>
     </div>
+    <br />
+    <div id="price_suggestion_box">
+        {% if not subscription %}
+        <table class="mytable">
+            <tr>
+                <td>
+                    <a href="" class="favorite_link">
+                    <img src="/media/assets/favorite-icon.png" />
+                    </a>
+                </td>
+                <td>
+                    <a href="" class="favorite_link">
+                    Agregar a mis favoritos
+                    </a>
+                </td>                
+            </tr>            
+        </table>
+        {% else %}
+            {% if subscription.email_notifications %}
+                <table class="mytable">
+                    <tr>
+                        <td>
+                            <img src="/media/assets/favorite-icon.png" />
+                        </td>
+                        <td>
+                            Este producto está en tus favoritos
+                        </td>                
+                    </tr>                         
+                </table>            
+            {% else %}
+                <table class="mytable">
+                    <tr>
+                        <td>
+                            <img src="/media/assets/favorite-icon.png" />
+                        </td>
+                        <td>
+                            Este producto está en tus favoritos
+                        </td>                
+                    </tr>                         
+                </table>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block product_details %}

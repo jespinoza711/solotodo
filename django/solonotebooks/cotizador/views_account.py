@@ -15,7 +15,7 @@ from utils import *
 from views import *
 
 def append_account_ptype_to_response(request, template, args):
-    args['ptypes'] = ProductType.objects.get_valid()
+    args['ptypes'] = ProductType.get_valid()
     return append_ads_to_response(request, template, args)
     
 def facebook_login(request):

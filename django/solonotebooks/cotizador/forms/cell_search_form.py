@@ -187,7 +187,8 @@ class CellSearchForm(SearchForm):
         return value
         
     def filter_products(self, cells):
-        tiers = CellPricingTier.objects
+        tiers = CellPricingTier.objects.filter(pricing__cell__isnull = False)
+        
         if self.plan_company:
             tiers = tiers.filter(pricing__company = self.plan_company)
         if self.plan_type:
@@ -287,10 +288,8 @@ class CellSearchForm(SearchForm):
         cells = list(cells)
         
         for tier in tiers:
-            try:
-                cell = tier.pricing.cell
-            except Cell.DoesNotExist:
-                continue
+            cell = tier.pricing.cell
+
             if cell and cell in cells and cell not in final_cells:
                 price = getattr(tier, price_field)
                 cell.price = price

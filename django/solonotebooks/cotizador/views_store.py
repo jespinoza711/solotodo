@@ -25,7 +25,7 @@ from utils import *
 from forms import *
 
 def append_advertisement_ptype_to_response(request, template, args):
-    args['ptypes'] = ProductType.objects.get_valid()
+    args['ptypes'] = ProductType.get_valid()
     return append_ads_to_response(request, template, args)
 
 def store_user_required(f):
