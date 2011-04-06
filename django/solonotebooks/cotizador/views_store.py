@@ -296,6 +296,7 @@ def entity_details(request, shpe_id):
         store_external_visit_count = 0
         all_external_visit_count = 0
         sponsored_visit_count = 0
+        generated_pie_chart = False
     
     product = shp.product
         
