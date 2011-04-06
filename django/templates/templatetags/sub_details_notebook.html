@@ -1,6 +1,3 @@
-{% extends "cotizador/product_details.html" %}
-
-{% block product_details %}
 <h1>{{ notebook }}</h1>
     <h3 class="subtitle">Especificaciones esenciales</h3>
     <strong>Procesador: </strong> <a href="{% url solonotebooks.cotizador.views_notebooks.processor_line_details notebook.processor.line.family.id %}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
@@ -68,5 +65,3 @@
     <strong>¿Lector de huellas digitales?: </strong> {% if notebook.has_fingerprint_reader %} Sí {% else %} No {% endif %}
     <br />
     <strong>¿Conexión Firewire?: </strong> {% if notebook.has_firewire %} Sí {% else %} No {% endif %}
-    
-{% endblock %}

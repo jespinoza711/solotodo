@@ -93,50 +93,5 @@
 {% endblock %}
 
 {% block product_details %}
-<h1>{{ cellphone }}</h1>
-<h3 class="subtitle">Especificaciones principales</h3>
-<strong>Pantalla: </strong> {{ phone.screen }}
-<br />
-<strong>Factor forma: </strong> {{ phone.form_factor }}
-<br />
-<strong>Categoría: </strong> {{ phone.category }}
-<br />
-<strong>Sistema operativo: </strong> {{ phone.operating_system }}
-<br />
-
-<h3 class="subtitle">Especificaciones secundarias</h3>
-<strong>Teclado: </strong> {{ phone.keyboard }}
-<br />
-<strong>Cámara: </strong> {{ phone.camera }}
-<br />
-<strong>Peso: </strong> {{ phone.pretty_weight }}
-<br />
-<strong>Tamaño: </strong> {{ phone.pretty_dimensions }}
-<br />
-<strong>Memoria interna: </strong> {{ phone.pretty_internal_memory }}
-<br />
-<strong>Batería: </strong> {{ phone.pretty_battery }}
-<br />
-<strong>Lector de tarjetas: </strong> {{ phone.card_reader }}
-<br />
-<strong>Extras: </strong>
-    <ul class="sub_ul">
-        <li><i>Bluetooth</i>: {% if phone.has_bluetooth %} Sí {% else %} No {% endif %}</li>
-        <li><i>WiFi</i>: {% if phone.has_wifi %} Sí {% else %} No {% endif %}</li>
-        <li><i>3G</i>: {% if phone.has_3g %} Sí {% else %} No {% endif %}</li>
-        <li><i>GPS</i>: {% if phone.has_gps %} Sí {% else %} No {% endif %}</li>
-        <li><i>Graba video</i>: {% if phone.records_video %} Sí {% else %} No {% endif %}</li>
-        <li><i>Reproduce MP3</i>: {% if phone.plays_mp3 %} Sí {% else %} No {% endif %}</li>
-        <li><i>Salida de audífonos</i>: {% if phone.has_headphones_output %} Sí {% else %} No {% endif %}</li>
-    </ul>
-<br />
-
-<h3 class="subtitle">Especificaciones avanzadas</h3>
-<strong>RAM: </strong> {{ phone.ram }}
-<br />
-<strong>Procesador: </strong> {% if phone.processor %} {{ phone.processor }} {% else %} Desconocido {% endif %}
-<br />
-
-<strong>Gráficos: </strong> {% if phone.graphics %} {{ phone.graphics }} {% else %} Desconocido {% endif %}
-<br />
+    {{ cellphone.render_details }}
 {% endblock %}

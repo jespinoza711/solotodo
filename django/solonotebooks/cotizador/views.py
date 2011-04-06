@@ -412,4 +412,7 @@ def product_details(request, product_id):
     extra_data = product.extra_data(request)
     base_data.update(extra_data)
     
-    return append_ads_to_response(request, template_file, base_data)
+    try:
+        return append_ads_to_response(request, template_file, base_data)
+    except:
+        return append_ads_to_response(request, 'templatetags/details_generic.html', base_data)

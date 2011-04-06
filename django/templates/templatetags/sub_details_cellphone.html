@@ -1,0 +1,46 @@
+<h1>{{ cellphone }}</h1>
+<h3 class="subtitle">Especificaciones principales</h3>
+<strong>Pantalla: </strong> {{ cellphone.phone.screen }}
+<br />
+<strong>Factor forma: </strong> {{ cellphone.phone.form_factor }}
+<br />
+<strong>Categoría: </strong> {{ cellphone.phone.category }}
+<br />
+<strong>Sistema operativo: </strong> {{ cellphone.phone.operating_system }}
+<br />
+
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Teclado: </strong> {{ cellphone.phone.keyboard }}
+<br />
+<strong>Cámara: </strong> {{ cellphone.phone.camera }}
+<br />
+<strong>Peso: </strong> {{ cellphone.phone.pretty_weight }}
+<br />
+<strong>Tamaño: </strong> {{ cellphone.phone.pretty_dimensions }}
+<br />
+<strong>Memoria interna: </strong> {{ cellphone.phone.pretty_internal_memory }}
+<br />
+<strong>Batería: </strong> {{ cellphone.phone.pretty_battery }}
+<br />
+<strong>Lector de tarjetas: </strong> {{ cellphone.phone.card_reader }}
+<br />
+<strong>Extras: </strong>
+    <ul class="sub_ul">
+        <li><i>Bluetooth</i>: {% if cellphone.phone.has_bluetooth %} Sí {% else %} No {% endif %}</li>
+        <li><i>WiFi</i>: {% if cellphone.phone.has_wifi %} Sí {% else %} No {% endif %}</li>
+        <li><i>3G</i>: {% if cellphone.phone.has_3g %} Sí {% else %} No {% endif %}</li>
+        <li><i>GPS</i>: {% if cellphone.phone.has_gps %} Sí {% else %} No {% endif %}</li>
+        <li><i>Graba video</i>: {% if cellphone.phone.records_video %} Sí {% else %} No {% endif %}</li>
+        <li><i>Reproduce MP3</i>: {% if cellphone.phone.plays_mp3 %} Sí {% else %} No {% endif %}</li>
+        <li><i>Salida de audífonos</i>: {% if cellphone.phone.has_headphones_output %} Sí {% else %} No {% endif %}</li>
+    </ul>
+<br />
+
+<h3 class="subtitle">Especificaciones avanzadas</h3>
+<strong>RAM: </strong> {{ cellphone.phone.ram }}
+<br />
+<strong>Procesador: </strong> {% if cellphone.phone.processor %} {{ cellphone.phone.processor }} {% else %} Desconocido {% endif %}
+<br />
+
+<strong>Gráficos: </strong> {% if cellphone.phone.graphics %} {{ cellphone.phone.graphics }} {% else %} Desconocido {% endif %}
+<br />
