@@ -16,7 +16,11 @@ class Cell(Product):
         return result
 
     def __unicode__(self):
-        return str(self.phone) + ' (' + str(self.pricing.company) + ')' 
+        result =  str(self.phone) + ' (' + str(self.pricing.company)
+        if self.name.strip():
+            result += ' / ' + self.name.strip()
+        result += ')'
+        return result
         
     def load_similar_products(self):
         pass
