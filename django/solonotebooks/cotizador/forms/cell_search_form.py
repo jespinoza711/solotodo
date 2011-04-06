@@ -30,7 +30,7 @@ class CellSearchForm(SearchForm):
     keyboard = ClassChoiceField(CellphoneKeyboard, 'Teclado', requires_advanced_controls = True)
     operating_system = ClassChoiceField(CellphoneOperatingSystem, 'Sist. Op.', requires_advanced_controls = True)
     
-    screen_size = ClassChoiceField(CellphoneScreenSize, 'Tam. mín.')
+    screen_size = ClassChoiceField(CellphoneScreenSize, 'Pantalla')
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil')
     
@@ -67,6 +67,7 @@ class CellSearchForm(SearchForm):
                      'plan_price_max']],
                  ['Datos del celular',
                     ['manufacturer',
+                     'screen_size',
                      'category',
                      'form_factor',
                      'camera',
@@ -220,7 +221,7 @@ class CellSearchForm(SearchForm):
         if self.operating_system and self.advanced_controls:
             tiers = tiers.filter(pricing__cell__phone__operating_system = self.operating_system)
         if self.screen_size:
-            tiers = tiers.filter(pricing__cell__phone__screen__size__value__gte = self.screen_size.value)
+            tiers = tiers.filter(pricing__cell__phone__screen__size__value__gte = CellphoneScreenSize.objects.get(pk = self.screen_size).value)
         if self.screen_touch:
             if self.screen_touch == 1:
                 tiers = tiers.filter(pricing__cell__phone__screen__is_touch = False)
