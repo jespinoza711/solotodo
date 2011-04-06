@@ -85,7 +85,7 @@
                 <ul>
 	                <li><a href="#subtabs-1">Número de visitas</a></li>
 	                <li><a href="#subtabs-2">Número de clicks a tiendas</a></li>
-	                <li><a href="#subtabs-3">Distribución de clicks</a></li>
+	                {% if generated_pie_chart %}<li><a href="#subtabs-3">Distribución de clicks</a></li>{% endif %}
 	                <li><a href="#subtabs-4">Resultados publicidad</a></li>
                 </ul>
                 <div id="subtabs-1">
@@ -99,9 +99,11 @@
                     <p class="advertisement_fact">Número total de clicks a tiendas en el periodo: {{ all_external_visit_count }}</p>
                     <p class="advertisement_fact">Número de clicks a {{ store }} en el periodo: {{ store_external_visit_count }}</p>
                 </div>
+                {% if generated_pie_chart %}
                 <div id="subtabs-3">
                     <img src="/media/pics/charts/unit_{{ shp.id }}_03.png?generator={{tag}}" />
                 </div>
+                {% endif %}
                 <div id="subtabs-4">
                     <img src="/media/pics/charts/unit_{{ shp.id }}_04.png?generator={{tag}}" />
                     <br />&nbsp;<br />

@@ -18,8 +18,9 @@
             {{ result_text|linebreaksbr }}
         </div>
         <div id="subtabs-2">
+            <h3>Buscador de productos</h3>
             <p>
-                Por favor ingrese la URL del equipo en el catálogo de {{ store }} del que desea información, para una búsqueda más rápida y exacta use una de las URLs que aparecen en la pestaña "Información de última indexación" o apéguese al formato de las URLs que ahi aparecen (usar el mismo nombre de dominio, ver si se usa o no "www", etc)
+                Por favor ingrese la URL del equipo en el sitio web de {{ store }} del que desea información, para una búsqueda más rápida y exacta use una de las URLs que aparecen en la pestaña "Información de última indexación".
             </p>
             {% if error_message %}
                 <p class="store_error">
@@ -30,6 +31,19 @@
                 {{ form.as_p }}
                 <input type="submit" value="Buscar" />
             </form>
+            
+            <br />
+            <hr />
+            
+            <h3>Listado completo de equipos indexados de {{ store }}</h3>
+            <p>
+                También puede seleccionar directamente uno de sus productos de la lista a continuación.
+            </p>
+            <ul>
+            {% for shpe in idx_shpes %}
+                <li><a href="{% url solonotebooks.cotizador.views_store.entity_details shpe.id %}">{{ shpe }}</a></li>
+            {% endfor %} 
+            </ul>
         </div>
         <div id="subtabs-3">
             {% if pending_shpes %}

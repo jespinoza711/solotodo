@@ -76,11 +76,12 @@ def registry(request):
         for line in f.readlines():
             result_text += line
     except Exception, e :
-        result_text = str(e)
-        #result_text = 'No hay información de la última indexación de ' + str(store)
+        #result_text = str(e)
+        result_text = 'No hay información de la última indexación de ' + str(store)
         
     pending_shpes = store.storehasproductentity_set.filter(shp__isnull = True, is_available = True, is_hidden = False)
     non_idx_shpes = store.storehasproductentity_set.filter(is_hidden = True, is_available = True)
+    idx_shpes = store.storehasproductentity_set.filter(shp__isnull = False, is_available = True, is_hidden = False)
             
     return append_advertisement_ptype_to_response(request, 'store/registry.html', {
         'store': store,
@@ -89,6 +90,7 @@ def registry(request):
         'error_message': error_message,
         'pending_shpes': pending_shpes,
         'non_idx_shpes': non_idx_shpes,
+        'idx_shpes': idx_shpes,
     })
     
 @store_user_required
@@ -169,7 +171,7 @@ def entity_details(request, shpe_id):
     store = request.user.get_profile().assigned_store
     shpe = StoreHasProductEntity.objects.get(pk = shpe_id)
     
-    if shpe.store != store:
+    if shpe.store != store and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views_store.index')
         return HttpResponseRedirect(url)
     
@@ -200,7 +202,7 @@ def entity_details(request, shpe_id):
         if end_date > date.today():
             end_date = date.today()
         if start_date >= end_date:
-            url = reverse('solonotebooks.cotizador.views_advertisement.slot_details', args = [shp.id])
+            url = reverse('solonotebooks.cotizador.views_store.slot_details', args = [shp.id])
             return HttpResponseRedirect(url)
     
     if store.sponsor_cap:    
@@ -268,7 +270,7 @@ def entity_details(request, shpe_id):
         raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('shn__store').annotate(Count('id'))
         chart_data = [(unicode(Store.objects.get(pk = pair['shn__store'])), pair['id__count']) for pair in raw_data]
         
-        generate_pie_chart(chart_data, 'unit_' + str(shp.id) + '_03.png', u'Distribución de clicks entre tiendas')
+        generated_pie_chart = generate_pie_chart(chart_data, 'unit_' + str(shp.id) + '_03.png', u'Distribución de clicks entre tiendas')
         
         # Fourth chart
         
@@ -294,13 +296,17 @@ def entity_details(request, shpe_id):
         store_external_visit_count = 0
         all_external_visit_count = 0
         sponsored_visit_count = 0
+    
+    product = shp.product
+        
+    #raise Exception
         
     return append_advertisement_ptype_to_response(request, 'store/entity_details.html', {
         'store': store,
         'shpe': shpe,
         'shp': shp,
         'other_shpes': other_shpes,
-        'product': shp.product,
+        'product': product,
         'form': form,
         'tag': datetime.now().toordinal(),
         'product_prices': product.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price'),
@@ -308,6 +314,7 @@ def entity_details(request, shpe_id):
         'store_external_visit_count': store_external_visit_count,
         'all_external_visit_count': all_external_visit_count,
         'sponsored_visit_count': sponsored_visit_count,
+        'generated_pie_chart': generated_pie_chart,
     })
     
 @store_user_required

@@ -24,6 +24,9 @@ class Cell(Product):
         
     def load_similar_products(self):
         pass
+        
+    def disqus_id(self):
+        return 'C' + str(self.phone.id)
     
     @staticmethod
     def get_valid():

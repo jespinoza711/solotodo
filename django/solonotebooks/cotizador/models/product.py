@@ -77,6 +77,9 @@ class Product(models.Model):
             message += 'No disponible'
         return message + '\n'
         
+    def disqus_id(self):
+        return str(self.id)
+        
     @classmethod
     def custom_update(self):
         pass
@@ -302,7 +305,8 @@ class Product(models.Model):
         if entity.__class__.__name__ == 'Product':
             entity = entity.get_polymorphic_instance()
         
-        template_file = 'templatetags/details_' + self.ptype.adminurlname + '.html'
+        template_file = 'templatetags/sub_details_' + self.ptype.adminurlname + '.html'
+        
         return render_to_string(template_file, { self.ptype.adminurlname: entity })
         
     def load_similar_products(self):

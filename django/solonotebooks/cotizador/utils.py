@@ -182,6 +182,9 @@ def generate_pie_chart(data, filename, title):
     import cairo
     import pycha.pie
     from copy import deepcopy
+    
+    if not data:
+        return False
         
     dataSet = [(entry[0], [[0, entry[1]]]) for entry in data]
 
@@ -224,6 +227,8 @@ def generate_pie_chart(data, filename, title):
     chart.render()
 
     surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + filename)
+    
+    return True
     
     
 def latin1_to_ascii(unicrap):
