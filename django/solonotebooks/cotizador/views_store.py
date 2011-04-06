@@ -76,7 +76,8 @@ def registry(request):
         for line in f.readlines():
             result_text += line
     except Exception, e :
-        result_text = 'No hay información de la última indexación de ' + str(store)
+        result_text = str(e)
+        #result_text = 'No hay información de la última indexación de ' + str(store)
         
     pending_shpes = store.storehasproductentity_set.filter(shp__isnull = True, is_available = True, is_hidden = False)
     non_idx_shpes = store.storehasproductentity_set.filter(is_hidden = True, is_available = True)
