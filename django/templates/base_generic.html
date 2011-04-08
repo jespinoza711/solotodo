@@ -138,6 +138,8 @@
                     </div>
                 {% endif %}
             {% endblock %}
+            <div id="js_info_message" class="info_message" style="display:hidden;">
+            </div>
             {% block flash_error %}
                 {% if flash.error %}
                     <div id="error_message" class="error_message">
@@ -162,7 +164,7 @@
 	                <div style="margin-bottom: 10px;">
 	                Si no recuerdas tu contraseña, coloca tu nombre de usuario a continuación y se te hará llegar una nueva a tu cuenta de correo. Esto sólo será posible si tu cuenta de correo está activada.
                     </div>
-	                <form id="regenerate_password_form" method="post" action="/account/regenerate_password">
+	                <form id="regenerate_password_form" method="post" action="/account/regenerate_password/">
 	                    <div class="dialog_error" id="regenerate_error"></div>
 	                    <div class="signup_element">
                             <label for="username" maxlength="30">Nombre de usuario: </label> 

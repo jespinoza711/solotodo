@@ -2,12 +2,12 @@ from django.db import models
 from django.db.models import Q
 from . import *
 import mechanize
-from BeautifulSoup import BeautifulSoup
+from utils import prettyPrice
+from django.core.urlresolvers import reverse
 
 class Cell(Product):    
     pricing = models.OneToOneField(CellPricing)
     phone = models.ForeignKey(Cellphone)
-    best_price = models.IntegerField()
     
     def raw_text(self):
         result = ''
@@ -30,7 +30,8 @@ class Cell(Product):
     
     @staticmethod
     def get_valid():
-        return Cell.objects.filter(shp__isnull = False)
+        cells =  Cell.objects.filter(shp__isnull = False)
+        return cells
         
     def pretty_connectivity(self):
         result = []
@@ -65,6 +66,11 @@ class Cell(Product):
     @classmethod
     def custom_update(self):
         from solonotebooks.fetch_scripts import *
+        
+        for pricing in CellPricing.objects.all():
+            pricing.best_tier = None
+            pricing.save()
+        
         for cell_company in CellCompany.objects.all():
             cell_company.cellpricingplan_set.all().delete()
             CellPricingTier.objects.filter(pricing__company = cell_company).delete()
@@ -82,6 +88,10 @@ class Cell(Product):
                     pricing.save()
                 cell_company.fetch_store.calculate_tiers(shpe, cell_plans, pricing)
                 
+        for pricing in CellPricing.objects.all():
+            pricing.update_best_tier()
+            pricing.save()
+                
         for cell in Cell.objects.all():
             cell.custom_local_update()
             cell.save()
@@ -91,18 +101,35 @@ class Cell(Product):
         if not tiers:
             tiers = CellPricingTier.objects.filter(pricing__cell = self).filter(plan__price = 0).order_by('cellphone_price')
             
-        if tiers:
-            self.best_price = tiers[0].cellphone_price
+    def pretty_min_price(self):
+        if self.shp:
+            if hasattr(self, 'is_sponsored'):
+                price = prettyPrice(self.sponsored_shp.shpe.latest_price)
+            else:
+                if hasattr(self, 'tier'):
+                    tier = self.tier
+                else:
+                    tier = self.pricing.best_tier
+                    if not tier:
+                        return '0'
+                    
+                cellphone_price = tier.cellphone_price
+                plan_price = tier.plan.price
+                price = prettyPrice(cellphone_price) + '<br /><span class="cell_pricing_span"> con plan de ' + prettyPrice(plan_price) + '</span>'
+            return price
         else:
-            self.best_price = 0
+            return 'No disponible'
             
-    def latest_price(self):
+    def determine_url(self):
         if hasattr(self, 'is_sponsored'):
-            return self.sponsored_shp.shpe.latest_price
-        elif hasattr(self, 'price'):
-            return self.price
+            return reverse('solonotebooks.cotizador.views.sponsored_product_redirect', args = [self.sponsored_shp.id])
         else:
-            return self.best_price
+            args = ''
+            tier = self.pricing.best_tier
+            if tier:
+                args = '?tier_id=' + str(tier.id)
+                
+            return reverse('solonotebooks.cotizador.views.product_details', args = [self.id]) + args
     
     class Meta:
         ordering = ['name']
