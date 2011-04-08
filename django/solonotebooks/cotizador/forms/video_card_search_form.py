@@ -163,7 +163,7 @@ class VideoCardSearchForm(SearchForm):
         if key == 'profile':
             value = 'Tarjetas de video ' + unicode(VideoCardProfile.objects.get(pk = pk_value))
         if key == 'refrigeration':
-            value = 'Tarjetas de video con refrigeración ' + unicode(VideoCardRefrigeration.objects.get(pk = pk_value))
+            value = u'Tarjetas de video con refrigeración ' + unicode(VideoCardRefrigeration.objects.get(pk = pk_value))
         if key == 'slots':
             value = 'Tarjetas de video ' + unicode(VideoCardSlotType.objects.get(pk = pk_value))
         if key == 'min_price':

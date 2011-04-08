@@ -14,7 +14,7 @@
 	    </ul>
 	    <ul class="precio-producto right">
 		    <li>
-		        <a href="{{ product.determine_url }}">{{ product.pretty_min_price }}</a>
+		        <a href="{{ product.determine_url }}">{{ product.pretty_min_price|safe }}</a>
 	        </li>
 	        {% if product.is_sponsored %}
 	            <p class="sponsored-result-text">Resultado patrocinado</p>

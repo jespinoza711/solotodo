@@ -160,7 +160,7 @@ br.product_details_comment_separator {
 }
 
 .dialog_button {
-    height: 24px;
+    /*height: 24px;*/
 }
 
 .dialog_form label {
@@ -205,7 +205,7 @@ br.product_details_comment_separator {
 
 .info_message {
     border: 2px solid #468130;
-    background-color: #B4E0B4;
+    background-color: #CBDCCB;
     color: #216B1A;
     padding: 10px;
     margin: 10px;
@@ -396,4 +396,8 @@ br.product_details_comment_separator {
 
 div#cell_tier_details {
     font-size: 16px;
+}
+
+.cell_pricing_span {
+    font-size: 12px;
 }
