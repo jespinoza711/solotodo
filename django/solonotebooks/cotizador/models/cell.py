@@ -115,7 +115,10 @@ class Cell(Product):
                     
                 cellphone_price = tier.cellphone_price
                 plan_price = tier.plan.price
-                price = prettyPrice(cellphone_price) + '<br /><span class="cell_pricing_span"> con plan de ' + prettyPrice(plan_price) + '</span>'
+                if plan_price:
+                    price = prettyPrice(cellphone_price) + '<br /><span class="cell_pricing_span"> con plan de ' + prettyPrice(plan_price) + '</span>'
+                else:
+                    price = prettyPrice(cellphone_price) + '<br /><span class="cell_pricing_span"> con plan prepago</span>'
             return price
         else:
             return 'No disponible'
