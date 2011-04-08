@@ -294,7 +294,6 @@ class CellSearchForm(SearchForm):
             if cell and cell in cells and cell not in final_cells:
                 price = getattr(tier, price_field)
                 cell.tier = tier
-                cell.url_args = {'tier_id': tier.id}
                 final_cells.append(cell)
             
         return final_cells

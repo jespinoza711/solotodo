@@ -125,7 +125,11 @@ class Cell(Product):
             return reverse('solonotebooks.cotizador.views.sponsored_product_redirect', args = [self.sponsored_shp.id])
         else:
             args = ''
-            tier = self.pricing.best_tier
+            if hasattr(self, 'tier'):
+                tier = self.tier
+            else:
+                tier = self.pricing.best_tier
+            
             if tier:
                 args = '?tier_id=' + str(tier.id)
                 
