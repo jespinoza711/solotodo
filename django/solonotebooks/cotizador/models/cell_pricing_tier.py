@@ -1,5 +1,5 @@
 from django.db import models
-from . import CellPricing, CellPricingPlan, StoreHasProductEntity
+from . import CellPricing, CellPricingPlan, StoreHasProductEntity, utils
 
 class CellPricingTier(models.Model):
     pricing = models.ForeignKey(CellPricing)
@@ -13,6 +13,12 @@ class CellPricingTier(models.Model):
     
     def plan_price(self):
         return self.plan.price + self.monthly_quota
+        
+    def pretty_plan_price(self):
+        return utils.prettyPrice(self.plan_price())
+        
+    def pretty_cellphone_price(self):
+        return utils.prettyPrice(self.cellphone_price)
     
     def __unicode__(self):
         return str(self.plan)

@@ -22,6 +22,10 @@ urlpatterns += patterns('solonotebooks.cotizador.views_videocards',
     (r'^video_cards/gpu_details/(?P<gpu_id>\d+)/$', 'gpu_details'),
 )
 
+urlpatterns += patterns('solonotebooks.cotizador.views_cellphones',
+    (r'^cellphones/plans/(?P<plan_id>\d+)/$', 'plan_details'),
+)
+
 urlpatterns += patterns('solonotebooks.cotizador.views_account',
     (r'^account/facebook_login/$', 'facebook_login'),
     (r'^account/facebook_fusion/$', 'facebook_fusion'),

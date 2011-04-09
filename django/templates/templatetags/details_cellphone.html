@@ -5,6 +5,7 @@
         var tiers = new Array()
         {% for tier in tiers %}
             var tier_details = new Array()
+            tier_details['plan_id'] = {{ tier.plan.id }}
             tier_details['cellphone_price'] = {{ tier.cellphone_price }}
             tier_details['plan_price'] = {{ tier.plan_price }}
             tier_details['plan_data'] = {% if tier.plan.includes_data %} 'Sí' {% else %} 'No' {% endif %}
@@ -32,7 +33,7 @@
         {% endfor %}
     </select>
     <br />
-    <br />
+    <p><a href="#" id="cell_plan_link">Ver los equipos compatibles con este plan</a></p>
     <div id="cell_tier_details">
         <b>Precio equipo:</b> <span id="cellphone_price_span"></span> <br />
         <b>Precio plan:</b> <span id="plan_price_span"></span> <br />

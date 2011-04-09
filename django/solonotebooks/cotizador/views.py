@@ -250,12 +250,13 @@ def append_metadata_to_response(request, template, args):
         if ptype:
             classname = ptype.classname
             s_form = eval(classname + 'SearchForm({})')
+            url = reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])
+            tabs = [[0, 'Todos', url + '?' + url_extension]]
+            
             options = s_form.main_category().choices.queryset
-            tabs = [[0, 'Todos', 'catalog']]
             for option in options:
-                url = reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])
-                url += '?' + url_extension + '&' + s_form.main_category_string() + '=' + str(option.id)
-                tabs.append([option.id, str(option), url])
+                option_url = url + '?' + url_extension + '&' + s_form.main_category_string() + '=' + str(option.id)
+                tabs.append([option.id, str(option), option_url])
                     
             args['tabs'] = ['Tipos de ' + ptype.displayname, tabs]
         else:
