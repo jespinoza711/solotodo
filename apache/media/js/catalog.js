@@ -70,10 +70,6 @@ $(function() {
     }
 })
 
-function update_tier_selection2() {
-    console.log('press')
-}
-
 function update_tier_selection() {
     var tier = tiers[$('#tiers-select').val()]
     $('span#cellphone_price_span').html(format_currency(tier['cellphone_price']))
@@ -83,6 +79,8 @@ function update_tier_selection() {
     $('span#six_month_price_span').html(format_currency(tier['six_month_pricing']))
     $('span#twelve_month_price_span').html(format_currency(tier['twelve_month_pricing']))
     $('a#cell_external_link').attr('href', '/store_product/' + tier['shpe_id'])
+    $('a#cell_plan_link').attr('href', '/cellphones/plans/' + tier['plan_id'])
+    
 }
 
 function format_currency(amount)

@@ -1,0 +1,32 @@
+{% extends "cotizador/base_catalog.html" %}
+
+{% block title %}{{ plan }} - {{ site_name }}{% endblock %}
+
+{% block catalog_content %}
+<div class="product_details_specs">
+    <h1>{{ plan }}</h1>
+    
+    <p>
+        <b>Compañía:</b> {{ plan.company }}<br />
+        <b>Precio base:</b> {{ plan.pretty_price }}<br />
+        <b>¿Incluye datos?:</b> {% if plan.includes_data %} Sí {% else %} No {% endif %}<br />
+    </p>
+    
+    <h2>Equipos compatibles con este plan</h2>
+    
+    <table class="mytable">
+        <tr>
+            <th>Equipo</th>
+            <th><a href="?price_ordering=base_price">Costo inicial</a></th>
+            <th><a href="?price_ordering=monthly_price">Costo mensual</a></th>
+        </tr>
+        {% for tier in tiers %}
+            <tr>
+                <td><a href="{% url solonotebooks.cotizador.views.product_details tier.pricing.cell.id %}?tier_id={{ tier.id }}">{{ tier.pricing.cell }}</a></td>
+                <td>{{ tier.pretty_cellphone_price }}</td>
+                <td>{{ tier.pretty_plan_price }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

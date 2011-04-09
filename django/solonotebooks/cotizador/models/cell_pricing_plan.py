@@ -1,5 +1,5 @@
 from django.db import models
-from . import CellCompany
+from . import CellCompany, utils
 
 class CellPricingPlan(models.Model):
     company = models.ForeignKey(CellCompany)
@@ -18,7 +18,10 @@ class CellPricingPlan(models.Model):
         return cpp
     
     def __unicode__(self):
-        return unicode(self.company) + ' - ' + self.name
+        return 'Plan ' + self.name
+        
+    def pretty_price(self):
+        return utils.prettyPrice(self.price)
     
     class Meta:
         app_label = 'cotizador'
