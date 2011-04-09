@@ -197,7 +197,7 @@ class SearchForm(forms.Form):
         return self.generate_current_url_with_skip(['page_number', 'ordering', 'ordering_direction']) + '&ordering='
    
     def generate_url_without_main_category(self):
-        return self.generate_current_url_with_skip(['page_number', self.main_category_string], '') + '&' + self.main_category_string()
+        return self.generate_current_url_with_skip(['page_number', self.main_category_string], '')
         
     def generate_base_page_link(self):
         return self.generate_current_url_with_skip(['page_number']) + '&page_number='

@@ -1,0 +1,67 @@
+{% extends "manager/base_store.html" %}
+
+{% block title %}
+    Gestor de publicidad de {{ store }} - {{ site_name }}
+{% endblock %}
+
+{% block manager_store_content %}
+
+<div id="result_set">
+    <h2>Gestor de publicidad de {{ store }}</h2>
+    
+    <div id="free_products" class="advertisement_list">
+        <h4>Productos disponibles</h4>
+        <form id="reserve_products_form" method="post" action="/store/advertisement/reserve_slots/">
+            {% if free_products %}
+                <ul>
+                    {% for product_pair in free_products %}
+                        <li><input type="checkbox" name="selected_products[]" value="{{ product_pair.0.id }}" /> <a href="{% url solonotebooks.cotizador.views_store.entity_details product_pair.0.shpe.id %}">{{ product_pair.1 }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay productos disponibles</p>
+            {% endif %}
+        </form>
+    </div>
+    
+    <div id="reserved_products" class="advertisement_list">
+        <h4>Productos reservados</h4>
+        <form id="free_products_form" method="post" action="/store/advertisement/free_slots/">
+        {% if reserved_products %}
+            <ul>
+                {% for product_pair in reserved_products %}
+                    <li><input type="checkbox" name="selected_products[]" value="{{ product_pair.0.id }}" /> <a href="{% url solonotebooks.cotizador.views_store.entity_details product_pair.0.shpe.id %}">{{ product_pair.1 }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay productos reservados</p>
+        {% endif %}
+        </form>
+        <p class="advertisement_counter">{{ reserved_products|length }} de {{ store.sponsor_cap }} lugares ocupados</p>
+        <p><a href="/admin/cotizador/store/{{ store.id }}">Asignar lugares</a></p>
+    </div>
+    
+    <div id="advertisement_buttons">
+        <p><input type="button" id="reserve_button" value=">> Reservar >>" /></p>
+        <p><input type="button" id="free_button" value="<< Liberar <<" /></p>
+    </div>
+    
+    <br class="clear" />
+    <br />
+    <hr />
+    <h4>Equipos ya tomados por otras tiendas</h4>
+    {% if unavailable_products %}
+        <ul>
+            {% for product_pair in unavailable_products %}
+                <li>{{ product_pair.1 }} 
+                    (<a href ="{% url solonotebooks.cotizador.views.product_details product_pair.1.id %}">Link en {{ site_name }}</a> 
+                    / 
+                    <a href ="{{ product_pair.0.shpe.url }}"> Link en {{ store }}</a>)</li>
+            {% endfor %}
+        </ul>        
+    {% else %}
+        <p>Todos los equipos están disponibles</p>
+    {% endif %}
+</div>
+    
+{% endblock %}

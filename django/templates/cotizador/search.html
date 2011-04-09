@@ -23,7 +23,7 @@
 <div id="pagination">
     {% ifnotequal page_count 0 %}
         {% ifnotequal page_number 1 %}
-		    <a href="/search/?search_keywords={{query}}&page_number={{ prev_page }}" title="Anterior">&laquo; Anterior</a>                        
+		    <a href="/search/?product_type={{ ptype.urlname }}&search_keywords={{query}}&page_number={{ prev_page }}" title="Anterior">&laquo; Anterior</a>                        
         {% endifnotequal %}
         {% ifnotequal left_page 1 %}
             ...
@@ -32,14 +32,14 @@
             {% ifequal page page_number %}
                 <span class="page-active">Pagina: {{ page }}</span>
             {% else %}
-			    <a href="/search/?search_keywords={{query}}&page_number={{ page }}" title="Numero pagina">{{ page }}</a>
+			    <a href="/search/?product_type={{ ptype.urlname }}&search_keywords={{query}}&page_number={{ page }}" title="Numero pagina">{{ page }}</a>
             {% endifequal %}
         {% endfor %}
         {% ifnotequal right_page page_count %}
             ...
         {% endifnotequal %}
         {% ifnotequal page_number page_count %}
-            <a href="/search/?search_keywords={{query}}&page_number={{ post_page }}" title="Siguiente">Siguiente &raquo;</a>
+            <a href="/search/?product_type={{ ptype.urlname }}&search_keywords={{query}}&page_number={{ post_page }}" title="Siguiente">Siguiente &raquo;</a>
         {% endifnotequal %}
     {% endifnotequal %}
 </div> <!-- end pagination -->

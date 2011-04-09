@@ -1,13 +1,13 @@
 #-*- coding: UTF-8 -*-
 from models import *
-from views import append_ads_to_response
+from views import append_metadata_to_response
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
 def append_notebook_ptype_to_response(request, template, args):
     ptype = ProductType.objects.get(classname = 'Notebook')
     args['ptype'] = ptype
-    return append_ads_to_response(request, template, args)
+    return append_metadata_to_response(request, template, args)
     
          
 def processor_line_details(request, processor_line_id):

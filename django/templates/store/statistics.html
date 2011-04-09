@@ -1,0 +1,25 @@
+{% extends "store/base.html" %}
+
+{% block title %}
+    Estadísticas de {{ store }}
+{% endblock %}
+
+{% block content %}
+
+<form method="get" id="advertisement_slot_form" action="#tabs-3">
+    Desde: {{ form.start_date }} &nbsp;&nbsp;Hasta: {{ form.end_date }}
+    <input type="submit" value="Actualizar" />
+</form>
+<br />
+<div id="sub_advertisement_tabs">
+    <ul>
+        <li><a href="#subtabs-1">Número de clicks</a></li>
+    </ul>
+    <div id="subtabs-1">
+        <img src="/media/pics/charts/store_{{ store.id }}_01.png?generator={{tag}}" />
+        <br />&nbsp;<br />
+        <p class="advertisement_fact">Número total de clicks en el periodo: {{ click_count }}</p>
+    </div>
+</div>
+
+{% endblock %}

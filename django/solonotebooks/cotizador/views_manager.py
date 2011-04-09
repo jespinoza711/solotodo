@@ -22,6 +22,7 @@ from fields import *
 from exceptions import *
 from utils import *
 from views import *
+from views_store import _registry, _advertisement, _statistics
 
 def manager_login_required(f):
     def wrap(request, *args, **kwargs):
@@ -35,9 +36,22 @@ def manager_login_required(f):
     return wrap
     
 def append_manager_ptype_to_response(request, template, args):
-    ptype = ProductType.objects.get(classname = 'Notebook')
-    args['ptype'] = ptype
-    return append_ads_to_response(request, template, args)
+    tabs = []
+    
+    name = 'Noticias'
+    url = reverse('solonotebooks.cotizador.views_manager.news')
+    tabs.append([-1, name, url])
+    
+    name = 'Nuevas entidades'
+    url = reverse('solonotebooks.cotizador.views_manager.new_entities')
+    tabs.append([-1, name, url])
+    
+    name = u'Tiendas'
+    url = reverse('solonotebooks.cotizador.views_manager.stores')
+    tabs.append([-1, name, url])
+    
+    args['tabs'] = ['Administración', tabs]
+    return append_metadata_to_response(request, template, args)
 
 @manager_login_required    
 def polymorphic_admin_request(request, product_id):
@@ -164,6 +178,31 @@ def storehasproductentity_refresh_price(request, store_has_product_entity_id):
     url = reverse('solonotebooks.cotizador.views_manager.storehasproductentity_edit', args = [shpe.id])
     return HttpResponseRedirect(url)
     
+@manager_login_required
+def stores(request):
+    stores = Store.objects.all()
+    return append_manager_ptype_to_response(request, 'manager/stores.html', {
+            'stores': stores,
+        })
+        
+@manager_login_required
+def store_details(request, store_id):
+    store = Store.objects.get(pk = store_id)
+    args =  _registry(request, store)
+    return append_manager_ptype_to_response(request, 'manager/store_details.html', args)
+    
+@manager_login_required
+def store_advertisement(request, store_id):
+    store = Store.objects.get(pk = store_id)
+    args =  _advertisement(store)
+    return append_manager_ptype_to_response(request, 'manager/store_advertisement.html', args)
+    
+@manager_login_required
+def store_statistics(request, store_id):
+    store = Store.objects.get(pk = store_id)
+    args =  _statistics(request, store)
+    return append_manager_ptype_to_response(request, 'manager/store_statistics.html', args)
+    
     
 @manager_login_required            
 def analyze_searches(request):
@@ -231,3 +270,5 @@ def analyze_searches(request):
                 'results': results,
                 'num_queries': num_queries,
             })
+            
+

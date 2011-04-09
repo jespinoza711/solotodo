@@ -1,0 +1,15 @@
+{% extends "manager/base.html" %}
+
+{% block title %}Manager de tiendas - {{ site_name }}{% endblock %}
+
+{% block manager_content %}
+
+<h2>Tiendas listadas</h2>
+
+<ul>
+{% for store in stores %}
+    <li><a href="{% url solonotebooks.cotizador.views_manager.store_details store.id %}">{{ store }}</a></li>
+    {% endfor %}
+</ul>
+    
+{% endblock %}

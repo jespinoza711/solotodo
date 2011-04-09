@@ -6,7 +6,7 @@
         {% for tier in tiers %}
             var tier_details = new Array()
             tier_details['cellphone_price'] = {{ tier.cellphone_price }}
-            tier_details['plan_price'] = {{ tier.calculate_plan_price }}
+            tier_details['plan_price'] = {{ tier.plan_price }}
             tier_details['plan_data'] = {% if tier.plan.includes_data %} 'Sí' {% else %} 'No' {% endif %}
             tier_details['three_month_pricing'] = {{ tier.three_month_pricing }}
             tier_details['six_month_pricing'] = {{ tier.six_month_pricing }}
