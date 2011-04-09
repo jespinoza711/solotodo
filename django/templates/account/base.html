@@ -1,4 +1,4 @@
-{% extends "base_no_product_type.html" %}
+{% extends "base_generic.html" %}
 
 {% block alert_content %}
     {% if not user.is_active %}
@@ -16,20 +16,7 @@
 
 {% block content %}
     <div id="result_set">
-        {% if not user.get_profile.facebook_name %}
-            <div id="account_options">
-                <a href="/account/subscriptions" title="Últimos Movimientos"><span>Mis Productos</span></a>
-                 | 
-                <a href="/account/change_email" title="Comentarios"><span>Cambiar correo electrónico</span></a>
-                 | 
-                <a href="/account/change_password" title="Nuevos Equipos"><span>Cambiar contraseña</span></a>
-                | 
-                <a href="/account/fuse_facebook_account" title="Fusionar cuenta"><span>Fusionar con cuenta de Facebook</span></a>
-            </div>
-        {% endif %}
-
         {% block account_content %}
         {% endblock %}
-
     </div>
 {% endblock %}

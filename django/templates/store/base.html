@@ -1,32 +1,19 @@
 {% extends "base_generic.html" %}
 
 {% block header_content %}
-<script type="text/javascript" src="/media/js/store.js"></script>
 {% endblock %}
 
 {% block tabs %}
 <div id="tabs">
-	<ul class="catalogo left">
-	    <li class="intro-catalogo">Opciones de administración</li>
+    <ul class="catalogo left">
+        <li class="intro-catalogo">{{ tabs.0 }}</li>
+        {% for tab_option in tabs.1 %}
         <li>
-            <a href="{% url solonotebooks.cotizador.views_store.index %}">Inicio</a>
+            <a href="{{ tab_option.1 }}">{{ tab_option.0 }}</a>
         </li>
-        <li>
-            <a href="{% url solonotebooks.cotizador.views_store.registry %}">Registros</a>
-        </li>
-        <li>
-            <a href="{% url solonotebooks.cotizador.views_store.advertisement %}">Gestor de publicidad</a>
-        </li>
-        <!--<li>
-            <a href="#"">Buscador personalizado</a>
-        </li>-->
-	</ul>
-	
-	<!--<ul class="social right">
-		<li class="rss"><a href="#">Suscríbete</a></li>
-		<li class="twitter"><a href="#">Síguenos</a></li>
-	</ul>-->
-</div> <!-- end tabs -->
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
 
 

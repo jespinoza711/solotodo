@@ -1,0 +1,18 @@
+{% extends "manager/base.html" %}
+
+{% block manager_content %}
+
+<div id="account_options">
+    <a href="{% url solonotebooks.cotizador.views_manager.store_details store.id %}" title="Registros"><span>Registros</span></a>
+     | 
+    <a href="{% url solonotebooks.cotizador.views_manager.store_advertisement store.id %}" title="Gestor de publicidad"><span>Gestor de publicidad</span></a>
+     | 
+    <a href="{% url solonotebooks.cotizador.views_manager.store_statistics store.id %}" title="Estadísticas"><span>Estadísticas</span></a>
+</div>
+
+{% block manager_store_content %}
+
+{% endblock %}
+
+{% endblock %}    
+

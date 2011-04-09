@@ -20,6 +20,7 @@
    	 	<script type="text/javascript" src="/media/js/dialog/jquery-ui-1.8.10.custom.min.js"></script>
    	 	<script type="text/javascript" src="/media/js/account_script.js"></script>
         <script type="text/javascript" src="/media/js/comparison_list.js"></script>
+        <script type="text/javascript" src="/media/js/store.js"></script>
         <script src="http://connect.facebook.net/es_CL/all.js"></script>
         
 
@@ -103,22 +104,15 @@
 				
 				{% block tabs %}
 				<div id="tabs">
-					<ul class="catalogo left">
-						<li class="intro-catalogo">Tipos de {{ ptype.displayname }}</li>
-					    {% for category_choice in main_category_choices %}
-                            <li {% ifequal category_choice.id main_category_comparison_key %}class="active-menu"{% endifequal %}>
-                                <a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?{{ change_category_url }}={{ category_choice.id }}" title="{{ category_choice }}">
-                                    {{ category_choice }}
-                                </a>
+                    <ul class="catalogo left">
+                        <li class="intro-catalogo">{{ tabs.0 }}</li>
+                        {% for tab_option in tabs.1 %}
+                            <li {% ifequal tab_option.0 main_category_comparison_key %}class="active-menu"{% endifequal %}>
+                                <a href="{{ tab_option.2 }}">{{ tab_option.1 }}</a>
                             </li>
                         {% endfor %}
-					</ul>
-					
-					<!--<ul class="social right">
-						<li class="rss"><a href="#">Suscríbete</a></li>
-						<li class="twitter"><a href="#">Síguenos</a></li>
-					</ul>-->
-				</div> <!-- end tabs -->
+                    </ul>
+                </div>
 				{% endblock %}
 				
 			</div><!-- !end content head -->

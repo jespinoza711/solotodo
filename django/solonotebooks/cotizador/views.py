@@ -24,15 +24,13 @@ from utils import *
     
 # Main landing page (/)    
 def index(request):
-    ptypes = ProductType.get_valid()
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
     result_products = highlighted_products_form.apply_filter(Product.get_valid())[:10]
     
-    return append_ads_to_response(request, 'cotizador/index.html', {
+    return append_metadata_to_response(request, 'cotizador/index.html', {
         'hnf': highlighted_products_form,
         'products': result_products,
-        'ptype': None,
-        'ptypes': ptypes,
+        'ptypes': ProductType.objects.all(),
     })
     
 def product_type_index(request, product_type_urlname):
@@ -43,15 +41,12 @@ def product_type_index(request, product_type_urlname):
     base_products = product_type_class.get_valid()
     result_products = highlighted_products_form.apply_filter(base_products)[:10]
     
-    return append_ads_to_response(request, 'cotizador/product_type_index.html', {
+    return append_metadata_to_response(request, 'cotizador/product_type_index.html', {
         'hnf': highlighted_products_form,
         'products': result_products,
-        'product_type_class': product_type_class,
         'ptype': ptype
     })
     
-# View that handles the main catalog, applying filters and ordering
-# (/catalog)
 def product_type_catalog(request, product_type_urlname):
     ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
     product_type_class = ptype.get_class()
@@ -100,7 +95,7 @@ def product_type_catalog(request, product_type_urlname):
         
     d = dict(search_form.price_choices)
     
-    return append_ads_to_response(request, 'cotizador/catalog.html', {
+    return append_metadata_to_response(request, 'cotizador/catalog.html', {
         'form': search_form,
         'max_price': d[str(search_form.max_price)], 
         'min_price': d[str(search_form.min_price)],
@@ -120,36 +115,6 @@ def product_type_catalog(request, product_type_urlname):
         'ordering': str(search_form.ordering),
         'ptype': ptype
     })
-    
-# View for showing a particular store with the products it offers    
-def store_details(request, store_id):
-    store = get_object_or_404(Store, pk = store_id)
-    
-    shps = []
-    
-    shpes = StoreHasProductEntity.objects.filter(store = store).filter(is_available = True, is_hidden = False).order_by('latest_price')
-    
-    for shpe in shpes:
-        if shpe.shp and shpe.shp not in shps:
-            shps.append(shpe.shp)
-    
-    for shp in shps:
-        shp.product = shp.product.get_polymorphic_instance()
-        shp.product.shp = shp
-        
-    return append_ads_to_response(request, 'cotizador/store_details.html', {
-        'store': store,
-        'shps': shps,
-        'ptype': ProductType.default()
-    })
-    
-# View for showing all of the stores currently in the DB    
-def store_index(request):
-    stores = Store.objects.all()
-    return append_ads_to_response(request, 'cotizador/store_index.html', {
-        'stores': stores,
-        'ptype': ProductType.default()
-    })  
     
 def search(request):
     ptype = None
@@ -220,7 +185,7 @@ def search(request):
     else:
         template = 'cotizador/search_no_product_type.html'
     
-    return append_ads_to_response(request, template, {
+    return append_metadata_to_response(request, template, {
         'query': query,
         'products': result_products,
         'page_number': page_number,
@@ -234,20 +199,10 @@ def search(request):
         'ptypes': ProductType.get_valid()
     })
     
-def append_ads_to_response(request, template, args):
+def append_metadata_to_response(request, template, args):
     args['side_ad'] = load_advertisement('Side')
     args['top_ad'] = load_advertisement('Top')
-    
-    return append_user_to_response(request, template, args)
-    
-class Category:
-    def __init__(self):
-        self.id = 0
-        
-    def __unicode__(self):
-        return u'Todos'
-    
-def append_user_to_response(request, template, args):
+
     authenticated_user = False
     username = ''
     
@@ -271,28 +226,44 @@ def append_user_to_response(request, template, args):
     if 'signup_key' not in request.session:
         request.session['signup_key'] = int(time())
         
+    ptype = None
     if 'ptype' in args:
         ptype = args['ptype']
-    else:
-        ptype = ProductType.default()
         
     if 'form' not in args:
-        args['form'] = initialize_search_form(request.GET, ptype)
-        
+        args['form'] = initialize_search_form(request.GET, ptype)        
     
-    try:    
-        args['change_category_url'] = args['form'].generate_url_without_main_category()        
+    try:
+        url_extension = args['form'].generate_url_without_main_category()        
         search_form = args['form']
-        main_category_choices = [Category()]
-        main_category_choices.extend(list(search_form.main_category().choices.queryset))
-        args['main_category_choices'] = main_category_choices
             
         main_category_comparison_key = search_form.main_category_key()
-        args['main_category_comparison_key'] = main_category_comparison_key
-    except:
-        pass
-
+    except Exception, e:
+        url_extension = ''
+        main_category_comparison_key = 0
         
+    args['main_category_comparison_key'] = main_category_comparison_key
+    
+    if 'tabs' not in args:
+        from solonotebooks.cotizador.forms import *
+        
+        if ptype:
+            classname = ptype.classname
+            s_form = eval(classname + 'SearchForm({})')
+            options = s_form.main_category().choices.queryset
+            tabs = [[0, 'Todos', 'catalog']]
+            for option in options:
+                url = reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])
+                url += '?' + url_extension + '&' + s_form.main_category_string() + '=' + str(option.id)
+                tabs.append([option.id, str(option), url])
+                    
+            args['tabs'] = ['Tipos de ' + ptype.displayname, tabs]
+        else:
+            tabs = []
+            for ptype in ProductType.objects.all():
+                tabs.append([ptype.id, ptype.indexname, reverse('solonotebooks.cotizador.views.product_type_index', args = [ptype.urlname])])
+            args['tabs'] = ['Tipos de producto', tabs]
+    
     args['signup_key'] = request.session['signup_key']
     args['site_name'] = settings.SITE_NAME
     
@@ -310,7 +281,7 @@ def all_products(request):
         step.append(c.objects.all())
         result.append(step)
 
-    return append_ads_to_response(request, 'cotizador/all_products.html',
+    return append_metadata_to_response(request, 'cotizador/all_products.html',
         {
             'product_types': result,
             'ptype': ProductType.default()
@@ -404,7 +375,6 @@ def product_details(request, product_id):
         'product_prices': stores_with_product_available,
         'product_comments': product.productcomment_set.filter(validated = True).order_by('id'),
         'posted_comment': posted_comment,
-        #'similar_products': similar_products,
         'subscription': product_subscription,
         'ptype': product.ptype
         }
@@ -413,6 +383,6 @@ def product_details(request, product_id):
     base_data.update(extra_data)
     
     try:
-        return append_ads_to_response(request, template_file, base_data)
+        return append_metadata_to_response(request, template_file, base_data)
     except:
-        return append_ads_to_response(request, 'templatetags/details_generic.html', base_data)
+        return append_metadata_to_response(request, 'templatetags/details_generic.html', base_data)

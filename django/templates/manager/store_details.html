@@ -1,0 +1,71 @@
+{% extends "manager/base_store.html" %}
+
+{% block title %}Dashboard de {{ store }}{% endblock %}
+
+{% block manager_store_content %}
+
+<h2>{{ store }}</h2>
+
+<div id="registry_tabs">
+    <ul>
+        <li><a href="#subtabs-1">Información de la última indexación</a></li>
+        <li><a href="#subtabs-2">Buscar producto específico</a></li>
+        <li><a href="#subtabs-3">Entidades aun no indexadas</a></li>
+        <li><a href="#subtabs-4">Entidades no indexables</a></li>
+    </ul>
+    <div id="subtabs-1">
+        {{ result_text|linebreaksbr }}
+    </div>
+    <div id="subtabs-2">
+        <h3>Buscador de productos</h3>
+        <p>
+            Por favor ingrese la URL del equipo en el sitio web de {{ store }} del que desea información, para una búsqueda más rápida y exacta use una de las URLs que aparecen en la pestaña "Información de última indexación".
+        </p>
+        {% if error_message %}
+            <p class="store_error">
+                {{ error_message }}
+            </p>
+        {% endif %}
+        <form id="shpe_search_form" action='#subtabs-2'>
+            {{ form.as_p }}
+            <input type="submit" value="Buscar" />
+        </form>
+        
+        <br />
+        <hr />
+        
+        <h3>Listado completo de equipos indexados de {{ store }}</h3>
+        <p>
+            También puede seleccionar directamente uno de sus productos de la lista a continuación.
+        </p>
+        <ul>
+        {% for shpe in idx_shpes %}
+            <li><a href="{% url solonotebooks.cotizador.views_store.entity_details shpe.id %}">{{ shpe }}</a></li>
+        {% endfor %} 
+        </ul>
+    </div>
+    <div id="subtabs-3">
+        {% if pending_shpes %}
+            <ul>
+                {% for shpe in pending_shpes %}
+                    <li><a href="{% url solonotebooks.cotizador.views_store.entity_details shpe.id %}">{{ shpe.custom_name }}</a></li>
+                {% endfor %}
+            </ul>        
+        {% else %}
+            <p>Todos los equipos están indexados</p>
+        {% endif %}
+    </div>
+    <div id="subtabs-4">
+        {% if non_idx_shpes %}
+            <ul>
+                {% for shpe in non_idx_shpes %}
+                    <li><a href="{% url solonotebooks.cotizador.views_store.entity_details shpe.id %}">{{ shpe.custom_name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Todos los equipos son indexables</p>
+        {% endif %}
+    </div>
+</div>
+    
+{% endblock %}

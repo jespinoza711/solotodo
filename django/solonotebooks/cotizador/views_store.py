@@ -17,20 +17,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.validators import email_re
 from solonotebooks import settings
-from solonotebooks.cotizador.views import append_ads_to_response
+from solonotebooks.cotizador.views import append_metadata_to_response
 from models import *
 from fields import *
 from exceptions import *
 from utils import *
 from forms import *
 
-def append_advertisement_ptype_to_response(request, template, args):
-    args['ptypes'] = ProductType.get_valid()
-    return append_ads_to_response(request, template, args)
+def append_store_metadata_to_response(request, template, args):
+    args['tabs'] = [
+            u'Opciones de admistración', 
+            [
+                    ['Inicio', reverse('solonotebooks.cotizador.views_store.index')],
+                    ['Registro', reverse('solonotebooks.cotizador.views_store.registry')],
+                    ['Gestor de publicidad', reverse('solonotebooks.cotizador.views_store.advertisement')],
+                    ['Estadísticas', reverse('solonotebooks.cotizador.views_store.statistics')]
+            ]
+        ]
+    return append_metadata_to_response(request, template, args)
 
 def store_user_required(f):
     def wrap(request, *args, **kwargs):
-        if not request.user.is_authenticated() or not request.user.get_profile().assigned_store:
+        if not request.user.is_authenticated() or (not request.user.get_profile().assigned_store and not request.user.is_superuser):
             request.flash['error'] = 'Por favor inicie sesión primero'
             return HttpResponseRedirect('/')
         else:
@@ -43,14 +51,18 @@ def store_user_required(f):
 @store_user_required    
 def index(request):
     store = request.user.get_profile().assigned_store
-    return append_advertisement_ptype_to_response(request, 'store/index.html', {
+    return append_store_metadata_to_response(request, 'store/index.html', {
         'store': store,
     })
     
 @store_user_required    
 def registry(request):
     store = request.user.get_profile().assigned_store
+    args =  _registry(request, store)
+    return append_store_metadata_to_response(request, 'store/registry.html', args)
     
+    
+def _registry(request, store):
     form = SearchShpeForm(request.GET)
     error_message = ''
     if request.GET and form.is_valid():
@@ -83,7 +95,7 @@ def registry(request):
     non_idx_shpes = store.storehasproductentity_set.filter(is_hidden = True, is_available = True)
     idx_shpes = store.storehasproductentity_set.filter(shp__isnull = False, is_available = True, is_hidden = False)
             
-    return append_advertisement_ptype_to_response(request, 'store/registry.html', {
+    return {
         'store': store,
         'result_text': result_text,
         'form': form,
@@ -91,11 +103,16 @@ def registry(request):
         'pending_shpes': pending_shpes,
         'non_idx_shpes': non_idx_shpes,
         'idx_shpes': idx_shpes,
-    })
+    }
     
 @store_user_required
 def advertisement(request):
     store = request.user.get_profile().assigned_store
+    args = _advertisement(store)           
+    
+    return append_store_metadata_to_response(request, 'store/advertisement.html', args)
+    
+def _advertisement(store):
     shpes = StoreHasProductEntity.objects.filter(store = store, is_available = True)
     
     non_indexable_shpes = shpes.filter(is_hidden = True)
@@ -120,35 +137,84 @@ def advertisement(request):
         else:
             unavailable_products.append(product_pair)            
     
-    return append_advertisement_ptype_to_response(request, 'store/advertisement.html', {
+    return {
         'store': store,
         'non_indexable_shpes': non_indexable_shpes,
         'non_indexed_shpes': non_indexed_shpes,
         'unavailable_products': unavailable_products,
         'reserved_products': reserved_products,
         'free_products': free_products
-    })
+    }
     
+@store_user_required
+def statistics(request):
+    store = request.user.get_profile().assigned_store
+    args = _statistics(request, store)           
+    
+    return append_store_metadata_to_response(request, 'store/statistics.html', args)
+    
+def _statistics(request, store):
+    form = AdvertisementSlotDetailsForm(request.GET)
+    if not form.is_valid():
+        form = AdvertisementSlotDetailsForm()
+        start_date = form.fields['start_date'].initial
+        end_date = form.fields['end_date'].initial
+        end_string = '#'
+    else:
+        start_date = form.cleaned_data['start_date']
+        end_date = form.cleaned_data['end_date']
+        if end_date > date.today():
+            end_date = date.today()
+        if start_date >= end_date:
+            url = reverse('solonotebooks.cotizador.views_store.statistics')
+            return HttpResponseRedirect(url)
+            
+    
+    raw_data = ExternalVisit.objects.filter(shn__store = store, date__gte = start_date, date__lte = end_date).values('date').annotate(Count('id')).order_by('date')
+    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
+    
+    sdate = start_date
+    step_date = timedelta(days = 1)
+    
+    while sdate <= end_date:
+        if sdate not in chart_data:
+            chart_data[sdate] = 0
+        sdate += step_date
+    
+    chart_data = chart_data.items()
+    chart_data = sorted(chart_data, key = lambda pair: pair[0])
+    
+    click_count = sum([e[1] for e in chart_data])
+
+    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_01.png', u'Número de clicks a ' + str(store))
+    
+    return {
+        'store': store,
+        'form': form,
+        'click_count': click_count,
+        'tag': datetime.now().toordinal(),
+        }
     
 @store_user_required
 def reserve_slots(request):
     store = request.user.get_profile().assigned_store
+    referrer = request.META.get('HTTP_REFERER')
     shp_ids = request.POST.getlist('selected_products[]')
     shps = [StoreHasProduct.objects.get(pk = shp_id) for shp_id in shp_ids]
     for shp in shps:
-        if shp.shpe.store != store:
+        if shp.shpe.store != store and not request.user.is_superuser:
             raise Exception
         if shp.product.sponsored_shp:
             raise Exception
     reserved_shps_count = Product.objects.filter(sponsored_shp__shpe__store = store).count()
     if len(shps) + reserved_shps_count > store.sponsor_cap:
         request.flash['error'] = 'Limite de anuncios excedido'
-        return HttpResponseRedirect('/store/advertisement/?refresh=true')
+        return HttpResponseRedirect(referrer)
     for shp in shps:
         shp.product.sponsored_shp = shp
         shp.product.save()
     request.flash['message'] = 'Suscripciones agregadas'
-    return HttpResponseRedirect('/store/advertisement/?refresh=true')
+    return HttpResponseRedirect(referrer)
     
 @store_user_required
 def free_slots(request):
@@ -164,7 +230,8 @@ def free_slots(request):
         shp.product.sponsored_shp = None
         shp.product.save()
     request.flash['message'] = 'Suscripciones liberadas'
-    return HttpResponseRedirect('/store/advertisement/?refresh=true')
+    referrer = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(referrer)
     
 @store_user_required
 def entity_details(request, shpe_id):
@@ -176,7 +243,7 @@ def entity_details(request, shpe_id):
         return HttpResponseRedirect(url)
     
     if shpe.is_hidden or not shpe.shp:
-        return append_advertisement_ptype_to_response(request, 'store/entity_details_no_data.html', {
+        return append_store_metadata_to_response(request, 'store/entity_details_no_data.html', {
             'store': store,
             'shpe': shpe,
         })
@@ -299,10 +366,8 @@ def entity_details(request, shpe_id):
         generated_pie_chart = False
     
     product = shp.product
-        
-    #raise Exception
-        
-    return append_advertisement_ptype_to_response(request, 'store/entity_details.html', {
+
+    return append_store_metadata_to_response(request, 'store/entity_details.html', {
         'store': store,
         'shpe': shpe,
         'shp': shp,

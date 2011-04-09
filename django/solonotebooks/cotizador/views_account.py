@@ -6,7 +6,7 @@ from django.contrib import auth
 from django.utils.http import urlquote
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from solonotebooks.cotizador.views import append_ads_to_response
+from solonotebooks.cotizador.views import append_metadata_to_response
 import simplejson
 from models import *
 from fields import *
@@ -15,8 +15,27 @@ from utils import *
 from views import *
 
 def append_account_ptype_to_response(request, template, args):
-    args['ptypes'] = ProductType.get_valid()
-    return append_ads_to_response(request, template, args)
+    tabs = []
+    
+    name = 'Mis productos'
+    url = reverse('solonotebooks.cotizador.views_account.subscriptions')
+    tabs.append([-1, name, url])
+    
+    if not request.user.get_profile().facebook_name:
+        name = 'Cambiar correo electrónico'
+        url = reverse('solonotebooks.cotizador.views_account.change_email')
+        tabs.append([-1, name, url])
+        
+        name = u'Cambiar contraseña'
+        url = reverse('solonotebooks.cotizador.views_account.change_password')
+        tabs.append([-1, name, url])
+        
+        name = 'Fusionar con Facebook'
+        url = reverse('solonotebooks.cotizador.views_account.fuse_facebook_account')
+        tabs.append([-1, name, url])
+    
+    args['tabs'] = ['', tabs]
+    return append_metadata_to_response(request, template, args)
     
 def facebook_login(request):
     next = '/'
@@ -282,7 +301,7 @@ def login(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(next_url)
     else:
-        return append_account_ptype_to_response(request, 'account/login.html', {
+        return append_metadata_to_response(request, 'account/login.html', {
             })
 
 # Deprecated    
