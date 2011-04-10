@@ -143,6 +143,7 @@ class Movistar(FetchStore):
                         tier.plan = plan
                         tier.shpe = shpe
                         tier.cellphone_price = cellphone_price
+                        tier.monthly_quota = plan.price
                         tier.update_prices()
                         tier.save()
                         print tier.pretty_print()
@@ -178,6 +179,7 @@ class Movistar(FetchStore):
             tier.plan = plan
             tier.shpe = shpe
             tier.cellphone_price = prepaid_price
+            tier.monthly_quota = plan.price
             tier.update_prices()
             tier.save()
             print tier.pretty_print()

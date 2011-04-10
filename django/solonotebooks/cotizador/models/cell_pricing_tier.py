@@ -6,16 +6,13 @@ class CellPricingTier(models.Model):
     plan = models.ForeignKey(CellPricingPlan)
     shpe = models.ForeignKey(StoreHasProductEntity, blank = True, null = True)
     cellphone_price = models.IntegerField()
-    monthly_quota = models.IntegerField(default = 0)
+    monthly_quota = models.IntegerField()
     three_month_pricing = models.IntegerField()
     six_month_pricing = models.IntegerField()
     twelve_month_pricing = models.IntegerField()
     
-    def plan_price(self):
-        return self.plan.price + self.monthly_quota
-        
-    def pretty_plan_price(self):
-        return utils.prettyPrice(self.plan_price())
+    def pretty_monthly_quota(self):
+        return utils.prettyPrice(self.monthly_quota)
         
     def pretty_cellphone_price(self):
         return utils.prettyPrice(self.cellphone_price)
@@ -29,15 +26,15 @@ class CellPricingTier(models.Model):
     def pretty_print(self):
         result = 'Equipo: ' + str(self.pricing) + '\n'
         result += 'Precio equipo: ' + str(self.cellphone_price) + '\n'
-        result += 'Cuota mensual equipo: ' + str(self.monthly_quota) + '\n'
         result += 'Nombre plan: ' + str(self.plan) + '\n'
         result += 'Precio plan: ' + str(self.plan.price) + '\n'
+        result += 'Cuota mensual total: ' + str(self.monthly_quota) + '\n'
         return result
         
     def update_prices(self):
-        self.three_month_pricing = self.cellphone_price + 3 * (self.plan.price + self.monthly_quota)
-        self.six_month_pricing = self.cellphone_price + 6 * (self.plan.price + self.monthly_quota)
-        self.twelve_month_pricing = self.cellphone_price + 12 * (self.plan.price + self.monthly_quota)
+        self.three_month_pricing = self.cellphone_price + 3 * self.monthly_quota
+        self.six_month_pricing = self.cellphone_price + 6 * self.monthly_quota
+        self.twelve_month_pricing = self.cellphone_price + 12 * self.monthly_quota
     
     class Meta:
         app_label = 'cotizador'

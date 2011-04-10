@@ -24,7 +24,7 @@
             <tr>
                 <td><a href="{% url solonotebooks.cotizador.views.product_details tier.pricing.cell.id %}?tier_id={{ tier.id }}">{{ tier.pricing.cell }}</a></td>
                 <td>{{ tier.pretty_cellphone_price }}</td>
-                <td>{{ tier.pretty_plan_price }}</td>
+                <td>{{ tier.pretty_monthly_quota }}</td>
             </tr>
         {% endfor %}
     </table>
