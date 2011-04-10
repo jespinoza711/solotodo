@@ -256,7 +256,7 @@ class CellSearchForm(SearchForm):
         
         if self.min_price:
             tiers = tiers.filter(cellphone_price__gte = int(self.min_price))
-        if self.max_price and self.max_price != int(self.price_choices[-1][0]):
+        if hasattr(self, 'max_price') and self.max_price != int(self.price_choices[-1][0]):
             tiers = tiers.filter(cellphone_price__lte = int(self.max_price))
             
         # Check the ordering orientation, if it is not set, each criteria uses 
