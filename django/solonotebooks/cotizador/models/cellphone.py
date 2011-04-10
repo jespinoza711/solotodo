@@ -66,8 +66,9 @@ class Cellphone(models.Model):
                 name = field.get_attname().replace('_id', '')
                 if name == 'shp' or name == 'sponsored_shp':
                     continue
-                print name
-                result += ' ' + getattr(self, name).raw_text().encode('ascii', 'ignore')
+                attribute = getattr(self, name)
+                if attribute:
+                    result += ' ' + attribute.raw_text().encode('ascii', 'ignore')
                 
         if self.records_video:
             result += u' grabación grabacion video vídeo'
