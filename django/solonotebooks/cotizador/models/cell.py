@@ -139,7 +139,7 @@ class Cell(Product):
             return reverse('solonotebooks.cotizador.views.product_details', args = [self.id]) + args
     
     class Meta:
-        ordering = ['name']
+        ordering = ['phone', 'pricing']
         app_label = 'cotizador'
         
     
