@@ -63,6 +63,7 @@ class Entel(FetchStore):
         
         extensions = [
                     ['P7200113701283291467481', True],
+                    ['P15600386721300459240749', True],
                     ['P800933501267454369229', False],
                     ['P800233501267216196630', False],
                     ['P800333501267216211110', False],
@@ -84,6 +85,8 @@ class Entel(FetchStore):
                     name_container = cells[0].find('p')
                     if not name_container:
                         name_container = cells[0].contents[0]
+                    if not name_container.string:
+                        continue
                     name = latin1_to_ascii(name_container.string.strip())
                     
                     price_container = cells[1].find('p')
@@ -103,8 +106,9 @@ class Entel(FetchStore):
         data = browser.open(shpe.url).get_data()
         soup = BeautifulSoup(data)
         
-        data_plans = list(cell_plans.filter(includes_data = True))
-        voice_plans = list(cell_plans.filter(includes_data = False))
+        blackberry_plans = cell_plans.filter(includes_data = True).filter(Q(name__icontains = 'blackberry') | Q(name__icontains = 'bb'))
+        data_plans = cell_plans.filter(includes_data = True)
+        voice_plans = cell_plans.filter(includes_data = False)
         
         # Multimedia check
         multimedia_link = soup.find('a', { 'class': 'btnAzul centrarBtn lbPlanesMulti' })
@@ -153,7 +157,7 @@ class Entel(FetchStore):
                     
                 
                 for plan_name, cellphone_price in plan_tiers:
-                    plan = cell_plans.get(name = plan_name)
+                    plan = data_plans.get(name = plan_name)
                     tier = CellPricingTier()
                     tier.pricing = pricing
                     tier.plan = plan
@@ -162,6 +166,36 @@ class Entel(FetchStore):
                     tier.update_prices()
                     tier.save()
                     print tier.pretty_print()
+                    
+        # Blackberry check
+        if 'blackberry' in shpe.custom_name.lower():
+            headers = soup.findAll('h3')
+            bb_headers = []
+            for header in headers:
+                text = header.string
+                if text and 'Arriendo' in text:
+                    bb_headers.append(header)
+                    
+            bb_headers.reverse()
+                    
+            for bb_header in bb_headers:
+                price_spans = bb_header.parent.findAll('span', {'class': 'valorPrecio'})
+                if price_spans and 'No disponible' not in price_spans[0].string:
+                    cellphone_price = int(price_spans[0].string.replace('$', '').replace(',', ''))
+                    monthly_quota = int(price_spans[1].string.replace('$', '').replace(',', ''))
+                    
+                    for plan in blackberry_plans:
+                        tier = CellPricingTier()
+                        tier.pricing = pricing
+                        tier.plan = plan
+                        tier.shpe = shpe
+                        tier.cellphone_price = cellphone_price
+                        tier.monthly_quota = monthly_quota
+                        tier.update_prices()
+                        tier.save()
+                        print tier.pretty_print()
+                        
+                    break
                 
         # Voice check
         headers = soup.findAll('h3')
