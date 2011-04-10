@@ -4,7 +4,7 @@ import sys
 import hashlib
 import operator
 import urllib
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 from time import time
 from math import ceil
 from django.db.models import Min, Max, Q
@@ -92,16 +92,12 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
         form = StoreHasProductEntityEditForm(request.POST)
         if form.is_valid():
             product = form.cleaned_data['product']
-            
-            # Begin changes
-            
+
             if shpe.shp:
                 shp = shpe.shp
                 shpe.shp = None
                 shpe.save()
                 shp.update(recursive = True)
-            
-            # End changes
             
             shps = StoreHasProduct.objects.filter(product = product)
             created = True
@@ -118,6 +114,10 @@ def storehasproductentity_edit(request, store_has_product_entity_id):
                 shp.save()
 
             shpe.shp = shp
+            
+            if not shpe.date_resolved:
+                shpe.date_resolved = datetime.now()
+                
             shpe.save()
                 
             shp.update(recursive = True)

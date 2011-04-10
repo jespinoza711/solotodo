@@ -120,7 +120,7 @@ class CellSearchForm(SearchForm):
         if key == 'camera':
             value = u'Cámara de ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
         if key == 'keyboard':
-            value = 'Teclado ' + unicode(CellphoneManufacturer.objects.get(pk = pk_value))
+            value = 'Teclado ' + unicode(CellphoneKeyboard.objects.get(pk = pk_value))
         if key == 'operating_system':
             value = 'Sistema operativo ' + unicode(CellphoneOperatingSystem.objects.get(pk = pk_value))
         if key == 'screen_size':
@@ -164,7 +164,7 @@ class CellSearchForm(SearchForm):
         if key == 'camera':
             value = u'Celulares con cámara de ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
         if key == 'keyboard':
-            value = 'Celulares con teclado ' + unicode(CellphoneManufacturer.objects.get(pk = pk_value))
+            value = 'Celulares con teclado ' + unicode(CellphoneKeyboard.objects.get(pk = pk_value))
         if key == 'operating_system':
             value = 'Celulares con sistema operativo ' + unicode(CellphoneOperatingSystem.objects.get(pk = pk_value))
         if key == 'screen_size':
