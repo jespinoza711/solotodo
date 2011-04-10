@@ -203,11 +203,11 @@ class CellSearchForm(SearchForm):
             else:
                 tiers = tiers.filter(plan__includes_data = True)
         if self.plan_price_min:
-            tiers = tiers.filter(plan__price__gte = self.plan_price_min)
+            tiers = tiers.filter(monthly_quota__gte = self.plan_price_min)
         if self.plan_price_max:
             max_price = int(self.plan_price_choices[-1][0])
             if self.plan_price_max != max_price:
-                tiers = tiers.filter(plan__price__lte = self.plan_price_max)
+                tiers = tiers.filter(monthly_quota__lte = self.plan_price_max)
         if self.manufacturer:
             tiers = tiers.filter(pricing__cell__phone__manufacturer = self.manufacturer)
         if self.category:

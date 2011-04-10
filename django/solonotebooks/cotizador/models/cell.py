@@ -114,7 +114,7 @@ class Cell(Product):
                         return '0'
                     
                 cellphone_price = tier.cellphone_price
-                plan_price = tier.plan_price()
+                plan_price = tier.monthly_quota
                 if plan_price:
                     price = prettyPrice(cellphone_price) + '<br /><span class="cell_pricing_span"> con plan de ' + prettyPrice(plan_price) + '</span>'
                 else:
