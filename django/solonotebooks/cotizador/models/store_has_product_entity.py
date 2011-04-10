@@ -14,6 +14,8 @@ class StoreHasProductEntity(models.Model):
     comparison_field = models.TextField()
     store = models.ForeignKey(Store)
     prevent_availability_change = models.BooleanField()
+    date_added = models.DateTimeField(auto_now_add = True)
+    date_resolved = models.DateTimeField(blank = True, null = True)
 
     shp = models.ForeignKey(StoreHasProduct, null = True, blank = True)
     ptype = models.ForeignKey(ProductType, null = True, blank = True)
