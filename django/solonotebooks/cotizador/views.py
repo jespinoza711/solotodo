@@ -54,7 +54,6 @@ def product_type_catalog(request, product_type_urlname):
     search_form = initialize_search_form(request.GET, ptype)
     search_form.save()
     
-    # Grab all the candidates (those currently available)
     result_products = search_form.filter_products(product_type_class.get_valid())
     num_results = len(result_products)
     

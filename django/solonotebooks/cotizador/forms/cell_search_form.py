@@ -118,7 +118,7 @@ class CellSearchForm(SearchForm):
         if key == 'form_factor':
             value = unicode(CellphoneFormFactor.objects.get(pk = pk_value))
         if key == 'camera':
-            value = u'Cámara de ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
+            value = u'Cámara de por lo menos ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
         if key == 'keyboard':
             value = 'Teclado ' + unicode(CellphoneKeyboard.objects.get(pk = pk_value))
         if key == 'operating_system':
@@ -162,7 +162,7 @@ class CellSearchForm(SearchForm):
         if key == 'form_factor':
             value = 'Celulares ' + unicode(CellphoneFormFactor.objects.get(pk = pk_value))
         if key == 'camera':
-            value = u'Celulares con cámara de ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
+            value = u'Celulares con cámara de por lo menos ' + unicode(CellphoneCamera.objects.get(pk = pk_value))
         if key == 'keyboard':
             value = 'Celulares con teclado ' + unicode(CellphoneKeyboard.objects.get(pk = pk_value))
         if key == 'operating_system':
@@ -188,7 +188,7 @@ class CellSearchForm(SearchForm):
         return value
         
     def filter_products(self, cells):
-        tiers = CellPricingTier.objects.filter(pricing__cell__isnull = False)
+        tiers = CellPricingTier.objects.filter(pricing__cell__in = cells)
         
         if self.plan_company:
             tiers = tiers.filter(pricing__company = self.plan_company)
@@ -204,7 +204,7 @@ class CellSearchForm(SearchForm):
                 tiers = tiers.filter(plan__includes_data = True)
         if self.plan_price_min:
             tiers = tiers.filter(monthly_quota__gte = self.plan_price_min)
-        if self.plan_price_max:
+        if hasattr(self, 'plan_price_max'):
             max_price = int(self.plan_price_choices[-1][0])
             if self.plan_price_max != max_price:
                 tiers = tiers.filter(monthly_quota__lte = self.plan_price_max)
@@ -215,7 +215,7 @@ class CellSearchForm(SearchForm):
         if self.form_factor:
             tiers = tiers.filter(pricing__cell__phone__form_factor = self.form_factor)
         if self.camera:
-            tiers = tiers.filter(pricing__cell__phone__camera = self.camera)
+            tiers = tiers.filter(pricing__cell__phone__camera__mp__gte = CellphoneCamera.objects.get(pk = self.camera).mp)
         if self.keyboard and self.advanced_controls:
             tiers = tiers.filter(pricing__cell__phone__keyboard = self.keyboard)
         if self.operating_system and self.advanced_controls:
@@ -268,33 +268,29 @@ class CellSearchForm(SearchForm):
             if ordering_direction == None:
                 ordering_direction = ''
             price_field = 'cellphone_price'
-            tiers = tiers.order_by(ordering_direction + price_field)
         elif self.ordering == 2:
             if ordering_direction == None:
                 ordering_direction = ''    
             price_field = 'three_month_pricing'
-            tiers = tiers.order_by(ordering_direction + price_field)
         elif self.ordering == 3:
             if ordering_direction == None:
                 ordering_direction = ''    
             price_field = 'six_month_pricing'
-            tiers = tiers.order_by(ordering_direction + price_field)
         else:
             if ordering_direction == None:
                 ordering_direction = ''    
             price_field = 'twelve_month_pricing'
-            tiers = tiers.order_by(ordering_direction + price_field)
             
+        tiers = tiers.order_by(ordering_direction + price_field)    
         final_cells = []
-        cells = list(cells)
         
         for tier in tiers:
             cell = tier.pricing.cell
 
-            if cell and cell in cells and cell not in final_cells:
-                price = getattr(tier, price_field)
+            if cell and cell not in final_cells:
                 cell.tier = tier
                 final_cells.append(cell)
+        
             
         return final_cells
         
