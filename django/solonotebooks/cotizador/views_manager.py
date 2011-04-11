@@ -189,7 +189,10 @@ def stores(request):
 def store_details(request, store_id):
     store = Store.objects.get(pk = store_id)
     args =  _registry(request, store)
-    return append_manager_ptype_to_response(request, 'manager/store_details.html', args)
+    if 'url' in args:
+        return HttpResponseRedirect(args['url'])
+    else:
+        return append_manager_ptype_to_response(request, 'manager/store_details.html', args)
     
 @manager_login_required
 def store_advertisement(request, store_id):

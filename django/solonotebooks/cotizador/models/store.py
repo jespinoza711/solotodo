@@ -21,6 +21,7 @@ class Store(models.Model):
         
     def fetch_product_data(self, url):
         from . import StoreHasProductEntity
+        from solonotebooks.fetch_scripts import *
         fetch_store = eval(self.classname + '()')
         product = fetch_store.retrieve_product_data(url)
         if not product:

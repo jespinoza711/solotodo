@@ -59,7 +59,10 @@ def index(request):
 def registry(request):
     store = request.user.get_profile().assigned_store
     args =  _registry(request, store)
-    return append_store_metadata_to_response(request, 'store/registry.html', args)
+    if 'url' in args:
+        return HttpResponseRedirect(args['url'])
+    else:
+        return append_store_metadata_to_response(request, 'store/registry.html', args)
     
     
 def _registry(request, store):
@@ -75,9 +78,9 @@ def _registry(request, store):
         
         if shpe:
             follow_url = reverse('solonotebooks.cotizador.views_store.entity_details', args = [shpe.id])
-            return HttpResponseRedirect(follow_url)
+            return { 'url': follow_url }
         else:
-            error_message = 'No se pudo obtener la información de la URL ingresada'
+            error_message = u'El producto de la URL ingresada no está en nuestro índice, si cree que debiera estarlo por favor contáctenos.'
     else:    
         form = SearchShpeForm()
         
@@ -88,7 +91,6 @@ def _registry(request, store):
         for line in f.readlines():
             result_text += line
     except Exception, e :
-        #result_text = str(e)
         result_text = 'No hay información de la última indexación de ' + str(store)
         
     pending_shpes = store.storehasproductentity_set.filter(shp__isnull = True, is_available = True, is_hidden = False)
