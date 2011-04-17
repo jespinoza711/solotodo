@@ -239,7 +239,6 @@ class Dell(FetchStore):
                             
         for url_extension in url_extensions:
             urlWebpage = self.urlBase + url_extension
-            print urlWebpage
             
             r = mechanize.urlopen(urlWebpage)
             baseSoup = BeautifulSoup(r.read())
