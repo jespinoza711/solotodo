@@ -21,8 +21,8 @@ def append_account_ptype_to_response(request, template, args):
     url = reverse('solonotebooks.cotizador.views_account.subscriptions')
     tabs.append([-1, name, url])
     
-    if not request.user.get_profile().facebook_name:
-        name = 'Cambiar correo electrónico'
+    if request.user.is_authenticated() and not request.user.get_profile().facebook_name:
+	name = 'Cambiar correo electrónico'
         url = reverse('solonotebooks.cotizador.views_account.change_email')
         tabs.append([-1, name, url])
         
