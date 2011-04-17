@@ -23,6 +23,7 @@ from fields import *
 from exceptions import *
 from utils import *
 from forms import *
+import random
 
 def append_store_metadata_to_response(request, template, args):
     args['tabs'] = [
@@ -170,7 +171,8 @@ def _statistics(request, store):
         if start_date >= end_date:
             url = reverse('solonotebooks.cotizador.views_store.statistics')
             return HttpResponseRedirect(url)
-            
+           
+    # Normal clicks 
     
     raw_data = ExternalVisit.objects.filter(shn__store = store, date__gte = start_date, date__lte = end_date).values('date').annotate(Count('id')).order_by('date')
     chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
@@ -188,13 +190,34 @@ def _statistics(request, store):
     
     click_count = sum([e[1] for e in chart_data])
 
-    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_01.png', u'Número de clicks a ' + str(store))
+    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_01.png', u'Número de clicks normales a ' + str(store))
+    
+    # Sponsored clicks
+    
+    raw_data = SponsoredVisit.objects.filter(shp__shpe__store = store, date__gte = start_date, date__lte = end_date).values('date').annotate(Count('id')).order_by('date')
+    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
+    
+    sdate = start_date
+    step_date = timedelta(days = 1)
+    
+    while sdate <= end_date:
+        if sdate not in chart_data:
+            chart_data[sdate] = 0
+        sdate += step_date
+    
+    chart_data = chart_data.items()
+    chart_data = sorted(chart_data, key = lambda pair: pair[0])
+    
+    sponsored_click_count = sum([e[1] for e in chart_data])
+
+    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_02.png', u'Número de clicks patrocinados a ' + str(store))
     
     return {
         'store': store,
         'form': form,
         'click_count': click_count,
-        'tag': datetime.now().toordinal(),
+        'sponsored_click_count': sponsored_click_count,
+        'tag': random.randint(1, 1000000)
         }
     
 @store_user_required
@@ -376,7 +399,7 @@ def entity_details(request, shpe_id):
         'other_shpes': other_shpes,
         'product': product,
         'form': form,
-        'tag': datetime.now().toordinal(),
+        'tag': random.randint(1, 1000000),
         'product_prices': product.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price'),
         'product_visit_count': product_visit_count,
         'store_external_visit_count': store_external_visit_count,

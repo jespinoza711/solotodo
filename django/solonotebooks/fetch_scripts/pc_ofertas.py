@@ -98,7 +98,6 @@ class PCOfertas(FetchStore):
                 del args['path']
                 args = ['%s=%s' % (k, v) for k, v in args.items()]
                 link = base_link + '?' + '&'.join(args)
-                print link
                 if link not in product_links:
                     product_links.append([link, ptype])
 

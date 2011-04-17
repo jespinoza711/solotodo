@@ -67,7 +67,6 @@ class Ripley(FetchStore):
             j = 1                    
             while True:
                 urlWebpage = urlBase + category_url + '?curPg=' + str(j)
-                #print urlWebpage
 
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()
@@ -91,7 +90,6 @@ class Ripley(FetchStore):
                         break
                         
                     links.append(url)
-                    #print url
                     product_links.append([url, ptype])
                     
                 if break_flag:

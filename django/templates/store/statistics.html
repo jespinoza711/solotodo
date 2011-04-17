@@ -13,12 +13,18 @@
 <br />
 <div id="sub_advertisement_tabs">
     <ul>
-        <li><a href="#subtabs-1">Número de clicks</a></li>
+        <li><a href="#subtabs-1">Número de clicks normales</a></li>
+        <li><a href="#subtabs-2">Número de clicks patrocinados</a></li>
     </ul>
     <div id="subtabs-1">
         <img src="/media/pics/charts/store_{{ store.id }}_01.png?generator={{tag}}" />
         <br />&nbsp;<br />
-        <p class="advertisement_fact">Número total de clicks en el periodo: {{ click_count }}</p>
+        <p class="advertisement_fact">Número total de clicks normales en el periodo: {{ click_count }}</p>
+    </div>
+    <div id="subtabs-2">
+        <img src="/media/pics/charts/store_{{ store.id }}_02.png?generator={{tag}}" />
+        <br />&nbsp;<br />
+        <p class="advertisement_fact">Número total de clicks patrocinados en el periodo: {{ sponsored_click_count }}</p>
     </div>
 </div>
 

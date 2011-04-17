@@ -21,7 +21,6 @@ class Paris(FetchStore):
         
         try:
             product_price = int(product_soup.find('div', { 'class': 'txtPrecioPrin' }).find('b').contents[0].split('$')[1].replace('.', ''))
-            print product_price
             product_prices.append(product_price)
         except:
             pass
