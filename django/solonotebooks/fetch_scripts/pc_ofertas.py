@@ -20,7 +20,11 @@ class PCOfertas(FetchStore):
         
         
         product_name = product_soup.find('h4', { 'class': 'Estilo5' }).string.encode('ascii', 'ignore')
-        product_price = int(product_soup.find('span', { 'class': 'Estilo4' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', ''))
+        
+        try:
+            product_price = int(product_soup.find('span', { 'class': 'Estilo4' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', ''))
+        except:
+            return None
         
         product_data = ProductData()
         product_data.custom_name = product_name
@@ -89,7 +93,14 @@ class PCOfertas(FetchStore):
             links = list(set(links))
                 
             for link in links:
-                product_links.append([link, ptype])
+                base_link, args = link.split('?')
+                args = dict([elem.split('=') for elem in args.split('&')])
+                del args['path']
+                args = ['%s=%s' % (k, v) for k, v in args.items()]
+                link = base_link + '?' + '&'.join(args)
+                print link
+                if link not in product_links:
+                    product_links.append([link, ptype])
 
         return product_links
 
