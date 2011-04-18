@@ -13,7 +13,7 @@ class Bym(FetchStore):
     def retrieve_product_data(self, product_link, already_tried = False):
         browser = mechanize.Browser()
         try:
-            base_data = browser.open(product_link).get_data()
+            base_data = mechanize.urlopen(product_link)
         except:
             if already_tried:
                 return None
@@ -41,6 +41,11 @@ class Bym(FetchStore):
         return product_data
 
     def retrieve_product_links(self):
+        cookies = mechanize.CookieJar()
+        opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
+        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
+                 ("From", "responsible.person@example.com")]
+        mechanize.install_opener(opener)
         urlBase = 'http://www.ttchile.cl/'        
         browser = mechanize.Browser()
         product_links = []
@@ -60,7 +65,7 @@ class Bym(FetchStore):
             
             while True:
                 urlWebpage = urlBase + url_extension + '&pagina=' + str(page_number)
-                base_data = browser.open(urlWebpage).get_data()
+                base_data = mechanize.urlopen(urlWebpage)
                 base_soup = BeautifulSoup(base_data)
                 
                 productLinks = [div.find('a')['href'] for div in base_soup.findAll('div', {'class': 'linkTitPro'})]
