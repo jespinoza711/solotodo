@@ -29,18 +29,19 @@ class RkNotebooks(FetchStore):
     # Main method
     def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.rk-notebooks.cl/store/category.php?id_category='
+        urlBase = 'http://www.rk-notebooks.cl/store/'
         
         # Browser initialization
         browser = mechanize.Browser()
         
         url_extensions = [
-                           ['7', 'Notebook'],
+                           ['30-notebooks-nuevos', 'Notebook'],
                             ]
         
         product_links = []                
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
+            print urlWebpage
 
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
