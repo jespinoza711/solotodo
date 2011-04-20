@@ -88,6 +88,10 @@ class Entel(FetchStore):
                     if not name_container.string:
                         continue
                     name = latin1_to_ascii(name_container.string.strip())
+                        
+                    m = re.search('^Multimedia(\d+)$', name)
+                    if m:
+                        name = 'Multimedia ' + m.group(1)
                     
                     price_container = cells[1].find('p')
                     if not price_container:
