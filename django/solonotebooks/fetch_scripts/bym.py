@@ -27,7 +27,7 @@ class Bym(FetchStore):
         if 'agotado' in stock_image_url:
             return None
         
-        title = base_soup.find('div', { 'class' : 'textTituloProducto'}).string.strip()
+        title = base_soup.find('div', { 'class' : 'textTituloProducto'}).string.strip().encode('ascii', 'ignore')
         
         prices = base_soup.findAll('div', { 'class' : 'textPrecioContado' })
         price = prices[0].string
