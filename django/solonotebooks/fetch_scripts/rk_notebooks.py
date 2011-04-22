@@ -41,7 +41,6 @@ class RkNotebooks(FetchStore):
         product_links = []                
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
-            print urlWebpage
 
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
