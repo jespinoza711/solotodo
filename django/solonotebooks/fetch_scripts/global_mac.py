@@ -11,6 +11,11 @@ class GlobalMac(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
+        cookies = mechanize.CookieJar()
+        opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
+        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
+                 ("From", "responsible.person@example.com")]
+        mechanize.install_opener(opener)
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
@@ -31,6 +36,11 @@ class GlobalMac(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
+        cookies = mechanize.CookieJar()
+        opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
+        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
+                 ("From", "responsible.person@example.com")]
+        mechanize.install_opener(opener)
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.globalmac.cl/'
         urlBuscarProductos = 'ver='
@@ -47,6 +57,7 @@ class GlobalMac(FetchStore):
                             
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
+            print urlWebpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
             

@@ -21,6 +21,10 @@ class Peta(FetchStore):
                 return self.retrieve_product_data(product_link, already_tried = True)
         product_soup = BeautifulSoup(product_data)
         
+        notify_product_resurrection_link = product_soup.find('div', { 'class': 'product-info-box' }).find('small')
+        if notify_product_resurrection_link:
+            return None
+        
         try:
             product_name = product_soup.find('h3', { 'class': 'product-name' }).string.encode('ascii', 'ignore')
             product_price = int(product_soup.find('span', { 'class': 'price' }).string.split('$')[1].replace('.', ''))
