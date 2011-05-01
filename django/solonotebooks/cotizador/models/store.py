@@ -67,6 +67,27 @@ class Store(models.Model):
         for shpe in shpes:
             shpe.prevent_availability_change = flag
             shpe.save()
+            
+    def get_products_in_category(self, ptype, ordering):
+        from . import StoreHasProductEntity, StoreHasProduct
+        classname = ptype.get_class()
+        products = classname.get_valid()
+        
+        shps = StoreHasProduct.objects.filter(shpe__store = self, product__in = products)
+        
+        if ordering == '1':
+            shps = shps.order_by('product__display_name')
+        elif ordering == '2':
+            shps = shps.order_by('-product__week_visitor_count')
+        elif ordering == '3':
+            shps = shps.order_by('-product__week_external_visits')
+        
+        final_products = []    
+        for shp in shps:
+            shp.product.equivalent_shpe = shp.shpe
+            final_products.append(shp.product)
+            
+        return final_products
     
     class Meta:
         ordering = ['name']

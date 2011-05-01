@@ -52,3 +52,4 @@ class StoreHasProduct(models.Model):
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Store has product' 
+        ordering = ['product']

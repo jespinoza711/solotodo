@@ -20,7 +20,9 @@ class Product(models.Model):
     sponsored_shp = models.ForeignKey('StoreHasProduct', null = True, blank = True, related_name = 'sponsored_product')
     week_visitor_count = models.IntegerField(default = 0)
     week_discount = models.IntegerField(default = 0)
+    week_external_visits = models.IntegerField(default = 0)
     long_description = models.TextField(default = ' ')
+    display_name = models.CharField(max_length = 255, default = '')
 
     similar_products = models.CommaSeparatedIntegerField(max_length = 30, default = '0')
     
@@ -167,6 +169,8 @@ class Product(models.Model):
         self.long_description = self.raw_text()
         self.update_week_discount()
         self.update_week_visits()
+        self.update_week_external_visits()
+        self.update_display_name()
         
         self.save()
         self.generate_chart()
@@ -209,6 +213,9 @@ class Product(models.Model):
         else:
             return 0
         
+    def update_display_name(self):
+        self.display_name = unicode(self)
+    
     def update_week_discount(self):
         t = date.today()
         d = timedelta(days = 3)
@@ -217,6 +224,13 @@ class Product(models.Model):
             self.week_discount = int(100 * (old_price - self.shp.shpe.latest_price) / old_price)
         except:
             self.week_discount = 0;
+            
+    def update_week_external_visits(self):
+        from . import ExternalVisit
+        t = date.today()
+        d = timedelta(days = 3)
+        counter = ExternalVisit.objects.filter(shn__shp__product = self, date__gte=t - d, date__lte=t).count()
+        self.week_external_visits = counter
             
     def update_week_visits(self):
         t = date.today()
@@ -341,5 +355,5 @@ class Product(models.Model):
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Product'
-        ordering = ['name']       
+        ordering = ['display_name']       
         

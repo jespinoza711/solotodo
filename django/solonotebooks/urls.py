@@ -56,6 +56,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views_store',
     (r'^store/advertisement/reserve_slots/$', 'reserve_slots'),
     (r'^store/advertisement/free_slots/$', 'free_slots'),
     (r'^store/statistics/$', 'statistics'),
+    (r'^store/competition_report/$', 'competition_report'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',
@@ -96,4 +97,8 @@ urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^search/$', 'search'),
     (r'^(?P<product_type_urlname>\w+)/catalog/$', 'product_type_catalog'),
     (r'^(?P<product_type_urlname>\w+)/$', 'product_type_index'),
+)
+
+urlpatterns += patterns('solonotebooks.cotizador.views_services',
+    (r'^products/(?P<product_id>\d+)/details/$', 'product_details'),
 )

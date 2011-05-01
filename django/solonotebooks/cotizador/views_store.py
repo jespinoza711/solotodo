@@ -31,7 +31,7 @@ def append_store_metadata_to_response(request, template, args):
             [
                     ['Inicio', reverse('solonotebooks.cotizador.views_store.index')],
                     ['Registro', reverse('solonotebooks.cotizador.views_store.registry')],
-                    ['Gestor de publicidad', reverse('solonotebooks.cotizador.views_store.advertisement')],
+                    ['Informe de competitividad', reverse('solonotebooks.cotizador.views_store.competition_report')],
                     ['Estadísticas', reverse('solonotebooks.cotizador.views_store.statistics')]
             ]
         ]
@@ -48,6 +48,26 @@ def store_user_required(f):
     wrap.__doc__ = f.__doc__
     wrap.__name__ = f.__name__
     return wrap
+    
+@store_user_required
+def competition_report(request):
+    form = CompetitivityReportOrdering(request.GET)
+    if form.is_valid():
+        ordering = form.cleaned_data['ordering']
+    else:
+        ordering = 1
+    
+    store = request.user.get_profile().assigned_store
+    ptypes = ProductType.objects.all()
+    results = []
+    for ptype in ptypes:
+        results.append([ptype.displayname, store.get_products_in_category(ptype, ordering)])
+    
+    return append_store_metadata_to_response(request, 'store/competitivity_report.html', {
+        'form': form,
+        'store': store,
+        'results': results,
+    })
 
 @store_user_required    
 def index(request):
@@ -157,9 +177,9 @@ def statistics(request):
     return append_store_metadata_to_response(request, 'store/statistics.html', args)
     
 def _statistics(request, store):
-    form = AdvertisementSlotDetailsForm(request.GET)
+    form = DateRangeForm(request.GET)
     if not form.is_valid():
-        form = AdvertisementSlotDetailsForm()
+        form = DateRangeForm()
         start_date = form.fields['start_date'].initial
         end_date = form.fields['end_date'].initial
         end_string = '#'
@@ -282,9 +302,9 @@ def entity_details(request, shpe_id):
     
     product = shp.product
     
-    form = AdvertisementSlotDetailsForm(request.GET)
+    form = DateRangeForm(request.GET)
     if not form.is_valid():
-        form = AdvertisementSlotDetailsForm()
+        form = DateRangeForm()
         start_date = form.fields['start_date'].initial
         end_date = form.fields['end_date'].initial
         end_string = '#'
