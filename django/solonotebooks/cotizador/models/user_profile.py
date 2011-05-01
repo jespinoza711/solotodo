@@ -18,6 +18,9 @@ class UserProfile(models.Model):
             return self.facebook_name
         else:
             return self.user.username
+            
+    def can_access_services(self):
+        return self.user.is_superuser or self.user.associated_store != None
           
     class Meta:
         app_label = 'cotizador'

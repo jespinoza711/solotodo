@@ -10,8 +10,9 @@ from processor_search_form import ProcessorSearchForm
 from screen_search_form import ScreenSearchForm
 from motherboard_search_form import MotherboardSearchForm
 from cell_search_form import CellSearchForm
-from advertisement_slot_details_form import AdvertisementSlotDetailsForm
+from date_range_form import DateRangeForm
 from search_shpe_form import SearchShpeForm
+from competitivity_report_ordering import CompetitivityReportOrdering
 
 __all__ = [ 
             'SearchForm', 
@@ -25,7 +26,8 @@ __all__ = [
             'ProcessorSearchForm',
             'ScreenSearchForm',
             'MotherboardSearchForm',
-            'AdvertisementSlotDetailsForm',
+            'DateRangeForm',
             'SearchShpeForm',
             'CellSearchForm',
+            'CompetitivityReportOrdering',
             ]

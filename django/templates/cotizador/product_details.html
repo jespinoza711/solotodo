@@ -164,6 +164,9 @@
     {% endblock %}
 </div>
 <div class="product_details_specs">
+    {% if user.get_profile.can_access_services %}
+        <p><strong><a href="{% url solonotebooks.cotizador.views_services.product_details product.id %}">Ver información estadística</a></strong></p>
+    {% endif %}
     {% block product_details %}
     {% endblock %}
     
