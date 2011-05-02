@@ -15,12 +15,12 @@ class Cell(Product):
         result += ' ' + self.phone.raw_text()
         return result
 
-    def __unicode__(self):
+    def update_display_name(self):
         result =  str(self.phone) + ' (' + str(self.pricing.company)
         if self.name.strip():
             result += ' / ' + self.name.strip()
         result += ')'
-        return result
+        self.display_name = result
         
     def load_similar_products(self):
         pass
@@ -139,7 +139,7 @@ class Cell(Product):
             return reverse('solonotebooks.cotizador.views.product_details', args = [self.id]) + args
     
     class Meta:
-        ordering = ['phone', 'pricing']
+        ordering = ['display_name']
         app_label = 'cotizador'
         
     

@@ -43,8 +43,8 @@ class Processor(Product):
         clone_prod.save()
         return clone_prod
     
-    def __unicode__(self):
-        return unicode(self.line) + self.line.family.separator + self.name
+    def update_display_name(self):
+        self.display_name = unicode(self.line) + self.line.family.separator + self.name
         
     def raw_text(self):
         result = super(Processor, self).base_raw_text()
@@ -161,7 +161,7 @@ class Processor(Product):
         
     
     class Meta:
-        ordering = ['line', 'name']
+        ordering = ['display_name']
         app_label = 'cotizador'
         
     

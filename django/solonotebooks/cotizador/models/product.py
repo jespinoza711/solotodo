@@ -109,7 +109,8 @@ class Product(models.Model):
         super(Product, self).save()
         if self.similar_products == '0':
             self.load_similar_products()
-            super(Product, self).save()
+        self.update_display_name()
+        super(Product, self).save()
             
     def latest_price(self):
         if hasattr(self, 'is_sponsored'):
@@ -189,8 +190,7 @@ class Product(models.Model):
         return c.objects.get(pk = self.id) 
         
     def __unicode__(self):
-        entity = self.get_polymorphic_instance()
-        return unicode(entity)
+        return self.display_name
         
     def raw_text(self):
         entity = self.get_polymorphic_instance()
@@ -212,9 +212,6 @@ class Product(models.Model):
             return self.shp.shpe.latest_price
         else:
             return 0
-        
-    def update_display_name(self):
-        self.display_name = unicode(self)
     
     def update_week_discount(self):
         t = date.today()
@@ -339,6 +336,8 @@ class Product(models.Model):
         clone_prod.name += ' (clone)'
         clone_prod.week_visitor_count = 0
         clone_prod.week_discount = 0
+        clone_prod.week_visitor_count = 0
+        clone_prod.week_external_visits = 0
         
         clone_prod.save()
         
