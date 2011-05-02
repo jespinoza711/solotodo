@@ -61,8 +61,8 @@ class Notebook(Product):
         result += ' bateria ' + str(self.battery_cells) + ' celdas ' 
         return result
         
-    def __unicode__(self):
-        return unicode(self.line) + ' ' + self.name
+    def update_display_name(self):
+        self.display_name = unicode(self.line) + ' ' + self.name
         
     def load_similar_products(self):
         threshold = 4
@@ -164,5 +164,5 @@ class Notebook(Product):
     class Meta:
         app_label = 'cotizador'
         verbose_name = 'Notebook'
-        ordering = ['line', 'name']       
+        ordering = ['display_name']       
         

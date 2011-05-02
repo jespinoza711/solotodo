@@ -21,8 +21,8 @@ class Motherboard(Product):
     
     # Interface methods
     
-    def __unicode__(self):
-        return unicode(self.brand) + ' ' + self.name
+    def update_display_name(self):
+        self.display_name = unicode(self.brand) + ' ' + self.name
         
     def raw_text(self):
         result = super(Motherboard, self).base_raw_text()
@@ -76,4 +76,4 @@ class Motherboard(Product):
     
     class Meta:
         app_label = 'cotizador'
-        ordering = ['brand', 'name']
+        ordering = ['display_name']

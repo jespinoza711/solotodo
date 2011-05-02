@@ -25,8 +25,8 @@ class Screen(Product):
     
     # Interface methods
 
-    def __unicode__(self):
-        return unicode(self.line) + ' ' + self.name
+    def update_display_name(self):
+        self.display_name = unicode(self.line) + ' ' + self.name
         
     def raw_text(self):
         result = super(Screen, self).base_raw_text()
@@ -74,5 +74,5 @@ class Screen(Product):
             return 'No posee'
             
     class Meta:
-        ordering = ['line', 'name']
+        ordering = ['display_name']
         app_label = 'cotizador'
