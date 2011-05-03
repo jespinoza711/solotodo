@@ -111,6 +111,11 @@ class Product(models.Model):
             self.load_similar_products()
         self.update_display_name()
         super(Product, self).save()
+
+    def update_display_name(self):
+        pself = self.get_polymorphic_instance()
+        pself.update_display_name()
+        self.display_name = pself.display_name
             
     def latest_price(self):
         if hasattr(self, 'is_sponsored'):
