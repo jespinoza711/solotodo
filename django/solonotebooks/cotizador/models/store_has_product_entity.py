@@ -8,6 +8,7 @@ from datetime import date
 class StoreHasProductEntity(models.Model):
     url = models.TextField()
     custom_name = models.CharField(max_length = 255)
+    part_number = models.CharField(blank=True, null=True, max_length=20)
     is_available = models.BooleanField()
     is_hidden = models.BooleanField()
     latest_price = models.IntegerField()
@@ -122,6 +123,9 @@ class StoreHasProductEntity(models.Model):
             
     def update_with_product(self, product):
         from . import StoreProductHistory, LogReviveEntity, LogChangeEntityName
+    
+        if hasattr(product, 'part_number'):
+            self.part_number = product.part_number
         
         if self.custom_name != product.custom_name:
             LogChangeEntityName.new(self, self.custom_name, product.custom_name)

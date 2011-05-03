@@ -21,12 +21,15 @@ class Magens(FetchStore):
         
         product_name = product_soup.find('div', { 'class': 'titleContent' }).string.encode('ascii', 'ignore')
         product_price = int(product_soup.findAll('div', { 'class': 'precioDetalle' })[1].string.split('$')[1].replace(',', ''))
+        part_number = product_soup.find('div', { 'class': 'codProduct' }).string.replace('[', '').replace(']', '').encode('ascii', 'ignore').strip()
+        part_number = product_soup.find('div', { 'class': 'codProduct' }).string.replace('[', '').replace(']', '').encode('ascii', 'ignore').strip()
         
         product_data = ProductData()
         product_data.custom_name = product_name
         product_data.price = product_price
         product_data.url = product_link
         product_data.comparison_field = product_link
+        product_data.part_number = part_number
         
         return product_data
 

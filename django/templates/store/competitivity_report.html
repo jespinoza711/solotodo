@@ -17,6 +17,7 @@
                 
                 <table class="mytable">
                     <tr>
+                        <th>Código</th>
                         <th>Nombre</th>
                         <th>Precio {{ store }}</th>
                         <th>Mejor precio</th>
@@ -24,6 +25,7 @@
                     
                     {% for entry in result.1 %}
                         <tr>
+                            <td>{{ entry.part_number }}</td>
                             <td><a href="{% url solonotebooks.cotizador.views_services.product_details entry.id %}">{{ entry }}</a></td>
                             <td>{{ entry.equivalent_shpe.pretty_price }} (<a href="{{ entry.equivalent_shpe.url }}">Link</a>)</td>
                             <td>{{ entry.pretty_min_price }} (<a href="{{ entry.shp.shpe.url }}">{{ entry.shp.shpe.store }}</a>)</td>

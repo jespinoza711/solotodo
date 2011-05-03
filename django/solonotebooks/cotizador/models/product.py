@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
+    part_number = models.CharField(blank=True, null=True, max_length=20)
     date_added = models.DateTimeField(auto_now_add = True)
     ptype = models.ForeignKey(ProductType, blank = True, null = True)
     
@@ -61,7 +62,9 @@ class Product(models.Model):
                     continue
                 result += ' ' + getattr(self, name).raw_text()
             elif field.__class__.__name__ == 'CharField':
-                result += ' ' + getattr(self, field.get_attname())
+                part_result = getattr(self, field.get_attname())
+                if part_result:
+                    result += ' ' + part_result
             
         for m2mfield in self._meta.get_m2m_with_model():
             m2mfieldname = m2mfield[0].name
@@ -116,6 +119,13 @@ class Product(models.Model):
         pself = self.get_polymorphic_instance()
         pself.update_display_name()
         self.display_name = pself.display_name
+        
+    def update_part_number(self):
+        from . import StoreHasProductEntity
+        if not self.part_number:
+            shpes = StoreHasProductEntity.objects.filter(shp__product=self, part_number__isnull=False)
+            if shpes:
+                self.part_number = shpes[0].part_number
             
     def latest_price(self):
         if hasattr(self, 'is_sponsored'):
@@ -177,6 +187,7 @@ class Product(models.Model):
         self.update_week_visits()
         self.update_week_external_visits()
         self.update_display_name()
+        self.update_part_number()
         
         self.save()
         self.generate_chart()
