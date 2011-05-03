@@ -30,7 +30,7 @@ def services_user_required(f):
         if not request.user.is_authenticated():
             request.flash['error'] = 'Por favor inicie sesión primero'
             return HttpResponseRedirect('/')
-        elif not request.user.get_profile().assigned_store or not request.user.is_superuser:
+        elif not request.user.get_profile().assigned_store and not request.user.is_superuser:
             request.flash['error'] = 'Su cuenta no tiene permisos para acceder a esta sección'
             return HttpResponseRedirect('/')
         else:
