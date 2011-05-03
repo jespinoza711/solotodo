@@ -4,9 +4,12 @@ from solonotebooks.cotizador.models.utils import prettyPrice
 class ProductData:
     def __str__(self):
         try:
-            return self.custom_name + ' (' + self.ptype + ')' + '\n' + str(self.pretty_price()) + '\n'
+            result =  self.custom_name + ' (' + self.ptype + ')' + '\n' + str(self.pretty_price()) + '\n'
         except:
-            return self.custom_name + '\n' + str(self.pretty_price()) + '\n'
+            result = self.custom_name + '\n' + str(self.pretty_price()) + '\n'
+        if hasattr(self, 'part_number'):
+            result += self.part_number + '\n'
+        return result
         
     def __unicode__(self):
         return str(self)
