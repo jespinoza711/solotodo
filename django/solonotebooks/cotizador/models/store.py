@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.db import models
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 
@@ -84,7 +85,18 @@ class Store(models.Model):
         
         final_products = []    
         for shp in shps:
-            shp.product.equivalent_shpe = shp.shpe
+            shp.product.store_shpe = shp.shpe
+            
+            if shp.product.shp.shpe.store == self:
+                other_shps = StoreHasProduct.objects.filter(product = shp.product, shpe__isnull=False).filter(~Q(shpe__store = self)).order_by('shpe__latest_price')
+                if other_shps:
+                    print shp.product
+                    shp.product.competitor_shpe = other_shps[0].shpe
+                else:
+                    shp.product.competitor_shpe = None
+            else:
+                shp.product.competitor_shpe = shp.product.shp.shpe
+                
             final_products.append(shp.product)
             
         return final_products
