@@ -20,7 +20,7 @@ class UserProfile(models.Model):
             return self.user.username
             
     def can_access_services(self):
-        return self.user.is_superuser or self.user.associated_store != None
+        return self.user.is_superuser or self.assigned_store != None
           
     class Meta:
         app_label = 'cotizador'
