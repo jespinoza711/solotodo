@@ -23,6 +23,8 @@ from fields import *
 from exceptions import *
 from utils import *
 from forms import *
+import xlwt
+from xlwt import Workbook, easyxf, Formula
 import random
 
 def append_store_metadata_to_response(request, template, args):
@@ -51,6 +53,15 @@ def store_user_required(f):
     
 @store_user_required
 def competition_report(request):
+    form, store, results = _competition_data(request)
+    
+    return append_store_metadata_to_response(request, 'store/competitivity_report.html', {
+        'form': form,
+        'store': store,
+        'results': results,
+    })
+    
+def _competition_data(request):
     form = CompetitivityReportOrdering(request.GET)
     if form.is_valid():
         ordering = form.cleaned_data['ordering']
@@ -62,12 +73,8 @@ def competition_report(request):
     results = []
     for ptype in ptypes:
         results.append([ptype.displayname, store.get_products_in_category(ptype, ordering)])
-    
-    return append_store_metadata_to_response(request, 'store/competitivity_report.html', {
-        'form': form,
-        'store': store,
-        'results': results,
-    })
+        
+    return [form, store, results]
 
 @store_user_required    
 def index(request):
@@ -444,3 +451,62 @@ def entity_refresh_price(request, shpe_id):
     
     url = reverse('solonotebooks.cotizador.views_store.entity_details', args = [shpe.id])
     return HttpResponseRedirect(url)
+    
+@store_user_required
+def competition_report_excel(request):
+    form, store, results = _competition_data(request)
+
+    response = HttpResponse(mimetype="application/ms-excel")
+    response['Content-Disposition'] = 'attachment; filename=informe_competitividad_%s.xls' % str(date.today())
+    
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('Informe')
+    
+    ws.col(0).width = 4000
+    ws.col(1).width = 15000
+    ws.col(2).width = 4000
+    ws.col(3).width = 8000
+    
+    ws.row(0).height = 500
+    
+    bold_template = easyxf('font: bold True;')
+    hyperlink_template = easyxf('font: underline single;')
+    
+    current_row = 0
+    ws.write(current_row, 0, u'Informe de Competitividad',
+        easyxf('font: bold True, height 300;'))
+        
+    current_row += 2
+    ws.write(current_row, 0, 'Tienda', bold_template)
+    ws.write(current_row, 1, unicode(store))
+    current_row += 1
+    ws.write(current_row, 0, 'Fecha', bold_template)
+    ws.write(current_row, 1, unicode(date.today()))
+    current_row += 1
+    ws.write(current_row, 0, 'Ordenamiento', bold_template)
+    ws.write(current_row, 1, unicode(form.get_ordering_as_string()))
+    current_row += 2
+    
+    ws.write(current_row, 0, u'Código', bold_template)
+    ws.write(current_row, 1, 'Nombre', bold_template)
+    ws.write(current_row, 2, 'Precio Magens', bold_template)
+    ws.write(current_row, 3, 'Mejor precio competencia', bold_template)
+    current_row += 1
+    
+    for result in results:
+        if result[1]:
+            ws.write(current_row, 0, result[0])
+            current_row += 1
+            
+            for entry in result[1]:
+                ws.write(current_row, 0, entry.part_number)
+                ws.write(current_row, 1, Formula('HYPERLINK("%s";"%s")' % ('%s%s' % (settings.SERVER_NAME, reverse('solonotebooks.cotizador.views_services.product_details', args = [entry.id])), unicode(entry))), hyperlink_template)
+                ws.write(current_row, 2, Formula('HYPERLINK("%s";"%s")' % (entry.store_shpe.url, entry.store_shpe.pretty_price())), hyperlink_template)
+                if entry.competitor_shpe:
+                   ws.write(current_row, 3, Formula('HYPERLINK("%s";"%s (%s)")' % (entry.competitor_shpe.url, entry.competitor_shpe.pretty_price(), unicode(entry.competitor_shpe.store))), hyperlink_template)
+                else:
+                    ws.write(current_row, 3, u'Sólo disponible en %s' % unicode(store))
+                current_row += 1
+
+    wb.save(response)
+    return response

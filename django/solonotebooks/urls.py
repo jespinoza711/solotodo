@@ -57,6 +57,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views_store',
     (r'^store/advertisement/free_slots/$', 'free_slots'),
     (r'^store/statistics/$', 'statistics'),
     (r'^store/competition_report/$', 'competition_report'),
+    (r'^store/competition_report/excel$', 'competition_report_excel'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',
