@@ -10,6 +10,21 @@ class CellPricingTier(models.Model):
     three_month_pricing = models.IntegerField()
     six_month_pricing = models.IntegerField()
     twelve_month_pricing = models.IntegerField()
+    # Meta fields required for fast searching
+    ordering_cellphone_price = models.BigIntegerField(default=0)
+    ordering_three_month_price = models.BigIntegerField(default=0)
+    ordering_six_month_price = models.BigIntegerField(default=0)
+    ordering_twelve_month_price = models.BigIntegerField(default=0)
+    
+    def save(self):
+        super(CellPricingTier, self).save()
+        
+        if self.ordering_cellphone_price == 0:
+            self.ordering_cellphone_price = self.id + 10000000 * self.monthly_quota + 2000000000000 * self.cellphone_price
+            self.ordering_three_month_price = self.id + 10000000 * self.three_month_pricing
+            self.ordering_six_month_price = self.id + 10000000 * self.six_month_pricing
+            self.ordering_twelve_month_price = self.id + 10000000 * self.twelve_month_pricing
+            super(CellPricingTier, self).save()
     
     def pretty_monthly_quota(self):
         return utils.prettyPrice(self.monthly_quota)

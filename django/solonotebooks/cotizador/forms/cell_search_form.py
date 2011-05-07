@@ -25,12 +25,12 @@ class CellSearchForm(SearchForm):
     
     manufacturer = ClassChoiceField(CellphoneManufacturer, 'Marca', in_quick_search = True, quick_search_name = 'Marca')
     category = ClassChoiceField(CellphoneCategory, 'Categoría')
-    form_factor = ClassChoiceField(CellphoneFormFactor, 'Estilo')
+    form_factor = ClassChoiceField(CellphoneFormFactor, 'Estilo', requires_advanced_controls = True)
     camera = ClassChoiceField(CellphoneCamera, 'Cámara')
     keyboard = ClassChoiceField(CellphoneKeyboard, 'Teclado', requires_advanced_controls = True)
     operating_system = ClassChoiceField(CellphoneOperatingSystem, 'Sist. Op.', requires_advanced_controls = True)
     
-    screen_size = ClassChoiceField(CellphoneScreenSize, 'Pantalla')
+    screen_size = ClassChoiceField(CellphoneScreenSize, 'Pantalla', requires_advanced_controls = True)
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil')
     
@@ -58,22 +58,22 @@ class CellSearchForm(SearchForm):
     max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
         
     def generate_interface_model(self):
-        model = [['Información del plan',
-                    ['plan_company',
-                     'plan_type',
-                     'plan_data',]],
-                 ['Precio del plan',
-                    ['plan_price_min',
-                     'plan_price_max']],
-                 ['Datos del celular',
+        model = [['Datos del celular',
                     ['manufacturer',
-                     'screen_size',
                      'category',
-                     'form_factor',
                      'camera',
+                     'screen_size',
+                     'form_factor',
                      'keyboard',
                      'operating_system',
                      ]],
+                 ['Precio del plan',
+                    ['plan_price_min',
+                     'plan_price_max']],
+                ['Información del plan',
+                    ['plan_company',
+                     'plan_type',
+                     'plan_data',]],
                  ['Extras del celular',
                     ['has_3g',
                      'has_bluetooth',
@@ -188,7 +188,7 @@ class CellSearchForm(SearchForm):
         return value
         
     def filter_products(self, cells):
-        tiers = CellPricingTier.objects.filter(pricing__cell__in = cells)
+        tiers = CellPricingTier.objects.filter(pricing__cell__isnull = False).filter(pricing__cell__in = cells)
         
         if self.plan_company:
             tiers = tiers.filter(pricing__company = self.plan_company)
@@ -212,7 +212,7 @@ class CellSearchForm(SearchForm):
             tiers = tiers.filter(pricing__cell__phone__manufacturer = self.manufacturer)
         if self.category:
             tiers = tiers.filter(pricing__cell__phone__category = self.category)
-        if self.form_factor:
+        if self.form_factor and self.advanced_controls:
             tiers = tiers.filter(pricing__cell__phone__form_factor = self.form_factor)
         if self.camera:
             tiers = tiers.filter(pricing__cell__phone__camera__mp__gte = CellphoneCamera.objects.get(pk = self.camera).mp)
@@ -220,7 +220,7 @@ class CellSearchForm(SearchForm):
             tiers = tiers.filter(pricing__cell__phone__keyboard = self.keyboard)
         if self.operating_system and self.advanced_controls:
             tiers = tiers.filter(pricing__cell__phone__operating_system = self.operating_system)
-        if self.screen_size:
+        if self.screen_size and self.advanced_controls:
             tiers = tiers.filter(pricing__cell__phone__screen__size__value__gte = CellphoneScreenSize.objects.get(pk = self.screen_size).value)
         if self.screen_touch:
             if self.screen_touch == 1:
@@ -261,36 +261,29 @@ class CellSearchForm(SearchForm):
             
         # Check the ordering orientation, if it is not set, each criteria uses 
         # sensible defaults (asc for price, desc for cpu performance, etc)
-        ordering_direction = [None, '', '-'][self.ordering_direction]
         
         # Apply the corresponding ordering based on the key
         if self.ordering == 1:
-            if ordering_direction == None:
-                ordering_direction = ''
-            price_field = 'cellphone_price'
+            ordering_criteria = 'ordering_cellphone_price'
         elif self.ordering == 2:
-            if ordering_direction == None:
-                ordering_direction = ''    
-            price_field = 'three_month_pricing'
+            ordering_criteria = 'ordering_three_month_price'
         elif self.ordering == 3:
-            if ordering_direction == None:
-                ordering_direction = ''    
-            price_field = 'six_month_pricing'
+            ordering_criteria = 'ordering_six_month_price'
         else:
-            if ordering_direction == None:
-                ordering_direction = ''    
-            price_field = 'twelve_month_pricing'
+            ordering_criteria = 'ordering_twelve_month_price'
             
-        tiers = tiers.order_by(ordering_direction + price_field)    
+        best_target_values = tiers.values('pricing').annotate(ordering_clause=Min(ordering_criteria))
+        best_target_values = [t['ordering_clause'] for t in best_target_values]
+        
+        filter_dict = {'%s__in' % ordering_criteria: best_target_values}
+        tiers = CellPricingTier.objects.filter(**filter_dict).order_by(ordering_criteria)
+
         final_cells = []
         
         for tier in tiers:
-            cell = tier.pricing.cell
-
-            if cell and cell not in final_cells:
-                cell.tier = tier
-                final_cells.append(cell)
+            cell = tier.pricing.cell            
+            cell.tier = tier
+            final_cells.append(cell)
         
-            
         return final_cells
         
