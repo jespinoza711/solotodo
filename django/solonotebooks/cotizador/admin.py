@@ -118,7 +118,7 @@ admin.site.register(VideoCardMemoryBusWidth)
 admin.site.register(VideoCardGpuCoreCount)
 admin.site.register(VideoCardGpuManufacturingProcess)
 
-excludes = ['ptype', 'shp', 'week_visitor_count', 'week_discount', 'long_description', 'similar_products', 'sponsored_shp', 'week_external_visits', 'display_name']
+excludes = ['ptype', 'shp', 'week_visitor_count', 'week_discount', 'long_description', 'similar_products', 'sponsored_shp', 'week_external_visits', 'display_name', 'part_number']
             
 class ProductAdmin(admin.ModelAdmin):
     exclude = excludes
