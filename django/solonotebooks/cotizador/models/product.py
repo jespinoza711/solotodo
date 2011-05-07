@@ -354,6 +354,7 @@ class Product(models.Model):
         clone_prod.week_discount = 0
         clone_prod.week_visitor_count = 0
         clone_prod.week_external_visits = 0
+        clone_prod.part_number = ''
         
         clone_prod.save()
         
