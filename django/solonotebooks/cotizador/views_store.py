@@ -202,42 +202,19 @@ def _statistics(request, store):
     # Normal clicks 
     
     raw_data = ExternalVisit.objects.filter(shn__store = store, date__gte = start_date, date__lte = end_date).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
-    
+    chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
     click_count = sum([e[1] for e in chart_data])
 
-    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_01.png', u'Número de clicks normales a ' + str(store))
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas'], 'store_' + str(store.id) + '_01.png', u'Número de clicks normales a ' + str(store))
     
     # Sponsored clicks
     
     raw_data = SponsoredVisit.objects.filter(shp__shpe__store = store, date__gte = start_date, date__lte = end_date).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
+    chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
     
     sponsored_click_count = sum([e[1] for e in chart_data])
 
-    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_02.png', u'Número de clicks patrocinados a ' + str(store))
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas'], 'store_' + str(store.id) + '_02.png', u'Número de clicks patrocinados a ' + str(store))
     
     return {
         'store': store,
@@ -328,61 +305,27 @@ def entity_details(request, shpe_id):
         # First chart
         
         raw_data = ProductVisit.objects.filter(notebook = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).extra(select = {'d': 'CAST(date AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
-        chart_data = dict([(entry['d'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        chart_data = [(entry['d'], entry['id__count']) for entry in raw_data]
         
         product_visit_count = sum([e[1] for e in chart_data])
 
-        generate_timelapse_chart([chart_data], [u'Número de visitas'], 'unit_' + str(shp.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
+        generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas'], 'unit_' + str(shp.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
         
         # Second chart
         
         raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
-        
+        chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
         all_external_visit_count = sum([e[1] for e in chart_data])
         
         schart_data = [chart_data]
         
         raw_data = ExternalVisit.objects.filter(shn__shp__product = product, shn__store = store, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
 
         store_external_visit_count = sum([e[1] for e in chart_data])
 
         schart_data.append(chart_data)
-        generate_timelapse_chart(schart_data, ['Clicks totales', 'Clicks a ' + unicode(store)], 'unit_' + str(shp.id) + '_02.png', u'Número de clicks a tiendas')
+        generate_timelapse_chart(schart_data, start_date, end_date, ['Clicks totales', 'Clicks a ' + unicode(store)], 'unit_' + str(shp.id) + '_02.png', u'Número de clicks a tiendas')
         
         # Third chart
         
@@ -394,22 +337,11 @@ def entity_details(request, shpe_id):
         # Fourth chart
         
         raw_data = SponsoredVisit.objects.filter(shp = shp, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
         
         sponsored_visit_count = sum([e[1] for e in chart_data])
 
-        generate_timelapse_chart([chart_data], [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
+        generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
     else:
         product_visit_count = 0
         store_external_visit_count = 0
