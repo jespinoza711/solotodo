@@ -36,17 +36,17 @@ class Racle(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        urlSearch = '/ventas/component/virtuemart/?category_id='            
+        urlSearch = '/ventas/'            
 
         urlExtensions = [
-                            ['21', 'Notebook'], 
-                            ['83', 'Notebook'],
-                            ['447', 'Screen'],
-                            ['446', 'Screen'],
+                            ['tienda/netbook', 'Notebook'], 
+                            ['tienda/notebook', 'Notebook'],
+                            ['tieda/moitor-led', 'Screen'],
+                            ['tienda/monitor', 'Screen'],
                         ]
         product_links = []
         for urlExtension, ptype in urlExtensions:
-            urlWebpage = urlBase + urlSearch + urlExtension + '&page=shop.browse&limit=50&limitstart=0'
+            urlWebpage = urlBase + urlSearch + urlExtension + '?page=shop.browse&limit=50&limitstart=0'
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
