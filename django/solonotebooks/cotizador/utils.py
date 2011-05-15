@@ -2,7 +2,7 @@
 import hashlib
 from copy import deepcopy
 from random import randint
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from django.db.models import Min, Max
 from django.core.mail import send_mail
 from django.template import Context
@@ -121,13 +121,30 @@ def concat_dictionary(d):
     else:
         return ''
         
-def generate_timelapse_chart(data_streams, legends, filename, title):
+def generate_timelapse_chart(data_streams, start_date, end_date, legends, filename, title):
     import cairo
     import pycha.line
     from copy import deepcopy
     
-    main_data_stream = data_streams[0]
+    data_streams = [dict(stream) for stream in data_streams]
+    step_date = timedelta(days = 1)
     
+    final_streams = []
+    for stream in data_streams:
+        sdate = start_date
+        
+        while sdate <= end_date:
+            if sdate not in stream:
+                stream[sdate] = 0
+            sdate += step_date
+        
+        stream = stream.items()
+        stream = sorted(stream, key = lambda pair: pair[0])
+        final_streams.append(stream)
+        
+    data_streams = final_streams
+    
+    main_data_stream = data_streams[0]
     values = [v for k, v in main_data_stream]
     
     maxi = max(values)

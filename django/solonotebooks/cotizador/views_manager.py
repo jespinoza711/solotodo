@@ -7,7 +7,7 @@ import urllib
 from datetime import datetime, date, timedelta
 from time import time
 from math import ceil
-from django.db.models import Min, Max, Q
+from django.db.models import Min, Max, Q, Avg, Count
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
@@ -23,6 +23,8 @@ from exceptions import *
 from utils import *
 from views import *
 from views_store import _registry, _advertisement, _statistics
+from forms import *
+import random
 
 def manager_login_required(f):
     def wrap(request, *args, **kwargs):
@@ -50,8 +52,60 @@ def append_manager_ptype_to_response(request, template, args):
     url = reverse('solonotebooks.cotizador.views_manager.stores')
     tabs.append([-1, name, url])
     
+    name = u'Estadísticas'
+    url = reverse('solonotebooks.cotizador.views_manager.statistics')
+    tabs.append([-1, name, url])
+    
     args['tabs'] = ['Administración', tabs]
     return append_metadata_to_response(request, template, args)
+    
+@manager_login_required    
+def statistics(request):
+    form = DateRangeForm(request.GET)
+    if not form.is_valid():
+        form = DateRangeForm()
+        start_date = form.fields['start_date'].initial
+        end_date = form.fields['end_date'].initial
+    else:
+        start_date = form.cleaned_data['start_date']
+        end_date = form.cleaned_data['end_date']
+        if end_date > date.today():
+            end_date = date.today()
+        if start_date >= end_date:
+            url = reverse('solonotebooks.cotizador.views_manager.statistics')
+            return HttpResponseRedirect(url)
+    
+    # First chart: Number of SHPEs appereances per day
+
+    raw_data = StoreHasProductEntity.objects.filter(date_added__gte = start_date, date_added__lt = end_date + timedelta(days = 1)).extra(select = {'d': 'CAST(date_added AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
+    chart_data = [(entry['d'], entry['id__count']) for entry in raw_data]
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de nuevas entidades'], 'manager_statistics_01.png', u'Número de nuevas entidades registradas')
+    
+    shpes_created_count = sum([e[1] for e in chart_data])
+    
+    # Second chart: Number of SHPEs resolved per day
+
+    raw_data = StoreHasProductEntity.objects.filter(date_added__gte = start_date, date_added__lt = end_date + timedelta(days = 1), date_resolved__isnull = False).extra(select = {'d': 'CAST(date_resolved AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
+    chart_data = [(entry['d'], entry['id__count']) for entry in raw_data]
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de entidades asociadas'], 'manager_statistics_02.png', u'Número de entidades asociadas')
+    
+    shpes_associated_count = sum([e[1] for e in chart_data])
+    
+    # Third chart: Number of products created per day
+
+    raw_data = Product.objects.filter(date_added__gte = start_date, date_added__lt = end_date + timedelta(days = 1)).extra(select = {'d': 'CAST(date_added AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
+    chart_data = [(entry['d'], entry['id__count']) for entry in raw_data]
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de productos creados'], 'manager_statistics_03.png', u'Número de productos creados')
+    
+    product_creation_count = sum([e[1] for e in chart_data])
+    
+    return append_manager_ptype_to_response(request, 'manager/statistics.html', {
+            'form': form,
+            'shpes_created_count': shpes_created_count,
+            'shpes_associated_count': shpes_associated_count,
+            'product_creation_count': product_creation_count,
+            'tag': random.randint(1, 1000000),
+        })
 
 @manager_login_required    
 def polymorphic_admin_request(request, product_id):
