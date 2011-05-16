@@ -47,7 +47,15 @@
                         <div id="logout">
                             <div>
                                 <span id="logout_links">
-                                {{ user.get_profile.name }} | <a href="{% url cotizador.views_account.subscriptions %}" class="toplink">Mis Productos</a> | <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="toplink">Logout</a>
+                                {{ user.get_profile.name }} | 
+                                <a href="{% url cotizador.views_account.subscriptions %}" class="toplink">Mis Productos</a> | 
+                                {% if user.is_superuser %}
+                                <a href="{% url cotizador.views_manager.news %}" class="toplink">Administrador</a> | 
+                                {% endif %}
+                                {% if user.get_profile.assigned_store %}
+                                <a href="{% url cotizador.views_store.index %}" class="toplink">Gestor de tienda</a> | 
+                                {% endif %}
+                                <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="toplink">Logout</a>
                                 </span>
                             </div>
                         </div>            

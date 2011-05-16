@@ -35,7 +35,7 @@ class NotebookSearchForm(SearchForm):
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil').does_require_advanced_controls()
     ntype = ClassChoiceField(NotebookType, 'Uso')
         
-    price_choices = SearchForm.generate_price_range(0, 1000000, 50000)
+    price_choices = SearchForm.generate_price_range(0, 800000, 50000)
     
     min_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Mínimo')
     max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
