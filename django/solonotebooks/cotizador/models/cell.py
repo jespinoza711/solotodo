@@ -59,7 +59,10 @@ class Cell(Product):
         }
         
         if 'tier_id' in request.GET:
-            result['tier_id'] = int(request.GET['tier_id'])
+            try:
+                result['tier_id'] = int(request.GET['tier_id'])
+            except ValueError:
+                pass
             
         return result
         
