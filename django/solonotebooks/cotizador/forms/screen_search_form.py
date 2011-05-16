@@ -34,7 +34,7 @@ class ScreenSearchForm(SearchForm):
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
         
-    price_choices = SearchForm.generate_price_range(0, 1000000, 50000)
+    price_choices = SearchForm.generate_price_range(0, 800000, 50000)
     
     min_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Mínimo')
     max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
