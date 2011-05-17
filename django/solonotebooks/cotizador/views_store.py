@@ -28,15 +28,18 @@ from xlwt import Workbook, easyxf, Formula
 import random
 
 def append_store_metadata_to_response(request, template, args):
-    args['tabs'] = [
+    tabs = [
             u'Opciones de admistración', 
             [
-                    ['Inicio', reverse('solonotebooks.cotizador.views_store.index')],
                     ['Registro', reverse('solonotebooks.cotizador.views_store.registry')],
-                    ['Informe de competitividad', reverse('solonotebooks.cotizador.views_store.competition_report')],
                     ['Estadísticas', reverse('solonotebooks.cotizador.views_store.statistics')]
             ]
         ]
+        
+    if request.user.get_profile().can_access_competitivity_report:
+        tabs[1].append(['Informe de competitividad', reverse('solonotebooks.cotizador.views_store.competition_report')],)
+        
+    args['tabs'] = tabs
     return append_metadata_to_response(request, template, args)
 
 def store_user_required(f):
@@ -53,7 +56,11 @@ def store_user_required(f):
     
 @store_user_required
 def competition_report(request):
-    form, store, results = _competition_data(request)
+    try:
+        form, store, results = _competition_data(request)
+    except:
+        request.flash['error'] = 'Usted no tiene permisos para acceder a esta sección'
+        return HttpResponseRedirect(reverse('solonotebooks.cotizador.views_store.registry'))
     
     return append_store_metadata_to_response(request, 'store/competitivity_report.html', {
         'form': form,
@@ -62,6 +69,9 @@ def competition_report(request):
     })
     
 def _competition_data(request):
+    if not request.user.get_profile().can_access_competitivity_report:
+        raise Exception
+
     form = CompetitivityReportOrdering(request.GET)
     if form.is_valid():
         ordering = form.cleaned_data['ordering']
@@ -78,10 +88,7 @@ def _competition_data(request):
 
 @store_user_required    
 def index(request):
-    store = request.user.get_profile().assigned_store
-    return append_store_metadata_to_response(request, 'store/index.html', {
-        'store': store,
-    })
+    return HttpResponseRedirect(reverse('solonotebooks.cotizador.views_store.registry'))
     
 @store_user_required    
 def registry(request):
@@ -386,7 +393,11 @@ def entity_refresh_price(request, shpe_id):
     
 @store_user_required
 def competition_report_excel(request):
-    form, store, results = _competition_data(request)
+    try:
+        form, store, results = _competition_data(request)
+    except:
+        request.flash['error'] = 'Usted no tiene permisos para descargar este informe'
+        return HttpResponseRedirect(reverse('solonotebooks.cotizador.views_store.registry'))
 
     response = HttpResponse(mimetype="application/ms-excel")
     response['Content-Disposition'] = 'attachment; filename=informe_competitividad_%s.xls' % str(date.today())

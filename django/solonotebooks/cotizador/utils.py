@@ -91,12 +91,17 @@ def send_new_password_mail(user, new_password):
     send_email(user, subject, t, args)    
     
 # Helper method to set the search_form for almost all of the views            
-def initialize_search_form(data, ptype = ProductType.default()):
+def initialize_search_form(request, ptype = ProductType.default()):
     if not ptype:
         return None
-    qd = data.copy()
+    qd = request.GET.copy()
     search_form_class = eval(ptype.classname + 'SearchForm')
-    search_form = search_form_class(qd)
+    
+    extra_permissions = False
+    if request.user.is_authenticated() and request.user.get_profile().allows_extra_ordering_options():
+        extra_permissions = True
+    search_form = search_form_class(qd, extra_permissions)
+    
     search_form.validate()
     search_form.is_valid()
     

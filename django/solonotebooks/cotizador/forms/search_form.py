@@ -12,14 +12,38 @@ class SearchForm(forms.Form):
     page_number = forms.IntegerField()
     
     
-    def __init__(self, qd):
+    def __init__(self, qd, extra_permissions):
         if 'max_price' not in qd:
             qd['max_price'] = self.price_choices[-1][0]
         if 'min_price' not in qd:
             qd['min_price'] = self.price_choices[0][0]
         if 'ordering' not in qd:
             qd['ordering'] = '1'
+        
+        if extra_permissions:
+            default_ordering_choices = self.ordering_choices
+            last_ordering_index = int(default_ordering_choices[-1][0])
+            new_ordering_choices = list(default_ordering_choices)
+            
+            new_ordering_choice = (str(last_ordering_index + 1), u'Popularidad en SoloTodo')
+            new_ordering_choices.append(new_ordering_choice)
+            
+            new_ordering_choice = (str(last_ordering_index + 2), u'Número de clicks a tiendas')
+            new_ordering_choices.append(new_ordering_choice)
+            
+            self.ordering_choices = tuple(new_ordering_choices)
+            
         super(SearchForm, self).__init__(qd)
+        
+    def handle_extra_ordering(self, products):
+        last_ordering_index = int(self.ordering_choices[-1][0])
+        
+        if self.ordering == last_ordering_index - 1:
+            products = products.order_by('-week_visitor_count')
+        elif self.ordering == last_ordering_index:
+            products = products.order_by('-week_external_visits')
+            
+        return products
         
     @staticmethod
     def generate_price_range(mini, maxi, step):
@@ -151,7 +175,11 @@ class SearchForm(forms.Form):
         for pair in choice_fields:
             try:
                 choice_field_selection = self.data[pair[0]]
-                choices_dict = dict([[x[0], x[1]] for x in self.fields[pair[0]].choices])
+                
+                if pair[0] == 'ordering':
+                    choices_dict = dict(self.ordering_choices)
+                else:
+                    choices_dict = dict([[x[0], x[1]] for x in self.fields[pair[0]].choices])
                 
                 if not choice_field_selection in choices_dict:
                     choice_field_selection = 0

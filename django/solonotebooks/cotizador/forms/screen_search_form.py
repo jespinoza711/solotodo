@@ -60,12 +60,12 @@ class ScreenSearchForm(SearchForm):
                      
         return self.parse_model(model)
         
-    def __init__(self, qd):
+    def __init__(self, qd, extra_permissions):
         if 'max_size' not in qd:
             qd['max_size'] = ScreenSizeFamily.objects.reverse()[0].id
         if 'min_size' not in qd:
             qd['min_size'] = ScreenSizeFamily.objects.all()[0].id
-        super(ScreenSearchForm, self).__init__(qd)
+        super(ScreenSearchForm, self).__init__(qd, extra_permissions)
         
     def main_category_string(self):
         return 'screen_type' 
@@ -180,9 +180,11 @@ class ScreenSearchForm(SearchForm):
             if ordering_direction == None:
                 ordering_direction = '-'    
             screens = screens.order_by(ordering_direction + 'resolution')
-        else:
+        elif self.ordering == 4:
             if ordering_direction == None:
                 ordering_direction = ''
             screens = screens.order_by(ordering_direction + 'response_time')
+        else:
+            screens = self.handle_extra_ordering(screens)
             
         return screens
