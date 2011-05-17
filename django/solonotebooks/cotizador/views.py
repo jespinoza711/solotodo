@@ -51,7 +51,7 @@ def product_type_catalog(request, product_type_urlname):
     ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
     product_type_class = ptype.get_class()
 
-    search_form = initialize_search_form(request.GET, ptype)
+    search_form = initialize_search_form(request, ptype)
     search_form.save()
     
     result_products = search_form.filter_products(product_type_class.get_valid())
@@ -230,7 +230,7 @@ def append_metadata_to_response(request, template, args):
         ptype = args['ptype']
         
     if 'form' not in args:
-        args['form'] = initialize_search_form(request.GET, ptype)        
+        args['form'] = initialize_search_form(request, ptype)        
     
     try:
         url_extension = args['form'].generate_url_without_main_category()        
@@ -248,7 +248,8 @@ def append_metadata_to_response(request, template, args):
         
         if ptype:
             classname = ptype.classname
-            s_form = eval(classname + 'SearchForm({})')
+            s_form = args['form']
+
             url = reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])
             tabs = [[0, 'Todos', url + '?' + url_extension]]
             

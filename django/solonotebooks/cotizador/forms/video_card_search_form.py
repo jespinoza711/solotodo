@@ -241,9 +241,11 @@ class VideoCardSearchForm(SearchForm):
             if ordering_direction == None:
                 ordering_direction = '-'    
             video_cards = video_cards.order_by(ordering_direction + 'memory_quantity')
-        else:
+        elif self.ordering == 6:
             if ordering_direction == None:
                 ordering_direction = ''    
             video_cards = video_cards.order_by(ordering_direction + 'gpu__tdp')
+        else:
+            video_cards = self.handle_extra_ordering(video_cards)
             
         return video_cards

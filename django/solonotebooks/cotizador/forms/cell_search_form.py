@@ -89,12 +89,12 @@ class CellSearchForm(SearchForm):
                      
         return self.parse_model(model)
         
-    def __init__(self, qd):
+    def __init__(self, qd, extra_permissions):
         if 'plan_price_min' not in qd:
             qd['plan_price_min'] = 0
         if 'plan_price_max' not in qd:
             qd['plan_price_max'] = self.plan_price_choices[-1][0]
-        super(CellSearchForm, self).__init__(qd)
+        super(CellSearchForm, self).__init__(qd, False)
         
     def main_category_string(self):
         return 'plan_company'    

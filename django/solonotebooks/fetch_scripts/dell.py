@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import pdb
 import mechanize
 from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET

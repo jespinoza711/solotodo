@@ -168,9 +168,11 @@ class ProcessorSearchForm(SearchForm):
             if ordering_direction == None:
                 ordering_direction = '-'    
             processors = processors.order_by(ordering_direction + 'frequency')
-        else:
+        elif self.ordering == 6:
             if ordering_direction == None:
                 ordering_direction = ''    
             processors = processors.order_by(ordering_direction + 'tdp')
+        else:
+            processors = self.handle_extra_ordering(processors)
             
         return processors

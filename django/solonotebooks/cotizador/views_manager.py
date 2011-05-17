@@ -267,7 +267,7 @@ def analyze_searches(request):
     from pycha.pie import PieChart
 
     results = {}
-    sf = initialize_search_form(request.GET)
+    sf = initialize_search_form(request)
     for field_name, field in sf.fields.items():
         if isinstance(field, ClassChoiceField) or isinstance(field, CustomChoiceField):
             results[field] = {'data': {}, 'meta': {'total': 0}}
