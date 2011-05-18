@@ -142,6 +142,14 @@ br.product_details_comment_separator {
     text-align: center;
 }
 
+#ad_top_container {
+    width: 748px;
+    height: 100px;
+    background-color: white;
+    margin-left: 90px;
+    padding-top: 10px;
+}
+
 #ad-right {
     text-align: center;
 }
