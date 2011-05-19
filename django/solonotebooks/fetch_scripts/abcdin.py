@@ -35,9 +35,12 @@ class AbcDin(FetchStore):
         
         product_name = product_soup.find('td', { 'id': 'mainDescr' }).find('h2').contents[0].encode('ascii', 'ignore')
         try:
-            product_price = int(product_soup.find('div', { 'id': 'precioProducto' }).find('strong').string.replace('Precio Internet: $', '').replace(',', ''))
+            product_price = int(product_soup.find('div', { 'id': 'precioProducto' }).find('strong').string.replace('Precio Tarjetas ABCDIN $', '').replace(',', ''))
         except:
-            product_price = int(product_soup.find('div', { 'id': 'precioNormal' }).find('span').string.replace('$', '').replace(',', ''))
+            try:
+                product_price = int(product_soup.find('div', { 'id': 'precioProducto' }).find('strong').string.replace('Precio Internet: $', '').replace(',', ''))
+            except:
+                product_price = int(product_soup.find('div', { 'id': 'precioNormal' }).find('span').string.replace('$', '').replace(',', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name
