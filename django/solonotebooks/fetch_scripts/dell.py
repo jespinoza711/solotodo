@@ -102,11 +102,12 @@ class Dell(FetchStore):
                             
         for url_extension in url_extensions:
             urlWebpage = self.urlBase + urlBuscarProductos + url_extension
+            print urlWebpage
             r = mechanize.urlopen(urlWebpage)
             baseSoup = BeautifulSoup(r.read())
 
             line_title_containers = baseSoup.findAll('div', { 'class' : 'productTitle' })
-            line_urls = [self.urlBase + div.find('a')['href'] for div in line_title_containers]
+            line_urls = [self.urlBase + div.find('a')['href'] for div in line_title_containers if div.find('a')]
             for url in line_urls:
                 product_links.extend(self.retrieve_line_links(url))
         
