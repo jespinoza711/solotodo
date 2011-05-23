@@ -305,7 +305,8 @@ def entity_details(request, shpe_id):
         if end_date > date.today():
             end_date = date.today()
         if start_date >= end_date:
-            url = reverse('solonotebooks.cotizador.views_store.slot_details', args = [shp.id])
+            request.flash['error'] = 'Por favor seleccione un rango de fechas valido'
+            url = reverse('solonotebooks.cotizador.views_store.entity_details', args = [shpe.id])
             return HttpResponseRedirect(url)
     
     if store.sponsor_cap:    
