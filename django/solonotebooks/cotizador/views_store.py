@@ -433,10 +433,10 @@ def competition_report_excel(request):
                 ws.write(current_row, 1, form.get_ordering_as_string())
                 ws.write(current_row, 2, entry.part_number)
                 ws.write(current_row, 3, unicode(entry))
-                ws.write(current_row, 4, entry.store_shpe.pretty_price())
+                ws.write(current_row, 4, str(entry.store_shpe.latest_price))
                 
                 if entry.competitor_shpe:
-                   ws.write(current_row, 5,  entry.competitor_shpe.pretty_price())
+                   ws.write(current_row, 5, str(entry.competitor_shpe.latest_price))
                    ws.write(current_row, 6,  unicode(entry.competitor_shpe.store))
                    
                 else:
