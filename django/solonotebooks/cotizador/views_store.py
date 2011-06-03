@@ -28,15 +28,18 @@ from xlwt import Workbook, easyxf, Formula
 import random
 
 def append_store_metadata_to_response(request, template, args):
-    args['tabs'] = [
+    tabs = [
             u'Opciones de admistración', 
             [
-                    ['Inicio', reverse('solonotebooks.cotizador.views_store.index')],
                     ['Registro', reverse('solonotebooks.cotizador.views_store.registry')],
-                    ['Informe de competitividad', reverse('solonotebooks.cotizador.views_store.competition_report')],
                     ['Estadísticas', reverse('solonotebooks.cotizador.views_store.statistics')]
             ]
         ]
+        
+    if request.user.get_profile().can_access_competitivity_report:
+        tabs[1].append(['Informe de competitividad', reverse('solonotebooks.cotizador.views_store.competition_report')],)
+        
+    args['tabs'] = tabs
     return append_metadata_to_response(request, template, args)
 
 def store_user_required(f):
@@ -53,7 +56,11 @@ def store_user_required(f):
     
 @store_user_required
 def competition_report(request):
-    form, store, results = _competition_data(request)
+    try:
+        form, store, results = _competition_data(request)
+    except:
+        request.flash['error'] = 'Usted no tiene permisos para acceder a esta sección'
+        return HttpResponseRedirect(reverse('solonotebooks.cotizador.views_store.registry'))
     
     return append_store_metadata_to_response(request, 'store/competitivity_report.html', {
         'form': form,
@@ -62,6 +69,9 @@ def competition_report(request):
     })
     
 def _competition_data(request):
+    if not request.user.get_profile().can_access_competitivity_report:
+        raise Exception
+
     form = CompetitivityReportOrdering(request.GET)
     if form.is_valid():
         ordering = form.cleaned_data['ordering']
@@ -78,10 +88,7 @@ def _competition_data(request):
 
 @store_user_required    
 def index(request):
-    store = request.user.get_profile().assigned_store
-    return append_store_metadata_to_response(request, 'store/index.html', {
-        'store': store,
-    })
+    return HttpResponseRedirect(reverse('solonotebooks.cotizador.views_store.registry'))
     
 @store_user_required    
 def registry(request):
@@ -202,42 +209,19 @@ def _statistics(request, store):
     # Normal clicks 
     
     raw_data = ExternalVisit.objects.filter(shn__store = store, date__gte = start_date, date__lte = end_date).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
-    
+    chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
     click_count = sum([e[1] for e in chart_data])
 
-    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_01.png', u'Número de clicks normales a ' + str(store))
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas'], 'store_' + str(store.id) + '_01.png', u'Número de clicks normales a ' + str(store))
     
     # Sponsored clicks
     
     raw_data = SponsoredVisit.objects.filter(shp__shpe__store = store, date__gte = start_date, date__lte = end_date).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
+    chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
     
     sponsored_click_count = sum([e[1] for e in chart_data])
 
-    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'store_' + str(store.id) + '_02.png', u'Número de clicks patrocinados a ' + str(store))
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas'], 'store_' + str(store.id) + '_02.png', u'Número de clicks patrocinados a ' + str(store))
     
     return {
         'store': store,
@@ -321,68 +305,35 @@ def entity_details(request, shpe_id):
         if end_date > date.today():
             end_date = date.today()
         if start_date >= end_date:
-            url = reverse('solonotebooks.cotizador.views_store.slot_details', args = [shp.id])
+            request.flash['error'] = 'Por favor seleccione un rango de fechas valido'
+            url = reverse('solonotebooks.cotizador.views_store.entity_details', args = [shpe.id])
             return HttpResponseRedirect(url)
     
     if store.sponsor_cap:    
         # First chart
         
         raw_data = ProductVisit.objects.filter(notebook = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).extra(select = {'d': 'CAST(date AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
-        chart_data = dict([(entry['d'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        chart_data = [(entry['d'], entry['id__count']) for entry in raw_data]
         
         product_visit_count = sum([e[1] for e in chart_data])
 
-        generate_timelapse_chart([chart_data], [u'Número de visitas'], 'unit_' + str(shp.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
+        generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas'], 'unit_' + str(shp.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
         
         # Second chart
         
         raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
-        
+        chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
         all_external_visit_count = sum([e[1] for e in chart_data])
         
         schart_data = [chart_data]
         
         raw_data = ExternalVisit.objects.filter(shn__shp__product = product, shn__store = store, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
 
         store_external_visit_count = sum([e[1] for e in chart_data])
 
         schart_data.append(chart_data)
-        generate_timelapse_chart(schart_data, ['Clicks totales', 'Clicks a ' + unicode(store)], 'unit_' + str(shp.id) + '_02.png', u'Número de clicks a tiendas')
+        generate_timelapse_chart(schart_data, start_date, end_date, ['Clicks totales', 'Clicks a ' + unicode(store)], 'unit_' + str(shp.id) + '_02.png', u'Número de clicks a tiendas')
         
         # Third chart
         
@@ -394,22 +345,11 @@ def entity_details(request, shpe_id):
         # Fourth chart
         
         raw_data = SponsoredVisit.objects.filter(shp = shp, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-        chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-        
-        sdate = start_date
-        step_date = timedelta(days = 1)
-        
-        while sdate <= end_date:
-            if sdate not in chart_data:
-                chart_data[sdate] = 0
-            sdate += step_date
-        
-        chart_data = chart_data.items()
-        chart_data = sorted(chart_data, key = lambda pair: pair[0])
+        chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
         
         sponsored_visit_count = sum([e[1] for e in chart_data])
 
-        generate_timelapse_chart([chart_data], [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
+        generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas patrocinadas'], 'unit_' + str(shp.id) + '_04.png', u'Número de visitas patrocinadas')
     else:
         product_visit_count = 0
         store_external_visit_count = 0
@@ -454,7 +394,11 @@ def entity_refresh_price(request, shpe_id):
     
 @store_user_required
 def competition_report_excel(request):
-    form, store, results = _competition_data(request)
+    try:
+        form, store, results = _competition_data(request)
+    except:
+        request.flash['error'] = 'Usted no tiene permisos para descargar este informe'
+        return HttpResponseRedirect(reverse('solonotebooks.cotizador.views_store.registry'))
 
     response = HttpResponse(mimetype="application/ms-excel")
     response['Content-Disposition'] = 'attachment; filename=informe_competitividad_%s.xls' % str(date.today())

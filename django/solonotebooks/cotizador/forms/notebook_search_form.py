@@ -35,7 +35,7 @@ class NotebookSearchForm(SearchForm):
     screen_touch = CustomChoiceField(choices = screen_touch_choices).set_name('Táctil').does_require_advanced_controls()
     ntype = ClassChoiceField(NotebookType, 'Uso')
         
-    price_choices = SearchForm.generate_price_range(0, 1000000, 50000)
+    price_choices = SearchForm.generate_price_range(0, 800000, 50000)
     
     min_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Mínimo')
     max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
@@ -71,12 +71,12 @@ class NotebookSearchForm(SearchForm):
                      
         return self.parse_model(model)
         
-    def __init__(self, qd):
+    def __init__(self, qd, extra_permissions):
         if 'max_size' not in qd:
             qd['max_size'] = NotebookScreenSizeFamily.objects.reverse()[0].id
         if 'min_size' not in qd:
             qd['min_size'] = NotebookScreenSizeFamily.objects.all()[0].id
-        super(NotebookSearchForm, self).__init__(qd)
+        super(NotebookSearchForm, self).__init__(qd, extra_permissions)
         
     def main_category_string(self):
         return 'ntype'    
@@ -265,10 +265,12 @@ class NotebookSearchForm(SearchForm):
             if ordering_direction == None:
                 ordering_direction = '-'    
             # Note: A notebook may have more than one SD, grab the biggest
-            notebooks = notebooks.annotate(max_hard_drive_capacity=Max('storage_drive__capacity__value')).order_by(ordering_direction + 'max_hard_drive_capacity')        
-        else:
+            notebooks = notebooks.annotate(max_hard_drive_capacity=Max('storage_drive__capacity__value')).order_by(ordering_direction + 'max_hard_drive_capacity')   
+        elif self.ordering == 6:
             if ordering_direction == None:
                 ordering_direction = ''    
-            notebooks = notebooks.order_by(ordering_direction + 'weight')
+            notebooks = notebooks.order_by(ordering_direction + 'weight')     
+        else:
+            notebooks = self.handle_extra_ordering(notebooks)
             
         return notebooks

@@ -139,8 +139,6 @@ class MotherboardSearchForm(SearchForm):
                 ordering_direction = ''
             motherboards = motherboards.order_by(ordering_direction + 'shp__shpe__latest_price')
         else:
-            if ordering_direction == None:
-                ordering_direction = ''    
-            motherboards = motherboards.order_by(ordering_direction + 'shp__shpe__latest_price')
+            motherboards = self.handle_extra_ordering(motherboards)
             
         return motherboards
