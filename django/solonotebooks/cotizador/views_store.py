@@ -462,50 +462,43 @@ def competition_report_excel(request):
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Informe')
     
-    ws.col(0).width = 4000
-    ws.col(1).width = 15000
-    ws.col(2).width = 4000
-    ws.col(3).width = 8000
-    
-    ws.row(0).height = 500
-    
-    bold_template = easyxf('font: bold True;')
-    hyperlink_template = easyxf('font: underline single;')
+    ws.col(0).width = 3000
+    ws.col(1).width = 7000
+    ws.col(2).width = 5000
+    ws.col(3).width = 16000
+    ws.col(4).width = 5000
+    ws.col(5).width = 5000
+    ws.col(6).width = 8000
+    ws.col(7).width = 10000
     
     current_row = 0
-    ws.write(current_row, 0, u'Informe de Competitividad',
-        easyxf('font: bold True, height 300;'))
-        
-    current_row += 2
-    ws.write(current_row, 0, 'Tienda', bold_template)
-    ws.write(current_row, 1, unicode(store))
-    current_row += 1
-    ws.write(current_row, 0, 'Fecha', bold_template)
-    ws.write(current_row, 1, unicode(date.today()))
-    current_row += 1
-    ws.write(current_row, 0, 'Ordenamiento', bold_template)
-    ws.write(current_row, 1, unicode(form.get_ordering_as_string()))
-    current_row += 2
-    
-    ws.write(current_row, 0, u'Código', bold_template)
-    ws.write(current_row, 1, 'Nombre', bold_template)
-    ws.write(current_row, 2, 'Precio Magens', bold_template)
-    ws.write(current_row, 3, 'Mejor precio competencia', bold_template)
+    ws.write(current_row, 0, u'Relevancia')
+    ws.write(current_row, 1, u'Tipo relevancia')
+    ws.write(current_row, 2, u'Código')
+    ws.write(current_row, 3, u'Nombre')
+    ws.write(current_row, 4, u'Precio %s' % unicode(store))
+    ws.write(current_row, 5, u'Competencia')
+    ws.write(current_row, 6, u'Competidor')
+    ws.write(current_row, 7, u'Categoría')
     current_row += 1
     
     for result in results:
         if result[1]:
-            ws.write(current_row, 0, result[0])
-            current_row += 1
-            
-            for entry in result[1]:
-                ws.write(current_row, 0, entry.part_number)
-                ws.write(current_row, 1, Formula('HYPERLINK("%s";"%s")' % ('%s%s' % (settings.SERVER_NAME, reverse('solonotebooks.cotizador.views_services.product_details', args = [entry.id])), unicode(entry))), hyperlink_template)
-                ws.write(current_row, 2, Formula('HYPERLINK("%s";"%s")' % (entry.store_shpe.url, entry.store_shpe.pretty_price())), hyperlink_template)
+            for idx, entry in enumerate(result[1]):
+                ws.write(current_row, 0, str(idx + 1))
+                ws.write(current_row, 1, form.get_ordering_as_string())
+                ws.write(current_row, 2, entry.part_number)
+                ws.write(current_row, 3, unicode(entry))
+                ws.write(current_row, 4, entry.store_shpe.pretty_price())
+                
                 if entry.competitor_shpe:
-                   ws.write(current_row, 3, Formula('HYPERLINK("%s";"%s (%s)")' % (entry.competitor_shpe.url, entry.competitor_shpe.pretty_price(), unicode(entry.competitor_shpe.store))), hyperlink_template)
+                   ws.write(current_row, 5,  entry.competitor_shpe.pretty_price())
+                   ws.write(current_row, 6,  unicode(entry.competitor_shpe.store))
+                   
                 else:
-                    ws.write(current_row, 3, u'Sólo disponible en %s' % unicode(store))
+                    ws.write(current_row, 5, u'N/A')
+                    
+                ws.write(current_row, 7, result[0])
                 current_row += 1
 
     wb.save(response)
