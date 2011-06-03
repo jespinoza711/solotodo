@@ -61,44 +61,20 @@ def product_details(request, product_id):
     # First chart
 
     raw_data = ProductVisit.objects.filter(notebook = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).extra(select = {'d': 'CAST(date AS DATE)'}).values('d').annotate(Count('id')).order_by('d')
-    chart_data = dict([(entry['d'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
-    
+    chart_data = [(entry['d'], entry['id__count']) for entry in raw_data]
+
     product_visit_count = sum([e[1] for e in chart_data])
 
-    generate_timelapse_chart([chart_data], [u'Número de visitas'], 'services_product_' + str(product.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
+    generate_timelapse_chart([chart_data], start_date, end_date, [u'Número de visitas'], 'services_product_' + str(product.id) + '_01.png', u'Número de visitas al producto en SoloTodo')
     
     # Second chart
     
     raw_data = ExternalVisit.objects.filter(shn__shp__product = product, date__gte = start_date, date__lt = end_date + timedelta(days = 1)).values('date').annotate(Count('id')).order_by('date')
-    chart_data = dict([(entry['date'], entry['id__count']) for entry in raw_data])
-    
-    sdate = start_date
-    step_date = timedelta(days = 1)
-    
-    while sdate <= end_date:
-        if sdate not in chart_data:
-            chart_data[sdate] = 0
-        sdate += step_date
-    
-    chart_data = chart_data.items()
-    chart_data = sorted(chart_data, key = lambda pair: pair[0])
+    chart_data = [(entry['date'], entry['id__count']) for entry in raw_data]
     
     all_external_visit_count = sum([e[1] for e in chart_data])
     
-    schart_data = [chart_data]
-    
-    generate_timelapse_chart(schart_data, ['Clicks totales a tiendas'], 'services_product_' + str(product.id) + '_02.png', u'Número de clicks a tiendas')
+    generate_timelapse_chart([chart_data], start_date, end_date, ['Clicks totales a tiendas'], 'services_product_' + str(product.id) + '_02.png', u'Número de clicks a tiendas')
     
     # Third chart
     

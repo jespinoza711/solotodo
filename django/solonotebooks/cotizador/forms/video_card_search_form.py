@@ -39,7 +39,7 @@ class VideoCardSearchForm(SearchForm):
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
         
-    price_choices = SearchForm.generate_price_range(0, 500000, 25000)
+    price_choices = SearchForm.generate_price_range(0, 350000, 25000)
     
     min_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Mínimo')
     max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
@@ -241,9 +241,11 @@ class VideoCardSearchForm(SearchForm):
             if ordering_direction == None:
                 ordering_direction = '-'    
             video_cards = video_cards.order_by(ordering_direction + 'memory_quantity')
-        else:
+        elif self.ordering == 6:
             if ordering_direction == None:
                 ordering_direction = ''    
             video_cards = video_cards.order_by(ordering_direction + 'gpu__tdp')
+        else:
+            video_cards = self.handle_extra_ordering(video_cards)
             
         return video_cards

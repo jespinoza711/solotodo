@@ -9,6 +9,8 @@ class UserProfile(models.Model):
     change_mails_sent = models.IntegerField(default = 0)
     assigned_store = models.ForeignKey(Store, null = True, blank = True)
     facebook_name = models.CharField(max_length = 255, blank = True, null = True)
+    can_access_competitivity_report = models.BooleanField(default=False)
+    can_use_extra_ordering_options = models.BooleanField(default=False)
 
     def __str__(self):  
           return "%s's profile" % self.user  
@@ -18,6 +20,9 @@ class UserProfile(models.Model):
             return self.facebook_name
         else:
             return self.user.username
+            
+    def allows_extra_ordering_options(self):
+        return self.can_use_extra_ordering_options or self.user.is_superuser
             
     def can_access_services(self):
         return self.user.is_superuser or self.assigned_store != None

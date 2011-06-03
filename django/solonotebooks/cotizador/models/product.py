@@ -219,13 +219,12 @@ class Product(models.Model):
             return 'No disponible'
         
     def price_at(self, date):
-        from . import ProductPriceChange
-    
-        ppc = ProductPriceChange.objects.filter(notebook = self).filter(date__gte = date).order_by('date')
-        if ppc:
-            return ppc[0].price
-        elif self.shp and self.shp.shpe:
-            return self.shp.shpe.latest_price
+        from . import StoreProductHistory
+        
+        sphs = StoreProductHistory.objects.filter(registry__shp__product = self, date = date).order_by('price')
+        
+        if sphs:
+            return sphs[0].price
         else:
             return 0
     

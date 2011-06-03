@@ -52,7 +52,7 @@ class CellSearchForm(SearchForm):
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')
         
-    price_choices = SearchForm.generate_price_range(0, 250000, 10000)
+    price_choices = SearchForm.generate_price_range(0, 200000, 10000)
     
     min_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Mínimo')
     max_price = CustomChoiceField(choices = price_choices, widget = forms.Select(attrs = {'class': 'price_range_select'})).set_name('Precio Máximo')
@@ -89,12 +89,12 @@ class CellSearchForm(SearchForm):
                      
         return self.parse_model(model)
         
-    def __init__(self, qd):
+    def __init__(self, qd, extra_permissions):
         if 'plan_price_min' not in qd:
             qd['plan_price_min'] = 0
         if 'plan_price_max' not in qd:
             qd['plan_price_max'] = self.plan_price_choices[-1][0]
-        super(CellSearchForm, self).__init__(qd)
+        super(CellSearchForm, self).__init__(qd, False)
         
     def main_category_string(self):
         return 'plan_company'    

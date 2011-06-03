@@ -421,7 +421,7 @@ div#login {padding-left: 8px; float: left; width: 900px;}
 -------------------------------------------------------------- */
 
 #ad_top {margin-top: 20px;}
-#ad_top a {margin-left: 110px;}
+/*#ad_top a {margin-left: 110px;}*/
 
 #content {background: #fff; min-height: 700px; margin-top: 20px; }
 #left {float: left; width: 640px; margin-right: 20px;}

@@ -1,0 +1,36 @@
+{% extends "manager/base.html" %}
+
+{% block title %}
+    Estadísticas de {{ settings.SITE_NAME }}
+{% endblock %}
+
+{% block content %}
+
+<form method="get" id="advertisement_slot_form">
+    Desde: {{ form.start_date }} &nbsp;&nbsp;Hasta: {{ form.end_date }}
+    <input type="submit" value="Actualizar" />
+</form>
+
+<div id="advertisement_tabs">
+	<ul>
+		<li><a href="#tabs">Entidades creadas</a></li>
+		<li><a href="#tabs-2">Entidades resueltas</a></li>
+		<li><a href="#tabs-3">Productos creados</a></li>
+	</ul>
+	<div id="tabs">
+        <img src="/media/pics/charts/manager_statistics_01.png?generator={{tag}}" />
+        <br />
+        <strong>Número de entidades registradas en el periodo:</strong> {{ shpes_created_count }}
+	</div>
+	<div id="tabs-2">
+        <img src="/media/pics/charts/manager_statistics_02.png?generator={{tag}}" />
+        <br />
+        <strong>Número de entidades resueltas en el periodo:</strong> {{ shpes_associated_count }}
+	</div>
+	<div id="tabs-3">
+        <img src="/media/pics/charts/manager_statistics_03.png?generator={{tag}}" />
+        <br />
+        <strong>Número de productos creados en el periodo:</strong> {{ product_creation_count }}
+	</div>
+</div>
+{% endblock %}
