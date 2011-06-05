@@ -15,6 +15,11 @@
 	        <li><a href="#subtabs-4">Entidades no indexables</a></li>
         </ul>
         <div id="subtabs-1">
+            {% if error_message %}
+                <p class="store_error">
+                    {{ error_message }}
+                </p>
+            {% endif %}
             {{ result_text|linebreaksbr }}
         </div>
         <div id="subtabs-2">
@@ -22,12 +27,7 @@
             <p>
                 Por favor ingrese la URL del equipo en el sitio web de {{ store }} del que desea información, para una búsqueda más rápida y exacta use una de las URLs que aparecen en la pestaña "Información de última indexación".
             </p>
-            {% if error_message %}
-                <p class="store_error">
-                    {{ error_message }}
-                </p>
-            {% endif %}
-            <form id="shpe_search_form" action='#subtabs-2'>
+            <form id="shpe_search_form" action="">
                 {{ form.as_p }}
                 <input type="submit" value="Buscar" />
             </form>
