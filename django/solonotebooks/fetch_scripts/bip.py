@@ -38,8 +38,6 @@ class Bip(FetchStore):
             return None
 
         titleSpan = soup.find("td", { "class" : "menuprodg" })
-        import ipdb
-        #ipdb.set_trace()
         title = titleSpan.contents[0].strip()
 
         priceCell = soup.findAll("td", { "class" : "prc8" })
