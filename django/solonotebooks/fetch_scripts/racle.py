@@ -36,27 +36,34 @@ class Racle(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        urlSearch = '/ventas/'            
+        urlSearch = '/ventas/component/virtuemart/?category_id='            
 
         urlExtensions = [
-                            ['tienda/netbook', 'Notebook'], 
-                            ['tienda/notebook', 'Notebook'],
-                            ['tieda/moitor-led', 'Screen'],
-                            ['tienda/monitor', 'Screen'],
+                            ['21', 'Notebook'], 
+                            ['83', 'Notebook'],
+                            ['446', 'Screen'],
+                            ['447', 'Screen'],
                         ]
         product_links = []
         for urlExtension, ptype in urlExtensions:
-            urlWebpage = urlBase + urlSearch + urlExtension + '?page=shop.browse&limit=50&limitstart=0'
+            urlWebpage = urlBase + urlSearch + urlExtension + '&page=shop.browse&limit=50&limitstart=0'
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
-            productDetailsCells = baseSoup.findAll('td', { 'class' : 'producto_fondo_tabla_M' })
+            productDetailsRows = baseSoup.find('form', {'name': 'order'}).parent.find('table').findAll('tr', recursive=False)
+            cells = []
             
-            for productDetailCell in productDetailsCells:
-                productLink = productDetailCell.find('a', { 'class' : 'producto_titulo' })
+            for tr in productDetailsRows:
+                cells.extend(tr.findAll('td', recursive=False))
+            
+            
+            for cell in cells:
+                productLink = cell.find('a')
+                if not productLink:
+                    continue
                 product_links.append([urlBase + productLink['href'], ptype])
             
         return product_links

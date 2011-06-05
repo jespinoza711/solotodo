@@ -19,11 +19,7 @@ class Dell(FetchStore):
         try:
             title = soup.find('div', { 'id': 'scpcc_title' }).find('img')['alt'].encode('ascii', 'ignore')
         except:
-            title = soup.find('title').string
-            if 'Sitio Oficial' in title:
-                return None
-            else:
-                raise Exception('Error al indexar url ' + productUrl)
+            return None
         price = int(soup.find(['tr', 'td'], { 'class': 'pricing_dotdotdot' }).findAll('span')[-1].string.split('$')[1].replace('.', ''))
         
         productData = ProductData()
@@ -102,7 +98,6 @@ class Dell(FetchStore):
                             
         for url_extension in url_extensions:
             urlWebpage = self.urlBase + urlBuscarProductos + url_extension
-            print urlWebpage
             r = mechanize.urlopen(urlWebpage)
             baseSoup = BeautifulSoup(r.read())
 
