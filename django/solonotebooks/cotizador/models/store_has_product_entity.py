@@ -85,13 +85,13 @@ class StoreHasProductEntity(models.Model):
                     # in a single day, preventing repeated log messages
                     if yesterday_log.price != last_log.price and last_log.price != self.latest_price:
                         print 'Hubieron cambios de precio, registrando'
-                        self.latest_price = last_log.price
-                        self.save()
                         LogChangeEntityPrice.new(self, yesterday_log.price, last_log.price).save()
                     else:
                         print 'No hubieron cambios'
                 except IndexError:
                     pass
+            self.latest_price = last_log.price
+            self.save()
         else:
             if self.is_available:
                 self.is_available = False

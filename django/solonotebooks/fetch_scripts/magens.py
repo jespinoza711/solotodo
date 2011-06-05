@@ -12,7 +12,10 @@ class Magens(FetchStore):
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
+        try:
+            product_data = browser.open(product_link).get_data()
+        except: 
+            return None
         product_soup = BeautifulSoup(product_data)
         
         availability = product_soup.find('div', { 'class': 'stock' }).contents[4]
