@@ -1,5 +1,3 @@
-import cairo
-import pycha.line
 from copy import deepcopy
 from datetime import date, datetime, timedelta
 from django.db.models import Min, Max
