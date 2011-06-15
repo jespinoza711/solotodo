@@ -15,8 +15,10 @@ class TopPC(FetchStore):
         br = mechanize.Browser()
         data = br.open(productUrl).get_data()
         soup = BeautifulSoup(data)
-
-        title = soup.find('h2').string
+        try:
+            title = soup.find('h2').string
+        except:
+            return None
         
         price = int(soup.find('span', { 'id': 'our_price_display' }).string.replace('$', '').replace('.', ''))
         
