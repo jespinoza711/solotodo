@@ -18,8 +18,10 @@ class PCOfertas(FetchStore):
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
-        
-        product_name = product_soup.find('h4', { 'class': 'Estilo5' }).string.encode('ascii', 'ignore')
+        try:
+            product_name = product_soup.find('h4', { 'class': 'Estilo5' }).string.encode('ascii', 'ignore')
+        except:
+            return None
         
         try:
             product_price = int(product_soup.find('span', { 'class': 'Estilo4' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', ''))
