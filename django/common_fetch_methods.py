@@ -1,3 +1,4 @@
+import os
 from copy import deepcopy
 from datetime import date, datetime, timedelta
 from django.db.models import Min, Max
@@ -39,7 +40,8 @@ def update_availability_and_price():
         ptype.get_class().custom_update()
         
 def get_store_products(fetch_store, update_shpes_on_finish = False):
-    logger = Logger(sys.stdout, settings.LOG_DIRECTORY + fetch_store.name + '_fetch.txt')
+    fetch_log_file_location = os.path.join(settings.LOG_DIRECTORY, fetch_store.__class__.__name__ + '_fetch.txt')
+    logger = Logger(sys.stdout, fetch_log_file_location)
     sys.stdout = logger
     
     try:
@@ -58,7 +60,9 @@ def get_store_products(fetch_store, update_shpes_on_finish = False):
         
         products = fetch_store.get_products()        
         
-        logger.change_log_file(settings.LOG_DIRECTORY + fetch_store.name + '_update.txt')
+        update_log_file_location = os.path.join(settings.LOG_DIRECTORY, fetch_store.__class__.__name__ + '_update.txt')
+        print update_log_file_location
+        logger.change_log_file(update_log_file_location)
         save_products(products, store)
         
         if update_shpes_on_finish:
