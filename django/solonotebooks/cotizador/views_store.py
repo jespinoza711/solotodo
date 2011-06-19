@@ -282,6 +282,8 @@ def update_prices(request):
         registry.status = 'Pendiente'
         registry.save()
         UpdateStore.delay(registry)
+        url = reverse('solonotebooks.cotizador.views_store.update_prices')
+        return HttpResponseRedirect(url)
     
     update_registries = StoreCustomUpdateRegistry.objects.filter(store=store)
     return append_store_metadata_to_response(request, 'store/update_prices.html', {
