@@ -7,9 +7,9 @@ from solonotebooks.fetch_scripts import *
 from common_fetch_methods import *
 
 def main():
-    ps = [eval(arg + '()') for arg in sys.argv[1:]]
+    ps = [Store.objects.get(classname=arg) for arg in sys.argv[1:]]
     for p in ps:
-        get_store_products(p, update_shpes_on_finish = True)
+        p.update_products_from_webpage(update_shpes_on_finish = True)
                 
 if __name__ == '__main__':
     print datetime.now()

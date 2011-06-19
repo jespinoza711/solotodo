@@ -54,6 +54,7 @@ from solonotebooks.cotizador.models.notebook_ram_quantity import NotebookRamQuan
 from solonotebooks.cotizador.models.notebook_ram_type import NotebookRamType
 from solonotebooks.cotizador.models.notebook_ram_frequency import NotebookRamFrequency
 from solonotebooks.cotizador.models.notebook_card_reader import NotebookCardReader
+
 from solonotebooks.cotizador.models.store import Store
 from solonotebooks.cotizador.models.notebook_type import NotebookType
 from solonotebooks.cotizador.models.product import Product
@@ -88,6 +89,8 @@ from solonotebooks.cotizador.models.mail_lost_product import MailLostProduct
 from solonotebooks.cotizador.models.mail_revive_product import MailReviveProduct
 from solonotebooks.cotizador.models.product_comparison_list import ProductComparisonList
 from solonotebooks.cotizador.models.product_visit import ProductVisit
+from solonotebooks.cotizador.models.store_custom_update_registry import StoreCustomUpdateRegistry
+
 from solonotebooks.cotizador.models.video_card_brand import VideoCardBrand
 from solonotebooks.cotizador.models.video_card_gpu_brand import VideoCardGpuBrand
 from solonotebooks.cotizador.models.video_card_gpu_family import VideoCardGpuFamily
@@ -278,6 +281,7 @@ __all__ = [
             'MailChangeProductPrice',
             'MailLostProduct', 
             'MailReviveProduct', 
+            'StoreCustomUpdateRegistry',
             'NotebookType',
             'ProductComparisonList',
             'ProductVisit',       

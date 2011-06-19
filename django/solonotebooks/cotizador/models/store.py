@@ -1,6 +1,10 @@
+import os, sys, traceback
+from solonotebooks.logger import Logger
+from datetime import date
 from django.db.models import Q
 from django.db import models
 from sorl.thumbnail.fields import ImageWithThumbnailsField
+from solonotebooks import settings
 
 class Store(models.Model):
     name = models.CharField(max_length = 255)
@@ -19,11 +23,10 @@ class Store(models.Model):
     def __unicode__(self):
         return unicode(self.name)
         
-        
     def fetch_product_data(self, url):
         from . import StoreHasProductEntity
         from solonotebooks.fetch_scripts import *
-        fetch_store = eval(self.classname + '()')
+        fetch_store = self.fetch_store()
         product = fetch_store.retrieve_product_data(url)
         if not product:
             return None
@@ -61,6 +64,59 @@ class Store(models.Model):
             LogNewEntity.new(shpe).save()
             
         shpe.update_with_product(product)
+        
+    def update_products_from_webpage(self, update_shpes_on_finish = False):
+        from . import LogFetchStoreError
+        fetch_store = self.fetch_store()
+        fetch_log_file_location = os.path.join(settings.LOG_DIRECTORY, fetch_store.__class__.__name__ + '_fetch.txt')
+        logger = Logger(sys.stdout, fetch_log_file_location)
+        sys.stdout = logger
+        
+        try:
+            store = Store.objects.get(name = fetch_store.name)
+        except Store.DoesNotExist:
+            store = Store()
+            store.name = fetch_store.name
+            store.save()
+            
+        store.set_shpe_prevent_availability_change_flag(False)
+            
+        try:
+            if update_shpes_on_finish:
+                for shpe in store.storehasproductentity_set.all():
+                    shpe.delete_today_history()
+            
+            products = fetch_store.get_products()        
+            
+            update_log_file_location = os.path.join(settings.LOG_DIRECTORY, fetch_store.__class__.__name__ + '_update.txt')
+            print update_log_file_location
+            logger.change_log_file(update_log_file_location)
+            for product in products:
+                self.save_product(product)
+            
+            if update_shpes_on_finish:
+                for shpe in store.storehasproductentity_set.all():
+                    shpe.update(recursive = True)
+
+            try:                
+                log_error = LogFetchStoreError.objects.get(log_entry__date = date.today(), store = store)
+                log_error.delete()
+            except LogFetchStoreError.DoesNotExist, e:
+                pass
+                
+        except Exception, e:
+            traceback.print_exc(file=sys.stdout)
+            print e
+            print('Error al obtener los productos de ' + store.name)
+            
+            try:                
+                log_error = LogFetchStoreError.objects.get(log_entry__date = date.today(), store = store)
+            except LogFetchStoreError.DoesNotExist, ex:
+                LogFetchStoreError.new(store, str(e))
+            
+            store.set_shpe_prevent_availability_change_flag(True)
+            
+        sys.stdout = logger.default_stdout()
         
     def set_shpe_prevent_availability_change_flag(self, flag):
         from . import StoreHasProductEntity

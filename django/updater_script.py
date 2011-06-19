@@ -15,10 +15,10 @@ def main():
 
     classnames = [classname for classname in dir(fetch_scripts) if inspect.isclass(getattr(fetch_scripts, classname)) and classname not in blacklist]
     
-    stores = [eval('fetch_scripts.' + c + '()') for c in classnames]
+    stores = [Store.objects.get(classname=c) for c in classnames]
     
     for store in stores:
-        get_store_products(store)
+        store.update_products_from_webpage()
                 
     update_availability_and_price()
                 
