@@ -1,19 +1,18 @@
-import pycurl
 from celery.task import Task
 from celery.registry import tasks
+from datetime import datetime
 
-class CheckWebsiteTask(Task):
-
-    def run(self, ip, **kwargs):
-
+class UpdateStore(Task):
+    def run(self, registry):
+        registry.status = 'En proceso'
+        registry.save()
         try:
-            c = pycurl.Curl()
-            c.setopt(pycurl.URL, ip)
-            c.setopt(pycurl.TIMEOUT, 10)
+            registry.store.update_products_from_webpage(update_shpes_on_finish = True)
+            registry.end_datetime = datetime.now()
+            registry.status = 'Completado'
+        except:
+            registry.status = 'Error'
+        
+        registry.save()
 
-            c.perform()
-
-        except Exception, e:
-            print e
-
-tasks.register(CheckWebsiteTask)
+tasks.register(UpdateStore)
