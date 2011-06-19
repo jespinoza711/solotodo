@@ -18,6 +18,7 @@ from django.contrib.auth.models import User
 from django.core.validators import email_re
 from solonotebooks import settings
 from solonotebooks.cotizador.views import append_metadata_to_response
+from solonotebooks.cotizador.tasks import UpdateStore
 from models import *
 from fields import *
 from exceptions import *
@@ -32,7 +33,8 @@ def append_store_metadata_to_response(request, template, args):
             u'Opciones de admistración', 
             [
                     ['Registro', reverse('solonotebooks.cotizador.views_store.registry')],
-                    ['Estadísticas', reverse('solonotebooks.cotizador.views_store.statistics')]
+                    ['Estadísticas', reverse('solonotebooks.cotizador.views_store.statistics')],
+                    ['Actualizar precios', reverse('solonotebooks.cotizador.views_store.update_prices')]
             ]
         ]
         
@@ -53,6 +55,7 @@ def store_user_required(f):
     wrap.__doc__ = f.__doc__
     wrap.__name__ = f.__name__
     return wrap
+
     
 @store_user_required
 def competition_report(request):
@@ -268,6 +271,23 @@ def free_slots(request):
     request.flash['message'] = 'Suscripciones liberadas'
     referrer = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(referrer)
+    
+@store_user_required
+def update_prices(request):
+    store = request.user.get_profile().assigned_store
+    
+    if request.method == 'POST':
+        registry = StoreCustomUpdateRegistry()
+        registry.store = store
+        registry.status = 'Pendiente'
+        registry.save()
+        UpdateStore.delay(registry)
+    
+    update_registries = StoreCustomUpdateRegistry.objects.filter(store=store)
+    return append_store_metadata_to_response(request, 'store/update_prices.html', {
+            'store': store,
+            'update_registries': update_registries,
+        })
     
 @store_user_required
 def entity_details(request, shpe_id):

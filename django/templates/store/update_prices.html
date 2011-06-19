@@ -1,0 +1,41 @@
+{% extends "store/base.html" %}
+
+{% block title %}
+    Actualización de precios
+{% endblock %}
+
+{% block content %}
+    <h2>Actualización de precios</h2>
+    <p>
+        Desde esta página puede ordenar una actualización de los precios de todos los productos de su página.
+    </p>
+    <p>
+        El proceso puede tomar cerca de 30 minutos, si sólo necesita actualizar el precio de uno de sus productos le rogamos utilizar el <a href="{% url solonotebooks.cotizador.views_store.registry %}#subtabs-2">buscador de registros</a> de su tienda y usar la opción "Actualizar precio" del producto deseado.
+    </p>
+    
+    <h3>Historial de operaciones</h3>
+    <table>
+        <tr>
+            <th>Fecha / hora de inicio</th>
+            <th>Fecha / hora de término</th>
+            <th>Estado</th>
+        </tr>
+        {% for registry in update_registries %}
+            <tr>
+                <td>{{ registry.start_datetime }}</td>
+                <td>{{ registry.end_datetime }}</td>
+                <td>{{ registry.status }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">
+                    <i>No hay registros</i>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <form method="post" action=".">
+        <input type="submit" value="Ordenar actualización de precios" />
+    </form>
+{% endblock %}

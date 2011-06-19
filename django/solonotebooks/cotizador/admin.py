@@ -39,6 +39,7 @@ admin.site.register(MailLostProduct)
 admin.site.register(MailReviveProduct)
 admin.site.register(ProductComparisonList)
 admin.site.register(ProductVisit)
+admin.site.register(StoreCustomUpdateRegistry)
 
 admin.site.register(LogNewEntity)
 admin.site.register(LogReviveEntity)
