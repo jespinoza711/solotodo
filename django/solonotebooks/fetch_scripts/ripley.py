@@ -31,6 +31,12 @@ class Ripley(FetchStore):
             product_prices.append(product_price)
         except:
             pass
+            
+        try:
+            product_price = int(product_soup.find('div', { 'class': 'textodetallesrojo' }).string.split('$')[1].replace('.', ''))
+            product_prices.append(product_price)
+        except:
+            pass
                 
         if not product_prices:
             raise Exception
