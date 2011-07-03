@@ -175,7 +175,7 @@ def search(request):
     result_products = result_products[(page_number - 1) * 10 : page_number * 10]
     
     for result in result_products:
-        result[0].matching = result[1]
+        result[0].matching = str(result[1]) + '%'
         
     result_products = [result[0] for result in result_products]
     

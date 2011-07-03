@@ -6,7 +6,7 @@
 	    <!--<p>{{ product.ntype.name }}</p>	-->
     </div>
     <div class="content-producto">
-	    <a href="{{ product.determine_url }}">{{ product }}</a> {% if product.matching %} ({{ product.matching|floatformat }}%) {% endif %}
+	    <a href="{{ product.determine_url }}">{{ product }}</a> {% if product.matching %} [{{ product.matching }}] {% endif %}
 	    <br />
 	    <ul class="info-producto left">
 		    {% block specs %}
