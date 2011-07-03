@@ -219,7 +219,7 @@ class VideoCardSearchForm(SearchForm):
         # Check the ordering orientation, if it is not set, each criteria uses 
         # sensible defaults (asc for price, desc for cpu performance, etc)
         ordering_direction = [None, '', '-'][self.ordering_direction]
-        
+        ordering_attr = None
         # Apply the corresponding ordering based on the key
         if self.ordering == 1:
             if ordering_direction == None:
@@ -227,15 +227,18 @@ class VideoCardSearchForm(SearchForm):
             video_cards = video_cards.order_by(ordering_direction + 'shp__shpe__latest_price')
         elif self.ordering == 2:
             if ordering_direction == None:
-                ordering_direction = '-'    
+                ordering_direction = '-'
+            ordering_attr = 'tdmark_06_score'
             video_cards = video_cards.order_by(ordering_direction + 'gpu__tdmark_06_score')
         elif self.ordering == 3:
             if ordering_direction == None:
                 ordering_direction = '-'    
+            ordering_attr = 'tdmark_vantage_score'
             video_cards = video_cards.order_by(ordering_direction + 'gpu__tdmark_vantage_score')
         elif self.ordering == 4:
             if ordering_direction == None:
                 ordering_direction = '-'    
+            ordering_attr = 'tdmark_11_score'
             video_cards = video_cards.order_by(ordering_direction + 'gpu__tdmark_11_score')
         elif self.ordering == 5:
             if ordering_direction == None:
@@ -247,5 +250,9 @@ class VideoCardSearchForm(SearchForm):
             video_cards = video_cards.order_by(ordering_direction + 'gpu__tdp')
         else:
             video_cards = self.handle_extra_ordering(video_cards)
+            
+        if ordering_attr:
+            for vc in video_cards:
+                vc.matching = 'Puntaje: %d' % getattr(vc.gpu, ordering_attr)
             
         return video_cards
