@@ -28,7 +28,7 @@ import random
 
 def manager_login_required(f):
     def wrap(request, *args, **kwargs):
-        if not request.user.is_staff:
+        if not request.user.is_superuser:
             return HttpResponseRedirect('/account/login')
         else:
             return f(request, *args, **kwargs)
@@ -44,10 +44,6 @@ def append_manager_ptype_to_response(request, template, args):
     url = reverse('solonotebooks.cotizador.views_manager.news')
     tabs.append([-1, name, url])
     
-    name = 'Nuevas entidades'
-    url = reverse('solonotebooks.cotizador.views_manager.new_entities')
-    tabs.append([-1, name, url])
-    
     name = u'Tiendas'
     url = reverse('solonotebooks.cotizador.views_manager.stores')
     tabs.append([-1, name, url])
@@ -59,7 +55,7 @@ def append_manager_ptype_to_response(request, template, args):
     args['tabs'] = ['Administración', tabs]
     return append_metadata_to_response(request, template, args)
     
-@manager_login_required    
+@manager_login_required
 def statistics(request):
     form = DateRangeForm(request.GET)
     if not form.is_valid():
@@ -106,20 +102,6 @@ def statistics(request):
             'product_creation_count': product_creation_count,
             'tag': random.randint(1, 1000000),
         })
-
-@manager_login_required    
-def polymorphic_admin_request(request, product_id):
-    product = Product.objects.get(pk = product_id)
-    url = '/admin/cotizador/' + product.ptype.adminurlname + '/' + str(product.id)
-    return HttpResponseRedirect(url)
-    
-@manager_login_required    
-def clone_product(request, product_id):
-    product = Product.objects.get(pk = product_id).get_polymorphic_instance()
-    cloned_product = product.clone_product()
-    
-    url = reverse('solonotebooks.cotizador.views_manager.polymorphic_admin_request', args = [cloned_product.id])
-    return HttpResponseRedirect(url)
     
 @manager_login_required    
 def news(request):
@@ -129,108 +111,6 @@ def news(request):
     return append_manager_ptype_to_response(request, 'manager/news.html', {
             'last_logs': last_logs,
         })
-        
-@manager_login_required    
-def new_entities(request):
-    # Shows the models that don't have an associated product in the DB (i.e.: pending)
-    new_entities = StoreHasProductEntity.objects.filter(is_hidden = False).filter(is_available = True).filter(shp__isnull = True)
-    return append_manager_ptype_to_response(request, 'manager/new_entities.html', {
-            'new_entities': new_entities,
-        })
-        
-@manager_login_required
-def storehasproductentity_edit(request, store_has_product_entity_id):
-    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
-
-    if request.method == 'POST':
-        form = StoreHasProductEntityEditForm(request.POST)
-        if form.is_valid():
-            product = form.cleaned_data['product']
-
-            if shpe.shp:
-                shp = shpe.shp
-                shpe.shp = None
-                shpe.save()
-                shp.update(recursive = True)
-            
-            shps = StoreHasProduct.objects.filter(product = product)
-            created = True
-            
-            for sub_shp in shps:
-                if sub_shp.store == shpe.store:
-                    shp = sub_shp
-                    created = False
-                    break
-                    
-            if created:
-                shp = StoreHasProduct()
-                shp.product = product
-                shp.save()
-
-            shpe.shp = shp
-            
-            if not shpe.date_resolved:
-                shpe.date_resolved = datetime.now()
-                
-            shpe.save()
-                
-            shp.update(recursive = True)
-            return HttpResponseRedirect('/manager/new_entities/?refresh=true')
-    else:
-        d = {}
-        
-        store = shpe.infer_store()
-        if store:
-            d['store'] = store
-            
-        form = StoreHasProductEntityEditForm(d)
-        
-    if shpe.ptype:
-        options = shpe.ptype.get_class().objects.all()
-    else:
-        options = Product.get_all_ordered()
-        
-    return append_manager_ptype_to_response(request, 'manager/store_has_product_entity_edit.html', {
-        'shpe_form': form,
-        'shpe': shpe,
-        'options': options
-    })
-        
-@manager_login_required
-def storehasproductentity_hide(request, store_has_product_entity_id):
-    # Makes a model invisible to the "pending" page if it is stupid (e.g. iPad)
-    # or doesn't apply (combos of products + printers, accesories, etc)
-    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
-    shpe.is_hidden = True
-    shpe.save()
-    shpe.update(recursive = True)
-    return HttpResponseRedirect('/manager/new_entities/?refresh=true');
-    
-@manager_login_required
-def storehasproductentity_change_ptype(request, store_has_product_entity_id):
-    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
-    ptype = ProductType.objects.get(classname = request.GET['classname'])
-    shpe.ptype = ptype
-    shpe.save()
-    url = reverse('solonotebooks.cotizador.views_manager.storehasproductentity_edit', args = [shpe.id])
-    return HttpResponseRedirect(url);
-    
-@manager_login_required
-def storehasproductentity_show(request, store_has_product_entity_id):
-    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
-    shpe.is_hidden = False
-    shpe.save()
-    shpe.update(recursive = True)
-    url = reverse('solonotebooks.cotizador.views_manager.storehasproductentity_edit', args = [shpe.id])    
-    return HttpResponseRedirect(url);
-    
-@manager_login_required
-def storehasproductentity_refresh_price(request, store_has_product_entity_id):
-    shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
-    shpe.update_price()
-    shpe.save()
-    url = reverse('solonotebooks.cotizador.views_manager.storehasproductentity_edit', args = [shpe.id])
-    return HttpResponseRedirect(url)
     
 @manager_login_required
 def stores(request):

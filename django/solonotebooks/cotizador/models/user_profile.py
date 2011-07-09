@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save  
 from django.contrib.auth.models import User
-from . import Store
+from . import Store, ProductType
 
 class UserProfile(models.Model):  
     user = models.OneToOneField(User)  
@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     facebook_name = models.CharField(max_length = 255, blank = True, null = True)
     can_access_competitivity_report = models.BooleanField(default=False)
     can_use_extra_ordering_options = models.BooleanField(default=False)
+    managed_product_types = models.ManyToManyField(ProductType)
 
     def __str__(self):  
           return "%s's profile" % self.user  

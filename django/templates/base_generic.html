@@ -52,6 +52,9 @@
                                 {% if user.is_superuser %}
                                 <a href="{% url cotizador.views_manager.news %}" class="toplink">Administrador</a> | 
                                 {% endif %}
+                                {% if user.is_staff %}
+                                <a href="{% url cotizador.views_staff.new_entities user.id %}" class="toplink">Staff</a> | 
+                                {% endif %}
                                 {% if user.get_profile.assigned_store %}
                                 <a href="{% url cotizador.views_store.index %}" class="toplink">Gestor de tienda</a> | 
                                 {% endif %}

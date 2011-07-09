@@ -1,0 +1,19 @@
+{% extends "staff/base.html" %}
+
+{% block title %}Nuevas entidades - {{ site_name }}{% endblock %}
+
+{% block staff_content %}
+
+<h2>Entidades por ingresar</h2>
+
+    {% for pair in pending_shpes %}
+        <h2>{{ pair.0 }}</h2>
+        <ul>
+        {% for entity in pair.1 %}
+            <li>{{ entity.custom_name }} (<a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit staff.id entity.id %}">Editar</a> | <a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_hide staff.id entity.id %}">Esconder</a>)</li>
+        {% endfor %}
+        </ul>
+    {% empty %}
+        No hay entidades por ingresar
+    {% endfor %}
+{% endblock %}
