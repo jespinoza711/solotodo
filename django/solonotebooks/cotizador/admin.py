@@ -119,14 +119,22 @@ admin.site.register(VideoCardMemoryBusWidth)
 admin.site.register(VideoCardGpuCoreCount)
 admin.site.register(VideoCardGpuManufacturingProcess)
 
-excludes = ['ptype', 'shp', 'week_visitor_count', 'week_discount', 'long_description', 'similar_products', 'sponsored_shp', 'week_external_visits', 'display_name', 'part_number']
+excludes = ['ptype', 'shp', 'week_visitor_count', 'week_discount', 'long_description', 'similar_products', 'sponsored_shp', 'week_external_visits', 'display_name', 'part_number', 'created_by']
             
 class ProductAdmin(admin.ModelAdmin):
     exclude = excludes
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.save()
     
 class VideoCardAdmin(admin.ModelAdmin):
     exclude = excludes
     list_display = ['pretty_display', 'core_clock', 'shader_clock', 'memory_clock']
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.save()
     
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Notebook, ProductAdmin)
@@ -157,6 +165,10 @@ admin.site.register(ProcessorGraphics)
 class ProcessorAdmin(admin.ModelAdmin):
     exclude = excludes
     list_display = ['pretty_display', 'pcmark_id', 'pcmark_05_score', 'pcmark_vantage_score', 'passmark_score']
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.save()
 
 admin.site.register(Processor, ProcessorAdmin)
 

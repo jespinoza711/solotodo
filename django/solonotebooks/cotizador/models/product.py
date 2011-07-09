@@ -10,6 +10,7 @@ from utils import prettyPrice
 from solonotebooks import settings
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
@@ -26,6 +27,7 @@ class Product(models.Model):
     display_name = models.CharField(max_length = 255, default = '')
 
     similar_products = models.CommaSeparatedIntegerField(max_length = 30, default = '0')
+    created_by = models.ForeignKey(User, blank=True, null=True)
     
     picture = ImageWithThumbnailsField(
         thumbnail = { 'size': (100, 100), },
@@ -58,7 +60,7 @@ class Product(models.Model):
         for field in self._meta.fields:
             if field.__class__.__name__ == 'ForeignKey':
                 name = field.get_attname().replace('_id', '')
-                if name == 'shp' or name == 'sponsored_shp':
+                if name in ['shp', 'sponsored_shp', 'created_by']:
                     continue
                 result += ' ' + getattr(self, name).raw_text()
             elif field.__class__.__name__ == 'CharField':

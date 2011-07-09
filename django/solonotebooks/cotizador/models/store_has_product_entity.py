@@ -4,6 +4,7 @@ from sorl.thumbnail.fields import ImageWithThumbnailsField
 from . import Product, Store, StoreHasProduct, ProductType
 from utils import prettyPrice
 from datetime import date
+from django.contrib.auth.models import User
 
 class StoreHasProductEntity(models.Model):
     url = models.TextField()
@@ -20,6 +21,8 @@ class StoreHasProductEntity(models.Model):
 
     shp = models.ForeignKey(StoreHasProduct, null = True, blank = True)
     ptype = models.ForeignKey(ProductType, null = True, blank = True)
+    
+    resolved_by = models.ForeignKey(User, blank=True, null=True)
     
     def infer_store(self):
         for store in Store.objects.all():
