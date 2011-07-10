@@ -11,9 +11,9 @@
         <ul>
         {% for entity in pair.1 %}
             <li>{{ entity.custom_name }} (<a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit staff.id entity.id %}">Editar</a> | <a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_hide staff.id entity.id %}">Esconder</a>)</li>
+            {% empty %}
+                No hay entidades por ingresar
         {% endfor %}
         </ul>
-    {% empty %}
-        No hay entidades por ingresar
     {% endfor %}
 {% endblock %}

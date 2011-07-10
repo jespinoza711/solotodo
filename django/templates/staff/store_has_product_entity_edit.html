@@ -4,6 +4,10 @@
 
 {% block staff_content %}
 
+<script type="text/javascript">
+    var staff_id = {{staff.id}}
+</script>
+
 <h2><a href="{{ shpe.url }}">{{ shpe }}</a></h2>
 <h4>
     Tienda: {{ shpe.store }}
@@ -28,6 +32,7 @@
     </select>
     
     <a id="product_link" href="#">Ver producto</a>
+    <a id="clone_link" href="#">Clonar producto</a>
     
     <p>
         {% if shpe.is_hidden %}
