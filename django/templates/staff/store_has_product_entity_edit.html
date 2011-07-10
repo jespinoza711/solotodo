@@ -30,10 +30,14 @@
             >{{ option }}</option>
         {% endfor %}
     </select>
-    
-    <a id="product_link" href="#">Ver producto</a>
-    <a id="clone_link" href="#">Clonar producto</a>
-    
+    <br />
+    <span class="shpe_link">
+        <a id="product_link" href="#">Ver producto seleccionado</a> | 
+        <a id="clone_link" href="#">Clonar producto seleccionado</a> | 
+        <a href="/admin/cotizador/{{shpe.ptype.adminurlname}}/add">Crear nuevo {{ shpe.ptype }}</a>
+    </span>
+    <br />
+    <br />
     <p>
         {% if shpe.is_hidden %}
         <a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_show staff.id shpe.id %}">Hacer visible</a>
