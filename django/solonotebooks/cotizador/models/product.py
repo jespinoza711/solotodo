@@ -343,7 +343,7 @@ class Product(models.Model):
             entity = entity.get_polymorphic_instance()
         entity.load_similar_products()
         
-    def clone_product(self):
+    def clone_product(self, staff):
         clone_prod = deepcopy(self)
         clone_prod.id = None
         clone_prod.product_ptr.id = None
@@ -356,6 +356,7 @@ class Product(models.Model):
         clone_prod.week_visitor_count = 0
         clone_prod.week_external_visits = 0
         clone_prod.part_number = ''
+        clone_prod.created_by = staff
         
         clone_prod.save()
         

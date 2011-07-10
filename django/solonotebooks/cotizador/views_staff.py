@@ -32,7 +32,7 @@ def append_staff_ptype_to_response(request, template, args):
     uid = args['staff'].id
     
     name = 'Nuevas entidades'
-    url = reverse('solonotebooks.cotizador.views_staff.new_entities', args=[uid])
+    url = reverse('solonotebooks.cotizador.views_staff.new_entities', args=[uid]) + '?refresh=true'
     tabs.append([-1, name, url])
     
     name = 'Estadísticas'
@@ -62,7 +62,7 @@ def storehasproductentity_edit(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
     if not shpe.ptype in staff.get_profile().managed_product_types.all():
-        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id])
+        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
 
     if request.method == 'POST':
@@ -100,7 +100,7 @@ def storehasproductentity_edit(request, staff, store_has_product_entity_id):
             shpe.save()
                 
             shp.update(recursive = True)
-            url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id])
+            url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
             return HttpResponseRedirect(url)
     else:
         d = {}
@@ -128,13 +128,13 @@ def storehasproductentity_hide(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
     if not shpe.ptype in staff.get_profile().managed_product_types.all():
-        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id])
+        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
     shpe.is_hidden = True
     shpe.save()
     shpe.update(recursive = True)
-    url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id])
+    url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
     return HttpResponseRedirect(url);
     
 @staff_login_required
@@ -142,7 +142,7 @@ def storehasproductentity_show(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
     if not shpe.ptype in staff.get_profile().managed_product_types.all():
-        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id])
+        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
     shpe.is_hidden = False
@@ -156,7 +156,7 @@ def storehasproductentity_refresh_price(request, staff, store_has_product_entity
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
     if not shpe.ptype in staff.get_profile().managed_product_types.all():
-        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id])
+        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
     shpe.update_price()
@@ -183,7 +183,7 @@ def clone_product(request, staff, product_id):
         url = reverse('solonotebooks.cotizador.views.index')
         return HttpResponseRedirect(url)
     
-    cloned_product = product.clone_product()
+    cloned_product = product.clone_product(staff)
     
     url = reverse('solonotebooks.cotizador.views_staff.polymorphic_admin_request', args = [staff.id, cloned_product.id])
     return HttpResponseRedirect(url)
@@ -193,7 +193,7 @@ def storehasproductentity_change_ptype(request, staff, store_has_product_entity_
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
     if not shpe.ptype in staff.get_profile().managed_product_types.all():
-        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id])
+        url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
     ptype = ProductType.objects.get(classname = request.GET['classname'])

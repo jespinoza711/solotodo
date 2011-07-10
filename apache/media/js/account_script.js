@@ -58,11 +58,14 @@ function refresh_product_link() {
     var ids = $('#id_product').val()
     if (ids) {
         url = '/products/' + ids
+        clone_url = '/staff/' + staff_id + '/clone_product/' + ids
     } else {
         url = '/all_products'
+        clone_url = '#'
     }
         
     $('#product_link').attr('href', url)
+    $('#clone_link').attr('href', clone_url)
 }
 
 function show_js_error(text) {

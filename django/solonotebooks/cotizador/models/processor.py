@@ -33,8 +33,8 @@ class Processor(Product):
     
     # Interface methods
     
-    def clone_product(self):
-        clone_prod = super(Processor, self).clone_product()
+    def clone_product(self, staff):
+        clone_prod = super(Processor, self).clone_product(staff)
         clone_prod.pcmark_id = '0'
         clone_prod.pcmark_05_score = 0
         clone_prod.pcmark_vantage_score = 0
