@@ -70,6 +70,8 @@ urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/stores/(?P<store_id>\d+)$', 'store_details'),
     (r'^manager/stores/(?P<store_id>\d+)/advertisement/$', 'store_advertisement'),
     (r'^manager/stores/(?P<store_id>\d+)/statistics/$', 'store_statistics'),
+    (r'^manager/staff/$', 'staff'),
+    (r'^manager/staff/(?P<staff_id>\d+)/$', 'staff_details'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_staff',

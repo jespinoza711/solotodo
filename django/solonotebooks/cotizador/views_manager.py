@@ -48,6 +48,10 @@ def append_manager_ptype_to_response(request, template, args):
     url = reverse('solonotebooks.cotizador.views_manager.stores')
     tabs.append([-1, name, url])
     
+    name = u'Staff'
+    url = reverse('solonotebooks.cotizador.views_manager.staff')
+    tabs.append([-1, name, url])
+    
     name = u'Estadísticas'
     url = reverse('solonotebooks.cotizador.views_manager.statistics')
     tabs.append([-1, name, url])
@@ -139,7 +143,23 @@ def store_statistics(request, store_id):
     store = Store.objects.get(pk = store_id)
     args =  _statistics(request, store)
     return append_manager_ptype_to_response(request, 'manager/store_statistics.html', args)
+
+@manager_login_required
+def staff(request):
+    staff = User.objects.filter(is_staff=True, is_superuser=False)
+    args = {'staff': staff}
+    return append_manager_ptype_to_response(request, 'manager/staff.html', args)
     
+@manager_login_required
+def staff_details(request, staff_id):
+    staff = User.objects.get(pk=staff_id)
+    
+    shpes = StoreHasProductEntity.objects.filter(resolved_by=staff, date_resolved__gte=date.today() - timedelta(days=7), is_hidden=False, shp__isnull=False).order_by('-date_resolved')
+    
+    products = Product.objects.filter(created_by=staff, date_added__gte=date.today() - timedelta(days=7)).order_by('-date_added')
+    
+    args = {'staff': staff, 'shpes': shpes, 'products': products}
+    return append_manager_ptype_to_response(request, 'manager/staff_details.html', args)
     
 @manager_login_required            
 def analyze_searches(request):
@@ -207,5 +227,3 @@ def analyze_searches(request):
                 'results': results,
                 'num_queries': num_queries,
             })
-            
-

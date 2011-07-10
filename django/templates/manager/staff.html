@@ -1,0 +1,15 @@
+{% extends "manager/base.html" %}
+
+{% block title %}Manager de staff - {{ site_name }}{% endblock %}
+
+{% block manager_content %}
+
+<h2>Listado de staff</h2>
+
+<ul>
+{% for user in staff %}
+    <li><a href="{% url solonotebooks.cotizador.views_manager.staff_details user.id%}">{{ user }}</a></li>
+    {% endfor %}
+</ul>
+    
+{% endblock %}
