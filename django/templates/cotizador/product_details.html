@@ -169,7 +169,9 @@
     {% endif %}
     
     {% if user.is_staff %}
-        <p><strong><a href="{% url solonotebooks.cotizador.views_staff.polymorphic_admin_request user.id product.id %}">Editar información</a></strong></p>
+        <p><strong><a href="{% url solonotebooks.cotizador.views_staff.polymorphic_admin_request user.id product.id %}">Editar información</a> |
+        <a href="{% url solonotebooks.cotizador.views_staff.clone_product user.id product.id %}">Clonar producto</a>
+        </strong></p>
     {% endif %}
     
     {% block product_details %}
