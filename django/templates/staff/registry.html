@@ -1,10 +1,18 @@
-{% extends "manager/base.html" %}
+{% extends "staff/base.html" %}
 
-{% block title %}Manager de staff - {{ staff }}{% endblock %}
+{% block title %}Registro de staff - {{ staff }}{% endblock %}
 
-{% block manager_content %}
+{% block staff_content %}
 
-<h2>Detalles de {{ staff }}</h2>
+<h2>Registro semanal de {{ staff }}</h2>
+
+<h3>Últimas entidades escondidas</h3>
+
+<ul>
+    {% for shpe in hidden_shpes %}
+        <li><a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit user.id shpe.id %}">{{ shpe.custom_name }}</a></li>        
+    {% endfor %}
+</ul>
 
 <h3>Últimas asociaciones</h3>
 

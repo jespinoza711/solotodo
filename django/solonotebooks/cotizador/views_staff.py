@@ -39,6 +39,9 @@ def append_staff_ptype_to_response(request, template, args):
     url = reverse('solonotebooks.cotizador.views_staff.statistics', args=[uid])
     tabs.append([-1, name, url])
     
+    name = 'Registro'
+    url = reverse('solonotebooks.cotizador.views_staff.registry', args=[uid])
+    tabs.append([-1, name, url])
     
     args['tabs'] = ['Staff', tabs]
     return append_metadata_to_response(request, template, args)
@@ -132,6 +135,7 @@ def storehasproductentity_hide(request, staff, store_has_product_entity_id):
         return HttpResponseRedirect(url)
     
     shpe.is_hidden = True
+    shpe.resolved_by = staff
     shpe.save()
     shpe.update(recursive = True)
     url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
@@ -203,6 +207,18 @@ def storehasproductentity_change_ptype(request, staff, store_has_product_entity_
     return HttpResponseRedirect(url);
     
 @staff_login_required
+def registry(request, staff):
+    
+    shpes = StoreHasProductEntity.objects.filter(resolved_by=staff, date_resolved__gte=date.today() - timedelta(days=7), is_hidden=False, shp__isnull=False).order_by('-date_resolved')
+    
+    products = Product.objects.filter(created_by=staff, date_added__gte=date.today() - timedelta(days=7)).order_by('-date_added')
+    
+    hidden_shpes = StoreHasProductEntity.objects.filter(resolved_by=staff, date_resolved__gte=date.today() - timedelta(days=7), is_hidden=True).order_by('-date_resolved')
+    
+    args = {'staff': staff, 'shpes': shpes, 'products': products, 'hidden_shpes': hidden_shpes}
+    return append_staff_ptype_to_response(request, 'staff/registry.html', args)
+    
+@staff_login_required
 def statistics(request, staff):
     form = DateRangeForm(request.GET)
     if not form.is_valid():
@@ -241,4 +257,3 @@ def statistics(request, staff):
             'tag': random.randint(1, 1000000),
             'staff': staff,
         })
-

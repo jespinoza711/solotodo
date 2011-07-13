@@ -71,7 +71,6 @@ urlpatterns += patterns('solonotebooks.cotizador.views_manager',
     (r'^manager/stores/(?P<store_id>\d+)/advertisement/$', 'store_advertisement'),
     (r'^manager/stores/(?P<store_id>\d+)/statistics/$', 'store_statistics'),
     (r'^manager/staff/$', 'staff'),
-    (r'^manager/staff/(?P<staff_id>\d+)/$', 'staff_details'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_staff',
@@ -84,6 +83,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views_staff',
     (r'^staff/(?P<staff_id>\d+)/clone_product/(?P<product_id>\d+)$', 'clone_product'),
     (r'^staff/(?P<staff_id>\d+)/storehasproductentity/(?P<store_has_product_entity_id>\d+)/change_ptype$', 'storehasproductentity_change_ptype'),
     (r'^staff/(?P<staff_id>\d+)/statistics$', 'statistics'),  
+    (r'^staff/(?P<staff_id>\d+)/registry$', 'registry'),
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_legacy',
