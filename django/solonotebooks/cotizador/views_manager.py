@@ -150,17 +150,6 @@ def staff(request):
     args = {'staff': staff}
     return append_manager_ptype_to_response(request, 'manager/staff.html', args)
     
-@manager_login_required
-def staff_details(request, staff_id):
-    staff = User.objects.get(pk=staff_id)
-    
-    shpes = StoreHasProductEntity.objects.filter(resolved_by=staff, date_resolved__gte=date.today() - timedelta(days=7), is_hidden=False, shp__isnull=False).order_by('-date_resolved')
-    
-    products = Product.objects.filter(created_by=staff, date_added__gte=date.today() - timedelta(days=7)).order_by('-date_added')
-    
-    args = {'staff': staff, 'shpes': shpes, 'products': products}
-    return append_manager_ptype_to_response(request, 'manager/staff_details.html', args)
-    
 @manager_login_required            
 def analyze_searches(request):
     import cairo
