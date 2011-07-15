@@ -10,7 +10,7 @@
 
 <ul>
     {% for shpe in hidden_shpes %}
-        <li><a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit user.id shpe.id %}">{{ shpe.custom_name }}</a></li>        
+        <li><a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit staff.id shpe.id %}">{{ shpe.custom_name }}</a></li>        
     {% endfor %}
 </ul>
 
@@ -18,7 +18,7 @@
 
 <ul>
     {% for shpe in shpes %}
-        <li><a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit user.id shpe.id %}">{{ shpe.custom_name }}</a> -> <a href="{% url solonotebooks.cotizador.views.product_details shpe.shp.product.id %}">{{ shpe.shp.product }}</a></li>        
+        <li><a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit staff.id shpe.id %}">{{ shpe.custom_name }}</a> -> <a href="{% url solonotebooks.cotizador.views.product_details shpe.shp.product.id %}">{{ shpe.shp.product }}</a></li>        
     {% endfor %}
 </ul>
 

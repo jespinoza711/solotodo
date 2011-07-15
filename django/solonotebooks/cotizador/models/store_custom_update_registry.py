@@ -11,5 +11,5 @@ class StoreCustomUpdateRegistry(models.Model):
         return unicode(self.store) + ' - ' + str(self.start_datetime)
         
     class Meta:
-        ordering=['store', 'start_datetime']
+        ordering=['-start_datetime', 'store']
         app_label = 'cotizador'
