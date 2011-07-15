@@ -49,26 +49,26 @@ class PCFactory(FetchStore):
         productsData = []
         
         url_extensions = [  
-                            ['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 11
-                            ['?papa=24&categoria=449', 'Notebook'],   # Notebooks 12 a 13
+                            #['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 11
+                            #['?papa=24&categoria=449', 'Notebook'],   # Notebooks 12 a 13
                             ['?papa=24&categoria=410', 'Notebook'],   # Notebooks 14
-                            ['?papa=24&categoria=437', 'Notebook'],   # Notebooks 15
-                            ['?papa=24&categoria=436', 'Notebook'],   # Notebooks 16 y +
-                            ['?papa=334&categoria=40', 'VideoCard'],   # VGA AGP
-                            ['?papa=334&categoria=378', 'VideoCard'],  # VGA PCIe Nvidia
-                            ['?papa=334&categoria=454', 'VideoCard'],  # VGA PCIe ATI
-                            ['?papa=334&categoria=455', 'VideoCard'],  # VGA Profesionales
-                            ['?papa=272&categoria=409', 'Processor'],  # CPU Server
-                            ['?papa=272&categoria=465', 'Processor'],  # CPU AM3
-                            ['?papa=272&categoria=388', 'Processor'],  # CPU 775
-                            ['?papa=272&categoria=468', 'Processor'],  # CPU 1156
-                            ['?papa=272&categoria=446', 'Processor'],  # CPU 1366
-                            ['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
-                            ['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
-                            ['?papa=292&categoria=473', 'Motherboard'],  # MB AM3
-                            ['?papa=292&categoria=392', 'Motherboard'],  # MB 775
-                            ['?papa=292&categoria=467', 'Motherboard'],  # MB 1156
-                            ['?papa=292&categoria=447', 'Motherboard'],  # MB 1366
+                            #['?papa=24&categoria=437', 'Notebook'],   # Notebooks 15
+                            #['?papa=24&categoria=436', 'Notebook'],   # Notebooks 16 y +
+                            #['?papa=334&categoria=40', 'VideoCard'],   # VGA AGP
+                            #['?papa=334&categoria=378', 'VideoCard'],  # VGA PCIe Nvidia
+                            #['?papa=334&categoria=454', 'VideoCard'],  # VGA PCIe ATI
+                            #['?papa=334&categoria=455', 'VideoCard'],  # VGA Profesionales
+                            #['?papa=272&categoria=409', 'Processor'],  # CPU Server
+                            #['?papa=272&categoria=465', 'Processor'],  # CPU AM3
+                            #['?papa=272&categoria=388', 'Processor'],  # CPU 775
+                            #['?papa=272&categoria=468', 'Processor'],  # CPU 1156
+                            #['?papa=272&categoria=446', 'Processor'],  # CPU 1366
+                            #['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
+                            #['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
+                            #['?papa=292&categoria=473', 'Motherboard'],  # MB AM3
+                            #['?papa=292&categoria=392', 'Motherboard'],  # MB 775
+                            #['?papa=292&categoria=467', 'Motherboard'],  # MB 1156
+                            #['?papa=292&categoria=447', 'Motherboard'],  # MB 1366
                             ]
                           
         pageLinks = []
@@ -81,7 +81,7 @@ class PCFactory(FetchStore):
                 
             while True:
                 completeWebpage = urlWebpage + '&pagina=' + str(pageNumber)
-
+                
                 baseData = browser.open(completeWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
 
@@ -91,12 +91,15 @@ class PCFactory(FetchStore):
                 if not ntbkLinks:
                     break
                     
+                link_repeat_counter = 0
                 for ntbkLink in ntbkLinks:
                     link = urlBase + ntbkLink['href']
                     link = link.encode('ascii', 'ignore')
                     if link in localLinks:
-                        trigger = True
-                        break
+                        link_repeat_counter += 1
+                        if link_repeat_counter == 2:
+                            trigger = True
+                            break
                     localLinks.append(link)
                     
                 if trigger:

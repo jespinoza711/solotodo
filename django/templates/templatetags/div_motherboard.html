@@ -3,6 +3,6 @@
 {% block specs %}
 <li><strong>Marca:</strong> {{ product.brand }}</li>
 <li><strong>Socket:</strong> {{ product.chipset.northbridge.family.socket }}</li>
-<li><strong>Chipset:</strong> {{ product.chipset }}</li>
+<li><strong>Chipset:</strong> {{ product.chipset.pretty_display }}</li>
 <li><strong>Memorias:</strong> {{ product.pretty_memory_types }}</li>
 {% endblock %}

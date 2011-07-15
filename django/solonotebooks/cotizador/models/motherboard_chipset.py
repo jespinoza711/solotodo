@@ -6,8 +6,11 @@ class MotherboardChipset(models.Model):
     northbridge = models.ForeignKey(MotherboardNorthbridge)
     southbridge = models.ForeignKey(MotherboardSouthbridge)
     
-    def __unicode__(self):
+    def pretty_display(self):
         return unicode(self.northbridge.family.brand) + ' ' + self.name
+        
+    def __unicode__(self):
+        return self.pretty_display() + ' (' + unicode(self.northbridge.family.socket) + ')'
         
     def raw_text(self):
         return self.name + ' ' + self.northbridge.raw_text() + ' ' + self.southbridge.raw_text()
