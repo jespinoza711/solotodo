@@ -71,46 +71,37 @@ class PCFactory(FetchStore):
                             ['?papa=292&categoria=447', 'Motherboard'],  # MB 1366
                             ]
                           
-        pageLinks = []
-        links = []                            
+        products_data = []                      
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
-            pageNumber = 1
             
-            localLinks = []
+            soup = BeautifulSoup(browser.open(urlWebpage).get_data())
+            
+            try:
+                page_count = int(soup.findAll('table', {'class': 'descripcionbold'})[1].findAll('td', {'align': 'center'})[-1].find('a').string)
+            except:
+                page_count = 1
+            
+            product_links = []
                 
-            while True:
-                completeWebpage = urlWebpage + '&pagina=' + str(pageNumber)
+            for page in range(page_count):
+                page += 1
                 
+                completeWebpage = urlWebpage + '&pagina=' + str(page)
+
                 baseData = browser.open(completeWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
 
                 ntbkLinks = baseSoup.findAll('a', { 'class' : 'vinculoNombreProd' })
-                trigger = False
-                
-                if not ntbkLinks:
-                    break
                     
-                link_repeat_counter = 0
                 for ntbkLink in ntbkLinks:
                     link = urlBase + ntbkLink['href']
                     link = link.encode('ascii', 'ignore')
-                    if link in localLinks:
-                        link_repeat_counter += 1
-                        if link_repeat_counter == 2:
-                            trigger = True
-                            break
-                    localLinks.append(link)
-                    
-                if trigger:
-                    for link in localLinks:
-                        if link in links:
-                            continue
-                        links.append(link)
-                        pageLinks.append([link, ptype])
-                    break
-                    
-                pageNumber += 1
+                    if link not in product_links:
+                        product_links.append(link)
+                
+            for link in product_links:
+                products_data.append([link, ptype])
 
-        return pageLinks
+        return products_data
 
