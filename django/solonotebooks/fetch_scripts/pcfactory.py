@@ -11,30 +11,27 @@ class PCFactory(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
-        try:
-            browser = mechanize.Browser()
-            baseData = browser.open(product_link).get_data()
-            baseSoup = BeautifulSoup(baseData)
-            product_data = ProductData()
-            
-            available_cells = baseSoup.findAll('table', { 'class' : 'ProductLine1' })[2].findAll('td')
-            if len(available_cells) != 1:
-                availability_cells = available_cells[2::2]
-                for cell in availability_cells:
-                    if cell.string == 'Agotado':      
-                        return None
-            
-            titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
-            product_data.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
-            product_data.url = product_link
-            product_data.comparison_field = product_link
-            
-            price_data = int(baseSoup.find('select', { 'class' : 'PCFdropFicha' }).findAll('option')[1]['value'].replace('.', ''))
-            product_data.price = price_data
-            
-            return product_data
-        except:
-            return None
+        browser = mechanize.Browser()
+        baseData = browser.open(product_link).get_data()
+        baseSoup = BeautifulSoup(baseData)
+        product_data = ProductData()
+        
+        available_cells = baseSoup.findAll('table', { 'class' : 'ProductLine1' })[2].findAll('td')
+        if len(available_cells) != 1:
+            availability_cells = available_cells[2::2]
+            for cell in availability_cells:
+                if cell.string == 'Agotado':      
+                    return None
+        
+        titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
+        product_data.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
+        product_data.url = product_link
+        product_data.comparison_field = product_link
+        
+        price_data = int(baseSoup.find('span', { 'class' : 'title_big' }).find('strong').string.replace('.', ''))
+        product_data.price = price_data
+        
+        return product_data
 
     # Main method
     def retrieve_product_links(self):
