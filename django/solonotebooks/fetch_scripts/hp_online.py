@@ -14,10 +14,7 @@ class HPOnline(FetchStore):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        try:
-            product_name = product_soup.find('span', { 'id': 'ctl00_templateContenido_detalle1_iuNombre' }).string.encode('ascii', 'ignore')
-        except:
-            return None
+        product_name = product_soup.find('span', { 'id': 'ctl00_templateContenido_detalle1_iuNombre' }).string.encode('ascii', 'ignore')
         product_price = int(product_soup.find('div', { 'id': 'ctl00_templateContenido_detalle1_iuPanelML' }).string.split('$')[1].replace('.', ''))
         
         product_data = ProductData()
@@ -31,20 +28,21 @@ class HPOnline(FetchStore):
     # Main method
     def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://hponline.techdata.cl'
+        urlBase = 'http://www.hponline.cl'
         urlBuscarProductos = '/personas/'
         
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  ['productos.aspx?cmd=Z2x4eA==', 'Notebook'],
-                            ['productos.aspx?cmd=ZWx4eA==', 'Notebook'],
+        url_extensions = [  ['productos.aspx?cmd=Z2w=', 'Notebook'],
+                            ['productos.aspx?cmd=ZWw=', 'Notebook'],
                             ['remates.aspx', 'Notebook'],
                             ]
                           
         product_links = []                            
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
+            
 
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
