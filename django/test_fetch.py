@@ -9,7 +9,8 @@ import sys
 # Script to test the fetch script for a store
 def main():
     p = eval(sys.argv[1] + '()')
-    p.retrieve_product_links()
+    for link, ptype in p.retrieve_product_links():
+        print link
                 
 if __name__ == '__main__':
     print datetime.now()
