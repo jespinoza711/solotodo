@@ -38,6 +38,7 @@ from top_pc import TopPC
 from compumanque import Compumanque
 from movistar import Movistar
 from entel import Entel
+from my_box import MyBox
 
 __all__ = [ 
             'ProductData',
@@ -80,4 +81,5 @@ __all__ = [
             'Compumanque',
             'Movistar',
             'Entel',
+            'MyBox',
         ]
