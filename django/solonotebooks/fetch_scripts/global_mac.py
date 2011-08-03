@@ -57,7 +57,6 @@ class GlobalMac(FetchStore):
                             
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension
-            print urlWebpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
             
@@ -69,7 +68,7 @@ class GlobalMac(FetchStore):
                 if link == None:
                 	continue
                 	
-            	product_links.append([urlBase + link['href'], ptype])
+            	product_links.append([urlBase + link['href'].replace('\t', ''), ptype])
             	
         return product_links
 
