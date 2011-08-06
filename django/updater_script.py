@@ -11,7 +11,7 @@ site, it grabs every single model of the stores with fetchers and inserts
 them into the database, logging price changes, new models and disappearing
 models'''
 def main():
-    blacklist = ['FetchStore', 'ProductData', 'TecnoGroup', 'Cintegral']
+    blacklist = ['FetchStore', 'ProductData', 'TecnoGroup', 'Cintegral', 'TecnoCl']
 
     classnames = [classname for classname in dir(fetch_scripts) if inspect.isclass(getattr(fetch_scripts, classname)) and classname not in blacklist]
     
