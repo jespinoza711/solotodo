@@ -5,12 +5,14 @@ from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+from django.utils.http import urlquote
 
 class Bym(FetchStore):
     name = 'Bym'
     use_existing_links = False
     
     def retrieve_product_data(self, product_link, already_tried = False):
+        product_link = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(product_link)
         browser = mechanize.Browser()
         try:
             base_data = mechanize.urlopen(product_link)
@@ -64,7 +66,8 @@ class Bym(FetchStore):
             page_number = 1
             
             while True:
-                urlWebpage = urlBase + url_extension + '&pagina=' + str(page_number)
+                initial_url = urlBase + url_extension + '&pagina=' + str(page_number)
+                urlWebpage = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(initial_url)
                 base_data = mechanize.urlopen(urlWebpage)
                 base_soup = BeautifulSoup(base_data)
                 
@@ -74,7 +77,8 @@ class Bym(FetchStore):
                     break
                 
                 for productLink in productLinks:
-                    product_links.append([urlBase + productLink, ptype])
+                    url = urlBase + productLink
+                    product_links.append([url, ptype])
                 
                 page_number += 1
 
