@@ -12,10 +12,10 @@ class Bym(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link, already_tried = False):
-        product_link = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(product_link)
+        new_product_link = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(product_link)
         browser = mechanize.Browser()
         try:
-            base_data = mechanize.urlopen(product_link)
+            base_data = mechanize.urlopen(new_product_link)
         except:
             if already_tried:
                 return None
@@ -78,6 +78,7 @@ class Bym(FetchStore):
                 
                 for productLink in productLinks:
                     url = urlBase + productLink
+                    print url
                     product_links.append([url, ptype])
                 
                 page_number += 1
