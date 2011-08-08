@@ -11,6 +11,8 @@ class FetchStore:
     def get_products(self):
         print 'Obteniendo productos de ' + self.name
         product_links = self.retrieve_product_links()
+        if not product_links:
+            raise Exception('0 links from ' + self.name)
         
         return self.retrieve_products_data(product_links)
         
