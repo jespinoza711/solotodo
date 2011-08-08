@@ -434,18 +434,27 @@ def competition_report_excel(request):
     ws.col(3).width = 16000
     ws.col(4).width = 5000
     ws.col(5).width = 5000
-    ws.col(6).width = 8000
-    ws.col(7).width = 10000
+    ws.col(6).width = 5000
+    ws.col(7).width = 5000
+    ws.col(8).width = 5000
+    ws.col(9).width = 5000
+    ws.col(10).width = 5000
+    ws.col(11).width = 5000
+    ws.col(12).width = 5000
     
     current_row = 0
     ws.write(current_row, 0, u'Relevancia')
     ws.write(current_row, 1, u'Tipo relevancia')
     ws.write(current_row, 2, u'Código')
     ws.write(current_row, 3, u'Nombre')
-    ws.write(current_row, 4, u'Precio %s' % unicode(store))
-    ws.write(current_row, 5, u'Competencia')
-    ws.write(current_row, 6, u'Competidor')
-    ws.write(current_row, 7, u'Categoría')
+    ws.write(current_row, 4, u'Categoría')
+    ws.write(current_row, 5, u'Precio %s' % unicode(store))
+    ws.write(current_row, 6, u'Competencia 1')
+    ws.write(current_row, 7, u'Competidor 1')
+    ws.write(current_row, 8, u'Competencia 2')
+    ws.write(current_row, 9, u'Competidor 2')
+    ws.write(current_row, 10, u'Competencia 3')
+    ws.write(current_row, 11, u'Competidor 3')
     current_row += 1
     
     for result in results:
@@ -455,16 +464,15 @@ def competition_report_excel(request):
                 ws.write(current_row, 1, form.get_ordering_as_string())
                 ws.write(current_row, 2, entry.part_number)
                 ws.write(current_row, 3, unicode(entry))
-                ws.write(current_row, 4, str(entry.store_shpe.latest_price))
+                ws.write(current_row, 4, result[0])
+                ws.write(current_row, 5, str(entry.store_shpe.latest_price))
                 
-                if entry.competitor_shpe:
-                   ws.write(current_row, 5, str(entry.competitor_shpe.latest_price))
-                   ws.write(current_row, 6,  unicode(entry.competitor_shpe.store))
-                   
-                else:
-                    ws.write(current_row, 5, u'N/A')
+                
+                for idx, shp in enumerate(entry.competitor_shps):
+                   ws.write(current_row, 6 + 2 * idx, str(shp.shpe.latest_price))
+                   ws.write(current_row, 6 + 2 * idx + 1,  unicode(shp.shpe.store))   
                     
-                ws.write(current_row, 7, result[0])
+                
                 current_row += 1
 
     wb.save(response)

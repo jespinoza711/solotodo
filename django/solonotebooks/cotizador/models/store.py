@@ -143,15 +143,11 @@ class Store(models.Model):
         for shp in shps:
             shp.product.store_shpe = shp.shpe
             
-            if shp.product.shp.shpe.store == self:
-                other_shps = StoreHasProduct.objects.filter(product = shp.product, shpe__isnull=False).filter(~Q(shpe__store = self)).order_by('shpe__latest_price')
-                if other_shps:
-                    print shp.product
-                    shp.product.competitor_shpe = other_shps[0].shpe
-                else:
-                    shp.product.competitor_shpe = None
+            other_shps = StoreHasProduct.objects.filter(product = shp.product, shpe__isnull=False).filter(~Q(shpe__store = self)).order_by('shpe__latest_price')
+            if other_shps:
+                shp.product.competitor_shps = other_shps[:3]
             else:
-                shp.product.competitor_shpe = shp.product.shp.shpe
+                shp.product.competitor_shps = []
                 
             final_products.append(shp.product)
             
