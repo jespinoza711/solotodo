@@ -78,7 +78,6 @@ class Bym(FetchStore):
                 
                 for productLink in productLinks:
                     url = urlBase + productLink
-                    print url
                     product_links.append([url, ptype])
                 
                 page_number += 1
