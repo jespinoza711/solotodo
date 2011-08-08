@@ -25,7 +25,9 @@
                         <th>Código</th>
                         <th>Nombre</th>
                         <th>Precio {{ store }}</th>
-                        <th>Mejor precio de la competencia</th>
+                        <th>Competencia 1</th>
+                        <th>Competencia 2</th>
+                        <th>Competencia 3</th>
                     </tr>
                     
                     {% for entry in result.1 %}
@@ -33,13 +35,13 @@
                             <td>{{ entry.part_number }}</td>
                             <td><a href="{% url solonotebooks.cotizador.views_services.product_details entry.id %}">{{ entry }}</a></td>
                             <td>{{ entry.store_shpe.pretty_price }} (<a href="{{ entry.store_shpe.url }}">Link</a>)</td>
-                            <td>
-                                {% if entry.competitor_shpe %}
-                                    {{ entry.competitor_shpe.pretty_price }} (<a href="{{ entry.competitor_shpe.url }}">{{ entry.competitor_shpe.store }}</a>)
-                                {% else %}
-                                    Sólo disponible en {{ store }}
-                                {% endif %}
+                                        
+                            {% for shp in entry.competitor_shps %}
+                            <td>    
+                                {{ shp.shpe.pretty_price }} (<a href="{{ shp.shpe.url }}">{{ shp.shpe.store }}</a>)
                             </td>
+                            {% endfor %}
+                            
                         </tr>
                     {% endfor %}
                 </table>
