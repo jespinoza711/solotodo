@@ -11,6 +11,15 @@ class SearchForm(forms.Form):
     advanced_controls = forms.IntegerField(widget = forms.HiddenInput())
     page_number = forms.IntegerField()
     
+    list_unavailable_products_choices = (('0', 'No'), ('1', 'Sí'))
+    list_unavailable_products = CustomChoiceField(choices = list_unavailable_products_choices).set_name('Mostrar todos?').does_require_advanced_controls()
+    
+    def filter(self, classname):
+        if self.list_unavailable_products:
+            products = classname.objects.all()
+        else:
+            products = classname.objects.filter(shp__isnull = False)
+        return self.filter_products(products)
     
     def __init__(self, qd, extra_permissions):
         if 'max_price' not in qd:
@@ -60,7 +69,7 @@ class SearchForm(forms.Form):
         
     def generate_title(self):
         # We are going to skip the special "filters" as they don't apply
-        skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction', 'min_price', 'max_price']
+        skip_keys = ['page_number', 'advanced_controls', 'ordering', 'ordering_direction', 'min_price', 'max_price', 'list_unavailable_products']
         valid_keys = []
         
         # For each filter (including those not active, represented by empty)
@@ -234,7 +243,7 @@ class SearchForm(forms.Form):
         filters = {}
         
         # We are going to skip the special "filters" as they don't apply
-        skip_keys = ['page_number', 'ordering', 'ordering_direction', 'min_price', 'max_price', 'advanced_controls']
+        skip_keys = ['page_number', 'ordering', 'ordering_direction', 'min_price', 'max_price', 'advanced_controls', 'list_unavailable_products']
         
         # For each filter (including those not active, represented by empty)
         adv_fields = self.get_attributes_requiring_advanced_controls()

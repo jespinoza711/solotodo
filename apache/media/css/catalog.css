@@ -15,6 +15,18 @@
     width: 150px;
 }
 
+#list_unavailable_products_choices select {
+    width: 50px;
+}
+
+#list_unavailable_products_choices label.search_form_label {
+    width: inherit;
+}
+
+#list_unavailable_products_choices {
+    padding-top: 5px;
+}
+
 .always_hidden_filter_item {
     display: none;
 }

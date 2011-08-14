@@ -40,10 +40,6 @@ class Screen(Product):
         similar_products = Screen.objects.filter(size__family = self.size.family).order_by('?')[:4]
         self.similar_products = ','.join([str(prod.id) for prod in similar_products])
         
-    @staticmethod
-    def get_valid():
-        return Screen.objects.filter(shp__isnull = False)
-        
     # Custom methods
     
     def pretty_display(self):

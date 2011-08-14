@@ -61,7 +61,7 @@ class Processor(Product):
         
     def load_similar_products(self):
         threshold = 4
-        processors = Processor.get_valid().filter(core = self.core).filter(line = self.line).filter(~Q(id = self.id)).order_by('?')[:threshold]
+        processors = Processor.get_available().filter(core = self.core).filter(line = self.line).filter(~Q(id = self.id)).order_by('?')[:threshold]
         self.similar_products = ','.join([str(processor.id) for processor in processors])
         
     @classmethod

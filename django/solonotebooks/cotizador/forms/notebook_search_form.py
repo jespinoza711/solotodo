@@ -1,7 +1,7 @@
 #-*- coding: UTF-8 -*-
 # Class that represents the search form to find notebooks
 from django import forms
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Count
 from solonotebooks.cotizador.models import *
 from solonotebooks.cotizador.models import utils
 from solonotebooks.cotizador.fields import ClassChoiceField, CustomChoiceField
@@ -247,7 +247,7 @@ class NotebookSearchForm(SearchForm):
         if self.ordering == 1:
             if ordering_direction == None:
                 ordering_direction = ''
-            notebooks = notebooks.order_by(ordering_direction + 'shp__shpe__latest_price')
+            notebooks = notebooks.annotate(null_position=Count('shp')).order_by('-null_position', ordering_direction + 'shp__shpe__latest_price')
         elif self.ordering == 2:
             if ordering_direction == None:
                 ordering_direction = '-'    
