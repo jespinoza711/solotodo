@@ -22,7 +22,7 @@
     </td>
     <td>
         {% if notebook.shp %}
-            <a href="{% url cotizador.views.product_details notebook.id %}">{{ notebook.pretty_min_price }}</a>
+            <a href="{% url cotizador.views.product_details notebook.url %}">{{ notebook.pretty_min_price }}</a>
         {% else %}
             Equipo no disponible
         {% endif %}

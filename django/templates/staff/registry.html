@@ -18,7 +18,7 @@
 
 <ul>
     {% for shpe in shpes %}
-        <li><a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit staff.id shpe.id %}">{{ shpe.custom_name }}</a> -> <a href="{% url solonotebooks.cotizador.views.product_details shpe.shp.product.id %}">{{ shpe.shp.product }}</a></li>        
+        <li><a href="{% url solonotebooks.cotizador.views_staff.storehasproductentity_edit staff.id shpe.id %}">{{ shpe.custom_name }}</a> -> <a href="{% url solonotebooks.cotizador.views.product_details shpe.shp.product.url %}">{{ shpe.shp.product }}</a></li>        
     {% endfor %}
 </ul>
 
@@ -27,7 +27,7 @@
 <h3>Últimos productos creados</h3>
 <ul>
     {% for product in products %}
-            <li><a href="{% url solonotebooks.cotizador.views.product_details product.id %}">{{ product }}</a></li>
+            <li><a href="{% url solonotebooks.cotizador.views.product_details product.url %}">{{ product }}</a></li>
     {% endfor %}
 </ul>
 {% endblock %}

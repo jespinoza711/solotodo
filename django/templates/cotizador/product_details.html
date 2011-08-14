@@ -11,7 +11,7 @@
     <meta property="fb:app_id" content="{{ settings.FACEBOOK_ID }}"/>
     <meta property="og:title" content="{{ product }}"/>
     <meta property="og:type" content="product"/>
-    <meta property="og:url" content="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}"/>
+    <meta property="og:url" content="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.url %}"/>
     <meta property="og:image" content="{{settings.SERVER_NAME }}{{ product.picture.extra_thumbnails.large.absolute_url }}"/>
     <meta property="og:site_name" content="{{ settings.SITE_NAME }}"/>
 
@@ -178,7 +178,7 @@
     {% endblock %}
     
     <p id="product_like">
-    <fb:like href="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}" show_faces="true" width="350"></fb:like>
+    <fb:like href="{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.url %}" show_faces="true" width="350"></fb:like>
     </p>
 </div>
 
@@ -188,7 +188,7 @@
 <script type="text/javascript">
     var disqus_shortname = '{{ settings.DISQUS_SHORTNAME }}';
     var disqus_identifier = '{{ product.disqus_id }}';
-    var disqus_url = '{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.id %}';
+    var disqus_url = '{{ settings.SERVER_NAME }}{% url solonotebooks.cotizador.views.product_details product.url %}';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

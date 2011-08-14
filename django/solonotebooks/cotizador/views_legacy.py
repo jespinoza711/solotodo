@@ -2,9 +2,11 @@
 from django.core.urlresolvers import reverse
 from utils import concat_dictionary
 from django.http import HttpResponseRedirect
+from cotizador.models import Product
          
 def notebook_details(request, notebook_id):
-    url = reverse('solonotebooks.cotizador.views.product_details', kwargs = {'product_id': notebook_id})
+    product = Product.objects.get(pk=notebook_id)
+    url = reverse('solonotebooks.cotizador.views.product_details', kwargs = {'product_url': product.url})
     return HttpResponseRedirect(url)
     
 def processor_line_family_details(request, processor_line_family_id):

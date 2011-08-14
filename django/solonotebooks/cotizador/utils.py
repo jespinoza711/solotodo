@@ -11,6 +11,7 @@ from solonotebooks import settings
 from models import *
 from forms import *
 from exceptions import *
+from string import digits, lowercase
 
 def stringCompare(comp1, comp2):
     comp1_words = comp1.lower().split()
@@ -251,6 +252,19 @@ def generate_pie_chart(data, filename, title):
     surface.write_to_png(settings.MEDIA_ROOT + '/charts/' + filename)
     
     return True
+    
+def urlify(unistring):
+    unistring = latin1_to_ascii(unistring)
+    unistring = unistring.lower()
+    valid_symbols = lowercase + digits
+    final_string = ''
+    for c in unistring:
+        if c in valid_symbols:
+            final_string += c
+        else:
+            final_string += ' '
+    final_string = '-'.join([w for w in final_string.split(' ') if w])
+    return final_string
     
     
 def latin1_to_ascii(unicrap):

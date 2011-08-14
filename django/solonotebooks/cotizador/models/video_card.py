@@ -21,8 +21,8 @@ class VideoCard(Product):
     
     # Interface methods
     
-    def update_display_name(self):
-        self.display_name = unicode(self.brand) + ' ' + self.gpu.name + ' (' + self.name + ')'
+    def get_display_name(self):
+        return unicode(self.brand) + ' ' + self.gpu.name + ' (' + self.name + ')'
         
     def raw_text(self):
         result = super(VideoCard, self).base_raw_text()

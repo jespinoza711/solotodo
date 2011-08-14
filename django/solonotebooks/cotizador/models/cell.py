@@ -15,12 +15,12 @@ class Cell(Product):
         result += ' ' + self.phone.raw_text()
         return result
 
-    def update_display_name(self):
+    def get_display_name(self):
         result =  str(self.phone) + ' (' + str(self.pricing.company)
         if self.name.strip():
             result += ' / ' + self.name.strip()
         result += ')'
-        self.display_name = result
+        return result
         
     def load_similar_products(self):
         pass
@@ -139,7 +139,7 @@ class Cell(Product):
             if tier:
                 args = '?tier_id=' + str(tier.id)
                 
-            return reverse('solonotebooks.cotizador.views.product_details', args = [self.id]) + args
+            return reverse('solonotebooks.cotizador.views.product_details', args = [self.url]) + args
     
     class Meta:
         ordering = ['display_name']

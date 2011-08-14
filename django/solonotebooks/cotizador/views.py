@@ -4,6 +4,7 @@ import sys
 import hashlib
 import operator
 import urllib
+import re
 from datetime import date, timedelta
 from time import time
 from math import ceil
@@ -321,9 +322,21 @@ def ad_visited(request, advertisement_id):
     ad_visit.save()
     return HttpResponseRedirect(advertisement.target_url)
     
-# View in charge of showing the details of a product and handle commment submissions        
-def product_details(request, product_id):
+def product_details_legacy(request, product_id):
     product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()
+    url = reverse('solonotebooks.cotizador.views.product_details', args = [product.url])
+    return HttpResponseRedirect(url)
+    
+# View in charge of showing the details of a product and handle commment submissions        
+def product_details(request, product_url):
+    match = re.match(r'(\d+)-[\w-]+', product_url)
+    product_id = int(match.groups()[0])
+
+    product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()
+    
+    if product.url != product_url:
+        url = reverse('solonotebooks.cotizador.views.product_details', args = [product.url])
+        return HttpResponseRedirect(url)
     
     # If this is a comment submission, validate and save
     if request.method == 'POST': 

@@ -25,8 +25,8 @@ class Screen(Product):
     
     # Interface methods
 
-    def update_display_name(self):
-        self.display_name = unicode(self.line) + ' ' + self.name
+    def get_display_name(self):
+        return unicode(self.line) + ' ' + self.name
         
     def raw_text(self):
         result = super(Screen, self).base_raw_text()
