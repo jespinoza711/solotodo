@@ -94,10 +94,15 @@ urlpatterns += patterns('solonotebooks.cotizador.views_legacy',
     (r'^video_card_line/$', 'video_card_line'),
     (r'^store_notebook/(?P<store_notebook_id>\d+)/$', 'store_notebook_redirect'),
     )
-    
+ 
+urlpatterns += patterns('solonotebooks.cotizador.views_services',
+    (r'^products/(?P<product_id>\d+)/details/$', 'product_details'),
+)
+   
 urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^$', 'index'),
-    (r'^products/(?P<product_id>\d+)/$', 'product_details'),
+    (r'^products/(?P<product_id>\d+)/$', 'product_details_legacy'),
+    (r'^products/(?P<product_url>\S+)/$', 'product_details'),
     (r'^store_product/(?P<store_product_id>\d+)/$', 'store_product_redirect'),
     (r'^sponsored_product/(?P<shp_id>\d+)/$', 'sponsored_product_redirect'),
     (r'^all_products/$', 'all_products'),
@@ -106,8 +111,4 @@ urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^search/$', 'search'),
     (r'^(?P<product_type_urlname>\w+)/catalog/$', 'product_type_catalog'),
     (r'^(?P<product_type_urlname>\w+)/$', 'product_type_index'),
-)
-
-urlpatterns += patterns('solonotebooks.cotizador.views_services',
-    (r'^products/(?P<product_id>\d+)/details/$', 'product_details'),
 )

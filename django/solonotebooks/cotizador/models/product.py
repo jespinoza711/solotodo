@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
+    url = models.CharField(max_length = 255)
     part_number = models.CharField(blank=True, null=True, max_length=20)
     date_added = models.DateTimeField(auto_now_add = True)
     ptype = models.ForeignKey(ProductType, blank = True, null = True)
@@ -53,7 +54,7 @@ class Product(models.Model):
                 vals = ['%s=%s' % (k, v) for k, v in self.url_args.items()]
                 args = '?' + '&'.join(vals)
                 
-            return reverse('solonotebooks.cotizador.views.product_details', args = [self.id]) + args
+            return reverse('solonotebooks.cotizador.views.product_details', args = [self.url]) + args
         
     def base_raw_text(self):
         result = self.name
@@ -118,9 +119,10 @@ class Product(models.Model):
         super(Product, self).save()
 
     def update_display_name(self):
+        from cotizador.utils import urlify
         pself = self.get_polymorphic_instance()
-        pself.update_display_name()
-        self.display_name = pself.display_name
+        self.display_name = pself.get_display_name()
+        self.url = str(self.id) + '-' + urlify(self.display_name)
         
     def update_part_number(self):
         from . import StoreHasProductEntity

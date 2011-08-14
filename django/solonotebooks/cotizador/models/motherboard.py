@@ -21,8 +21,8 @@ class Motherboard(Product):
     
     # Interface methods
     
-    def update_display_name(self):
-        self.display_name = unicode(self.brand) + ' ' + self.name
+    def get_display_name(self):
+        return unicode(self.brand) + ' ' + self.name
         
     def raw_text(self):
         result = super(Motherboard, self).base_raw_text()

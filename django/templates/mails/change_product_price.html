@@ -2,7 +2,7 @@ Hola {{ user.get_profile.name }},
 
 El equipo {{ product }} acaba de cambiar de precio, para ver su nuevo valor entra a 
 
-{{ server_name }}{% url cotizador.views.product_details product.id %}
+{{ server_name }}{% url cotizador.views.product_details product.url %}
 
 Este correo fue enviado pues estás suscrito a los cambios de este equipo, para modificar tus preferencias sólo necesitas editarlas en tu lista de productos:
 

@@ -61,8 +61,8 @@ class Notebook(Product):
         result += ' bateria ' + str(self.battery_cells) + ' celdas ' 
         return result
         
-    def update_display_name(self):
-        self.display_name = unicode(self.line) + ' ' + self.name
+    def get_display_name(self):
+        return unicode(self.line) + ' ' + self.name
         
     def load_similar_products(self):
         threshold = 4

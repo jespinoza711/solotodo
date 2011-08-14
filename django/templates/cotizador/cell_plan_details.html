@@ -22,7 +22,7 @@
         </tr>
         {% for tier in tiers %}
             <tr>
-                <td><a href="{% url solonotebooks.cotizador.views.product_details tier.pricing.cell.id %}?tier_id={{ tier.id }}">{{ tier.pricing.cell }}</a></td>
+                <td><a href="{% url solonotebooks.cotizador.views.product_details tier.pricing.cell.url %}?tier_id={{ tier.id }}">{{ tier.pricing.cell }}</a></td>
                 <td>{{ tier.pretty_cellphone_price }}</td>
                 <td>{{ tier.pretty_monthly_quota }}</td>
             </tr>

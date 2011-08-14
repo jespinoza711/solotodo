@@ -11,7 +11,7 @@
     <br />
     <strong>Nickname: </strong> {{ comment.nickname }}
     <br />
-    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.id %}">{{ comment.product }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.url %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />
@@ -47,7 +47,7 @@
         {{ comment.nickname }}
     {% endif %}
     <br />
-    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.id %}">{{ comment.product }}</a>
+    <strong>Producto: </strong> <a href="{% url cotizador.views.product_details comment.product.url %}">{{ comment.product }}</a>
     <br />
     <strong>Comentario: </strong>
     <br />

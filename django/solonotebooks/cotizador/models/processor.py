@@ -43,8 +43,8 @@ class Processor(Product):
         clone_prod.save()
         return clone_prod
     
-    def update_display_name(self):
-        self.display_name = unicode(self.line) + self.line.family.separator + self.name
+    def get_display_name(self):
+        return unicode(self.line) + self.line.family.separator + self.name
         
     def raw_text(self):
         result = super(Processor, self).base_raw_text()
