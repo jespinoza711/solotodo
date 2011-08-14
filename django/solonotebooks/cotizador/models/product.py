@@ -102,9 +102,9 @@ class Product(models.Model):
             result.extend(c.objects.all())
         return result
         
-    @staticmethod
-    def get_valid():
-        return Product.objects.filter(shp__isnull = False)
+    @classmethod
+    def get_available(self):
+        return self.objects.filter(shp__isnull = False)
         
     def clean(self):
         self.ptype = ProductType.objects.get(classname = self.__class__.__name__)

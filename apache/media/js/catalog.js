@@ -39,6 +39,7 @@ $(function() {
     showing advanced controls, the link should say "Busqueda basica") */
     if (advFieldVal == "1") {
         $('#toggle_hidden_link').html("Búsqueda básica");
+        $('#price_search_title').html("Precio y disponibilidad")
         visibleHiddenFields = true;
     } else {
         $('.hidden_filter_item').hide();
@@ -56,9 +57,11 @@ $(function() {
         visibleHiddenFields = !visibleHiddenFields;
         if (visibleHiddenFields) {
             $('#toggle_hidden_link').html("Búsqueda básica");
+            $('#price_search_title').html("Precio y disponibilidad")
             $('#id_advanced_controls').val(1);
         } else {
             $('#toggle_hidden_link').html("Búsqueda avanzada");
+            $('#price_search_title').html("Precio")
             $('#id_advanced_controls').val(0);
         }
     });

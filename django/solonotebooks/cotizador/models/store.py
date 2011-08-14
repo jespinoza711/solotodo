@@ -128,7 +128,7 @@ class Store(models.Model):
     def get_products_in_category(self, ptype, ordering):
         from . import StoreHasProductEntity, StoreHasProduct
         classname = ptype.get_class()
-        products = classname.get_valid()
+        products = classname.get_available()
         
         shps = StoreHasProduct.objects.filter(shpe__store = self, product__in = products)
         

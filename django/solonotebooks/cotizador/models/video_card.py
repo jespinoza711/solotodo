@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from utils import prettyPrice
 from solonotebooks.cotizador.models import Product, VideoCardGpu, VideoCardMemoryBusWidth, VideoCardMemoryQuantity, VideoCardMemoryType, VideoCardBrand, VideoCardBus, VideoCardProfile, VideoCardSlotType, VideoCardRefrigeration, VideoCardHasPort
 
 class VideoCard(Product):
@@ -21,6 +22,12 @@ class VideoCard(Product):
     
     # Interface methods
     
+    def pretty_min_price(self):
+        if self.shp:
+            return prettyPrice(self.latest_price())
+        else:
+            return 'No disp.'
+    
     def get_display_name(self):
         return unicode(self.brand) + ' ' + self.gpu.name + ' (' + self.name + ')'
         
@@ -30,7 +37,7 @@ class VideoCard(Product):
         
     def load_similar_products(self):
         threshold = 4
-        video_cards = VideoCard.get_valid().filter(gpu = self.gpu).filter(~Q(id = self.id)).order_by('?')[:threshold]
+        video_cards = VideoCard.get_available().filter(gpu = self.gpu).filter(~Q(id = self.id)).order_by('?')[:threshold]
         self.similar_products = ','.join([str(video_card.id) for video_card in video_cards])
         
     @classmethod

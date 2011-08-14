@@ -26,7 +26,7 @@ from utils import *
 # Main landing page (/)    
 def index(request):
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
-    result_products = highlighted_products_form.apply_filter(Product.get_valid())[:10]
+    result_products = highlighted_products_form.apply_filter(Product.get_available())[:10]
     
     return append_metadata_to_response(request, 'cotizador/index.html', {
         'hnf': highlighted_products_form,
@@ -39,7 +39,7 @@ def product_type_index(request, product_type_urlname):
     product_type_class = ptype.get_class()
     
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
-    base_products = product_type_class.get_valid()
+    base_products = product_type_class.get_available()
     result_products = highlighted_products_form.apply_filter(base_products)[:10]
     
     return append_metadata_to_response(request, 'cotizador/product_type_index.html', {
@@ -55,7 +55,7 @@ def product_type_catalog(request, product_type_urlname):
     search_form = initialize_search_form(request, ptype)
     search_form.save()
     
-    result_products = search_form.filter_products(product_type_class.get_valid())
+    result_products = search_form.filter(product_type_class)
     num_results = len(result_products)
     
     page_count = ceil(len(result_products) / 10.0);        
@@ -77,7 +77,7 @@ def product_type_catalog(request, product_type_urlname):
         last_result_index = num_results
     result_products = result_products[first_result_index - 1 : last_result_index]
     
-    all_sponsored_products = product_type_class.get_valid().filter(sponsored_shp__isnull = False)
+    all_sponsored_products = product_type_class.get_available().filter(sponsored_shp__isnull = False)
     filtered_sponsored_products = search_form.filter_products(all_sponsored_products)
     selected_sponsored_products = []
     for product in filtered_sponsored_products:
@@ -145,7 +145,7 @@ def search(request):
         return HttpResponseRedirect(url)
     
     # We grab all the candidates (those currently available)
-    available_products = product_type_class.get_valid()
+    available_products = product_type_class.get_available()
     
     # For each one, we assign a score base on how many of the keywords match a 
     # huge single line description of the product stored in the DB

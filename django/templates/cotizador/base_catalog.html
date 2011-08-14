@@ -22,12 +22,16 @@
 	
     	{{ form.main_category_bound_field.as_hidden }}
 		<!-- Filtros generales -->
-		<h2>Precio</h2>
+		<h2 id="price_search_title">Precio</h2>
 		<div class="filter_item">
 		    <div class="price_slider">
 		        {{ form.min_price }} {{ form.max_price }}
 			</div>
 			<br />
+			<div class="hidden_filter_item" id="list_unavailable_products_choices">
+			    <label class="search_form_label">Mostrar no disponibles?</label>
+			    {{ form.list_unavailable_products }}
+			</div>
 		</div>
 		
 		{% for section in form.generate_interface_model %}

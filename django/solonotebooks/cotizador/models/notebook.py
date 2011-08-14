@@ -66,7 +66,7 @@ class Notebook(Product):
         
     def load_similar_products(self):
         threshold = 4
-        ntbks = Notebook.get_valid().filter(~Q(id = self.id))
+        ntbks = Notebook.get_available().filter(~Q(id = self.id))
         
         max_card_type = self.video_card.all().aggregate(Max('card_type'))['card_type__max']
         ntbks_gpu = ntbks.filter(video_card__card_type__id = max_card_type).distinct()
@@ -100,10 +100,6 @@ class Notebook(Product):
         
         ntbks = [str(result_notebook[0].id) for result_notebook in sorted_result_notebooks]
         self.similar_products = ','.join(ntbks)
-        
-    @staticmethod
-    def get_valid():
-        return Notebook.objects.filter(shp__isnull = False)
         
     # Custom methods
         

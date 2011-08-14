@@ -23,13 +23,13 @@ def processor_line_details(request, processor_line_id):
             
         try:
             processor = NotebookProcessor.objects.filter(line__family = processor_line_family).get(pk = processor_id)
-            ntbks = Notebook.get_valid().filter(processor = processor).order_by('?')[0:5]
+            ntbks = Notebook.get_available().filter(processor = processor).order_by('?')[0:5]
         except:
             processor = None
-            ntbks = Notebook.get_valid().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
+            ntbks = Notebook.get_available().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
     else:
         processor = None
-        ntbks = Notebook.get_valid().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
+        ntbks = Notebook.get_available().filter(processor__line__family = processor_line_family).order_by('?')[0:5]
         
     processors = NotebookProcessor.objects.filter(line__family = processor_line_family).order_by('-speed_score')
     return append_notebook_ptype_to_response(request, 'cotizador/notebook_processor_line_details.html', {
@@ -53,13 +53,13 @@ def video_card_line_details(request, video_card_line_id):
             
         try:
             video_card = NotebookVideoCard.objects.filter(line = video_card_line).get(pk = video_card_id)
-            ntbks = Notebook.get_valid().filter(video_card = video_card).order_by('?').distinct()[0:5]
+            ntbks = Notebook.get_available().filter(video_card = video_card).order_by('?').distinct()[0:5]
         except:
             video_card = None
-            ntbks = Notebook.get_valid().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
+            ntbks = Notebook.get_available().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
     else:
         video_card = None    
-        ntbks = Notebook.get_valid().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
+        ntbks = Notebook.get_available().filter(video_card__line = video_card_line).order_by('?').distinct()[0:5]
     
     video_cards = NotebookVideoCard.objects.filter(line = video_card_line).order_by('-speed_score')
     return append_notebook_ptype_to_response(request, 'cotizador/notebook_video_card_line_details.html', {
