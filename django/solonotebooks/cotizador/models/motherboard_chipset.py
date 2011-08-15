@@ -10,7 +10,7 @@ class MotherboardChipset(models.Model):
         return unicode(self.northbridge.family.brand) + ' ' + self.name
         
     def __unicode__(self):
-        return self.pretty_display() + ' (' + unicode(self.northbridge.family.socket) + ')'
+        return '%s (%s)' % (self.pretty_display(), unicode(self.northbridge.family.socket))
         
     def raw_text(self):
         return self.name + ' ' + self.northbridge.raw_text() + ' ' + self.southbridge.raw_text()

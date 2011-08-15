@@ -85,7 +85,7 @@ def main():
     for prod in prods:
         prodElem = xml.createElement('url')
         
-        locText = xml.createTextNode(siteUrl + '/products/' + str(prod.id) + '/')
+        locText = xml.createTextNode(siteUrl + '/products/' + str(prod.url) + '/')
         locElem = xml.createElement('loc')
         locElem.appendChild(locText)
         prodElem.appendChild(locElem)
@@ -104,7 +104,7 @@ def main():
         
     ptypes = ProductType.objects.all()
     for ptype in ptypes:
-        sf = eval(ptype.classname + 'SearchForm({})')
+        sf = eval(ptype.classname + 'SearchForm({}, False)')
         for field in sf.fields:
             field_value = sf.fields[field]
             if field_value.__class__.__name__ == 'ClassChoiceField':
