@@ -7,7 +7,7 @@ class MotherboardNorthbridgeFamily(models.Model):
     socket = models.ForeignKey(MotherboardSocket)
     
     def __unicode__(self):
-        return unicode(self.brand) + ' ' + self.name
+        return '%s %s (%s)' % (unicode(self.brand), self.name, unicode(self.socket),)
         
     def raw_text(self):
         return unicode(self)      

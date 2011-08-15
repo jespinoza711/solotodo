@@ -7,7 +7,7 @@ class MotherboardNorthbridge(models.Model):
     graphics = models.ForeignKey(MotherboardGraphics)
     
     def __unicode__(self):
-        return unicode(self.family.brand) + ' ' + self.name
+        return '%s %s (%s)' % (unicode(self.family.brand), self.name, unicode(self.family.socket))
         
     def raw_text(self):
         return unicode(self)      
