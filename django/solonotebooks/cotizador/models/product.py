@@ -119,7 +119,7 @@ class Product(models.Model):
         super(Product, self).save()
 
     def update_display_name(self):
-        from cotizador.utils import urlify
+        from solonotebooks.cotizador.utils import urlify
         pself = self.get_polymorphic_instance()
         self.display_name = pself.get_display_name()
         self.url = str(self.id) + '-' + urlify(self.display_name)

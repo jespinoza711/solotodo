@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse
 from utils import concat_dictionary
 from django.http import HttpResponseRedirect
-from cotizador.models import Product
+from solonotebooks.cotizador.models import Product
          
 def notebook_details(request, notebook_id):
     product = Product.objects.get(pk=notebook_id)

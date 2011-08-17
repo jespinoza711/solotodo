@@ -76,8 +76,6 @@ class Magens(FetchStore):
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=100'
             
-            print urlWebpage
-
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
