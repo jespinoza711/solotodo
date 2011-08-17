@@ -39,7 +39,6 @@ from compumanque import Compumanque
 from movistar import Movistar
 from entel import Entel
 from my_box import MyBox
-from lider import Lider
 
 __all__ = [ 
             'ProductData',
@@ -83,5 +82,4 @@ __all__ = [
             'Movistar',
             'Entel',
             'MyBox',
-            'Lider',
         ]
