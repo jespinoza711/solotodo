@@ -11,6 +11,7 @@ class Magens(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
+        print product_link
         browser = mechanize.Browser()
         try:
             product_data = browser.open(product_link).get_data()
@@ -66,7 +67,7 @@ class Magens(FetchStore):
             ['sam3-c-1_31.html', 'Processor'], 
             ['intel-s1156-c-1_197.html', 'Processor'], 
             ['intel-s775-c-1_32.html', 'Processor'], 
-            ['server-c-1_30.html', 'Processor'], 
+            'server-c-1_30.html', 'Processor'], 
             ['monitores-televisores-c-13.html', 'Screen'], 
             ['placas-madre-c-2.html', 'Motherboard'], 
         ]
@@ -74,16 +75,17 @@ class Magens(FetchStore):
         product_links = []            
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=100'
+            
+            print urlWebpage
 
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
 
-            nameDivs = baseSoup.findAll('div', { 'class': 'text11Red uppercase tituloProducto' })
-            priceSpans = baseSoup.findAll('span', { 'class': 'text12Green' })[::2]
+            nameDivs = baseSoup.findAll('div', { 'class': 'text11 uppercase tituloProducto' })
             for i in range(len(nameDivs)):
-                link = nameDivs[i].find('a')
-                product_links.append([link['href'].split('?osCsid')[0], ptype])
+                link = nameDivs[i].find('a')['href']
+                product_links.append([link.split('?osCsid')[0], ptype])
             
         return product_links
 
