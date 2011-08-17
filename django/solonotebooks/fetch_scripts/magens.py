@@ -67,7 +67,7 @@ class Magens(FetchStore):
             ['sam3-c-1_31.html', 'Processor'], 
             ['intel-s1156-c-1_197.html', 'Processor'], 
             ['intel-s775-c-1_32.html', 'Processor'], 
-            'server-c-1_30.html', 'Processor'], 
+            ['server-c-1_30.html', 'Processor'], 
             ['monitores-televisores-c-13.html', 'Screen'], 
             ['placas-madre-c-2.html', 'Motherboard'], 
         ]
