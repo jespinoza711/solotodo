@@ -61,13 +61,16 @@ class Wei(FetchStore):
                             
         for category_url, ptype in category_urls:
             urlWebpage = urlBase + category_url
-
+            
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
 
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            productLinks = baseSoup.find('table', { 'cellpadding': '5'}).findAll("a", { "class" : "TXTSMNU" })
+            try:
+                productLinks = baseSoup.find('table', { 'cellpadding': '5'}).findAll("a", { "class" : "TXTSMNU" })
+            except AttributeError, e:
+                continue
+                
             for link in productLinks:
                 link = link['href']
                 if link in links:
