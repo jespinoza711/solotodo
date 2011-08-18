@@ -16,7 +16,7 @@ class NotebookCenter(FetchStore):
         product_link = 'http://www.notebookcenter.cl/detalle.php?id_producto=' + id_prod
     
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
+        product_data = browserp.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
         product_subnames = [unicode(str(subpart), errors = 'ignore').strip() for subpart in product_soup.find('td', { 'class': 'menus3' }).findAll('div')[-1].contents]
@@ -72,8 +72,6 @@ class NotebookCenter(FetchStore):
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '&indice=' + str(index)
                 
-                print urlWebpage
-
                 baseData = browser.open(urlWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
 
