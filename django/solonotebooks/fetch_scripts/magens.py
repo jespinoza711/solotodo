@@ -11,7 +11,6 @@ class Magens(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
-        print product_link
         browser = mechanize.Browser()
         try:
             product_data = browser.open(product_link).get_data()
