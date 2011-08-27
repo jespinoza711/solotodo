@@ -16,19 +16,24 @@ class PCFactory(FetchStore):
         baseSoup = BeautifulSoup(baseData)
         product_data = ProductData()
         
-        available_cells = baseSoup.findAll('table', { 'class' : 'ProductLine1' })[2].findAll('td')
+        '''
+        available_cells = baseSoup.find('table', { 'class' : 'main' })
+        if not available_cells:
+            return None
+        available_cells = available_cells.findAll('td')
         if len(available_cells) != 1:
             availability_cells = available_cells[2::2]
             for cell in availability_cells:
                 if cell.string == 'Agotado':      
                     return None
+        '''
         
-        titleSpan = baseSoup.find('span', { 'class' : 'productoFicha' })
-        product_data.custom_name = titleSpan.find('strong').string.encode('ascii', 'ignore')
+        titleSpan = baseSoup.find('span', { 'class' : 'men_confirmacion' })
+        product_data.custom_name = titleSpan.string.encode('ascii', 'ignore').strip()
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        price_data = int(baseSoup.find('span', { 'class' : 'title_big' }).find('strong').string.replace('.', ''))
+        price_data = int(baseSoup.find('span', { 'class' : 'texto_Precio_Oferta_Internet_BIG' }).string.replace('.', '').replace('&nbsp;', ''))
         product_data.price = price_data
         
         return product_data
