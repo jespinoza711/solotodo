@@ -56,12 +56,12 @@
 		<ul>
 			<li><span>Productos</span></li>
 			{% for ptype in ptypes %}
-                <li><a href="{% url cotizador.views.product_type_index ptype.urlname %}" title="{{ ptype }}">{{ ptype.indexname }}</a></li>
+                <li><a href="{% url solonotebooks.cotizador.views.product_type_index ptype.urlname %}" title="{{ ptype }}">{{ ptype.indexname }}</a></li>
             {% endfor %}
 		</ul>
 		<ul>
 			<li><span>CATEGORIAS</span></li>
-			<li><a href="{% url cotizador.views.index %}" title="Catálogo">Catálogo</a></li>
+			<li><a href="{% url solonotebooks.cotizador.views.index %}" title="Catálogo">Catálogo</a></li>
 			<li><a href="/blog" title="Blog">Blog</a></li>
 			<li><a href="/blog/about" title="Nosotros">Nosotros</a></li>
 			<li><a href="/blog/contacto" title="Contacto">Contacto</a></li>

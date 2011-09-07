@@ -18,7 +18,7 @@
 	</div> <!-- !end top left -->
 	<br />
 				
-	<form id="search_form" action="{% url cotizador.views.product_type_catalog ptype.urlname %}" method="get">
+	<form id="search_form" action="{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %}" method="get">
 	
     	{{ form.main_category_bound_field.as_hidden }}
 		<!-- Filtros generales -->

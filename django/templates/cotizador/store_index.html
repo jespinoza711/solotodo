@@ -10,7 +10,7 @@
 <h1>Tiendas indexadas</h1>
 
 {% for store in stores %}
-    <a href="{% url cotizador.views.store_details store.id %}">{{ store }}</a>
+    <a href="{% url solonotebooks.cotizador.views.store_details store.id %}">{{ store }}</a>
     <br />
 {% endfor %}
 

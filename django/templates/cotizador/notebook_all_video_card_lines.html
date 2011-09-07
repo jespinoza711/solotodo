@@ -18,7 +18,7 @@
     </tr>
     {% for video_card in video_cards %}
         <tr>
-            <td><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?video_card={{ video_card.id }}&advanced_controls=1">{{ video_card }}</a></td>
+            <td><a href="{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %}?video_card={{ video_card.id }}&advanced_controls=1">{{ video_card }}</a></td>
             <td>{{ video_card.card_type }}</td>
             <td>{{ video_card.speed_score }}</td>
             <td>{{ video_card.memory }}</td>                
@@ -35,7 +35,7 @@
     <h2>Ver línea específica</h2>
     <ul>
     {% for video_card_line in video_card_lines %}
-        <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
+        <li><a href="{% url solonotebooks.cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
     {% endfor %}
     </ul>
 </div>

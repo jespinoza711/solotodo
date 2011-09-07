@@ -9,7 +9,7 @@
 {% for product_type in product_types %}
     <h2>{{ product_type.0 }}</h2>
     {% for product in product_type.1 %}
-        <a href="{% url cotizador.views.product_details product.url %}">
+        <a href="{% url solonotebooks.cotizador.views.product_details product.url %}">
             {{ product }}
         </a>
         <br />
