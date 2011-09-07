@@ -32,7 +32,7 @@
         {% else %}
             <tr>
         {% endifequal %}
-            <td><a href="{% url cotizador.views.product_type_catalog ptype.urlname %}?video_card={{video_card.id}}&advanced_controls=1">{{ video_card }}</a></td>
+            <td><a href="{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %}?video_card={{video_card.id}}&advanced_controls=1">{{ video_card }}</a></td>
             <td>{{ video_card.card_type }}</td>
             <td>{{ video_card.speed_score }}</td>
             <td>{{ video_card.memory }}</td>                
@@ -61,9 +61,9 @@
 <div>
     <h2>Ver otras líneas</h2>
     <ul>
-        <li><a href="{% url cotizador.views_notebooks.video_card_line %}">Comparar todas las líneas</a></li>
+        <li><a href="{% url solonotebooks.cotizador.views_notebooks.video_card_line %}">Comparar todas las líneas</a></li>
     {% for video_card_line in other_video_card_lines %}
-        <li><a href="{% url cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
+        <li><a href="{% url solonotebooks.cotizador.views_notebooks.video_card_line_details video_card_line.id %}">{{ video_card_line }}</a></li>
     {% endfor %}
     </ul>
 </div>

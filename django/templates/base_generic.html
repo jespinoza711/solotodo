@@ -48,17 +48,17 @@
                             <div>
                                 <span id="logout_links">
                                 {{ user.get_profile.name }} | 
-                                <a href="{% url cotizador.views_account.subscriptions %}" class="toplink">Mis Productos</a> | 
+                                <a href="{% url solonotebooks.cotizador.views_account.subscriptions %}" class="toplink">Mis Productos</a> | 
                                 {% if user.is_superuser %}
-                                <a href="{% url cotizador.views_manager.news %}" class="toplink">Administrador</a> | 
+                                <a href="{% url solonotebooks.cotizador.views_manager.news %}" class="toplink">Administrador</a> | 
                                 {% endif %}
                                 {% if user.is_staff %}
-                                <a href="{% url cotizador.views_staff.new_entities user.id %}" class="toplink">Staff</a> | 
+                                <a href="{% url solonotebooks.cotizador.views_staff.new_entities user.id %}" class="toplink">Staff</a> | 
                                 {% endif %}
                                 {% if user.get_profile.assigned_store %}
-                                <a href="{% url cotizador.views_store.index %}" class="toplink">Gestor de tienda</a> | 
+                                <a href="{% url solonotebooks.cotizador.views_store.index %}" class="toplink">Gestor de tienda</a> | 
                                 {% endif %}
-                                <a href="{% url cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="toplink">Logout</a>
+                                <a href="{% url solonotebooks.cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="toplink">Logout</a>
                                 </span>
                             </div>
                         </div>            
@@ -84,9 +84,9 @@
 					
 				<div id="menu">
 					<div id="combo-search" class="left">
-						<a href="{% url cotizador.views.index %}" title="Inicio" title="{{ site_name }}" class="left main-logo"><img src="/media/css/img/logo_4.png" /></a>
+						<a href="{% url solonotebooks.cotizador.views.index %}" title="Inicio" title="{{ site_name }}" class="left main-logo"><img src="/media/css/img/logo_4.png" /></a>
 						<ol id="search" class="left">
-						    <form method="get" action="{% url cotizador.views.search %}">
+						    <form method="get" action="{% url solonotebooks.cotizador.views.search %}">
 							<li>
     							    <input name="search_keywords" type="text" class="input-search" value="¿Qué{% if ptype %} {{ ptype.displayname }}{% endif %} estás buscando?" />
     							    {% if ptype %}
@@ -101,9 +101,9 @@
 					
 					<div id="areas-site" class="right">
 						<ul>
-							<li class="sprite-inicio-active"><a href="{% url cotizador.views.index %}" title="Inicio">Inicio</a></li>
+							<li class="sprite-inicio-active"><a href="{% url solonotebooks.cotizador.views.index %}" title="Inicio">Inicio</a></li>
 							<li class="sprite-catalogo">							    
-							    <a href="{% if ptype %}{% url cotizador.views.product_type_catalog ptype.urlname %} {% else %}/{% endif %}" title="Catálogo">
+							    <a href="{% if ptype %}{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %} {% else %}/{% endif %}" title="Catálogo">
 							        Catálogo
 						        </a>
 						    </li>
