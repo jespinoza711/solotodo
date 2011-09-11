@@ -69,12 +69,17 @@ class Movistar(FetchStore):
         browser = mechanize.Browser()
         
         extensions = [
-                    ['P9601988711290175314777', True, -1],
+                    # Multimedia Libre
+                    ['P13000377301307396916365', True, -1],
+                    # Planes Libre
                     ['P9600488711290017299371', False, -1],
+                    # Planes Club
                     ['P9600588711290017393713', False, -1],
+                    # Planes Control Destino
                     ['P9600688711290017495969', False, -1],
+                    # Planes Control Tarifa Plana
                     ['P9600788711290017587840', False, -1],
-                    ['P9600988711290017787150', False, 0],
+                    # Planes BlackBerry Libres
                     ['P9601088711290017897034', True, 0],
                     ]
                     
@@ -83,7 +88,7 @@ class Movistar(FetchStore):
         for extension, includes_data, last_index in extensions:
             url = urlBase + extension
             data = browser.open(url).get_data()
-            soup = BeautifulSoup(data)
+            soup = BeautifulSoup(data)    
 
             tables = soup.findAll('table', { 'class': 'TablaPlanesIndividiales' })
             if last_index != 0:
