@@ -9,7 +9,10 @@ import sys
 # Script to test the fetch script for a store
 def main():
     p = eval(sys.argv[1] + '()')
-    p.get_plans()
+    plans = p.get_plans()
+    
+    for plan in plans:
+        print plan  
                 
 if __name__ == '__main__':
     print datetime.now()
