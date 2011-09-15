@@ -64,7 +64,7 @@ def new_entities(request, staff):
 def storehasproductentity_edit(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
-    if not shpe.ptype in staff.get_profile().managed_product_types.all():
+    if not shpe.ptype in staff.get_profile().managed_product_types.all() and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
 
@@ -130,7 +130,7 @@ def storehasproductentity_edit(request, staff, store_has_product_entity_id):
 def storehasproductentity_hide(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
-    if not shpe.ptype in staff.get_profile().managed_product_types.all():
+    if not shpe.ptype in staff.get_profile().managed_product_types.all() and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
@@ -145,7 +145,7 @@ def storehasproductentity_hide(request, staff, store_has_product_entity_id):
 def storehasproductentity_show(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
-    if not shpe.ptype in staff.get_profile().managed_product_types.all():
+    if not shpe.ptype in staff.get_profile().managed_product_types.all() and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
@@ -159,7 +159,7 @@ def storehasproductentity_show(request, staff, store_has_product_entity_id):
 def storehasproductentity_refresh_price(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
-    if not shpe.ptype in staff.get_profile().managed_product_types.all():
+    if not shpe.ptype in staff.get_profile().managed_product_types.all() and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
@@ -172,7 +172,7 @@ def storehasproductentity_refresh_price(request, staff, store_has_product_entity
 def polymorphic_admin_request(request, staff, product_id):
     product = Product.objects.get(pk = product_id)
     
-    if not product.ptype in staff.get_profile().managed_product_types.all():
+    if not product.ptype in staff.get_profile().managed_product_types.all() and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views.index')
         return HttpResponseRedirect(url)
     
@@ -183,7 +183,7 @@ def polymorphic_admin_request(request, staff, product_id):
 def clone_product(request, staff, product_id):
     product = Product.objects.get(pk = product_id).get_polymorphic_instance()
     
-    if not product.ptype in staff.get_profile().managed_product_types.all():
+    if not product.ptype in staff.get_profile().managed_product_types.all() and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views.index')
         return HttpResponseRedirect(url)
     
@@ -196,7 +196,7 @@ def clone_product(request, staff, product_id):
 def storehasproductentity_change_ptype(request, staff, store_has_product_entity_id):
     shpe = get_object_or_404(StoreHasProductEntity, pk = store_has_product_entity_id)
     
-    if not shpe.ptype in staff.get_profile().managed_product_types.all():
+    if not shpe.ptype in staff.get_profile().managed_product_types.all() and not request.user.is_superuser:
         url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
         return HttpResponseRedirect(url)
     
