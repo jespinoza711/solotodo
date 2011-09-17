@@ -14,8 +14,8 @@ class MacOnline(FetchStore):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
-        product_name = product_soup.find('td', { 'class': 'tit_categoria_despliegue' }).string.encode('ascii', 'ignore')
+
+        product_name = product_soup.find('td', { 'class': 'tit_categoria_despliegue' }).contents[0].strip().encode('ascii', 'ignore')
         product_price = int(product_soup.find('em').string.split('$')[1].replace('.', ''))
         
         product_data = ProductData()
@@ -37,9 +37,9 @@ class MacOnline(FetchStore):
         browser = mechanize.Browser()
         product_links = []
         
-        url_extensions = [  ['178.html', 'Notebook'],
-                            ['379.html', 'Notebook'],
+        url_extensions = [  ['397.html', 'Notebook'],
                             ['421.html', 'Notebook'],
+                            ['384.html', 'Notebook'],
                             ['288.html', 'Screen'],
                             ]
                             
@@ -47,6 +47,7 @@ class MacOnline(FetchStore):
             page_number = 0
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '?pagina=' + str(page_number)
+                print urlWebpage
                 
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()
