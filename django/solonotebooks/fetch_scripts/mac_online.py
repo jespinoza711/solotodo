@@ -47,7 +47,6 @@ class MacOnline(FetchStore):
             page_number = 0
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '?pagina=' + str(page_number)
-                print urlWebpage
                 
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()
