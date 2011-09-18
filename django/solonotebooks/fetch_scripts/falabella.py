@@ -68,6 +68,10 @@ class Falabella(FetchStore):
                 for div in mosaicDivs:                        
                     url = 'http://www.falabella.com' + div.find('a')['href']
                     
+                    m = re.search(';jsessionid=\S+\.node\d', url)
+                    if m:
+                        url = url[:m.start()] + url[m.end():]
+                    
                     product_links.append([url, ptype])
                     
                 page_number += 1
