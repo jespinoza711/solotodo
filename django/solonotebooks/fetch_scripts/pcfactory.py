@@ -60,17 +60,10 @@ class PCFactory(FetchStore):
                             ['?papa=334&categoria=378', 'VideoCard'],  # VGA PCIe Nvidia
                             ['?papa=334&categoria=454', 'VideoCard'],  # VGA PCIe ATI
                             ['?papa=334&categoria=455', 'VideoCard'],  # VGA Profesionales
-                            ['?papa=272&categoria=409', 'Processor'],  # CPU Server
-                            ['?papa=272&categoria=465', 'Processor'],  # CPU AM3
-                            ['?papa=272&categoria=388', 'Processor'],  # CPU 775
-                            ['?papa=272&categoria=468', 'Processor'],  # CPU 1156
-                            ['?papa=272&categoria=446', 'Processor'],  # CPU 1366
+                            ['?papa=272&categoria=272', 'Processor'],
                             ['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
                             ['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
-                            ['?papa=292&categoria=473', 'Motherboard'],  # MB AM3
-                            ['?papa=292&categoria=392', 'Motherboard'],  # MB 775
-                            ['?papa=292&categoria=467', 'Motherboard'],  # MB 1156
-                            ['?papa=292&categoria=447', 'Motherboard'],  # MB 1366
+                            ['?papa=292&categoria=292', 'Motherboard'],
                             ]
                           
         products_data = []                      
