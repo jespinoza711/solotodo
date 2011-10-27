@@ -2,11 +2,11 @@
 <div id="content">
 	<?php the_post(); $nocomment_class=''; if ('open' != $post->comment_status) $nocomment_class=' post-page-nocomment'; ?>
 	<div <?php post_class('post post-page'.$nocomment_class); ?> id="post-<?php the_ID(); ?>"><!-- post div -->
-		<h2 class="title title-single"><?php the_title(); ?></h2>
+		<h2 class="title"><?php the_title(); ?></h2>
 		<?php if ('open' == $post->comment_status) { ?>
 		<div class="post-info-top">
-			<span id="addcomment"><a href="#respond"  rel="nofollow" title="Leave a comment ?"><?php _e('Leave a comment', 'zbench'); ?></a><?php comments_number(' (0)', ' (1)', ' (%)'); ?></span>
-			<span id="gotocomments"><a href="#comments"  rel="nofollow" title="Go to comments ?"><?php _e('Go to comments', 'zbench'); ?></a></span>
+			<span id="addcomment"><a href="#respond"  rel="nofollow" title="<?php _e('Leave a comment ?', 'zbench'); ?>"><?php _e('Leave a comment', 'zbench'); ?></a><?php comments_number(' (0)', ' (1)', ' (%)'); ?></span>
+			<span id="gotocomments"><a href="#comments"  rel="nofollow" title="<?php _e('Go to comments ?', 'zbench'); ?>"><?php _e('Go to comments', 'zbench'); ?></a></span>
 		</div>
 		<?php } else { ?>
 		<div class="post-info-top post-info-top-nocomment"></div>
