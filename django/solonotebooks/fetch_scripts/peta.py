@@ -21,12 +21,15 @@ class Peta(FetchStore):
                 return self.retrieve_product_data(product_link, already_tried = True)
         product_soup = BeautifulSoup(product_data)
         
-        notify_product_resurrection_link = product_soup.find('div', { 'class': 'product-info-box' }).find('small')
-        if notify_product_resurrection_link:
+        try:
+            product_availability = product_soup.find('p', { 'class': 'availability in-stock' }).find('span')
+            if product_availability.string != 'En existencia':
+                return None
+        except:
             return None
         
         try:
-            product_name = product_soup.find('h3', { 'class': 'product-name' }).string.encode('ascii', 'ignore')
+            product_name = product_soup.find('h1', { 'class': 'p-title' }).string.encode('ascii', 'ignore')
             product_price = int(product_soup.find('span', { 'class': 'price' }).string.split('$')[1].replace('.', ''))
         except:
             return None
@@ -63,28 +66,27 @@ class Peta(FetchStore):
             pageNumber = 1
                 
             while True:
-                completeWebpage = urlWebpage + '?p=' + str(pageNumber)
+                completeWebpage = urlWebpage + '?limit=36&p=' + str(pageNumber)
 
                 baseData = browser.open(completeWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
 
-                ntbkCells = baseSoup.find('table', { 'id': 'product-list-table'})
+                ntbkCells = []
+                ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item first'}))
+                ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item'}))
+                ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item last'}))
+                
                 if not ntbkCells:
                     break
-                
-                ntbkCells = ntbkCells.findAll('td')
 
                 trigger = False
                 for ntbkCell in ntbkCells:
-                    try:
-                        link = ntbkCell.findAll('a')[1]
-                    except:
-                        break
+                    link = ntbkCell.find('a')['href']
                         
-                    link = link['href']
                     if link in links:
                         trigger = True
                         break
+                        
                     links.append(link)
                     product_links.append([link, ptype])
                     

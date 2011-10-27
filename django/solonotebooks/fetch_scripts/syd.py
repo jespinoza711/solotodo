@@ -16,7 +16,10 @@ class Syd(FetchStore):
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.findAll('h2')[5].string.encode('ascii', 'ignore')
-        product_price = int(product_soup.find('div', { 'class': 'detallesCompra' }).findAll('dd')[1].string.replace('$', '').replace('.', ''))
+        try:
+            product_price = int(product_soup.find('div', { 'class': 'detallesCompra' }).findAll('dd')[1].string.replace('$', '').replace('.', ''))
+        except:
+            return None
         
         product_data = ProductData()
         product_data.custom_name = product_name
