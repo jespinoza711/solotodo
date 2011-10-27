@@ -1,27 +1,31 @@
-<?php get_header(); $options = get_option('zBench_options'); ?>
+<?php get_header(); global $zbench_options; ?>
 <div id="content">
-	<?php the_post(); ?>
+	<?php $archive_title=''; if($paged && $paged > 1) $archive_title='<span class="page-title-paged"> - '.sprintf(__('Page %s','zbench'),$paged).'</span>'; ?>
 	<div class="page-title">
 		<?php if ( is_day() ) : ?>
-			<h1><?php printf((__('Daily Archives:', 'zbench').' <span>%s</span>'),get_the_time(get_option('date_format'))); ?></h1>
+			<h1><?php printf((__('Daily Archives:', 'zbench').' <span>%s</span>'),get_the_time(get_option('date_format')).$archive_title); ?></h1>
 		<?php elseif ( is_month() ) : ?>
-			<h1><?php printf((__('Monthly Archives:', 'zbench').' <span>%s</span>'),get_the_time('F Y')); ?></h1>
+			<h1><?php printf((__('Monthly Archives:', 'zbench').' <span>%s</span>'),get_the_time('F Y').$archive_title); ?></h1>
 		<?php elseif ( is_year() ) : ?>
-			<h1><?php printf((__('Yearly Archives:', 'zbench').' <span>%s</span>'),get_the_time('Y')); ?></h1>
+			<h1><?php printf((__('Yearly Archives:', 'zbench').' <span>%s</span>'),get_the_time('Y').$archive_title); ?></h1>
 		<?php elseif ( is_category() ) : ?>
-			<h1><?php printf((__('Category Archives:', 'zbench').' <span>%s</span>'),single_cat_title('',false)); ?></h1>
+			<h1><?php printf((__('Category Archives:', 'zbench').' <span>%s</span>'),single_cat_title('',false).$archive_title); ?></h1>
 		<?php elseif ( is_tag() ) : ?>
-			<h1><?php printf((__('Tag Archives:', 'zbench').' <span>%s</span>'),single_tag_title('',false)); ?></h1>
+			<h1><?php printf((__('Tag Archives:', 'zbench').' <span>%s</span>'),single_tag_title('',false).$archive_title); ?></h1>
+		<?php elseif ( is_author() ) : ?>
+			<?php the_post(); ?>
+			<h1><?php printf((__('Author Archives:', 'zbench').' <span>%s</span>'),get_the_author().$archive_title); ?></h1>
+			<?php rewind_posts(); ?>
 		<?php elseif ( isset($_GET['paged']) && !empty($_GET['paged']) ) : ?>
 			<h1><?php _e('Blog Archives', 'zbench'); ?></h1>
 		<?php endif; ?>
-	</div><?php rewind_posts(); ?>
+	</div>
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 	<div <?php post_class(); ?> id="post-<?php the_ID(); ?>"><!-- post div -->
-		<h2 class="title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__('Permalink to %s', 'zbench'), the_title_attribute('echo=0') ); ?>"><?php the_title(); ?></a></h2>
+		<h2 class="title"><a href="<?php the_permalink(); ?>" title="<?php printf( __('Permalink to %s', 'zbench'), the_title_attribute('echo=0') ); ?>"><?php the_title(); ?></a></h2>
 		<div class="post-info-top">
 			<span class="post-info-date">
-				<?php _e('Posted by', 'zbench'); ?> <?php the_author(); ?>
+				<?php _e('Posted by', 'zbench'); ?> <a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ) ); ?>" title="<?php printf( __( 'View all posts by %s', 'zbench' ), get_the_author() ) ?>" rel="author"><?php the_author(); ?></a>
 				<?php _e('on', 'zbench'); ?> <a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( get_the_time() ); ?>" rel="bookmark"><?php the_time(get_option( 'date_format' )); ?></a>
 				<?php edit_post_link(__('Edit','zbench'), '[', ']'); ?>
 			</span>
@@ -29,7 +33,7 @@
 		</div>
 		<div class="clear"></div>
 		<div class="entry">
-			<?php if ( $options['excerpt_check']=='true' ) { the_excerpt(__('Read more &raquo;','zbench')); } else { the_content(__('Read more &raquo;','zbench')); } ?>
+			<?php if ( $zbench_options['excerpt_check']=='true' ) { the_excerpt(__('Read more &raquo;','zbench')); } else { the_content(__('Read more &raquo;','zbench')); } ?>
 		</div><!-- END entry -->
 	</div><!-- END post -->
 	<?php endwhile; else: ?>

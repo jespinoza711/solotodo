@@ -2,7 +2,7 @@
 Author:zwwooooo
 Tags:custom-menu, threaded-comments, two-columns, fixed-width, right-sidebar, theme-options
 Requires at least: 3.0.0
-Tested up to: 3.1.2
+Tested up to: 3.2.1
 
 
 == Description ==
@@ -35,12 +35,47 @@ License URI:http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 * Norge (nb_NO): norshotokan
 * Brasil (pt_BR): Henrique Cintra
 * Russian (ru_RU): Vladimir
-* French (fr_FR): Jean-Marc Paratte
+* French (fr_FR): Jean-Marc Paratte / Ga¨¦tan Collaud
 * German (de_DE): Sebastian
 * Spanish (es_ES): Francisco Santos
+* Czech (cs_CZ): Jirka Vilim
+* Hungarian (hu_HU): Bortny¨¢k Roland
 
 
 == Changelog ==
+
+= 1.3.1 =
+* Update Hungarian translation files
+
+= 1.3.0 =
+* Add custom page template: Page without Sidebar 
+* Modify: read more style & Custom read more link function.
+* Any details of the changes
+
+= 1.2.9 =
+* Fix: Getting the "Undefined index" errors when saving theme settings with debugging turned on.
+* Correct button of "reset all setting" positions.
+
+= 1.2.8 =
+* Add pingback/trackback for commentlist.
+* Modify archive.php: add is_author for author archive page title
+* Modify index.php: add is_search() for search result page title
+* Add Hungarian translation files.
+* Correct translation of the missing words
+* Add reset button for theme options
+
+= 1.2.7 =
+* Add Header image URL
+* Add rel=me/rel=author for Blog author
+* Add option: Custom Social Media(2)
+* Add option: hide the title and description
+* Add Czech translation files.
+
+= 1.2.6 =
+* Fix: wp_title
+* Fix: current page menu sytle
+* Add: Google+ links option
+* Modify: rss,twitter,facebook links icon and style
 
 = 1.2.5 =
 * Fix: "#header h2 a" line-height
