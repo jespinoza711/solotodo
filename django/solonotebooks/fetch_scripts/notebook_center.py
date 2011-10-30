@@ -74,13 +74,10 @@ class NotebookCenter(FetchStore):
                 
                 baseData = browser.open(urlWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
-
-                rawNames = baseSoup.findAll("span", { "class" : "subtit2" })[1::2]
-                
-                if not rawNames:
-                    break
                     
-                rawLinks = baseSoup.findAll("a", { "target" : "_top" })
+                rawLinks = baseSoup.findAll("a", { "target" : "_parent" })
+                if not rawLinks:
+                    break
 
                 
                 for rawLink in rawLinks:
