@@ -18,7 +18,7 @@ class CellPricingPlan(models.Model):
         return cpp
     
     def __unicode__(self):
-        return 'Plan ' + self.name
+        return self.name
         
     def pretty_price(self):
         return utils.prettyPrice(self.price)

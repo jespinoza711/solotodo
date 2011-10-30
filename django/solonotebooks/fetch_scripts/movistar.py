@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#-*- coding: UTF-8 -*-
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
@@ -7,6 +8,8 @@ from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 from django.db.models import Q
 from solonotebooks.cotizador.models import CellPricingTier, CellCompany, CellPricingPlan
+import pdb
+import re
 
 class Movistar(FetchStore):
     name = 'Movistar'
@@ -100,61 +103,98 @@ class Movistar(FetchStore):
                     cells = row.findAll('td')
                     name = ' '.join(str(c).strip() for c in cells[0].find('div').contents if str(c) != '<br />')
                     name = name.replace('<br />', '')
+                    name = name.replace('Smartphone ', '')
                     price = cells[2].find('div', { 'class': 'PrecioPlan' }).string
                     price = int(price.replace('$', '').replace('.', '').replace('(**)', ''))
                     plan = [name, price, includes_data]
                     plans.append(plan)
                     
+        # LANPASS plans
+        lanpass_url = urlBase + 'P1201419831272321333859'
+        data = browser.open(lanpass_url).get_data()
+        soup = BeautifulSoup(data)    
+
+        tables = soup.findAll('table', { 'class': 'TablaPlanesLANPASS' })
+        for table in tables:
+            rows = table.findAll('tr')
+            for row in rows:
+                cells = row.findAll('td')
+                name = cells[1].find('div').string
+                name = name.replace('Smartphones', 'Multimedia')
+                name = ' '.join([s for s in name.split(' ') if s])
+                name = name.replace('Multimedia BB', 'Blackberry')
+                price = cells[1].find('div', { 'class': 'PrecioPlan' }).string
+                price = int(price.replace('$', '').replace('.', '').replace('(**)', ''))
+                plan = [name, price, True]
+                plans.append(plan)
+                
+        # Súper Smartphone plans
+        super_smartphone_url = urlBase + 'P14400695741312847094968'
+        data = browser.open(super_smartphone_url).get_data()
+        soup = BeautifulSoup(data)    
+
+        
+        table = soup.find('div', { 'class': 'contenedorPlanesConecta' }).find('table')
+        rows = table.findAll('tr')[1:]
+        for row in rows:
+            cells = row.findAll('td')
+            name = cells[0].find('div', 'equipos').string
+            name = name.replace('/', ' - ')
+            price = cells[4].find('span', { 'class': 'renta' }).string
+            price = int(price.replace('$', '').replace('.', '').replace('(**)', ''))
+            plan = [name, price, True]
+            plans.append(plan)
+                    
         return plans
         
     def calculate_tiers(self, shpe, cell_plans, pricing):
+        print shpe.id
+        print pricing.id
         print shpe.dprint()
         
         browser = mechanize.Browser()
         data = browser.open(shpe.url).get_data()
         soup = BeautifulSoup(data)
         
-        multimedia_plans = list(cell_plans.filter(includes_data = True).filter(~Q(name__icontains = 'blackberry')))
-        voice_plans = list(cell_plans.filter(includes_data = False).all())
-        blackberry_plans = list(cell_plans.filter(includes_data = True, name__icontains = 'blackberry').all())
-        
         contrato_tab = soup.find('a', { 'id': 'contrato_test' })
         if contrato_tab:
-            contrato_container = soup.find('div', { 'id': 'contrato' })
-            plan_divs = contrato_container.findAll('div', { 'class': 'equipoPlan clearfix' })
+            plan_divs = soup.findAll('div', 'seleccionPlan')
+            plan_count = len(plan_divs) / 2
+            plan_divs = plan_divs[:plan_count]
+            
             for plan_div in plan_divs:
-                text = plan_div.find('h3').string.lower()
-                if 'blackberry' in text:
-                    plans = blackberry_plans
-                elif 'multimedia' in text:
-                    plans = multimedia_plans
-                elif 'voz' in text:
-                    plans = voice_plans
-                else:
-                    continue
+                phone_price = plan_div.find('span', 'precioCabecera').string
+                phone_price = int(phone_price.replace('$', '').replace('.', ''))
+                
+                plan_labels = plan_div.findAll('label')
+                for plan_label in plan_labels:
+                    plan_name = plan_label.string
                     
-                cellphone_price = int(plan_div.find('li', { 'class': 'valor' }).string.replace('$', '').replace('.', ''))
-                try:
-                    min_plan_price = int(text.split('$')[1].replace('.', ''))
-                except:
-                    min_plan_price = 0
-                   
-                i = 0
-                while i < len(plans):
-                    plan = plans[i]
-                    if plan.price >= min_plan_price:
+                    m = re.search(r'(\d+)G', plan_name)
+                    if m:
+                        plan_name = plan_name.replace(m.group(), m.group() + 'B')
+                        
+                    m = re.match(r'Libre', plan_name)
+                    if m:
+                        plan_name = 'Plan ' + plan_name
+                        
+                    plan_name = plan_name.replace(' + Num Ilimitado', '')
+                    plan_name = plan_name.replace(u' + Servicio Reparación', '')
+                        
+                    try:
+                        plan = cell_plans.get(name=plan_name)
+                        
                         tier = CellPricingTier()
                         tier.pricing = pricing
                         tier.plan = plan
                         tier.shpe = shpe
-                        tier.cellphone_price = cellphone_price
+                        tier.cellphone_price = phone_price
                         tier.monthly_quota = plan.price
                         tier.update_prices()
                         tier.save()
                         print tier.pretty_print()
-                        plans.remove(plan)
-                    else:
-                        i += 1
+                    except:
+                        print 'Plan no encontrado %s' % plan_name
 
         prepago_tab = soup.find('a', { 'id': 'prepago_test' })
         

@@ -45,7 +45,7 @@ class Entel(FetchStore):
 
         # Obtain and parse HTML information of the base webpage
         baseData = browser.open(url).get_data()
-        json_data = json.loads(baseData)
+        json_data = json.loads(baseData, strict=False)
         
         json_products = json_data['equipos']
         for json_product in json_products:
@@ -82,7 +82,10 @@ class Entel(FetchStore):
                 rows = table.findAll('tr')[1:]
                 for row in rows:
                     cells = row.findAll('td')
-                    name_container = cells[0].find('p')
+                    try:
+                        name_container = cells[0].find('p')
+                    except IndexError, e:
+                        continue
                     if not name_container:
                         name_container = cells[0].contents[0]
                     if not name_container.string:
