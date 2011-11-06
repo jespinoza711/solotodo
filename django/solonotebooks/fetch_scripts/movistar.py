@@ -153,7 +153,10 @@ class Movistar(FetchStore):
         print shpe.dprint()
         
         browser = mechanize.Browser()
-        data = browser.open(shpe.url).get_data()
+        try:
+            data = browser.open(shpe.url).get_data()
+        except Exception, e:
+            return
         soup = BeautifulSoup(data)
         
         contrato_tab = soup.find('a', { 'id': 'contrato_test' })
