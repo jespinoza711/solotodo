@@ -53,7 +53,7 @@ class Bym(FetchStore):
         product_links = []
         
         url_extensions = [  
-                            ['catpro.php?ic=21', 'Notebook'],  # Notebooks
+                            ['catpro.php?ic=21&isc=20', 'Notebook'],  # Notebooks
                             ['catpro.php?ic=31', 'VideoCard'],              # Tarjetas de video
                             ['catpro.php?ic=25', 'Processor'],             # Procesadores AMD
                             ['catpro.php?ic=26', 'Processor'],             # Procesadores Intel
