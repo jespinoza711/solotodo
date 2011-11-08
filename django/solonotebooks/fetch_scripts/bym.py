@@ -53,13 +53,13 @@ class Bym(FetchStore):
         product_links = []
         
         url_extensions = [  
-                            ['subpro.php?idCat=21&idSubCat=20', 'Notebook'],  # Notebooks
-                            ['catpro.php?idCat=31', 'VideoCard'],              # Tarjetas de video
-                            ['catpro.php?idCat=25', 'Processor'],             # Procesadores AMD
-                            ['catpro.php?idCat=26', 'Processor'],             # Procesadores Intel
-                            ['catpro.php?idCat=18', 'Screen'],             # LCD
-                            ['catpro.php?idCat=23', 'Motherboard'],             # MB AMD
-                            ['catpro.php?idCat=24', 'Motherboard'],             # MB Intel
+                            ['catpro.php?ic=21', 'Notebook'],  # Notebooks
+                            ['catpro.php?ic=31', 'VideoCard'],              # Tarjetas de video
+                            ['catpro.php?ic=25', 'Processor'],             # Procesadores AMD
+                            ['catpro.php?ic=26', 'Processor'],             # Procesadores Intel
+                            ['catpro.php?ic=18', 'Screen'],             # LCD
+                            ['catpro.php?ic=23', 'Motherboard'],             # MB AMD
+                            ['catpro.php?ic=24', 'Motherboard'],             # MB Intel
                             ]
                             
         for url_extension, ptype in url_extensions:
