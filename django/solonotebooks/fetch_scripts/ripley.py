@@ -13,14 +13,14 @@ class Ripley(FetchStore):
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
         
-        try:
-            product_data = browser.open(product_link).get_data()
-        except KeyError, e:
-            return None
-        
+        product_data = browser.open(product_link).get_data()
+    
         product_soup = BeautifulSoup(product_data)
         
-        product_name = product_soup.find('span', { 'class': 'textogrisbold' }).string.encode('ascii', 'ignore')
+        try:
+            product_name = product_soup.find('span', { 'class': 'textogrisbold' }).string.encode('ascii', 'ignore')
+        except AttributeError, e:
+            return None
         
         product_prices = []
         
@@ -100,6 +100,7 @@ class Ripley(FetchStore):
                         break_flag = True
                         break
                         
+                    url = url.encode('ascii', 'ignore')
                     links.append(url)
                     product_links.append([url, ptype])
                     
