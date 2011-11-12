@@ -74,7 +74,7 @@ class Cell(Product):
             pricing.best_tier = None
             pricing.save()
         
-        for cell_company in CellCompany.objects.all():
+        for cell_company in CellCompany.objects.filter(store__name='Movistar'):
             cell_company.cellpricingplan_set.all().delete()
             CellPricingTier.objects.filter(pricing__company = cell_company).delete()
             

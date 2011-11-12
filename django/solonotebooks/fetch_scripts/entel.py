@@ -101,8 +101,36 @@ class Entel(FetchStore):
                         price_container = cells[1].contents[0]
                     price = price_container.string.strip()
                     price = int(price.replace('$', '').replace('.', ''))
+                    if price == 0:
+                        continue
                     plan = [name, price, includes_data]
                     plans.append(plan)
+                    
+        # Multimedia red
+        url = urlBase + 'P22201254521315250240353'
+        data = browser.open(url).get_data()
+        soup = BeautifulSoup(data)
+
+        table = soup.find('table', { 'class': 'tablaLiquida' })
+            
+        rows = table.findAll('tr')[2:]
+        for row in rows:
+            cells = row.findAll('td')
+            name_container = cells[0].find('p')
+            name = latin1_to_ascii(name_container.string.strip())
+                
+            m = re.search('^Multimedia(\d+)$', name)
+            if m:
+                name = 'Multimedia ' + m.group(1)
+            
+            price_container = cells[1].find('palign')
+            if not price_container:
+                price_container = cells[1].find('p')
+
+            price = price_container.string.strip()
+            price = int(price.replace('$', '').replace('.', ''))
+            plan = [name, price, True]
+            plans.append(plan)
                     
         return plans
         

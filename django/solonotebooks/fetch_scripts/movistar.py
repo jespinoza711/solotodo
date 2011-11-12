@@ -204,10 +204,27 @@ class Movistar(FetchStore):
         if prepago_tab:
             prepago_container = soup.find('div', { 'id': 'prepago' })
             
+            prepaid_price = None
+            
             try:
                 prepaid_price = int(prepago_container.find('p', {'class': 'precio'}).string.replace('$', '').replace('.', ''))
             except:
-                prepaid_price = int(prepago_container.find('strong').string.replace('$', '').replace('.', ''))
+                pass
+                
+            if not prepaid_price:
+                try:
+                    prepaid_price = int(prepago_container.find('strong').string.replace('$', '').replace('.', ''))
+                except:
+                    pass
+                
+            if not prepaid_price:
+                try:
+                    prepaid_price = int(prepago_container.find('li', {'class': 'pnormalForeverAlone'}).find('span').string.replace('$', '').replace('.', ''))
+                except:
+                    pass
+                    
+            if not prepaid_price:
+                raise Exception
             
             company = CellCompany.objects.get(store__classname = self.__class__.__name__)
             
