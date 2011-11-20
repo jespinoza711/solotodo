@@ -41,6 +41,7 @@ class MacOnline(FetchStore):
                             ['421.html', 'Notebook'],
                             ['384.html', 'Notebook'],
                             ['288.html', 'Screen'],
+                            ['435.html', 'Notebook'],
                             ]
                             
         for url_extension, ptype in url_extensions:
