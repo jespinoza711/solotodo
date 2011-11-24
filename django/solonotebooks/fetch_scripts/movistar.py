@@ -23,7 +23,7 @@ class Movistar(FetchStore):
             return None
         product_soup = BeautifulSoup(product_data)
         
-        product_title = product_soup.find('h2').string
+        product_title = product_soup.find('h2').string.encode('ascii', 'ignore')
         product_price = 0
                 
         product_data = ProductData()
