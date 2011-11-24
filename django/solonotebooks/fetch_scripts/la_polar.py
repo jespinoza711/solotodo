@@ -5,6 +5,7 @@ from BeautifulSoup import BeautifulSoup
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+import json
 
 class LaPolar(FetchStore):
     name = 'La Polar'
@@ -15,8 +16,12 @@ class LaPolar(FetchStore):
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
-        product_name = product_soup.find('div', { 'class': 'LetraDetalleProducto' }).string.encode('ascii', 'ignore')
-        product_price = int(product_soup.find('span', { 'class': 'PrecioDetalleRojo' }).string.split('$')[1].split('pesos')[0].replace('.', ''))
+        try:
+            product_name = product_soup.find('div', { 'class': 'LetraDetalleProducto' }).string.encode('ascii', 'ignore')
+        except AttributeError:
+            return None
+        
+        product_price = int(product_soup.findAll('span', { 'class': 'PrecioDetalleRojo' })[1].string.split('$')[1].replace('.', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name
@@ -43,7 +48,6 @@ class LaPolar(FetchStore):
         browser = mechanize.Browser()
         
         # Array containing the data for each product
-        product_links = []
         products_data = []
         for urlExtension, ptype in urlExtensions:
             page = 1;
@@ -53,25 +57,25 @@ class LaPolar(FetchStore):
                 # Obtain and parse HTML information of the base webpage
                 baseData = browser.open(urlWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
-
-                # Obtain the links to the other pages of the catalog (2, 3, ...)
-                productRows = baseSoup.find("td", { "colspan" : "3" })
                 
-                if not productRows:
+                try:
+                    raw_json_data = json.loads(baseSoup.findAll('script')[-3].string.strip().replace('var listado_productos_json = ', '')[:-1])
+                except ValueError:
                     break
                 
-                productRows = productRows.find("table").findAll("tr", recursive = False)[1::2]
+                json_product_array_data = []
                 
-                if len(productRows) == 0:
-                    break
+                for row in raw_json_data['lista_completa']:
+                    json_product_array_data.extend(row['sub_lista'])
 
-                for productRow in productRows:
-                    productCells = productRow.findAll("td", recursive = False)[::2]
-                    for productCell in productCells:
-                        titleField = productCell.find("div", {'class': 'letraNormalBold'})
-                        link = titleField.find("a")['href']
-                        product_links.append([link, ptype])
-                page = page + 1
+                for json_product_data in json_product_array_data:
+                    product_id = json_product_data['prid']
+                    
+                    url = 'http://www.lapolar.cl/internet/catalogo/detalles/%s%s' % (urlExtension, product_id)
+                    
+                    products_data.append([url, ptype])
+                    
+                page += 1
 
-        return product_links
+        return products_data
 

@@ -20,9 +20,9 @@ class GlobalMac(FetchStore):
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
-        product_name = product_soup.find('div', { 'id': 'ficha' }).find('h1').string.encode('ascii', 'ignore')
+        product_name = product_soup.find('h1').string.encode('ascii', 'ignore')
         try:
-            product_price = int(product_soup.find('div', { 'class': 'price' }).find('h4').string.split('$')[1].split('pesos')[0].replace('.', ''))
+            product_price = int(product_soup.find('span', { 'id': 'product_price' }).string.replace('.', ''))
         except:
             return None
         
@@ -43,32 +43,25 @@ class GlobalMac(FetchStore):
         mechanize.install_opener(opener)
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.globalmac.cl/'
-        urlBuscarProductos = 'ver='
         
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  ['Apple/MacBook', 'Notebook'],
-                            ['Apple/MacBook%20Pro', 'Notebook'],
-                            ['Hardware/Monitores%20LCD', 'Screen'],
-                            ['Apple/Cinema%20Display', 'Screen'],
+        url_extensions = [  ['MacBook/', 'Notebook'],
+                            ['MacBook-Pro/', 'Notebook'],
+                            ['Cinema-Display/', 'Screen'],
                             ]
         product_links = []
                             
         for url_extension, ptype in url_extensions:
-            urlWebpage = urlBase + urlBuscarProductos + url_extension
+            urlWebpage = urlBase + url_extension
             baseData = browser.open(urlWebpage).get_data()
             baseSoup = BeautifulSoup(baseData)
             
-            titles = baseSoup.findAll('h3')
+            titles = baseSoup.findAll('a', {'class': 'product-title'})
 
-            for i in range(len(titles)):
-                link = titles[i].find('a')
-                
-                if link == None:
-                	continue
-                	
-            	product_links.append([urlBase + link['href'].replace('\t', ''), ptype])
+            for title in titles:
+            	product_links.append([title['href'], ptype])
             	
         return product_links
 

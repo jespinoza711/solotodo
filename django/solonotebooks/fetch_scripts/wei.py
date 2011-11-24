@@ -14,7 +14,7 @@ class Wei(FetchStore):
         data = br.open(product_link).get_data()
         soup = BeautifulSoup(data)
         
-        availabilities = soup.find('div', { 'class' : 'pdisponibilidad' }).findAll('td')
+        availabilities = soup.find('table', { 'class' : 'pdisponibilidad' }).findAll('td')
         
         for availability in availabilities:
             if 'Producto agotado' in availability.contents[1]:
@@ -24,8 +24,8 @@ class Wei(FetchStore):
 
         title = soup.find('title').string.split('WEI CHILE S. A. - ')[1]
 
-        priceCell = soup.find('th', { 'class' : 'red' })
-        price = int(priceCell.string.strip().replace('.', ''))
+
+        price = int(soup.find('table', { 'class' : 'pprecio' }).find('h1').string.replace('&nbsp;', '').strip().replace('.', ''))
         productData.custom_name = title.encode('ascii','ignore')
         productData.price = price
         productData.url = product_link
@@ -70,13 +70,22 @@ class Wei(FetchStore):
                 baseSoup = BeautifulSoup(baseData)
 
                 product_cells = baseSoup.findAll('div', { 'class': 'box1'})
+                flag = False
                 
                 if not product_cells:
                     break
                     
                 for cell in product_cells:
                     link = urlStore + cell.parent['href']
+                    if link in links:
+                        flag = True
+                        break
                     product_links.append([link, ptype])
+                    links.append(link)
+                
+                if flag:
+                    break
+                    
                 desde += 20
 
         return product_links
