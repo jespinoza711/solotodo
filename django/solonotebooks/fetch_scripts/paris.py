@@ -15,7 +15,7 @@ class Paris(FetchStore):
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
-        product_name = product_soup.find('div', { 'id': 'ficha-producto-nombre' }).find('h1').string.encode('ascii', 'ignore')
+        product_name = product_soup.find('div', { 'id': 'ficha-producto-nombre' }).string.encode('ascii', 'ignore').strip()
                 
         product_prices = []
         
