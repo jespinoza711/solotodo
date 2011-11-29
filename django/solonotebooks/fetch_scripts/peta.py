@@ -23,7 +23,7 @@ class Peta(FetchStore):
         
         try:
             product_availability = product_soup.find('p', { 'class': 'availability in-stock' }).find('span')
-            if product_availability.string != 'En existencia':
+            if product_availability.string and product_availability.string != 'En existencia':
                 return None
         except:
             return None
@@ -52,6 +52,7 @@ class Peta(FetchStore):
         
         url_extensions = [  ['computadores-1/netbooks.html', 'Notebook'],
                             ['computadores-1/notebooks.html', 'Notebook'],
+                            ['computadores-1/apple.html?appletype=898,903', 'Notebook'],
                             ['peta-cl/tarjetas-de-video.html', 'VideoCard'],
                             ['peta-cl/procesadores.html', 'Processor'],
                             ['peta-cl/monitores.html', 'Screen'],
