@@ -19,6 +19,7 @@ class Ram(Product):
     latency_trp = models.ForeignKey(RamLatencyTrp, blank=True, null=True)
     latency_tras = models.ForeignKey(RamLatencyTras, blank=True, null=True)
     is_ecc = models.BooleanField(default=False)
+    is_fully_buffered = models.BooleanField(default=False)
     
     def get_display_name(self):
         return '%s %s (%s | %s)' % (unicode(self.line), self.name, unicode(self.capacity), self.bus.title_display())
