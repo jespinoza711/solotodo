@@ -1,7 +1,7 @@
 {% extends "templatetags/div_base.html" %}
 
 {% block specs %}
-<li><strong>Capacidad:</strong> {{ product.capacity }}</li>
+<li><strong>Capacidad:</strong> {{ product.capacity.pretty_display }}</li>
 <li><strong>Tipo:</strong> {{ product.bus.bus.bus.type }}</li>
 <li><strong>Frecuencia:</strong> {{ product.bus.frequency }}</li>
 <li><strong>Formato:</strong> {{ product.bus.bus.bus.format }}</li>

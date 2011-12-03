@@ -8,8 +8,8 @@ from . import SearchForm
 class RamSearchForm(SearchForm):
     brand = ClassChoiceField(RamBrand, 'Marca', in_quick_search=True, quick_search_name='Marca')
     line = ClassChoiceField(RamLine, 'Línea', requires_advanced_controls=True)
-    total_capacity = ClassChoiceField(RamTotalCapacity, u'Cap. mín', in_quick_search=True, quick_search_name='Capacidad')
-    capacity = ClassChoiceField(RamCapacity, 'Capacidad')
+    total_capacity = ClassChoiceField(RamTotalCapacity, u'Cap. total', in_quick_search=True, quick_search_name='Capacidad')
+    capacity = ClassChoiceField(RamCapacity, 'Cap. esp.')
     type = ClassChoiceField(InterfaceMemoryType, 'Tipo', in_quick_search=True, quick_search_name='Tipo')
     format = ClassChoiceField(InterfaceMemoryFormat, 'Formato', in_quick_search=True, quick_search_name='Formato')
     frequency = ClassChoiceField(RamFrequency, u'Frec. mín')
@@ -18,6 +18,10 @@ class RamSearchForm(SearchForm):
     latency_trcd = ClassChoiceField(RamLatencyTrcd, 'Trcd', requires_advanced_controls=True)
     latency_trp = ClassChoiceField(RamLatencyTrp, 'Trp', requires_advanced_controls=True)
     latency_tras = ClassChoiceField(RamLatencyTras, 'Tras', requires_advanced_controls=True)
+
+
+    is_ecc_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
+    is_ecc = CustomChoiceField(choices = is_ecc_choices).set_name('ECC')
     
     ordering_choices = (
         ('1', 'Precio'), 
@@ -45,8 +49,9 @@ class RamSearchForm(SearchForm):
                      'frequency',
                      'voltage',
                      ]],
-                 ['Latencias',
-                    ['latency_cl',
+                 ['Latencias y ECC',
+                    ['is_ecc',
+                     'latency_cl',
                      'latency_trcd',
                      'latency_trp',
                      'latency_tras']],
@@ -83,6 +88,8 @@ class RamSearchForm(SearchForm):
             value = u'Latencia Trp máxima: ' + unicode(RamLatencyTrp.objects.get(pk=pk_value))
         elif key == 'latency_tras':
             value = u'Latencia Tras máxima: ' + unicode(RamLatencyTras.objects.get(pk=pk_value))
+        elif key == 'is_ecc':
+            value = ['Sin', 'Con'][pk_value - 1] + ' soporte ECC'
         return value
         
     # Method that, given a key (e.g.: notebook_brand, processor, etc) and a
@@ -114,12 +121,14 @@ class RamSearchForm(SearchForm):
             value = u'RAM con latencia Trp máxima de ' + unicode(RamLatencyTrp.objects.get(pk = pk_value))
         elif key == 'latency_tras':
             value = u'RAM con latencia Tras máxima de ' + unicode(RamLatencyTras.objects.get(pk = pk_value))
+        elif key == 'is_ecc':
+            value = 'RAM ' ['sin', 'con'][pk_value - 1] + ' soporte ECC'
         return value
         
     def filter_products(self, rams):
         if self.brand:
             rams = rams.filter(line__brand = self.brand)
-        if self.line:
+        if self.line and self.advanced_controls:
             rams = rams.filter(line = self.line)
         if self.total_capacity:
             rams = rams.filter(capacity__total_capacity__value__gte = RamTotalCapacity.objects.get(pk = self.total_capacity).value)
@@ -131,15 +140,17 @@ class RamSearchForm(SearchForm):
             rams = rams.filter(bus__bus__bus__format = self.format)
         if self.frequency:
             rams = rams.filter(bus__frequency__value__gte = RamFrequency.objects.get(pk=self.frequency).value)
-        if self.voltage:
+        if self.voltage and self.advanced_controls:
             rams = rams.filter(voltage__value__lte = RamVoltage.objects.get(pk=self.voltage).value)
+        if self.is_ecc:
+            rams = rams.filter(is_ecc = self.is_ecc - 1)
         if self.latency_cl:
             rams = rams.filter(latency_cl__value__lte = RamLatencyCl.objects.get(pk=self.latency_cl).value)
-        if self.latency_trcd:
+        if self.latency_trcd and self.advanced_controls:
             rams = rams.filter(latency_trcd__value__lte = RamLatencyTrcd.objects.get(pk=self.latency_trcd).value)
-        if self.latency_trp:
+        if self.latency_trp and self.advanced_controls:
             rams = rams.filter(latency_trp__value__lte = RamLatencyTrp.objects.get(pk=self.latency_trp).value)
-        if self.latency_tras:
+        if self.latency_tras and self.advanced_controls:
             rams = rams.filter(latency_tras__value__lte = RamLatencyTras.objects.get(pk=self.latency_tras).value)
 
         if self.min_price:

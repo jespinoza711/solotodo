@@ -18,6 +18,7 @@ class Ram(Product):
     latency_trcd = models.ForeignKey(RamLatencyTrcd, blank=True, null=True)
     latency_trp = models.ForeignKey(RamLatencyTrp, blank=True, null=True)
     latency_tras = models.ForeignKey(RamLatencyTras, blank=True, null=True)
+    is_ecc = models.BooleanField(default=False)
     
     def get_display_name(self):
         return '%s %s (%s | %s)' % (unicode(self.line), self.name, unicode(self.capacity), self.bus.title_display())
@@ -25,6 +26,8 @@ class Ram(Product):
     def raw_text(self):
         result = super(Ram, self).base_raw_text()
         result += ' ' + unicode(self)
+        if self.is_ecc:
+            result += ' ecc'
         return result
         
     def load_similar_products(self):
@@ -33,5 +36,3 @@ class Ram(Product):
     class Meta:
         ordering = ['display_name']
         app_label = 'cotizador'
-        
-    

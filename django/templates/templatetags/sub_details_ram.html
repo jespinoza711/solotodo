@@ -2,7 +2,7 @@
 <h3 class="subtitle">Especificaciones principales</h3>
 <strong>Marca: </strong> {{ ram.line }}
 <br />
-<strong>Capacidad: </strong> {{ ram.capacity }}
+<strong>Capacidad: </strong> {{ ram.capacity.pretty_display }}
 <br />
 <strong>Tipo: </strong> {{ ram.bus.bus.bus.type }}
 <br />
@@ -13,6 +13,8 @@
 
 <h3 class="subtitle">Especificaciones secundarias</h3>
 <strong>Voltaje: </strong> {{ ram.voltage }}
+<br />
+<strong>Soporte ECC: </strong> {% if ram.is_ecc %} Sí {% else %} No {% endif %}
 <br />
 <strong>Latencia Cl (CAS): </strong> {{ ram.latency_cl }}
 <br />
