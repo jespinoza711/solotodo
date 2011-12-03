@@ -19,9 +19,11 @@ class RamSearchForm(SearchForm):
     latency_trp = ClassChoiceField(RamLatencyTrp, 'Trp', requires_advanced_controls=True)
     latency_tras = ClassChoiceField(RamLatencyTras, 'Tras', requires_advanced_controls=True)
 
-
     is_ecc_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
-    is_ecc = CustomChoiceField(choices = is_ecc_choices).set_name('ECC')
+    is_ecc = CustomChoiceField(choices = is_ecc_choices).set_name('ECC').does_require_advanced_controls()
+
+    is_fully_buffered_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
+    is_fully_buffered = CustomChoiceField(choices = is_fully_buffered_choices).set_name('Fully buff.').does_require_advanced_controls()
     
     ordering_choices = (
         ('1', 'Precio'), 
@@ -49,12 +51,14 @@ class RamSearchForm(SearchForm):
                      'frequency',
                      'voltage',
                      ]],
-                 ['Latencias y ECC',
-                    ['is_ecc',
-                     'latency_cl',
+                 ['Avanzado',
+                    ['latency_cl',
                      'latency_trcd',
                      'latency_trp',
-                     'latency_tras']],
+                     'latency_tras',
+                     'is_ecc',
+                     'is_fully_buffered'
+                    ]],
                      ]
                      
         return self.parse_model(model)
@@ -90,6 +94,8 @@ class RamSearchForm(SearchForm):
             value = u'Latencia Tras máxima: ' + unicode(RamLatencyTras.objects.get(pk=pk_value))
         elif key == 'is_ecc':
             value = ['Sin', 'Con'][pk_value - 1] + ' soporte ECC'
+        elif key == 'is_fully_buffered':
+            value = ['Sin', 'Con'][pk_value - 1] + ' soporte de full buffer'
         return value
         
     # Method that, given a key (e.g.: notebook_brand, processor, etc) and a
@@ -122,7 +128,9 @@ class RamSearchForm(SearchForm):
         elif key == 'latency_tras':
             value = u'RAM con latencia Tras máxima de ' + unicode(RamLatencyTras.objects.get(pk = pk_value))
         elif key == 'is_ecc':
-            value = 'RAM ' ['sin', 'con'][pk_value - 1] + ' soporte ECC'
+            value = 'RAM ' + ['sin', 'con'][pk_value - 1] + ' soporte ECC'
+        elif key == 'is_fully_buffered':
+            value = 'RAM ' + ['sin', 'con'][pk_value - 1] + ' soporte de full buffer'
         return value
         
     def filter_products(self, rams):
@@ -142,8 +150,10 @@ class RamSearchForm(SearchForm):
             rams = rams.filter(bus__frequency__value__gte = RamFrequency.objects.get(pk=self.frequency).value)
         if self.voltage and self.advanced_controls:
             rams = rams.filter(voltage__value__lte = RamVoltage.objects.get(pk=self.voltage).value)
-        if self.is_ecc:
+        if self.is_ecc and self.advanced_controls:
             rams = rams.filter(is_ecc = self.is_ecc - 1)
+        if self.is_fully_buffered and self.advanced_controls:
+            rams = rams.filter(is_fully_buffered = self.is_fully_buffered - 1)
         if self.latency_cl:
             rams = rams.filter(latency_cl__value__lte = RamLatencyCl.objects.get(pk=self.latency_cl).value)
         if self.latency_trcd and self.advanced_controls:

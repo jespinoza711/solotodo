@@ -71,6 +71,8 @@ class Bip(FetchStore):
                             ['categoria=19', 'Screen'],                         # LCD
                             ['categoria=108', 'Motherboard'],                   # Placas madre
                             ['categoria=132', 'Ram'],                   # RAM PC
+                            ['categoria=178', 'Ram'],                   # RAM Notebook
+                            ['categoria=179', 'Ram'],                   # RAM Servidor
                             ]
                             
         product_links = []

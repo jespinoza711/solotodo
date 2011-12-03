@@ -14,8 +14,6 @@
 <h3 class="subtitle">Especificaciones secundarias</h3>
 <strong>Voltaje: </strong> {{ ram.voltage }}
 <br />
-<strong>Soporte ECC: </strong> {% if ram.is_ecc %} Sí {% else %} No {% endif %}
-<br />
 <strong>Latencia Cl (CAS): </strong> {{ ram.latency_cl }}
 <br />
 <strong>Latencia Trcd: </strong> {{ ram.latency_trcd|default_if_none:"Desconocida" }}
@@ -23,5 +21,9 @@
 <strong>Latencia Trp: </strong> {{ ram.latency_trp|default_if_none:"Desconocida" }}
 <br />
 <strong>Latencia Tras: </strong> {{ ram.latency_tras|default_if_none:"Desconocida" }}
+<br />
+<strong>Soporte ECC: </strong> {% if ram.is_ecc %} Sí {% else %} No {% endif %}
+<br />
+<strong>Soporte full buffered: </strong> {% if ram.is_fully_buffered %} Sí {% else %} No {% endif %}
 <br />
 <br />
