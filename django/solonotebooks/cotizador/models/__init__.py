@@ -7,7 +7,9 @@ from interface_card_bus import InterfaceCardBus
 from interface_socket_brand import InterfaceSocketBrand
 from interface_socket import InterfaceSocket
 from interface_port import InterfacePort
+from interface_memory_format import InterfaceMemoryFormat
 from interface_memory_type import InterfaceMemoryType
+from interface_memory_bus import InterfaceMemoryBus
 from interface_bus import InterfaceBus
 from interface_power_connector import InterfacePowerConnector
 from solonotebooks.cotizador.models.product_type import ProductType
@@ -299,6 +301,8 @@ __all__ = [
             'VideoCardHasPort',
             'InterfaceCardBusName',
             'InterfaceCardBusLane',
+            'InterfaceMemoryFormat',
+            'InterfaceMemoryBus',
             'VideoCardBus',
             'VideoCardGpuDirectxVersion',
             'VideoCardGpuOpenglVersion',

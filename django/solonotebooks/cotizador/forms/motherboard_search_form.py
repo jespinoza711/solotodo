@@ -14,7 +14,7 @@ class MotherboardSearchForm(SearchForm):
     northbridge = ClassChoiceField(MotherboardNorthbridge, 'Chipset', in_quick_search = True, quick_search_name = 'Chipset')
     socket = ClassChoiceField(MotherboardSocket, 'Socket', in_quick_search = True, quick_search_name = 'Socket')
     format = ClassChoiceField(MotherboardFormat, 'Formato', requires_advanced_controls = True)
-    memory_type = ClassChoiceField(MotherboardMemoryType, 'Tipo')
+    memory_type = ClassChoiceField(InterfaceMemoryType, 'Tipo')
     memory_channels = ClassChoiceField(MotherboardMemoryChannel, 'Canales')
     integrated_graphics = ClassChoiceField(MotherboardGraphics, 'Integrados')
     
@@ -65,7 +65,7 @@ class MotherboardSearchForm(SearchForm):
         if key == 'format':
             value = 'Formato ' + unicode(MotherboardFormat.objects.get(pk = pk_value))
         if key == 'memory_type':
-            value = 'Soporte memoria ' + unicode(MotherboardMemoryType.objects.get(pk = pk_value))
+            value = 'Soporte memoria ' + unicode(InterfaceMemoryType.objects.get(pk = pk_value))
         if key == 'memory_channels':
             value = 'Soporte memoria ' + unicode(MotherboardMemoryChannel.objects.get(pk = pk_value))
         if key == 'integrated_graphics':
@@ -90,7 +90,7 @@ class MotherboardSearchForm(SearchForm):
         if key == 'format':
             value = 'Placas madre ' + unicode(MotherboardFormat.objects.get(pk = pk_value))
         if key == 'memory_type':
-            value = 'Placas madre con soporte de memoria ' + unicode(MotherboardMemoryType.objects.get(pk = pk_value))
+            value = 'Placas madre con soporte de memoria ' + unicode(InterfaceMemoryType.objects.get(pk = pk_value))
         if key == 'memory_channels':
             value = 'Placas madre con soporte de memoria ' + unicode(MotherboardMemoryChannel.objects.get(pk = pk_value))
         if key == 'integrated_graphics':
@@ -114,7 +114,7 @@ class MotherboardSearchForm(SearchForm):
         if self.format and self.advanced_controls:
             motherboards = motherboards.filter(format = self.format)
         if self.memory_type:
-            motherboards = motherboards.filter(memory_types__mtype__id = self.memory_type).distinct()
+            motherboards = motherboards.filter(memory_types__mtype__itype__type__id = self.memory_type).distinct()
         if self.memory_channels:
             motherboards = motherboards.filter(memory_channels = self.memory_channels)
         if self.integrated_graphics:
