@@ -3,7 +3,6 @@ from . import InterfaceMemoryType
 from solonotebooks.cotizador.models.interface_memory_bus import InterfaceMemoryBus
 
 class MotherboardMemoryType(models.Model):
-    mtype = models.ForeignKey(InterfaceMemoryType, blank=True, null=True)
     itype = models.ForeignKey(InterfaceMemoryBus, blank=True, null=True)
     
     def __unicode__(self):
