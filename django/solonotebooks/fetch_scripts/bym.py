@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 from django.utils.http import urlquote
 
@@ -13,10 +11,9 @@ class Bym(FetchStore):
     
     def retrieve_product_data(self, product_link, already_tried = False):
         new_product_link = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(product_link)
-        browser = mechanize.Browser()
         try:
             base_data = mechanize.urlopen(new_product_link)
-        except:
+        except Exception:
             if already_tried:
                 return None
             else:
@@ -49,7 +46,6 @@ class Bym(FetchStore):
                  ("From", "responsible.person@example.com")]
         mechanize.install_opener(opener)
         urlBase = 'http://www.ttchile.cl/'        
-        browser = mechanize.Browser()
         product_links = []
         
         url_extensions = [  

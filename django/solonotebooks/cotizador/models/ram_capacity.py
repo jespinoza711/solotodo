@@ -10,6 +10,9 @@ class RamCapacity(models.Model):
     
     def __unicode__(self):
         return '%s x %s' % (unicode(self.dimm_quantity), unicode(self.dimm_capacity))
+
+    def pretty_display(self):
+        return '%s (%s)' % (unicode(self.total_capacity), unicode(self))
         
     def raw_text(self):
         return unicode(self)      

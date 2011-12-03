@@ -2,17 +2,18 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+from django.utils.http import urlquote
+
 
 class Sistemax(FetchStore):
     name = 'Sistemax'
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
+        new_product_link = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(product_link)
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
+        product_data = browser.open(new_product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.findAll('h2')[3].find('font').string.encode('ascii', 'ignore')
@@ -48,6 +49,8 @@ class Sistemax(FetchStore):
         product_links = []                
         for extension, ptype in extensions:
             urlWebpage = baseUrl + url_buscar_productos + extension + '&page=-1&listar=true'
+            urlWebpage = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(urlWebpage)
+            print urlWebpage
             
             browser = mechanize.Browser()
 
