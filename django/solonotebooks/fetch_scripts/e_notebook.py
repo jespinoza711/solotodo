@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
 class ENotebook(FetchStore):
@@ -25,7 +23,7 @@ class ENotebook(FetchStore):
         
         try:
             product_price = int(price_cell.find('span', { 'class' : 'productSpecialPrice' }).string.replace('$', '').replace('.', ''))
-        except:
+        except Exception:
             product_price = int(price_cell.string.split('$')[1].replace('.', ''))
         
         product_data = ProductData()
@@ -43,7 +41,6 @@ class ENotebook(FetchStore):
         product_links = []
         cellis = soup.findAll("td", { "class" : "productListing-data" })
         cells = cellis[1::4]
-        prices = cellis[2::4]
         for i in range(len(cells)):
             link = cells[i].find("a")
             product_links.append(link['href'].split('?osCsid')[0])
@@ -54,7 +51,7 @@ class ENotebook(FetchStore):
         br = mechanize.Browser()
         data = br.open(base_page_link).get_data()
         soup = BeautifulSoup(data)
-        links = [base_page_link];
+        links = [base_page_link]
         pageLinks = soup.findAll("a", { "class" : "pageResults" })[:-1]
         for pageLink in pageLinks:
             link = pageLink['href'].split('&osCsid')[0]
@@ -72,11 +69,12 @@ class ENotebook(FetchStore):
         browser = mechanize.Browser()
         
         url_extensions = [
-                            ['it-index-n-notebooks-cP-1.html', 'Notebook'],
-                            ['it-index-n-monitores_televisores_lcd-cP-22.html', 'Notebook'],
-                        ]
+            ['it-index-n-notebooks-cP-1.html', 'Notebook'],
+        ]
                         
-        extra_pagelinks = [ ]
+        extra_pagelinks = [
+            ['it-index-n-memoria_notebook-cP-46_4.html', 'Ram'],
+        ]
                         
         pageLinks = []
         for url_extension, ptype in url_extensions:
@@ -92,7 +90,7 @@ class ENotebook(FetchStore):
                 link = pn.find("a")
                 try:
                     pageLinks.append([link['href'].split('?osCsid')[0], ptype])
-                except:
+                except Exception:
                     continue
         
         for page_link, ptype in extra_pagelinks:

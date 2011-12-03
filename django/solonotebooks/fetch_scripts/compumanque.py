@@ -37,14 +37,17 @@ class Compumanque(FetchStore):
         urlBase = 'http://72.249.5.151/~compucl/index.php?route=product/category&path='
         browser = mechanize.Browser()
         
-        url_extensions = [  ['101_87', 'VideoCard'],    # Tarjetas de video
-                            ['19', 'Processor'],     # Procesadores
-                            ['45_97', 'Screen'],    # Monitores
-                            ['45_98', 'Screen'],    # TV
-                            ['106', 'Notebook'],   # Netbooks
-                            ['50', 'Notebook'],     # Notebooks
-                            ['79', 'Motherboard'],      # Placas madre
-                            ]
+        url_extensions = [
+            ['101_87', 'VideoCard'],    # Tarjetas de video
+            ['19', 'Processor'],     # Procesadores
+            ['45_97', 'Screen'],    # Monitores
+            ['45_98', 'Screen'],    # TV
+            ['106', 'Notebook'],   # Netbooks
+            ['50', 'Notebook'],     # Notebooks
+            ['79', 'Motherboard'],      # Placas madre
+            ['122_121', 'Ram'],      # Ram Notebook
+            ['122_57', 'Ram'],      # Ram PC
+        ]
                             
         product_links = []
                             

@@ -46,37 +46,39 @@ class Clie(FetchStore):
         products_data = []
         
         url_extensions = [  
-                            ['561', 'Notebook'],
-                            ['542', 'Notebook'],
-                            ['580', 'Notebook'],
-                            ['564', 'Notebook'],
-                            ['581', 'Notebook'],
-                            ['562', 'Notebook'],
-                            ['579', 'Notebook'],
-                            ['575', 'Notebook'],
-                            ['612', 'Notebook'],
-                            ['598', 'Notebook'],
-                            ['596', 'Notebook'],
-                            ['595', 'Notebook'],
-                            ['178', 'Notebook'],
-                            ['500', 'Notebook'],
-                            ['158', 'Notebook'],
-                            ['307', 'Notebook'],                            
-                            ['308', 'Notebook'],
-                            ['646', 'Processor'],  # Procesadores Intel
-                            ['167', 'Screen'],  # LCD monitor
-                            ['551', 'Screen'],
-                            ['19', 'Screen'],  
-                            ['536', 'Screen'],   
-                            ['156', 'Screen'],
-                            ['310', 'Screen'],  # LCD TV monitor
-                            ['266', 'Screen'],  
-                            ['550', 'Screen'],  
-                            ['560', 'Screen'],  
-                            ['632', 'Screen'], # LED monitor
-                            ['616', 'Screen'],
-                            ['614', 'Screen'],  # LED TV monitor
-                            ]
+            ['561', 'Notebook'],
+            ['542', 'Notebook'],
+            ['580', 'Notebook'],
+            ['564', 'Notebook'],
+            ['581', 'Notebook'],
+            ['562', 'Notebook'],
+            ['579', 'Notebook'],
+            ['575', 'Notebook'],
+            ['612', 'Notebook'],
+            ['598', 'Notebook'],
+            ['596', 'Notebook'],
+            ['595', 'Notebook'],
+            ['178', 'Notebook'],
+            ['500', 'Notebook'],
+            ['158', 'Notebook'],
+            ['307', 'Notebook'],
+            ['308', 'Notebook'],
+            ['646', 'Processor'],  # Procesadores Intel
+            ['167', 'Screen'],  # LCD monitor
+            ['551', 'Screen'],
+            ['19', 'Screen'],
+            ['536', 'Screen'],
+            ['156', 'Screen'],
+            ['310', 'Screen'],  # LCD TV monitor
+            ['266', 'Screen'],
+            ['550', 'Screen'],
+            ['560', 'Screen'],
+            ['632', 'Screen'], # LED monitor
+            ['616', 'Screen'],
+            ['614', 'Screen'],  # LED TV monitor
+            ['26', 'Ram'],
+            ['446', 'Ram'],
+        ]
                             
         product_links = []
                             
