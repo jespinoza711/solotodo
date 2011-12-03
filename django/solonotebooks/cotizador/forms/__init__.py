@@ -13,6 +13,7 @@ from cell_search_form import CellSearchForm
 from date_range_form import DateRangeForm
 from search_shpe_form import SearchShpeForm
 from competitivity_report_ordering import CompetitivityReportOrdering
+from ram_search_form import RamSearchForm
 
 __all__ = [ 
             'SearchForm', 
@@ -30,4 +31,5 @@ __all__ = [
             'SearchShpeForm',
             'CellSearchForm',
             'CompetitivityReportOrdering',
+            'RamSearchForm',
             ]

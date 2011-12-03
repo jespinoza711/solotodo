@@ -199,6 +199,23 @@ from cellphone_processor import CellphoneProcessor
 from cellphone import Cellphone
 from cell import Cell
 
+from ram_brand import RamBrand
+from ram_line import RamLine
+from ram_memory_bus import RamMemoryBus
+from ram_frequency import RamFrequency
+from ram_bus import RamBus
+from ram_dimm_capacity import RamDimmCapacity
+from ram_dimm_quantity import RamDimmQuantity
+from ram_total_capacity import RamTotalCapacity
+from ram_capacity import RamCapacity
+from ram_voltage import RamVoltage
+from ram_latency_cl import RamLatencyCl
+from ram_latency_tras import RamLatencyTras
+from ram_latency_trcd import RamLatencyTrcd
+from ram_latency_trp import RamLatencyTrp
+from ram import Ram
+
+
 __all__ = [ 
             'InterfaceBrand',
             'InterfaceVideoPort',
@@ -393,4 +410,19 @@ __all__ = [
             'CellphoneProcessor',
             'Cellphone',
             'Cell',
+            'RamBrand',
+            'RamLine',
+            'RamMemoryBus',
+            'RamFrequency',
+            'RamBus',
+            'RamDimmCapacity',
+            'RamDimmQuantity',
+            'RamTotalCapacity',
+            'RamCapacity',
+            'RamVoltage',
+            'RamLatencyCl',
+            'RamLatencyTras',
+            'RamLatencyTrcd',
+            'RamLatencyTrp',
+            'Ram',
             ]

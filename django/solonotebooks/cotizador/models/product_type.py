@@ -11,8 +11,8 @@ class ProductType(models.Model):
     ordering = models.IntegerField()    
     
     @classmethod
-    def get_valid(self):
-        return ProductType.objects.filter(ordering__gt = 0)
+    def get_valid(cls):
+        return cls.objects.filter(ordering__gt = 0)
     
     def get_class(self):
         from . import *

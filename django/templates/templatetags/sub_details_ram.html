@@ -1,0 +1,25 @@
+<h1>{{ ram }}</h1>
+<h3 class="subtitle">Especificaciones principales</h3>
+<strong>Marca: </strong> {{ ram.line }}
+<br />
+<strong>Capacidad: </strong> {{ ram.capacity }}
+<br />
+<strong>Tipo: </strong> {{ ram.bus.bus.bus.type }}
+<br />
+<strong>Frecuencia: </strong> {{ ram.bus.frequency }}
+<br />
+<strong>Formato: </strong> {{ ram.bus.bus.bus.format }}
+<br />
+
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Voltaje: </strong> {{ ram.voltage }}
+<br />
+<strong>Latencia Cl (CAS): </strong> {{ ram.latency_cl }}
+<br />
+<strong>Latencia Trcd: </strong> {{ ram.latency_trcd|default_if_none:"Desconocida" }}
+<br />
+<strong>Latencia Trp: </strong> {{ ram.latency_trp|default_if_none:"Desconocida" }}
+<br />
+<strong>Latencia Tras: </strong> {{ ram.latency_tras|default_if_none:"Desconocida" }}
+<br />
+<br />

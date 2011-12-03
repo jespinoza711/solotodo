@@ -264,7 +264,7 @@ def append_metadata_to_response(request, template, args):
             tabs = []
             for ptype in ProductType.objects.all():
                 tabs.append([ptype.id, ptype.indexname, reverse('solonotebooks.cotizador.views.product_type_index', args = [ptype.urlname])])
-            tabs = ['Tipos de producto', tabs]
+            tabs = ['', tabs]
             args['tabs'] = tabs
     
     args['signup_key'] = request.session['signup_key']

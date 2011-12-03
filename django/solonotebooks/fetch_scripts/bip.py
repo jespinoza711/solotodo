@@ -40,7 +40,7 @@ class Bip(FetchStore):
         titleSpan = soup.find("td", { "class" : "menuprodg" })
         title = titleSpan.contents[0].strip()
 
-        priceCell = soup.findAll("td", { "class" : "prc8" })
+        priceCell = soup.findAll("td", { "class" : "prcm" })
         price = int(str(priceCell[0].string).replace('.', '').replace('$', '').strip())
 
         productData.custom_name = title.encode('ascii','ignore').strip()
@@ -70,6 +70,7 @@ class Bip(FetchStore):
                             ['categoria=242&categoria_papa=111', 'Processor'],  # Proces AMD AM3
                             ['categoria=19', 'Screen'],                         # LCD
                             ['categoria=108', 'Motherboard'],                   # Placas madre
+                            ['categoria=132', 'Ram'],                   # RAM PC
                             ]
                             
         product_links = []
