@@ -6,11 +6,14 @@ from solonotebooks import fetch_scripts
 from common_fetch_methods import *
 import inspect
 
-'''Main and all-powerful updater script, probably the backbone of the whole
-site, it grabs every single model of the stores with fetchers and inserts
-them into the database, logging price changes, new models and disappearing
-models'''
 def main():
+    """
+    Main and all-powerful updater script, probably the backbone of the whole
+    site, it grabs every single model of the stores with fetchers and inserts
+    them into the database, logging price changes, new models and disappearing
+    models
+    """
+
     blacklist = ['FetchStore', 'ProductData', 'TecnoGroup', 'Cintegral', 'TecnoCl', 'Impulso']
 
     classnames = [classname for classname in dir(fetch_scripts) if inspect.isclass(getattr(fetch_scripts, classname)) and classname not in blacklist]

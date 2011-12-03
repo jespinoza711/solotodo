@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
 class GlobalMac(FetchStore):
@@ -23,7 +21,7 @@ class GlobalMac(FetchStore):
         product_name = product_soup.find('h1').string.encode('ascii', 'ignore')
         try:
             product_price = int(product_soup.find('span', { 'id': 'product_price' }).string.replace('.', ''))
-        except:
+        except Exception:
             return None
         
         product_data = ProductData()
@@ -51,6 +49,15 @@ class GlobalMac(FetchStore):
                             ['MacBook-Pro/', 'Notebook'],
                             ['Cinema-Display/', 'Screen'],
                             ]
+
+        memory_catalog_url = urlBase + 'Memorias/'
+        baseData = browser.open(memory_catalog_url).get_data()
+        baseSoup = BeautifulSoup(baseData)
+        subcats = baseSoup.findAll('span', {'class': 'subcategories'})
+        for subcat in subcats:
+            link = subcat.find('a')['href'].replace('http://www.globalmac.cl/', '')
+            url_extensions.append([link, 'RAM'])
+
         product_links = []
                             
         for url_extension, ptype in url_extensions:
@@ -61,7 +68,7 @@ class GlobalMac(FetchStore):
             titles = baseSoup.findAll('a', {'class': 'product-title'})
 
             for title in titles:
-            	product_links.append([title['href'], ptype])
+                product_links.append([title['href'], ptype])
             	
         return product_links
 
