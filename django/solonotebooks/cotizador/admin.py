@@ -1,6 +1,5 @@
 from solonotebooks.cotizador.models import *
 from django.contrib import admin
-from django import forms
 
 admin.site.register(UserProfile)
 admin.site.register(AdvertisementPosition)
@@ -237,3 +236,20 @@ admin.site.register(CellphoneScreen)
 admin.site.register(CellphoneProcessor)
 admin.site.register(Cellphone)
 admin.site.register(Cell, ProductAdmin)
+
+
+admin.site.register(RamBrand)
+admin.site.register(RamLine)
+admin.site.register(RamMemoryBus)
+admin.site.register(RamFrequency)
+admin.site.register(RamBus)
+admin.site.register(RamDimmCapacity)
+admin.site.register(RamDimmQuantity)
+admin.site.register(RamTotalCapacity)
+admin.site.register(RamCapacity)
+admin.site.register(RamVoltage)
+admin.site.register(RamLatencyCl)
+admin.site.register(RamLatencyTras)
+admin.site.register(RamLatencyTrcd)
+admin.site.register(RamLatencyTrp)
+admin.site.register(Ram, ProductAdmin)

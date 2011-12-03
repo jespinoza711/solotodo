@@ -63,7 +63,10 @@ class Product(models.Model):
                 name = field.get_attname().replace('_id', '')
                 if name in ['shp', 'sponsored_shp', 'created_by']:
                     continue
-                result += ' ' + getattr(self, name).raw_text()
+                try:
+                    result += ' ' + getattr(self, name).raw_text()
+                except AttributeError:
+                    pass
             elif field.__class__.__name__ == 'CharField':
                 part_result = getattr(self, field.get_attname())
                 if part_result:
@@ -89,8 +92,12 @@ class Product(models.Model):
         return str(self.id)
         
     @classmethod
-    def custom_update(self):
+    def custom_update(cls):
         pass
+
+    @classmethod
+    def get_valid(cls):
+        return cls.objects.filter(shp__isnull = False)
         
     @staticmethod
     def get_all_ordered():
