@@ -10,7 +10,7 @@ class RamBus(models.Model):
         return u'%s (%s)' % (unicode(self.bus),  unicode(self.frequency))
 
     def title_display(self):
-        return '%s %s' % (unicode(self.bus.bus.type), unicode(self.frequency))
+        return '%s %s-%s' % (unicode(self.bus.bus.format), unicode(self.bus.bus.type), unicode(self.frequency.value))
         
     def raw_text(self):
         return unicode(self)
