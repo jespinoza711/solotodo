@@ -6,7 +6,7 @@ class MotherboardHasMemoryType(models.Model):
     mtype = models.ForeignKey(MotherboardMemoryType)
     
     def __unicode__(self):
-        return str(self.quantity) + 'x ' + unicode(self.mtype)
+        return str(self.quantity) + 'x ' + unicode(self.mtype.itype.type)
         
     def raw_text(self):
         return unicode(self)      
