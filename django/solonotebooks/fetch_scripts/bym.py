@@ -49,14 +49,18 @@ class Bym(FetchStore):
         product_links = []
         
         url_extensions = [  
-                            ['catpro.php?ic=21&isc=20', 'Notebook'],  # Notebooks
-                            ['catpro.php?ic=31', 'VideoCard'],              # Tarjetas de video
-                            ['catpro.php?ic=25', 'Processor'],             # Procesadores AMD
-                            ['catpro.php?ic=26', 'Processor'],             # Procesadores Intel
-                            ['catpro.php?ic=18', 'Screen'],             # LCD
-                            ['catpro.php?ic=23', 'Motherboard'],             # MB AMD
-                            ['catpro.php?ic=24', 'Motherboard'],             # MB Intel
-                            ]
+            ['subpro.php?ic=21&isc=20', 'Notebook'],    # Notebooks
+            ['catpro.php?ic=31', 'VideoCard'],          # Tarjetas de video
+            ['catpro.php?ic=25', 'Processor'],          # Procesadores AMD
+            ['catpro.php?ic=26', 'Processor'],          # Procesadores Intel
+            ['catpro.php?ic=18', 'Screen'],             # LCD
+            ['catpro.php?ic=23', 'Motherboard'],        # MB AMD
+            ['catpro.php?ic=24', 'Motherboard'],        # MB Intel
+            ['subpro.php?ic=16&isc=10', 'Ram'],         # RAM DDR
+            ['subpro.php?ic=16&isc=11', 'Ram'],         # RAM DDR2
+            ['subpro.php?ic=16&isc=12', 'Ram'],         # RAM DDR3
+            ['subpro.php?ic=16&isc=13', 'Ram'],         # RAM Notebook
+            ]
                             
         for url_extension, ptype in url_extensions:
             page_number = 1
