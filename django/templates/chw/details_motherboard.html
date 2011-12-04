@@ -1,0 +1,22 @@
+{% extends "chw/base.html" %}
+
+{% block product_details %}
+    <h1><a href="{{ product.determine_url }}">{{ product }}</a></h1>
+    <ul class="description-list">
+        <li>
+            <strong>Fabricante: </strong> {{ product.brand }}
+        </li>
+        <li>
+            <strong>Socket: </strong> {{ product.chipset.northbridge.family.socket }}
+        </li>
+        <li>
+            <strong>Chipset: </strong> {{ product.chipset.pretty_display }}
+        </li>
+        <li>
+            <strong>Slots memorias: </strong> {{ product.pretty_memory_types }}
+        </li>
+        <li>
+            <strong>Canales memoria: </strong> {{ product.memory_channels }}
+        </li>
+    </ul>
+{% endblock %}

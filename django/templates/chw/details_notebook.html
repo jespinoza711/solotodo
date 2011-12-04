@@ -1,0 +1,40 @@
+{% extends "chw/base.html" %}
+
+{% block product_details %}
+    <h1><a href="{{ product.determine_url }}">{{ product }}</a></h1>
+    <ul class="description-list">
+        <li>
+            <strong>Procesador: </strong> <a href="{% url solonotebooks.cotizador.views_notebooks.processor_line_details product.processor.line.family.id %}?processor={{ product.processor.id }}">{{ product.processor.pretty_print }}</a>
+        </li>
+        <li>
+            <strong>Pantalla: </strong> {{ product.screen.pretty_display }}
+        </li>
+        <li>
+            <strong>Memoria RAM: </strong> {{ product.ram_quantity }} ({{product.ram_type}}-{{product.ram_frequency.value}})
+        </li>
+        <li>
+            <strong>Almacenamiento: </strong>
+                {% ifequal product.storage_drive.all.count 1 %}
+                    {{ product.storage_drive.all.0 }}
+                {% else %}
+                <ul>
+                    {% for storage in product.storage_drive.all %}
+                    <li>{{ storage }}</li>
+                    {% endfor %}
+                </ul>
+            {% endifequal %}
+        </li>
+        <li>
+            <strong>Tarjeta de video: </strong>
+            {% ifequal product.video_card.all.count 1 %}
+            <a href="{% url solonotebooks.cotizador.views_notebooks.video_card_line_details product.video_card.all.0.line.id %}?video_card={{product.video_card.all.0.id}}">{{ product.video_card.all.0 }}</a>
+            {% else %}
+            <ul class="sub_ul">
+                {% for video_card in product.video_card.all %}
+                <li><a href="{% url solonotebooks.cotizador.views_notebooks.video_card_line_details video_card.line.id %}?video_card={{video_card.id}}">{{ video_card }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endifequal %}
+        </li>
+    </ul>
+{% endblock %}
