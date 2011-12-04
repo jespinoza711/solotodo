@@ -98,6 +98,10 @@ urlpatterns += patterns('solonotebooks.cotizador.views_legacy',
 urlpatterns += patterns('solonotebooks.cotizador.views_services',
     (r'^products/(?P<product_id>\d+)/details/$', 'product_details'),
 )
+
+urlpatterns += patterns('solonotebooks.cotizador.views_chw',
+    (r'^mini/(?P<product_id>\d+)/$', 'inline_forum_post'),
+)
    
 urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^$', 'index'),

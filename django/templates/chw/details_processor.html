@@ -1,0 +1,40 @@
+{% extends "chw/base.html" %}
+
+{% block product_details %}
+    <h1><a href="{{ product.determine_url }}">{{ product }}</a></h1>
+    <ul class="description-list">
+        <li>
+            <strong>Frecuencia: </strong> {{ product.pretty_frequency }}
+        </li>
+        <li>
+            <strong>Núcleos: </strong> {{ product.core_count }}
+        </li>
+        <li>
+            <strong>Caché: </strong> {{ product.pretty_cache }}
+        </li>
+        <li>
+            <strong>Socket: </strong> {{ product.socket }}
+        </li>
+        <li>
+            <strong>TDP: </strong> {{ product.pretty_tdp }}
+        </li>
+        <li>
+            <strong>Multiplicador: </strong> {{ product.pretty_multiplier }}
+        </li>
+        <li>
+            <strong>SMP (Hyper-threading): </strong> {% if product.has_smp %} Sí {% else %} No {% endif %}
+        </li>
+        <li>
+            <strong>Frecuencias Turbo: </strong>
+            {% if product.turbo_clocks %}
+            <ul class="sub_ul">
+                {% for turbo_clock in product.turbo_clocks %}
+                <li>{{ forloop.counter }} core{{ forloop.counter|pluralize }}: {{ turbo_clock }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            No posee frecuencias turbo
+            {% endif %}
+        </li>
+    </ul>
+{% endblock %}

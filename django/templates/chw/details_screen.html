@@ -1,0 +1,28 @@
+{% extends "chw/base.html" %}
+
+{% block product_details %}
+    <h1><a href="{{ product.determine_url }}">{{ product }}</a></h1>
+    <ul class="description-list">
+        <li>
+            <strong>Tipo: </strong> {{ product.display }}
+        </li>
+        <li>
+            <strong>Tamaño: </strong> {{ product.size }}
+        </li>
+        <li>
+            <strong>Resolución: </strong> {{ product.resolution }}
+        </li>
+        <li>
+            <strong>Contraste: </strong> {{ product.pretty_contrast }}
+        </li>
+        <li>
+            <strong>Brillo: </strong> {{ product.pretty_brightness|safe }}
+        </li>
+        <li>
+            <strong>Tiempo de respuesta: </strong> {{ product.response_time }}
+        </li>
+        <li>
+            <strong>Tasa de refresco: </strong> {{ product.refresh_rate }}
+        </li>
+    </ul>
+{% endblock %}

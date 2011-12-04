@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>{{ product }}</title>
+    <link rel="stylesheet" href="/media/css/chw_inline_style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            {{ product.picture.extra_thumbnails_tag.large }}
+        </div>
+        <div class="description-container">
+            {% block product_details %}
+            {% endblock %}
+
+            <table class="price-comparison-table">
+                <tr>
+                    <th>Tienda</th>
+                    <th>Precio</th>
+                </tr>
+                {% ifequal product_prices|length 0 %}
+                    <tr>
+                        <td colspan="2" class="product-unavailability-message">
+                            Este producto no está disponible actualmente
+                        </td>
+                    </tr>
+                    {% else %}
+                    {% for product_price in product_prices %}
+                    <tr>
+                        <td>
+                            <a href="/store_product/{{product_price.shpe.id}}" rel="nofollow" class="comparison-table-store-link">{{ product_price.store }}</a>
+                        </td>
+                        <td>
+                            <a href="/store_product/{{product_price.shpe.id}}" rel="nofollow">{{ product_price.shpe.pretty_price }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endifequal %}
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-11970222-1");
+            pageTracker._trackPageview();
+        } catch(err) {}</script>
+</body>
+</html>

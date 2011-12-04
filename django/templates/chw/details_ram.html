@@ -1,0 +1,22 @@
+{% extends "chw/base.html" %}
+
+{% block product_details %}
+    <h1><a href="{{ product.determine_url }}">{{ product }}</a></h1>
+    <ul class="description-list">
+        <li>
+            <strong>Marca: </strong> {{ product.line }}
+        </li>
+        <li>
+            <strong>Capacidad: </strong> {{ product.capacity.pretty_display }}
+        </li>
+        <li>
+            <strong>Tipo: </strong> {{ product.bus.bus.bus.type }}
+        </li>
+        <li>
+            <strong>Frecuencia: </strong> {{ product.bus.frequency }}
+        </li>
+        <li>
+            <strong>Formato: </strong> {{ product.bus.bus.bus.format }}
+        </li>
+    </ul>
+{% endblock %}
