@@ -1,13 +1,13 @@
 {% extends "chw/base.html" %}
 
 {% block product_details %}
-    <h1><a href="{{ product.determine_url }}">{{ product }}</a></h1>
+    <h1><a href="{{ product.determine_url }}" target="_top">{{ product }}</a></h1>
     <ul class="description-list">
         <li>
             <strong>Fabricante: </strong> {{ product.brand }}
         </li>
         <li>
-            <strong>GPU: </strong> <a href="{% url solonotebooks.cotizador.views_videocards.gpu_details product.gpu.id %}">{{ product.gpu }}</a>
+            <strong>GPU: </strong> <a href="{% url solonotebooks.cotizador.views_videocards.gpu_details product.gpu.id %}" target="_top">{{ product.gpu }}</a>
         </li>
         <li>
             <strong>Memoria: </strong> {{ product.pretty_memory }}
