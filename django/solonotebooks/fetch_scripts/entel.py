@@ -62,22 +62,25 @@ class Entel(FetchStore):
         browser = mechanize.Browser()
         
         extensions = [
-                    ['P7200113701283291467481', True],
-                    ['P15600386721300459240749', True],
-                    ['P800933501267454369229', False],
-                    ['P800233501267216196630', False],
-                    ['P800333501267216211110', False],
+                    ['P7200113701283291467481', True, 0],
+                    ['P15600386721300459240749', True, 2],
+                    ['P800933501267454369229', False, 0],
+                    ['P800233501267216196630', False, 0],
+                    ['P800333501267216211110', False, 0],
                     ]
                     
         plans = []
                     
-        for extension, includes_data in extensions:
+        for extension, includes_data, table_limit in extensions:
             url = urlBase + extension
             data = browser.open(url).get_data()
             soup = BeautifulSoup(data)
 
             tables = soup.findAll('table', { 'class': 'tablaLiquida' })
-                
+
+            if table_limit:
+                tables = tables[:table_limit]
+
             for table in tables:
                 rows = table.findAll('tr')[1:]
                 for row in rows:
@@ -95,7 +98,13 @@ class Entel(FetchStore):
                     m = re.search('^Multimedia(\d+)$', name)
                     if m:
                         name = 'Multimedia ' + m.group(1)
-                    
+
+                    try:
+                        if cells[1]['class'] == 'contenidoEtiqueta':
+                            continue
+                    except KeyError:
+                        pass
+
                     price_container = cells[1].find('p')
                     if not price_container:
                         price_container = cells[1].contents[0]

@@ -10,9 +10,16 @@ class Paris(FetchStore):
     name = 'Paris'
     use_existing_links = False
     
-    def retrieve_product_data(self, product_link):
+    def retrieve_product_data(self, product_link, already_tried=False):
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
+        try:
+            product_data = browser.open(product_link).get_data()
+        except Exception:
+            if already_tried:
+                return None
+            else:
+                return self.retrieve_product_data(product_link, already_tried=True)
+
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.find('div', { 'id': 'ficha-producto-nombre' }).string.encode('ascii', 'ignore').strip()
@@ -61,7 +68,9 @@ class Paris(FetchStore):
         product_links = []          
         for url, ptype in urls:
             # Obtain and parse HTML information of the base webpage
+            print url
             baseData = browser.open(url).get_data()
+            baseData = unicode(baseData, errors='ignore')
             baseSoup = BeautifulSoup(baseData)
 
             # Obtain the links to the other pages of the catalog (2, 3, ...)
