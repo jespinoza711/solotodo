@@ -10,15 +10,22 @@ class Magens(FetchStore):
     name = 'Magens'
     use_existing_links = False
     
-    def retrieve_product_data(self, product_link):
+    def retrieve_product_data(self, product_link, already_tried=False):
         browser = mechanize.Browser()
         try:
             product_data = browser.open(product_link).get_data()
         except: 
             return None
         product_soup = BeautifulSoup(product_data)
-        
-        availability = product_soup.find('div', { 'class': 'stock' }).contents[4]
+
+        try:
+            availability = product_soup.find('div', { 'class': 'stock' }).contents[4]
+        except AttributeError:
+            if already_tried:
+                return None
+            else:
+                return self.retrieve_product_data(product_link, already_tried=True)
+
         if 'Agotado' in availability:
             return None
         
@@ -27,7 +34,6 @@ class Magens(FetchStore):
             product_price = int(product_soup.findAll('div', { 'class': 'precioDetalle' })[1].string.split('$')[1].replace(',', ''))
         except:
             product_price = int(product_soup.findAll('div', { 'class': 'precioDetalle' })[0].string.split('$')[1].replace(',', ''))
-        part_number = product_soup.find('div', { 'class': 'codProduct' }).string.replace('[', '').replace(']', '').encode('ascii', 'ignore').strip()
         part_number = product_soup.find('div', { 'class': 'codProduct' }).string.replace('[', '').replace(']', '').encode('ascii', 'ignore').strip()
         
         product_data = ProductData()
