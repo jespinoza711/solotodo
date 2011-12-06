@@ -43,8 +43,6 @@ class Eprod(FetchStore):
         url_extensions = [
             ['?category_id=1', 'Notebook'],     # Notebooks
             ['?category_id=3', 'Notebook'],     # Netbooks
-            ['?category_id=26', 'Screen'],      # Pantallas
-            ['?category_id=40', 'Ram'],         # RAM
         ]
         
         productLinks = []
