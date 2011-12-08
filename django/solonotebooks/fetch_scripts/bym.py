@@ -23,7 +23,7 @@ class Bym(FetchStore):
         product_data = ProductData()
         
         stock_image_url = base_soup.findAll('div', { 'class' : 'textOtrosPrecios' })[2].find('img')['src']
-        if 'agotado' in stock_image_url:
+        if 'agotado' in stock_image_url or 'proximo' in stock_image_url:
             return None
         
         title = base_soup.find('div', { 'class' : 'textTituloProducto'}).string.strip().encode('ascii', 'ignore')
