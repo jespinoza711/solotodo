@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
 class Peta(FetchStore):
@@ -14,7 +12,7 @@ class Peta(FetchStore):
         browser = mechanize.Browser()
         try:
             product_data = browser.open(product_link).get_data()
-        except:
+        except Exception:
             if already_tried:
                 return None
             else:
@@ -25,13 +23,13 @@ class Peta(FetchStore):
             product_availability = product_soup.find('p', { 'class': 'availability in-stock' }).find('span')
             if product_availability.string and product_availability.string != 'En existencia':
                 return None
-        except:
+        except Exception:
             return None
         
         try:
             product_name = product_soup.find('h1', { 'class': 'p-title' }).string.encode('ascii', 'ignore')
             product_price = int(product_soup.find('span', { 'class': 'price' }).string.split('$')[1].replace('.', ''))
-        except:
+        except Exception:
             return None
         
         product_data = ProductData()
@@ -72,11 +70,12 @@ class Peta(FetchStore):
                 baseData = browser.open(completeWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
 
+                baseSoup = baseSoup.find('div', 'category-products')
                 ntbkCells = []
                 ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item first'}))
                 ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item'}))
                 ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item last'}))
-                
+
                 if not ntbkCells:
                     break
 
