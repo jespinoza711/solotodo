@@ -15,6 +15,7 @@ class Store(models.Model):
         thumbnail = { 'size': (140, 90), },                                          
         upload_to = 'store_logos',
         generate_on_save = True,)
+    affiliate_id = models.CharField(max_length=255, blank=True, null=True)
     
     def fetch_store(self):
         from solonotebooks.fetch_scripts import *

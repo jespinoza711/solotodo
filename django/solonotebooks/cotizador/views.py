@@ -300,7 +300,12 @@ def store_product_redirect(request, store_product_id):
         external_visit.shpe = store_product
         external_visit.date = date.today()
         external_visit.save()
-    return HttpResponseRedirect(store_product.url)
+
+    url = store_product.url
+    if store_product.store.affiliate_id:
+        # Solucion ad-hoc para Peta!
+        url = url + '?' + store_product.store.affiliate_id
+    return HttpResponseRedirect(url)
     
 def sponsored_product_redirect(request, shp_id):
     shp = get_object_or_404(StoreHasProduct, pk = shp_id)
