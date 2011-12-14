@@ -304,7 +304,7 @@ def store_product_redirect(request, store_product_id):
     url = store_product.url
     if store_product.store.affiliate_id:
         # Solucion ad-hoc para Peta!
-        url = "http://www.peta.cl/otros/solotodo_redirect.html?next=" + urllib.quote_plus(url)
+        url = url + '?' + store_product.store.affiliate_id
     return HttpResponseRedirect(url)
     
 def sponsored_product_redirect(request, shp_id):
