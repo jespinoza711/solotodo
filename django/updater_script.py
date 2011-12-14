@@ -21,6 +21,7 @@ def main():
     stores = [Store.objects.get(classname=c) for c in classnames]
     
     for store in stores:
+        print datetime.now()
         store.update_products_from_webpage()
                 
     update_availability_and_price()
