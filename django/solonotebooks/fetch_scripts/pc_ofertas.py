@@ -24,7 +24,7 @@ class PCOfertas(FetchStore):
             return None
         
         try:
-            product_price = int(product_soup.find('span', { 'class': 'Estilo4' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', ''))
+            product_price = int(product_soup.find('span', { 'style': 'color: #F00; font-size:12px;' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', ''))
         except:
             return None
         
