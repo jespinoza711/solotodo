@@ -22,7 +22,13 @@ class Ram(Product):
     is_fully_buffered = models.BooleanField(default=False)
     
     def get_display_name(self):
-        return '%s %s (%s | %s)' % (unicode(self.line), self.name, unicode(self.capacity), self.bus.title_display())
+        result = '%s %s (%s | %s' % (unicode(self.line), self.name, unicode(self.capacity), self.bus.title_display())
+        if self.is_ecc:
+            result += ' ECC'
+        if self.is_fully_buffered:
+            result += ' Full buffer'
+        result += ')'
+        return result
         
     def raw_text(self):
         result = super(Ram, self).base_raw_text()
