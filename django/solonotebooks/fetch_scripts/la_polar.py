@@ -50,8 +50,8 @@ class LaPolar(FetchStore):
         # Array containing the data for each product
         products_data = []
         for urlExtension, ptype in urlExtensions:
-            page = 1;
-            while(True):
+            page = 1
+            while True:
                 urlWebpage = urlBase + urlBuscarProductos + urlExtension + str(page)
 
                 # Obtain and parse HTML information of the base webpage
