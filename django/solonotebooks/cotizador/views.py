@@ -304,9 +304,15 @@ def store_product_redirect(request, store_product_id):
     url = store_product.url
     if store_product.store.affiliate_id:
         # Solucion ad-hoc para Peta!
-        url = url + '?' + store_product.store.affiliate_id
-    return HttpResponseRedirect(url)
-    
+        url = "http://www.peta.cl/otros/solotodo_redirect.html?a_aid=4ee651f559739&next=" + urllib.quote_plus(url)
+
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        import simplejson
+        data = simplejson.dumps({'url': url}, indent=4)
+        return HttpResponse(data, mimetype='application/javascript')
+    else:
+        return HttpResponseRedirect(url)
+
 def sponsored_product_redirect(request, shp_id):
     shp = get_object_or_404(StoreHasProduct, pk = shp_id)
     if not request.user.is_staff:
