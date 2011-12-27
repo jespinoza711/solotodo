@@ -80,7 +80,7 @@ class Magens(FetchStore):
                 
         product_links = []            
         for url_extension, ptype in url_extensions:
-            urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=100'
+            urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=1000'
             
             # Obtain and parse HTML information of the base webpage
             baseData = browser.open(urlWebpage).get_data()
