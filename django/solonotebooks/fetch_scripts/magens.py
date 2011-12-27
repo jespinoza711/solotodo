@@ -74,7 +74,8 @@ class Magens(FetchStore):
             ['intel-s775-c-1_32.html', 'Processor'], 
             ['server-c-1_30.html', 'Processor'], 
             ['monitores-televisores-c-13.html', 'Screen'], 
-            ['placas-madre-c-2.html', 'Motherboard'], 
+            ['placas-madre-c-2.html', 'Motherboard'],
+            ['memorias-c-12.html', 'Ram'],
         ]
                 
         product_links = []            
