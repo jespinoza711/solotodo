@@ -1,3 +1,5 @@
+var already_clicked = false
+
 $(function() {
     // Generate the custom slider if exists
     if ($('.custom_range_select').length > 0) {
@@ -71,6 +73,22 @@ $(function() {
     if ($('#tiers-select').length > 0) {
         update_tier_selection()
     }
+    
+    $('.store_link').click(function(e) {
+        link_html = $(this)
+        if (already_clicked) {
+            already_clicked = false
+        } else {
+            e.preventDefault()
+            $.getJSON(link_html.attr('s_url'), 
+                function(result) {
+                    already_clicked = true
+                    link_html.attr('href', result['url'])
+                    link_html[0].click()
+                }
+            )
+        }
+    })
 })
 
 function update_tier_selection() {

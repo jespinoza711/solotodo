@@ -64,10 +64,10 @@
               {% for product_price in product_prices %}
                   <tr>
                       <td>
-                          <a href="{{product_price.shpe.url}}" rel="nofollow">{{ product_price.store.picture.thumbnail_tag }}</a>
+                          <a class="store_link" s_url="/store_product/{{product_price.shpe.id}}/" href="{{product_price.shpe.url}}" rel="nofollow">{{ product_price.store.picture.thumbnail_tag }}</a>
                       </td>
                       <td>
-                          <a href="{{product_price.shpe.url}}" rel="nofollow">{{ product_price.shpe.pretty_price }}</a>
+                          <a class="store_link" s_url="/store_product/{{product_price.shpe.id}}/" href="{{product_price.shpe.url}}" rel="nofollow">{{ product_price.shpe.pretty_price }}</a>
                       </td>
                   </tr>
               {% endfor %}
