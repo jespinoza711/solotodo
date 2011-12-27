@@ -41,8 +41,7 @@ class Racle(FetchStore):
         urlExtensions = [
                             ['21', 'Notebook'], 
                             ['83', 'Notebook'],
-                            ['446', 'Screen'],
-                            ['447', 'Screen'],
+                            ['755', 'Screen'],
                         ]
         product_links = []
         for urlExtension, ptype in urlExtensions:

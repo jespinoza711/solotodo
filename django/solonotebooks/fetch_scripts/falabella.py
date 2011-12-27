@@ -67,6 +67,7 @@ class Falabella(FetchStore):
                 
                 for div in mosaicDivs:                        
                     url = 'http://www.falabella.com' + div.find('a')['href']
+                    url = url.replace(' ', '')
                     
                     m = re.search(';jsessionid=\S+\.node\d', url)
                     if m:

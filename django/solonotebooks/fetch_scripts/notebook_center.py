@@ -23,8 +23,11 @@ class NotebookCenter(FetchStore):
         
         
         product_name = ' '.join(product_subnames).strip().replace('<br />', '')
-        
-        product_price = int(product_soup.find('td', { 'width': '258' }).find('div').contents[2].split('$')[1].split('IVA')[0].replace('.', ''))
+
+        try:
+            product_price = int(product_soup.find('td', { 'width': '258' }).find('div').contents[2].split('$')[1].split('IVA')[0].replace('.', ''))
+        except IndexError:
+            product_price = int(product_soup.find('td', { 'width': '258' }).find('div').contents[-5].replace('$', '').replace('.', '').strip())
         
         product_data = ProductData()
         product_data.custom_name = product_name
