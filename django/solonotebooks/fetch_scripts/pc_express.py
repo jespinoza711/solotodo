@@ -37,26 +37,28 @@ class PCExpress(FetchStore):
         browser = mechanize.Browser()
         
         url_extensions = [  
-                            ['75_136', 'Notebook'],   # Notebooks
-                            ['83_157', 'VideoCard'],   # Tarjetas de video AGP
-                            ['83_158', 'VideoCard'],   # Tarjetas de video PCIe AMD
-                            ['83_159', 'VideoCard'],   # Tarjetas de video PCIe Nvidia
-                            ['61_85', 'Processor'],    # Procesadores AM2
-                            ['61_84', 'Processor'],    # Procesadores AM3
-                            ['61_86', 'Processor'],    # Procesadores 775
-                            ['61_193', 'Processor'],   # Procesadores 1155
-                            ['61_87', 'Processor'],    # Procesadores 1156
-                            ['61_165', 'Processor'],   # Procesadores 1366
-                            ['73_128', 'Screen'],   # LCD
-                            ['73_129', 'Screen'],   # LCD/TV
-                            ['73_171', 'Screen'],   # LED
-                            ['60_88', 'Motherboard'],   # Placas madre AM2
-                            ['60_89', 'Motherboard'],   # Placas madre AM3
-                            ['60_90', 'Motherboard'],   # Placas madre 775
-                            ['60_194', 'Motherboard'],   # Placas madre 1155
-                            ['60_91', 'Motherboard'],   # Placas madre 1156
-                            ['60_186', 'Motherboard'],   # Placas madre 1366
-                        ]
+            ['75_136', 'Notebook'],   # Notebooks
+            ['83_157', 'VideoCard'],   # Tarjetas de video AGP
+            ['83_158', 'VideoCard'],   # Tarjetas de video PCIe AMD
+            ['83_159', 'VideoCard'],   # Tarjetas de video PCIe Nvidia
+            ['61_85', 'Processor'],    # Procesadores AM2
+            ['61_84', 'Processor'],    # Procesadores AM3
+            ['61_86', 'Processor'],    # Procesadores 775
+            ['61_193', 'Processor'],   # Procesadores 1155
+            ['61_87', 'Processor'],    # Procesadores 1156
+            ['61_165', 'Processor'],   # Procesadores 1366
+            ['73_128', 'Screen'],   # LCD
+            ['73_129', 'Screen'],   # LCD/TV
+            ['73_171', 'Screen'],   # LED
+            ['60_88', 'Motherboard'],   # Placas madre AM2
+            ['60_89', 'Motherboard'],   # Placas madre AM3
+            ['60_90', 'Motherboard'],   # Placas madre 775
+            ['60_194', 'Motherboard'],   # Placas madre 1155
+            ['60_91', 'Motherboard'],   # Placas madre 1156
+            ['60_186', 'Motherboard'],   # Placas madre 1366
+            ['72_126', 'Ram'],   # RAM Desktop
+            ['72_127', 'Ram'],   # RAM Notebook
+        ]
                             
         product_links = []
                             

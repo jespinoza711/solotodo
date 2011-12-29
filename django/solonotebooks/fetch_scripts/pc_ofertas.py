@@ -17,14 +17,14 @@ class PCOfertas(FetchStore):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
+
         try:
             product_name = product_soup.find('h4', { 'class': 'Estilo5' }).string.encode('ascii', 'ignore')
         except:
             return None
         
         try:
-            product_price = int(product_soup.find('span', { 'style': 'color: #F00; font-size:12px;' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', ''))
+            product_price = int(product_soup.find('span', { 'style': 'color: #F00; font-size:12px;' }).parent.parent.parent.findAll('td')[1].find('span').string.replace('$', '').replace(',', '').replace('.', ''))
         except:
             return None
         
@@ -80,13 +80,14 @@ class PCOfertas(FetchStore):
         product_links = []
         
         url_extensions = [  
-                            ['74', 'Notebook'],   # Notebook
-                            ['75', 'Notebook'],   # Netbook
-                            ['87', 'VideoCard'],   # Tarjetas de video
-                            ['18', 'Processor'],   # Procesadores
-                            ['28', 'Screen'],   # Monitores
-                            ['108', 'Motherboard'],   # Monitores
-                            ]
+            ['74', 'Notebook'],   # Notebook
+            ['75', 'Notebook'],   # Netbook
+            ['87', 'VideoCard'],   # Tarjetas de video
+            ['18', 'Processor'],   # Procesadores
+            ['28', 'Screen'],   # Monitores
+            ['108', 'Motherboard'],   # Monitores
+            ['17', 'Ram'],   # RAM
+        ]
         
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + url_extension
