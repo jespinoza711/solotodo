@@ -15,7 +15,7 @@ class Falabella(FetchStore):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
+
         product_name = product_soup.find('div', { 'id' : 'destacadoRuta' }).find('a').string
 
         if not product_name:

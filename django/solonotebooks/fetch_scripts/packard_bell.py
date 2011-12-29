@@ -14,7 +14,7 @@ class PackardBell(FetchStore):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
+
         try:
             avail = int(product_soup.find('span', { 'class': 'unidades' }).string)
             if not avail:
@@ -24,7 +24,7 @@ class PackardBell(FetchStore):
         
         product_name = product_soup.find('div', { 'class': 'tit_prod_det' }).string.encode('ascii', 'ignore').strip()
         try:
-            product_price = int(product_soup.find('div', { 'class': 'precio_det' }).contents[0].replace('.', ''))
+            product_price = int(product_soup.find('div', { 'class': 'precio_det' }).contents[1].replace('.', ''))
         except:
             return None
         
