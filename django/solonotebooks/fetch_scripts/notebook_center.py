@@ -2,9 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
-import re
 from . import ProductData, FetchStore
 
 class NotebookCenter(FetchStore):
@@ -12,22 +9,12 @@ class NotebookCenter(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
-        id_prod = product_link.split('i_p=')[1]
-        product_link = 'http://www.notebookcenter.cl/detalle.php?id_producto=' + id_prod
-    
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
-        product_subnames = [unicode(str(subpart), errors = 'ignore').strip() for subpart in product_soup.find('td', { 'class': 'menus3' }).findAll('div')[-1].contents]
-        
-        
-        product_name = ' '.join(product_subnames).strip().replace('<br />', '')
 
-        try:
-            product_price = int(product_soup.find('td', { 'width': '258' }).find('div').contents[2].split('$')[1].split('IVA')[0].replace('.', ''))
-        except IndexError:
-            product_price = int(product_soup.find('td', { 'width': '258' }).find('div').contents[-5].replace('$', '').replace('.', '').strip())
+        product_name = product_soup.find('span', {'class': 'titulo_producto'}).string.encode('ascii', 'ignore')
+        product_price = int(product_soup.find('span', { 'class': 'precio_producto_efectivo' }).string.replace('$', '').replace('.', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name
@@ -37,59 +24,57 @@ class NotebookCenter(FetchStore):
         
         return product_data
 
-
-    # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.notebookcenter.cl/'
-        urlBuscarProductos = 'centrodetalle.php?id_categoria='
-        
-        # Browser initialization
+        urlBuscarProductos = '?p=1&op=2&p3='
         browser = mechanize.Browser()
         
-        url_extensions = [  
-                            ['557', 'Notebook'],  # Macbook
-                            ['558', 'Notebook'],  # Macbook Pro
-                            ['565', 'Notebook'],  # Macbook Air
-                            ['401', 'Notebook'],  # Netbook Acer
-                            ['403', 'Notebook'],  # Netbook HP
-                            ['405', 'Notebook'],  # Netbook Packard Bell
-                            ['406', 'Notebook'],  # Netbook Samsung
-                            ['407', 'Notebook'],  # Netbook Toshiba
-                            ['61', 'Notebook'],   # Notebook Acer
-                            ['251', 'Notebook'],  # Notebook Dell
-                            ['57', 'Notebook'],   # Notebook HP
-                            ['64', 'Notebook'],   # Notebook Lenovo
-                            ['564', 'Notebook'],   # Notebook Packard Bell
-                            ['212', 'Notebook'],  # Notebook Sony
-                            ['63', 'Notebook'],   # Notebook Toshiba
-                            ['275', 'Screen'],  # Monitores Apple
-                            ['162', 'Screen'],  # Monitores LCD
-                            ['472', 'Processor'],  # Procesadores AMD
-                            ['473', 'Processor'],  # Procesadores Intel
-                            ]
+        url_extensions = [
+            ['565', 'Notebook'],  # Macbook Air
+            ['558', 'Notebook'],  # Macbook Pro
+            ['61', 'Notebook'],   # Notebook Acer
+            ['251', 'Notebook'],  # Notebook Dell
+            ['57', 'Notebook'],   # Notebook HP
+            ['64', 'Notebook'],   # Notebook Lenovo
+            ['418', 'Notebook'],  # Netbook Samsung
+            ['212', 'Notebook'],  # Notebook Sony
+            ['63', 'Notebook'],   # Notebook Toshiba
+            ['603', 'Notebook'],   # Notebook Corporativo Acer
+            ['602', 'Notebook'],   # Notebook Corporativo Lenovo
+            ['598', 'Notebook'],   # Notebook Corporativo HP
+            ['606', 'Notebook'],   # Notebook Corporativo Dell
+            ['401', 'Notebook'],  # Netbook Acer
+            ['402', 'Notebook'],  # Netbook Dell
+            ['406', 'Notebook'],  # Netbook Samsung
+            ['472', 'Processor'],  # Procesadores AMD
+            ['473', 'Processor'],  # Procesadores Intel
+            ['275', 'Screen'],  # Monitores Apple
+            ['162', 'Screen'],  # Monitores LCD
+            ['640', 'Screen'],  # Monitores LED
+            ['323', 'Screen'],  # Televisor LCD
+            ['641', 'Screen'],  # Televisor LED
+            ['6', 'Ram'],  # Notebook RAM
+        ]
                           
         product_links = []  
         for url_extension, ptype in url_extensions:
-            index = 1
+            index = 0
             while True:
-                urlWebpage = urlBase + urlBuscarProductos + url_extension + '&indice=' + str(index)
+                urlWebpage = urlBase + urlBuscarProductos + url_extension + '&i_p=' + str(index)
                 
                 baseData = browser.open(urlWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
                     
-                rawLinks = baseSoup.findAll("a", { "target" : "_parent" })
-                if not rawLinks:
+                product_containers = baseSoup.findAll("div", { "id" : "producto_inicio" })
+                if not product_containers:
                     break
 
-                
-                for rawLink in rawLinks:
-                    js_data = rawLink['href']
-                    m = re.search(r"'(\d+)'", js_data)
-                    if not m:
-                        continue
-                    id_prod = m.group(1)
-                    link = urlBase + 'index.php?p=detalle&i_p=' + id_prod
+                for product_container in product_containers:
+                    js_data = product_container.find('a')['href']
+
+                    js_arguments = [int(s) for s in js_data.replace("'", ' ').split() if s.isdigit()]
+                    id_prod = js_arguments[1]
+                    link = urlBase + '?p=productos&op=1&i_p=' + str(id_prod)
                     product_links.append([link, ptype])
 
                 index += 1

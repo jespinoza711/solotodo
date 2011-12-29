@@ -39,12 +39,13 @@ class MyBox(FetchStore):
         product_links = []
         
         url_extensions = [  
-                            ['38-notebooks', 'Notebook'],
-                            ['7-monitores-y-proyectores', 'Screen'],
-                            ['41-placas-madre', 'Motherboard'],
-                            ['44-procesadores', 'Processor'],
-                            ['54-tarjetas-de-video', 'VideoCard'],
-                            ]
+            ['38-notebooks', 'Notebook'],
+            ['7-monitores-y-proyectores', 'Screen'],
+            ['41-placas-madre', 'Motherboard'],
+            ['44-procesadores', 'Processor'],
+            ['54-tarjetas-de-video', 'VideoCard'],
+            ['28-memoria-ram', 'Ram'],
+        ]
                             
         for url_extension, ptype in url_extensions:
             urlWebpage = urlBase + '/' + url_extension + '?n=50'
