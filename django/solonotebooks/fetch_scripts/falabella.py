@@ -72,7 +72,8 @@ class Falabella(FetchStore):
                     m = re.search(';jsessionid=\S+\.node\d', url)
                     if m:
                         url = url[:m.start()] + url[m.end():]
-                    
+
+                    url = ''.join(url.split())
                     product_links.append([url, ptype])
                     
                 page_number += 1
