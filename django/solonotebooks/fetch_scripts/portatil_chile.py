@@ -29,7 +29,7 @@ class PortatilChile(FetchStore):
     # Main method
     def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.portatilchile.cl/modules/rmms/'
+        urlBase = 'http://www.portatilchile.cl/productos.html'
         
         # Browser initialization
         browser = mechanize.Browser()
@@ -37,19 +37,13 @@ class PortatilChile(FetchStore):
         baseData = browser.open(urlBase).get_data()
         baseSoup = BeautifulSoup(baseData)
         
-        productTable = baseSoup.find('table', { 'class': 'outer' })
-        productRows = productTable.findAll('tr', recursive = False)
-        productCells = []
-        product_links = []
-        for productRow in productRows:
-            productCells.extend(productRow.findAll('td', recursive = False))
-        
-        # Array containing the data for each product
-        products_data = []
-        
-        for productCell in productCells:
-            link = urlBase + productCell.find('a')['href']
-            product_links.append([link, 'Notebook'])
+        product_tables = baseSoup.findAll('table', { 'width': '226' })
 
-        return product_links
+        products_data = []
+
+        for product_table in product_tables:
+            link = product_table.find('a')['href']
+            products_data.append([link, 'Notebook'])
+
+        return products_data
 
