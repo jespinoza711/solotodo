@@ -64,6 +64,10 @@ class PCFactory(FetchStore):
                             ['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
                             ['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
                             ['?papa=292&categoria=292', 'Motherboard'],
+                            ['?papa=264&categoria=112', 'Ram'], # Memoria PC
+                            ['?papa=264&categoria=482', 'Ram'], # Memoria PC High-End
+                            ['?papa=264&categoria=100', 'Ram'], # Memoria Notebook
+                            ['?papa=264&categoria=266', 'Ram'], # Memoria Server
                             ]
                           
         products_data = []                      
