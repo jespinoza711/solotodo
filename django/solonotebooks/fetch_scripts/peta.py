@@ -56,6 +56,7 @@ class Peta(FetchStore):
                             ['peta-cl/monitores.html', 'Screen'],
                             ['audio-y-video-1/televisores.html', 'Screen'],
                             ['peta-cl/placas-madre-1.html', 'Motherboard'],
+                            ['partes-y-piezas/memorias.html', 'Ram'],
                             ]
                           
         product_links = []
