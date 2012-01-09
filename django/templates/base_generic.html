@@ -40,7 +40,19 @@
 	
 	<body>
 	<script type="text/javascript">var _kiq = _kiq || [];</script>
-  <script type="text/javascript" src="//s3.amazonaws.com/ki.js/29097/5IK.js" async="true"></script>	
+	<script type="text/javascript" src="//s3.amazonaws.com/ki.js/29097/5IK.js" async="true"></script>	
+	<script type="text/javascript">
+	_kiq.push(function(){
+		var surveys = [50298, 50301]; // Replace with ID’s
+		var ab = new $KI.Cookie(‘ab_test_1′, surveys[Math.floor(Math.random() * surveys.length)]);
+		if(ab) {
+			KI.show_by_id(‘survey’, ab.get());
+		}
+	});
+
+
+	</script>
+	
 		<div id="head">
 			<div id="content-head" class="container">
 				<div id="nav-user" class="nav-mine">
