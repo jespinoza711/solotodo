@@ -15,3 +15,5 @@ django/*.txt
 *.db
 .DS_Store
 .python-eggs
+.idea/**
+.idea/*
