@@ -1,11 +1,9 @@
 #-*- coding: UTF-8 -*-
 import operator
-from datetime import date, timedelta
 from django.db import models
-from django.db.models import Min, Max, Q
-from sorl.thumbnail.fields import ImageWithThumbnailsField
+from django.db.models import Max, Q
 from . import *
-from utils import prettyPrice
+from solonotebooks.cotizador.models import *
 
 class Notebook(Product):
     is_ram_dual_channel = models.BooleanField()
@@ -48,15 +46,15 @@ class Notebook(Product):
         
     def raw_text(self):
         result = super(Notebook, self).base_raw_text()
-        if (self.is_ram_dual_channel):
+        if self.is_ram_dual_channel:
             result += ' ram dual channel'
-        if (self.has_bluetooth):
+        if self.has_bluetooth:
             result += ' bluetooth'
-        if (self.has_esata):
+        if self.has_esata:
             result += ' esata'
-        if (self.has_firewire):
+        if self.has_firewire:
             result += ' firewire 1394'
-        if (self.has_fingerprint_reader):
+        if self.has_fingerprint_reader:
             result += ' fingerprint reader huella digital'
         result += ' bateria ' + str(self.battery_cells) + ' celdas ' 
         return result
