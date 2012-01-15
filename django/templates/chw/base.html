@@ -9,6 +9,9 @@
             {{ product.picture.extra_thumbnails_tag.large }}
         </div>
         <div class="description-container">
+            <h1><a href="{{ product.determine_url }}" target="_top">{{ product }}</a></h1>
+            <div style="padding-top: 8px; float: left; margin-left: 5px;"><a style="text-decoration: none; color: blue; font-size: 12px; font-weight: bold;" href="http://www.solotodo.net/blog/2012/01/15/cotizaciones-de-solotodo-en-chw-net/" target="_top">(¿Qué es esto?)</a></div>
+            <br style="clear: both;" />
             {% block product_details %}
             {% endblock %}
 
@@ -36,10 +39,6 @@
                     {% endfor %}
                 {% endifequal %}
             </table>
-        </div>
-
-        <div class="help_div">
-            <a href="http://www.solotodo.net/blog/2012/01/15/cotizaciones-de-solotodo-en-chw-net/" target="_top">¿Qué es esto?</a>
         </div>
     </div>
 
