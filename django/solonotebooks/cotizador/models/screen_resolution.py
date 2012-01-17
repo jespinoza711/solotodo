@@ -22,5 +22,5 @@ class ScreenResolution(models.Model):
         return result
             
     class Meta:
-        ordering = ['total_pixels']
+        ordering = ['-commercial_name', 'total_pixels']
         app_label = 'cotizador'

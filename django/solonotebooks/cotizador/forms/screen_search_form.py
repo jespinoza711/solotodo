@@ -1,18 +1,15 @@
 #-*- coding: UTF-8 -*-
-# Class that represents the search form to find video cards
+# Class that represents the search form to find screens
 from django import forms
-from django.db.models import Min, Max, Count
+from django.db.models import Count
 from solonotebooks.cotizador.models import *
-from solonotebooks.cotizador.models import utils
 from solonotebooks.cotizador.fields import ClassChoiceField, CustomChoiceField
-from datetime import date
 from . import SearchForm
 
 class ScreenSearchForm(SearchForm):
     screen_type = ClassChoiceField(ScreenType, 'Categoría', in_quick_search = True, quick_search_name = 'Categoría')
     brand = ClassChoiceField(ScreenBrand, 'Marca', in_quick_search = True, quick_search_name = 'Marca')
-    display = ClassChoiceField(ScreenDisplay, 'Tipo av.', requires_advanced_controls = True)
-    display_type = ClassChoiceField(ScreenDisplayType, 'Tipo', in_quick_search = True, quick_search_name = 'Tipo')
+    display = ClassChoiceField(ScreenDisplay, 'Tipo')
     min_size, max_size = ClassChoiceField.generate_slider(ScreenSizeFamily)
     resolution = ClassChoiceField(ScreenResolution, 'Resolución', in_quick_search = True, quick_search_name = 'Resolución')
     panel_type = ClassChoiceField(ScreenPanelType, 'Panel', requires_advanced_controls = True)
@@ -41,16 +38,17 @@ class ScreenSearchForm(SearchForm):
         
     def generate_interface_model(self):
         model = [['Datos generales',
-                    ['brand',
+                    ['display',
                      'resolution',
-                     'display_type',
-                     'display',]],
+                     'brand'
+                     ]],
                  ['Tamaño',
                     ['min_size',
                      'max_size',]],
                  ['Sintonizadores',
-                    ['analog_tuner',
-                     'digital_tuner',]],
+                    ['digital_tuner',
+                     'analog_tuner',
+                    ]],
                  ['Otros',
                     ['video_port',
                      'response_time',
@@ -76,8 +74,6 @@ class ScreenSearchForm(SearchForm):
             value = unicode(ScreenBrand.objects.get(pk = pk_value))
         if key == 'display':
             value = unicode(ScreenDisplay.objects.get(pk = pk_value))
-        if key == 'display_type':
-            value = unicode(ScreenDisplayType.objects.get(pk = pk_value))
         if key == 'screen_type':
             value = unicode(ScreenType.objects.get(pk = pk_value))
         if key == 'min_size':
@@ -107,8 +103,6 @@ class ScreenSearchForm(SearchForm):
             value = 'Pantallas ' + unicode(ScreenBrand.objects.get(pk = pk_value))
         if key == 'display':
             value = 'Pantallas ' + unicode(ScreenDisplay.objects.get(pk = pk_value))
-        if key == 'display_type':
-            value = 'Pantallas ' + unicode(ScreenDisplayType.objects.get(pk = pk_value))
         if key == 'screen_type':
             value = unicode(ScreenType.objects.get(pk = pk_value))
         if key == 'min_size':
@@ -134,10 +128,8 @@ class ScreenSearchForm(SearchForm):
     def filter_products(self, screens):
         if self.brand:
             screens = screens.filter(line__brand = self.brand)
-        if self.display and self.advanced_controls:
+        if self.display:
             screens = screens.filter(display = self.display)
-        if self.display_type:
-            screens = screens.filter(display__dtype = self.display_type)
         if self.screen_type:
             screens = screens.filter(stype = self.screen_type)
         if self.min_size:
@@ -169,19 +161,19 @@ class ScreenSearchForm(SearchForm):
         
         # Apply the corresponding ordering based on the key
         if self.ordering == 1:
-            if ordering_direction == None:
+            if ordering_direction is None:
                 ordering_direction = ''
             screens = screens.annotate(null_position=Count('shp')).order_by('-null_position', ordering_direction + 'shp__shpe__latest_price')
         elif self.ordering == 2:
-            if ordering_direction == None:
+            if ordering_direction is None:
                 ordering_direction = '-'
             screens = screens.order_by(ordering_direction + 'size')
         elif self.ordering == 3:
-            if ordering_direction == None:
+            if ordering_direction is None:
                 ordering_direction = '-'    
             screens = screens.order_by(ordering_direction + 'resolution')
         elif self.ordering == 4:
-            if ordering_direction == None:
+            if ordering_direction is None:
                 ordering_direction = ''
             screens = screens.order_by(ordering_direction + 'response_time')
         else:

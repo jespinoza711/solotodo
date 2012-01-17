@@ -263,7 +263,7 @@ def append_metadata_to_response(request, template, args):
         else:
             tabs = []
             for ptype in ProductType.objects.all():
-                tabs.append([ptype.id, ptype.indexname, reverse('solonotebooks.cotizador.views.product_type_index', args = [ptype.urlname])])
+                tabs.append([ptype.id, ptype.indexname, reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])])
             tabs = ['', tabs]
             args['tabs'] = tabs
     
