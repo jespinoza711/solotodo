@@ -27,8 +27,8 @@ class NotebookSearchForm(SearchForm):
     video_card_type = ClassChoiceField(NotebookVideoCardType, 'Tipo', in_quick_search = True, quick_search_name = 'Tarjeta de video')
     video_card = ClassChoiceField(NotebookVideoCard, 'Modelo', requires_advanced_controls = True)
     
-    ordering_choices = (('1', 'Precio'), ('2', 'Velocidad del procesador'), ('3', 'Capacidad para juegos'), ('4', 'Cantidad de RAM'),
-    ('5', 'Capacidad de almacenamiento'), ('6', 'Peso'))
+    ordering_choices = (('1', 'Precio'), ('2', 'Capacidad para correr aplicaciones'), ('3', 'Capacidad para correr juegos'),
+    ('6', 'Peso'))
     screen_touch_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
     
     ordering = CustomChoiceField(choices = ordering_choices, widget = forms.HiddenInput()).set_name('Ordenamiento')

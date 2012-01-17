@@ -36,7 +36,7 @@
         {% for ptype in ptypes %}
             <div class="categoryOff {% if forloop.last %} lastCategory {% endif %}">
 	            <span class="categoryTitle categoryName">
-		            <a href="{% url solonotebooks.cotizador.views.product_type_index ptype.urlname %}">{{ ptype.indexname }}</a>
+		            <a href="{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %}">{{ ptype.indexname }}</a>
 	            </span>
             </div>
         {% endfor %}
@@ -56,7 +56,7 @@
 		<ul>
 			<li><span>Productos</span></li>
 			{% for ptype in ptypes %}
-                <li><a href="{% url solonotebooks.cotizador.views.product_type_index ptype.urlname %}" title="{{ ptype }}">{{ ptype.indexname }}</a></li>
+                <li><a href="{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %}" title="{{ ptype }}">{{ ptype.indexname }}</a></li>
             {% endfor %}
 		</ul>
 		<ul>
