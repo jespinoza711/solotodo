@@ -39,14 +39,16 @@ class Rigam(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  ['index.php?act=viewCat&catId=39', 'Notebook'],   # Notebooks
-                            ['index.php?act=viewCat&catId=60', 'VideoCard'],    # Tarjetas de video
-                            ['index.php?act=viewCat&catId=40', 'Processor'],   # Procesadores AMD
-                            ['index.php?act=viewCat&catId=2', 'Processor'],     # Procesadores Intel
-                            ['index.php?act=viewCat&catId=54', 'Screen'],    # Monitores
-                            ['index.php?act=viewCat&catId=3', 'Motherboard'], # MB AMD
-                            ['index.php?act=viewCat&catId=52', 'Motherboard'], # MB Intel
-                            ]
+        url_extensions = [
+            ['index.php?act=viewCat&catId=39', 'Notebook'],   # Notebooks
+            ['index.php?act=viewCat&catId=60', 'VideoCard'],    # Tarjetas de video
+            ['index.php?act=viewCat&catId=40', 'Processor'],   # Procesadores AMD
+            ['index.php?act=viewCat&catId=2', 'Processor'],     # Procesadores Intel
+            ['index.php?act=viewCat&catId=54', 'Screen'],    # Monitores
+            ['index.php?act=viewCat&catId=3', 'Motherboard'], # MB AMD
+            ['index.php?act=viewCat&catId=52', 'Motherboard'], # MB Intel
+            ['index.php?act=viewCat&catId=35', 'Ram'], # RAM
+        ]
         
         product_links = []                    
         for url_extension, ptype in url_extensions:
