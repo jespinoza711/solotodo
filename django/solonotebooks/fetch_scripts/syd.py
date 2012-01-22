@@ -42,11 +42,13 @@ class Syd(FetchStore):
         # Array containing the data for each product
         products_data = []
         
-        url_extensions = [  ['/computadoras/macbook_pro', 'Notebook'],
-                            ['/computadoras/macbook', 'Notebook'],
-                            ['/computadoras/macbook_air', 'Notebook'],
-                            ['/computadoras/monitores', 'Screen'],
-                            ]
+        url_extensions = [
+            ['/computadoras/macbook_pro', 'Notebook'],
+            ['/computadoras/macbook', 'Notebook'],
+            ['/computadoras/macbook_air', 'Notebook'],
+            ['/computadoras/monitores', 'Screen'],
+            ['/memorias', 'Ram'],
+        ]
         
         product_links = []                    
         for url_extension, ptype in url_extensions:
