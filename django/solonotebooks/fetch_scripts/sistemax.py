@@ -34,23 +34,23 @@ class Sistemax(FetchStore):
         url_buscar_productos = 'index.php?op=seccion/id='
         
         extensions = [
-                ['112', 'Notebook'],      # Netbooks
-                ['27', 'Notebook'],       # Notebooks
-                ['35', 'VideoCard'],       # Tarjetas de video
-                ['58', 'Processor'],       # Procesadores AMD
-                ['59', 'Processor'],       # Procesadores Intel
-                ['25', 'Screen'],       # Monitores
-                ['82', 'Notebook'],       # Mac / iPod
-                ['30', 'Motherboard'],       # MB AMD
-                ['69', 'Motherboard'],       # MB Intel
-                ]
+            ['112', 'Notebook'],    # Netbooks
+            ['27', 'Notebook'],     # Notebooks
+            ['35', 'VideoCard'],    # Tarjetas de video
+            ['58', 'Processor'],    # Procesadores AMD
+            ['59', 'Processor'],    # Procesadores Intel
+            ['25', 'Screen'],       # Monitores
+            ['82', 'Notebook'],     # Mac / iPod
+            ['30', 'Motherboard'],  # MB AMD
+            ['69', 'Motherboard'],  # MB Intel
+            ['24', 'Ram'],          # RAM
+        ]
                         
         # Array containing the data for each product
         product_links = []                
         for extension, ptype in extensions:
             urlWebpage = baseUrl + url_buscar_productos + extension + '&page=-1&listar=true'
             urlWebpage = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(urlWebpage)
-            print urlWebpage
             
             browser = mechanize.Browser()
 
