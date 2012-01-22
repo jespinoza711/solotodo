@@ -44,15 +44,17 @@ class Sym(FetchStore):
         browser = mechanize.Browser()
         
         
-        url_extensions = [  ['?cat=104', 'Notebook'],         # Notebooks
-                            ['?cat=32_68', 'VideoCard'],       # Tarjetas de video AGP
-                            ['?cat=32_69', 'VideoCard'],       # Tarjetas de video PCIe
-                            ['?cat=50', 'Processor'],          # Procesadores Intel
-                            ['?cat=25', 'Processor'],          # Procesadores AMD
-                            ['?cat=81', 'Screen'],          # Monitores LCD
-                            ['?cat=26', 'Motherboard'],     # MB AMD
-                            ['?cat=49', 'Motherboard'],     # MB Intel
-                            ]
+        url_extensions = [
+            ['?cat=104', 'Notebook'],       # Notebooks
+            ['?cat=32_68', 'VideoCard'],    # Tarjetas de video AGP
+            ['?cat=32_69', 'VideoCard'],    # Tarjetas de video PCIe
+            ['?cat=50', 'Processor'],       # Procesadores Intel
+            ['?cat=25', 'Processor'],       # Procesadores AMD
+            ['?cat=81', 'Screen'],          # Monitores LCD
+            ['?cat=26', 'Motherboard'],     # MB AMD
+            ['?cat=49', 'Motherboard'],     # MB Intel
+            ['?cat=27', 'Ram'],             # RAM
+        ]
                             
         productLinks = []
         links = []
