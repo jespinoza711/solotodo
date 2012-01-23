@@ -60,7 +60,11 @@ class Bym(FetchStore):
             ['subpro.php?ic=16&isc=11', 'Ram'],         # RAM DDR2
             ['subpro.php?ic=16&isc=12', 'Ram'],         # RAM DDR3
             ['subpro.php?ic=16&isc=13', 'Ram'],         # RAM Notebook
-            ]
+            ['subpro.php?ic=10&isc=4', 'StorageDrive'], # Discos duros IDE
+            ['subpro.php?ic=10&isc=6', 'StorageDrive'], # Discos duros Notebook
+            ['subpro.php?ic=10&isc=5', 'StorageDrive'], # Discos duros SATA
+            ['subpro.php?ic=10&isc=7', 'StorageDrive'], # SSD
+        ]
                             
         for url_extension, ptype in url_extensions:
             page_number = 1
