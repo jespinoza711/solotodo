@@ -261,11 +261,13 @@ def append_metadata_to_response(request, template, args):
                     
             args['tabs'] = ['Tipos de ' + ptype.displayname, tabs]
         else:
+            '''
             tabs = []
             for ptype in ProductType.objects.all():
                 tabs.append([ptype.id, ptype.indexname, reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])])
             tabs = ['', tabs]
             args['tabs'] = tabs
+            '''
     
     args['signup_key'] = request.session['signup_key']
     args['site_name'] = settings.SITE_NAME

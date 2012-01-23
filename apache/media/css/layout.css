@@ -268,7 +268,7 @@ div#login {padding-left: 8px; float: left; width: 900px;}
 #areas-site ul li.sprite-blog-active {background: url(img/blog.png) no-repeat 9px -50px; background-position: center top;}
 
 .catalogo {margin-left: 26px; position: relative; top: -14px;}
-.catalogo li {
+.catalogo > li {
  float: left; 
  margin-right: 3px;
  font-size: 14px; 
@@ -282,6 +282,34 @@ div#login {padding-left: 8px; float: left; width: 900px;}
  display: block;
 }
 
+.subcatalog li {
+    margin-right: -15px;
+    margin-left: -15px;
+    font-size: 14px;
+    color: #dee8f2;
+    text-shadow: #224b70 0 1px 0;
+    padding: 6px 14px;
+    background: url(img/tabs.jpg) repeat-x;
+    border-top: #5d90bd 1px solid;
+    border-left: #5d90bd 1px solid;
+    border-right: #5d90bd 1px solid;
+    display: block;
+    width: 150px;
+}
+
+.subcatalog {
+    margin-top: 6px;
+    position:absolute;
+    z-index: 300;
+    display: none;
+}
+
+.catalogo > li.item-with-subcatalog {
+    /* padding-bottom: 0;*/
+    position: relative;
+    width: 150px;
+}
+
 .catalogo li:hover {
  background: url(img/tabsh.jpg) repeat-x;
  border-top: #afd69e 1px solid;
@@ -289,18 +317,18 @@ div#login {padding-left: 8px; float: left; width: 900px;}
  border-right: #afd69e 1px solid;
 }
 
-.catalogo li a { color: #dee8f2; font-weight: bold;}
-.catalogo li a:hover { text-decoration: none; text-shadow: #417531 0 1px 0;}
-.catalogo li.intro-catalogo {font-size: 12px; color: #b5cce5; background: none; border: none; margin-top: 3px; margin-right: 12px;}
+.catalogo > li a { color: #dee8f2; font-weight: bold;}
+.catalogo > li a:hover { text-decoration: none; text-shadow: #417531 0 1px 0;}
+.catalogo > li.intro-catalogo {font-size: 12px; color: #b5cce5; background: none; border: none; margin-top: 3px; margin-right: 12px;}
 
-.catalogo li.active-menu {
+.catalogo > li.active-menu {
  background: url(img/tabsh.jpg) repeat-x;
  border-top: #afd69e 1px solid;
  border-left: #afd69e 1px solid;
  border-right: #afd69e 1px solid;
 }
 
-.catalogo li.active-menu a{text-decoration: none; text-shadow: #417531 0 1px 0;}
+.catalogo > li.active-menu a{text-decoration: none; text-shadow: #417531 0 1px 0;}
 
 .social {margin-top: 8px; margin-right: 0;}
 .social li {float: left; margin-left: 15px;}
