@@ -215,6 +215,17 @@ from ram_latency_trcd import RamLatencyTrcd
 from ram_latency_trp import RamLatencyTrp
 from ram import Ram
 
+from storage_drive_brand import StorageDriveBrand
+from storage_drive_buffer import StorageDriveBuffer
+from storage_drive_bus import StorageDriveBus
+from storage_drive_capacity import StorageDriveCapacity
+from storage_drive_family import StorageDriveFamily
+from storage_drive_line import StorageDriveLine
+from storage_drive_rpm import StorageDriveRpm
+from storage_drive_size import StorageDriveSize
+from storage_drive_type import StorageDriveType
+from storage_drive import StorageDrive
+
 
 __all__ = [ 
             'InterfaceBrand',
@@ -425,4 +436,15 @@ __all__ = [
             'RamLatencyTrcd',
             'RamLatencyTrp',
             'Ram',
+            'StorageDriveBrand',
+            'StorageDriveBuffer',
+            'StorageDriveBus',
+            'StorageDriveCapacity',
+            'StorageDriveFamily',
+            'StorageDriveLine',
+            'StorageDriveRpm',
+            'StorageDriveSize',
+            'StorageDriveType',
+            'StorageDrive',
             ]
+

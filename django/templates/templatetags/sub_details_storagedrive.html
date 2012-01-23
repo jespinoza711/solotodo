@@ -1,0 +1,31 @@
+<h1>{{ storagedrive }}</h1>
+<h3 class="subtitle">Especificaciones principales</h3>
+<strong>Tipo: </strong> {{ storagedrive.type }}
+<br />
+<strong>Línea: </strong> {{ storagedrive.line }}
+<br />
+<strong>Capacidad: </strong> {{ storagedrive.capacity }}
+<br />
+<strong>RPM: </strong> {{ storagedrive.rpm }}
+<br />
+<strong>Tamaño: </strong> {{ storagedrive.size }}
+<br />
+<strong>Bus: </strong> {{ storagedrive.bus }}
+<br />
+<strong>Búfer: </strong> {{ storagedrive.buffer }}
+<br />
+<h3 class="subtitle">Velocidades</h3>
+<strong>Lectura secuencial: </strong>
+{% if storagedrive.sequential_read_speed %} {{ storagedrive.sequential_read_speed }} MB/s {% else %} N/A {% endif %}
+<br />
+<strong>Escritura secuencial: </strong>
+{% if storagedrive.sequential_write_speed %} {{ storagedrive.sequential_write_speed }} MB/s {% else %} N/A {% endif %}
+<br />
+<strong>Lectura aleatoria: </strong>
+{% if storagedrive.random_read_speed %} {{ storagedrive.random_read_speed }} MB/s {% else %} N/A {% endif %}
+<br />
+<strong>Escritura aleatoria: </strong>
+{% if storagedrive.random_write_speed %} {{ storagedrive.random_write_speed }} MB/s {% else %} N/A {% endif %}
+<br />
+<br />
+<br />

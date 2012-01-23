@@ -1,0 +1,21 @@
+{% extends "chw/base.html" %}
+
+{% block product_details %}
+    <ul class="description-list">
+        <li>
+            <strong>Tipo: </strong> {{ product.type }}
+        </li>
+        <li>
+            <strong>Capacidad: </strong> {{ product.capacity }}
+        </li>
+        <li>
+            <strong>RPM: </strong> {{ product.rpm }}
+        </li>
+        <li>
+            <strong>Bus: </strong> {{ product.bus }}
+        </li>
+        <li>
+            <strong>Búfer: </strong> {{ product.buffer }}
+        </li>
+    </ul>
+{% endblock %}

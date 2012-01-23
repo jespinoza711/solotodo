@@ -59,21 +59,24 @@ class Bip(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  ['categoria=191', 'Notebook'],                      # Netbooks
-                            ['categoria=166', 'Notebook'],                      # Notebooks
-                            ['categoria=118&categoria_papa=97', 'VideoCard'],   # Tarjetas de video
-                            ['categoria=99&categoria_papa=111', 'Processor'],   # Proces Intel 775
-                            ['categoria=339&categoria_papa=111', 'Processor'],  # Proces Intel 1155
-                            ['categoria=262&categoria_papa=111', 'Processor'],  # Proces Intel 1156
-                            ['categoria=263&categoria_papa=111', 'Processor'],  # Proces Intel 1366
-                            ['categoria=100&categoria_papa=111', 'Processor'],  # Proces AMD AM2
-                            ['categoria=242&categoria_papa=111', 'Processor'],  # Proces AMD AM3
-                            ['categoria=19', 'Screen'],                         # LCD
-                            ['categoria=108', 'Motherboard'],                   # Placas madre
-                            ['categoria=132', 'Ram'],                   # RAM PC
-                            ['categoria=178', 'Ram'],                   # RAM Notebook
-                            ['categoria=179', 'Ram'],                   # RAM Servidor
-                            ]
+        url_extensions = [
+            ['categoria=191', 'Notebook'],                          # Netbooks
+            ['categoria=166', 'Notebook'],                          # Notebooks
+            ['categoria=118&categoria_papa=97', 'VideoCard'],       # Tarjetas de video
+            ['categoria=99&categoria_papa=111', 'Processor'],       # Proces Intel 775
+            ['categoria=339&categoria_papa=111', 'Processor'],      # Proces Intel 1155
+            ['categoria=262&categoria_papa=111', 'Processor'],      # Proces Intel 1156
+            ['categoria=263&categoria_papa=111', 'Processor'],      # Proces Intel 1366
+            ['categoria=100&categoria_papa=111', 'Processor'],      # Proces AMD AM2
+            ['categoria=242&categoria_papa=111', 'Processor'],      # Proces AMD AM3
+            ['categoria=19', 'Screen'],                             # LCD
+            ['categoria=108', 'Motherboard'],                       # Placas madre
+            ['categoria=132', 'Ram'],                               # RAM PC
+            ['categoria=178', 'Ram'],                               # RAM Notebook
+            ['categoria=179', 'Ram'],                               # RAM Servidor
+            ['categoria=125&categoria_papa=123', 'StorageDrive'],   # Disco Duro 2,5"
+            ['categoria=124&categoria_papa=123', 'StorageDrive'],   # Disco Duro 3,5"
+        ]
                             
         product_links = []
                             
