@@ -23,7 +23,12 @@ class StorageDrive(Product):
     random_write_speed = models.IntegerField()
     
     def get_display_name(self):
-        return '%s %s (%s)' % (unicode(self.line), unicode(self.capacity), self.name)
+        result = '%s %s' % (unicode(self.line), unicode(self.capacity))
+        if self.name != ' ':
+            result += ' (%s)' % self.name
+        else:
+            result += ' (%s, %s, %s)' % (unicode(self.size), unicode(self.rpm), unicode(self.bus))
+        return result
         
     def raw_text(self):
         return super(StorageDrive, self).base_raw_text()
