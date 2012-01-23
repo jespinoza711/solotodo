@@ -304,7 +304,7 @@ def store_product_redirect(request, store_product_id):
     url = store_product.url
     if store_product.store.affiliate_id:
         # Solucion ad-hoc para Peta!
-        url = "http://www.peta.cl/otros/solotodo_redirect.html?a_aid=4ee651f559739&next=" + urllib.quote_plus(url)
+        url += "?a_aid=4ee651f559739"
 
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         import simplejson
