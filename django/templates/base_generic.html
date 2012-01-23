@@ -129,12 +129,48 @@
 				{% block tabs %}
 				<div id="tabs">
                     <ul class="catalogo left">
-                        <li class="intro-catalogo">{{ tabs.0 }}</li>
-                        {% for tab_option in tabs.1 %}
-                            <li {% ifequal tab_option.0 main_category_comparison_key %}class="active-menu"{% endifequal %}>
-                                <a href="{{ tab_option.2 }}">{{ tab_option.1 }}</a>
+                        {% if tabs %}
+                            <li class="intro-catalogo">{{ tabs.0 }}</li>
+                            {% for tab_option in tabs.1 %}
+                                <li {% ifequal tab_option.0 main_category_comparison_key %}class="active-menu"{% endifequal %}>
+                                    <a href="{{ tab_option.2 }}">{{ tab_option.1 }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="intro-catalogo"></li>
+
+                            <li>
+                                <a href="/notebooks/catalog/">Notebooks</a>
                             </li>
-                        {% endfor %}
+
+                            <li>
+                                <a href="/cellphones/catalog/">Celulares</a>
+                            </li>
+
+                            <li>
+                                <a href="/screens/catalog/">Televisores y Monitores</a>
+                            </li>
+
+                            <li class="item-with-subcatalog">
+                                <a href="#">Partes de PC</a>
+
+                                <ul class="subcatalog">
+                                    <li>
+                                        <a href="/video_cards/catalog/">Tarjetas de video</a>
+                                    </li>
+                                    <li>
+                                        <a href="/processors/catalog/">Procesadores</a>
+                                    </li>
+                                    <li>
+                                        <a href="/motherboards/catalog/">Placas madre</a>
+                                    </li>
+                                    <li>
+                                        <a href="/ram/catalog/">RAM</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        {% endif %}
                     </ul>
                 </div>
 				{% endblock %}
