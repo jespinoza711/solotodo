@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
 class TopPC(FetchStore):
@@ -17,7 +15,7 @@ class TopPC(FetchStore):
         soup = BeautifulSoup(data)
         try:
             title = soup.find('h2').string
-        except:
+        except Exception:
             return None
         
         price = int(soup.find('span', { 'id': 'our_price_display' }).string.replace('$', '').replace('.', ''))
@@ -39,13 +37,15 @@ class TopPC(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  ['76', 'VideoCard'],    # Tarjetas de video
-                            ['5', 'Processor'],     # Procesadores
-                            ['61', 'Screen'],    # Monitores y TV
-                            ['153', 'Notebook'],   # Notebooks
-                            ['8', 'Motherboard'],   # MB
-                            ]
-                            
+        url_extensions = [
+            ['76', 'VideoCard'],    # Tarjetas de video
+            ['5', 'Processor'],     # Procesadores
+            ['61', 'Screen'],    # Monitores y TV
+            ['153', 'Notebook'],   # Notebooks
+            ['8', 'Motherboard'],   # MB
+            ['11', 'Ram'],   # RAM
+        ]
+
         productLinks = []
                             
         for url_extension, ptype in url_extensions:

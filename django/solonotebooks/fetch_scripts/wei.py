@@ -48,16 +48,20 @@ class Wei(FetchStore):
         links = []
         
         category_urls = [
-                    ['252', 'Notebook'],      # Notebooks
-                    ['175', 'VideoCard'],     # Tarjetas de video AGP
-                    ['176', 'VideoCard'],     # Tarjetas de video PCI Express
-                    ['119', 'Processor'],     # Procesadores AMD
-                    ['120', 'Processor'],     # Procesadores Intel
-                    ['205', 'Screen'],    # LCD TV
-                    ['80', 'Screen'],     # Monitores LCD
-                    ['65', 'Motherboard'],     # MB AMD
-                    ['84', 'Motherboard'],     # MB Intel
-                        ]
+            ['252', 'Notebook'],      # Notebooks
+            ['175', 'VideoCard'],     # Tarjetas de video AGP
+            ['176', 'VideoCard'],     # Tarjetas de video PCI Express
+            ['119', 'Processor'],     # Procesadores AMD
+            ['120', 'Processor'],     # Procesadores Intel
+            ['205', 'Screen'],    # LCD TV
+            ['80', 'Screen'],     # Monitores LCD
+            ['65', 'Motherboard'],     # MB AMD
+            ['84', 'Motherboard'],     # MB Intel
+            ['68', 'Ram'],     # RAM Notebook
+            ['89', 'Ram'],     # RAM DDR
+            ['195', 'Ram'],     # RAM DDR2
+            ['199', 'Ram'],     # RAM DDR3
+        ]
                      
         
         for category_url, ptype in category_urls:
