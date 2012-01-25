@@ -26,11 +26,18 @@
         <li>
             <strong>Frecuencias Turbo: </strong>
             {% if product.turbo_clocks %}
-            <ul class="sub_ul">
-                {% for turbo_clock in product.turbo_clocks %}
-                <li>{{ forloop.counter }} core{{ forloop.counter|pluralize }}: {{ turbo_clock }}</li>
-                {% endfor %}
-            </ul>
+                <table style="font-size: 13px;">
+                    <tr>
+                        {% for turbo_clock in product.turbo_clocks %}
+                            <td>{{ forloop.counter }} core{{ forloop.counter|pluralize }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for turbo_clock in product.turbo_clocks %}
+                            <td>{{ turbo_clock }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
             {% else %}
             No posee frecuencias turbo
             {% endif %}
