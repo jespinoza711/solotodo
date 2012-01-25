@@ -45,10 +45,15 @@ class GlobalMac(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  ['MacBook/', 'Notebook'],
-                            ['MacBook-Pro/', 'Notebook'],
-                            ['Cinema-Display/', 'Screen'],
-                            ]
+        url_extensions = [
+            ['MacBook/', 'Notebook'],
+            ['MacBook-Pro/', 'Notebook'],
+            ['Monitores-LCD/', 'Screen'],
+            ['Cinema-Display/', 'Screen'],
+            ['Disco-Duro-SATA-2.5/', 'StorageDrive'],
+            ['Discos-Duros-ATA-2.5/', 'StorageDrive'],
+            ['Discos-Duros-SATA/', 'StorageDrive'],
+        ]
 
         memory_catalog_url = urlBase + 'Memorias/'
         baseData = browser.open(memory_catalog_url).get_data()

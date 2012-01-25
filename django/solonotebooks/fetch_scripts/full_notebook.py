@@ -41,9 +41,10 @@ class FullNotebook(FetchStore):
         product_links = []
         
         url_extensions = [  
-                    ['notebooks', 'Notebook'],
-                    ['monitores', 'Notebook'],
-                    ]
+            ['notebooks', 'Notebook'],
+            ['mini-notebooks', 'Notebook'],
+            ['netbook', 'Notebook'],
+        ]
         
         for url_extension, ptype in url_extensions:
             # Primero necesitamos el numero de paginas
