@@ -37,12 +37,14 @@ class MacOnline(FetchStore):
         browser = mechanize.Browser()
         product_links = []
         
-        url_extensions = [  ['397.html', 'Notebook'],
-                            ['421.html', 'Notebook'],
-                            ['384.html', 'Notebook'],
-                            ['288.html', 'Screen'],
-                            ['435.html', 'Notebook'],
-                            ]
+        url_extensions = [
+            ['397.html', 'Notebook'],
+            ['421.html', 'Notebook'],
+            ['384.html', 'Notebook'],
+            ['288.html', 'Screen'],
+            ['435.html', 'Notebook'],
+            ['293', 'StorageDrive'],
+        ]
                             
         for url_extension, ptype in url_extensions:
             page_number = 0
