@@ -76,6 +76,9 @@ class Magens(FetchStore):
             ['monitores-televisores-c-13.html', 'Screen'], 
             ['placas-madre-c-2.html', 'Motherboard'],
             ['memorias-c-12.html', 'Ram'],
+            ['discos-duros-c-3_35.html', 'StorageDrive'],
+            ['discos-notebook-c-3_37.html', 'StorageDrive'],
+            ['ssd-c-3_215.html', 'StorageDrive'],
         ]
                 
         product_links = []            
