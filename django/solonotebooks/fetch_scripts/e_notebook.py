@@ -74,6 +74,7 @@ class ENotebook(FetchStore):
                         
         extra_pagelinks = [
             ['it-index-n-memoria_notebook-cP-46_4.html', 'Ram'],
+            ['it-index-n-discos_duros-cP-46_23.html', 'StorageDrive'],
         ]
                         
         pageLinks = []

@@ -78,6 +78,10 @@ class Clie(FetchStore):
             ['614', 'Screen'],  # LED TV monitor
             ['26', 'Ram'],
             ['446', 'Ram'],
+            ['438', 'StorageDrive'],
+            ['434', 'StorageDrive'],
+            ['738', 'StorageDrive'],
+            ['642', 'StorageDrive'],
         ]
                             
         product_links = []
