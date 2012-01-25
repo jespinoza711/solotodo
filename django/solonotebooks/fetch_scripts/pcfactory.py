@@ -16,18 +16,6 @@ class PCFactory(FetchStore):
         baseSoup = BeautifulSoup(baseData)
         product_data = ProductData()
         
-        '''
-        available_cells = baseSoup.find('table', { 'class' : 'main' })
-        if not available_cells:
-            return None
-        available_cells = available_cells.findAll('td')
-        if len(available_cells) != 1:
-            availability_cells = available_cells[2::2]
-            for cell in availability_cells:
-                if cell.string == 'Agotado':      
-                    return None
-        '''
-        
         titleSpan = baseSoup.find('span', { 'class' : 'men_confirmacion' })
         product_data.custom_name = titleSpan.string.encode('ascii', 'ignore').strip()
         product_data.url = product_link
@@ -51,24 +39,26 @@ class PCFactory(FetchStore):
         productsData = []
         
         url_extensions = [  
-                            ['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 11
-                            ['?papa=24&categoria=449', 'Notebook'],   # Notebooks 12 a 13
-                            ['?papa=24&categoria=410', 'Notebook'],   # Notebooks 14
-                            ['?papa=24&categoria=437', 'Notebook'],   # Notebooks 15
-                            ['?papa=24&categoria=436', 'Notebook'],   # Notebooks 16 y +
-                            ['?papa=334&categoria=40', 'VideoCard'],   # VGA AGP
-                            ['?papa=334&categoria=378', 'VideoCard'],  # VGA PCIe Nvidia
-                            ['?papa=334&categoria=454', 'VideoCard'],  # VGA PCIe ATI
-                            ['?papa=334&categoria=455', 'VideoCard'],  # VGA Profesionales
-                            ['?papa=272&categoria=272', 'Processor'],
-                            ['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
-                            ['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
-                            ['?papa=292&categoria=292', 'Motherboard'],
-                            ['?papa=264&categoria=112', 'Ram'], # Memoria PC
-                            ['?papa=264&categoria=482', 'Ram'], # Memoria PC High-End
-                            ['?papa=264&categoria=100', 'Ram'], # Memoria Notebook
-                            ['?papa=264&categoria=266', 'Ram'], # Memoria Server
-                            ]
+            ['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 11
+            ['?papa=24&categoria=449', 'Notebook'],   # Notebooks 12 a 13
+            ['?papa=24&categoria=410', 'Notebook'],   # Notebooks 14
+            ['?papa=24&categoria=437', 'Notebook'],   # Notebooks 15
+            ['?papa=24&categoria=436', 'Notebook'],   # Notebooks 16 y +
+            ['?papa=334&categoria=40', 'VideoCard'],   # VGA AGP
+            ['?papa=334&categoria=378', 'VideoCard'],  # VGA PCIe Nvidia
+            ['?papa=334&categoria=454', 'VideoCard'],  # VGA PCIe ATI
+            ['?papa=334&categoria=455', 'VideoCard'],  # VGA Profesionales
+            ['?papa=272&categoria=272', 'Processor'],
+            ['?papa=256&categoria=250', 'Screen'],  # Monitores LCD
+            ['?papa=256&categoria=260', 'Screen'],  # Televisores LCD
+            ['?papa=292&categoria=292', 'Motherboard'],
+            ['?papa=264&categoria=112', 'Ram'], # Memoria PC
+            ['?papa=264&categoria=482', 'Ram'], # Memoria PC High-End
+            ['?papa=264&categoria=100', 'Ram'], # Memoria Notebook
+            ['?papa=264&categoria=266', 'Ram'], # Memoria Server
+            ['?papa=312&categoria=340', 'StorageDrive'], # HDD PC
+            ['?papa=312&categoria=421', 'StorageDrive'], # HDD Notebook
+        ]
                           
         products_data = []                      
         for url_extension, ptype in url_extensions:
