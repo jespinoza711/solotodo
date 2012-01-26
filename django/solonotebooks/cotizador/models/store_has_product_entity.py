@@ -58,7 +58,7 @@ class StoreHasProductEntity(models.Model):
         if shp:
             shp.update(recursive = True)
         
-    def update(self, recursive = False):
+    def update(self, recursive = False, product_visits=None):
         from . import LogLostEntity, LogChangeEntityPrice
         print ''
         print str(self)
@@ -101,7 +101,7 @@ class StoreHasProductEntity(models.Model):
         self.save()
         
         if self.shp and recursive:
-            self.shp.update(recursive = True)
+            self.shp.update(recursive=True, product_visits=product_visits)
             
     def delete_today_history(self):
         from . import StoreProductHistory
