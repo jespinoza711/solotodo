@@ -16,7 +16,7 @@ class StoreHasProduct(models.Model):
     
     store = property(get_store)
     
-    def update(self, recursive = False):
+    def update(self, recursive = False, product_visits=None):
         print self
         product = self.product
         
@@ -38,7 +38,7 @@ class StoreHasProduct(models.Model):
             self.save()
         
         if recursive:
-            product.update()
+            product.update(product_visits=product_visits)
     
     def __unicode__(self):
         result = unicode(self.product)

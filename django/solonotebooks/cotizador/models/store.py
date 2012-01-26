@@ -96,8 +96,11 @@ class Store(models.Model):
                 self.save_product(product)
             
             if update_shpes_on_finish:
+                from . import ProductVisit
+                product_visits = ProductVisit.get_last_day_visitor_count_for_each_product()
+
                 for shpe in store.storehasproductentity_set.all():
-                    shpe.update(recursive = True)
+                    shpe.update(recursive=True, product_visits=product_visits)
 
             try:                
                 log_error = LogFetchStoreError.objects.get(log_entry__date = date.today(), store = store)

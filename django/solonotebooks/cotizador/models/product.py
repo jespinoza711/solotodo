@@ -2,7 +2,7 @@
 import operator
 from datetime import datetime, date, timedelta
 from django.db import models
-from django.db.models import Min, Max, Q
+from django.db.models import Min, Max
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 from . import *
 from copy import deepcopy
@@ -146,7 +146,7 @@ class Product(models.Model):
         else:
             return 0
             
-    def update(self, send_mails = True):
+    def update(self, send_mails=True, product_visits=None):
         from . import LogReviveProduct, LogChangeProductPrice, LogLostProduct, ProductPriceChange, LogReviveProduct
         print self
 
@@ -202,7 +202,14 @@ class Product(models.Model):
         print '6'
         self.update_week_discount()
         print '7'
-        self.update_week_visits()
+        if not product_visits:
+            self.update_week_visits()
+        else:
+            try:
+                self.week_visitor_count = product_visits[self.id]
+            except KeyError:
+                print 'Error: ' + str(self.id);
+                self.week_visitor_count = 0
         print '8'
         self.update_week_external_visits()
         print '9'
@@ -262,8 +269,8 @@ class Product(models.Model):
         old_price = self.price_at(t - d)
         try:
             self.week_discount = int(100 * (old_price - self.shp.shpe.latest_price) / old_price)
-        except:
-            self.week_discount = 0;
+        except Exception:
+            self.week_discount = 0
             
     def update_week_external_visits(self):
         from . import ExternalVisit
