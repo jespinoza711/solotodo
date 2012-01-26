@@ -149,8 +149,10 @@ class Product(models.Model):
     def update(self, send_mails = True):
         from . import LogReviveProduct, LogChangeProductPrice, LogLostProduct, ProductPriceChange, LogReviveProduct
         print self
-        
+
+        print '1'
         shps = self.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')
+        print '2'
         
         if shps:
             shp = shps[0]
@@ -178,8 +180,10 @@ class Product(models.Model):
                  LogLostProduct.new(self).send_notification_mails(send_mails)
 
             self.shp = None
-            
+
+        print '3'
         ppcs = self.productpricechange_set.all()
+        print '4'
         if len(ppcs) == 0:
             ppc = ProductPriceChange()
             ppc.product = self
@@ -192,20 +196,33 @@ class Product(models.Model):
         
         if self.sponsored_shp and not self.sponsored_shp.shpe:
             self.sponsored_shp = None
-            
+
+        print '5'
         self.long_description = self.raw_text()
+        print '6'
         self.update_week_discount()
+        print '7'
         self.update_week_visits()
+        print '8'
         self.update_week_external_visits()
+        print '9'
         self.update_display_name()
+        print '10'
         self.update_part_number()
+        print '11'
         
         self.save()
+        print '12'
         self.generate_chart()
-        
+        print '13'
+
+        print '14'
         pol_prod = self.get_polymorphic_instance()
+        print '15'
         pol_prod.custom_local_update()
+        print '16'
         pol_prod.save()
+        print '17'
         
     def custom_local_update(self):
         pass
