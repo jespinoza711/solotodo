@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from . import Product
 
 class ProductVisit(models.Model):
-    date = models.DateTimeField(auto_now_add = True)
+    date = models.DateTimeField(auto_now_add = True, db_index=True)
     notebook = models.ForeignKey(Product)
     
     def get_product(self):
