@@ -58,6 +58,8 @@ class PCExpress(FetchStore):
             ['60_186', 'Motherboard'],   # Placas madre 1366
             ['72_126', 'Ram'],   # RAM Desktop
             ['72_127', 'Ram'],   # RAM Notebook
+            ['62_101', 'StorageDrive'],   # HDD PC
+            ['62_103', 'StorageDrive'],   # HDD Notebook
         ]
                             
         product_links = []

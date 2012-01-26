@@ -54,6 +54,8 @@ class NotebookCenter(FetchStore):
             ['323', 'Screen'],  # Televisor LCD
             ['641', 'Screen'],  # Televisor LED
             ['6', 'Ram'],  # Notebook RAM
+            ['109', 'StorageDrive'],  # HDD Notebook
+            ['412', 'StorageDrive'],  # HDD Desktop
         ]
                           
         product_links = []  
