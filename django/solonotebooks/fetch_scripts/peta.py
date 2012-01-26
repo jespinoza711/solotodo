@@ -48,16 +48,18 @@ class Peta(FetchStore):
         # Browser initialization
         browser = mechanize.Browser()
         
-        url_extensions = [  ['computadores-1/netbooks.html', 'Notebook'],
-                            ['computadores-1/notebooks.html', 'Notebook'],
-                            ['computadores-1/apple.html?appletype=898,903', 'Notebook'],
-                            ['peta-cl/tarjetas-de-video.html', 'VideoCard'],
-                            ['peta-cl/procesadores.html', 'Processor'],
-                            ['peta-cl/monitores.html', 'Screen'],
-                            ['audio-y-video-1/televisores.html', 'Screen'],
-                            ['peta-cl/placas-madre-1.html', 'Motherboard'],
-                            ['partes-y-piezas/memorias.html', 'Ram'],
-                            ]
+        url_extensions = [
+            ['computadores-1/netbooks.html', 'Notebook'],
+            ['computadores-1/notebooks.html', 'Notebook'],
+            ['computadores-1/apple.html?appletype=898,903', 'Notebook'],
+            ['peta-cl/tarjetas-de-video.html', 'VideoCard'],
+            ['peta-cl/procesadores.html', 'Processor'],
+            ['peta-cl/monitores.html', 'Screen'],
+            ['audio-y-video-1/televisores.html', 'Screen'],
+            ['peta-cl/placas-madre-1.html', 'Motherboard'],
+            ['partes-y-piezas/memorias.html', 'Ram'],
+            ['partes-y-piezas/discos-duros.html', 'StorageDrive'],
+        ]
                           
         product_links = []
         links = []                            
