@@ -4,7 +4,7 @@ from . import StoreHasProductEntity
 
 class StoreProductHistory(models.Model):
     price = models.IntegerField()
-    date = models.DateField()
+    date = models.DateField(db_index=True)
     
     registry = models.ForeignKey(StoreHasProductEntity)
     
