@@ -48,6 +48,8 @@ class Rigam(FetchStore):
             ['index.php?act=viewCat&catId=3', 'Motherboard'], # MB AMD
             ['index.php?act=viewCat&catId=52', 'Motherboard'], # MB Intel
             ['index.php?act=viewCat&catId=35', 'Ram'], # RAM
+            ['index.php?act=viewCat&catId=70', 'StorageDrive'], # HDD Notebook
+            ['index.php?act=viewCat&catId=58', 'StorageDrive'], # HDD SATA
         ]
         
         product_links = []                    

@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from store_has_product_entity import StoreHasProductEntity
 
 class ExternalVisit(models.Model):
-    date = models.DateField()
+    date = models.DateField(db_index=True)
     shn = models.ForeignKey(StoreHasProductEntity)
     
     def set_shpe(self, shpe):
