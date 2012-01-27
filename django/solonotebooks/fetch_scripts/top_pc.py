@@ -44,6 +44,9 @@ class TopPC(FetchStore):
             ['153', 'Notebook'],   # Notebooks
             ['8', 'Motherboard'],   # MB
             ['11', 'Ram'],   # RAM
+            ['17', 'StorageDrive'],   # HDD SATA
+            ['34', 'StorageDrive'],   # HDD IDE Desktop
+            ['35', 'StorageDrive'],   # HDD IDE Notebook
         ]
 
         productLinks = []
