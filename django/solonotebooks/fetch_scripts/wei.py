@@ -61,6 +61,9 @@ class Wei(FetchStore):
             ['89', 'Ram'],     # RAM DDR
             ['195', 'Ram'],     # RAM DDR2
             ['199', 'Ram'],     # RAM DDR3
+            ['70', 'StorageDrive'],     # HDD IDE
+            ['71', 'StorageDrive'],     # HDD SATA
+            ['78', 'StorageDrive'],     # HDD Notebook
         ]
                      
         

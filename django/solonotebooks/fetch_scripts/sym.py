@@ -54,6 +54,9 @@ class Sym(FetchStore):
             ['?cat=26', 'Motherboard'],     # MB AMD
             ['?cat=49', 'Motherboard'],     # MB Intel
             ['?cat=27', 'Ram'],             # RAM
+            ['?cat=29_61', 'StorageDrive'], # HDD Notebook
+            ['?cat=29_62', 'StorageDrive'], # HDD SATA
+            ['?cat=29_129', 'StorageDrive'], # SSD
         ]
                             
         productLinks = []
