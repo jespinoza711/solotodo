@@ -16,7 +16,8 @@ def update_availability_and_price():
         
     print 'Paso 3: Actualizando Productos'
     for product in Product.objects.all():
-        product.update(send_mails = True)
+        pvs = ProductVisit.get_last_day_visitor_count_for_each_product()
+        product.update(product_visits=pvs)
         
     # Other housekeeping stuff
     for ptype in ProductType.objects.all():
