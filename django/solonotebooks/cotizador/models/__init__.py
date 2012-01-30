@@ -226,6 +226,16 @@ from storage_drive_size import StorageDriveSize
 from storage_drive_type import StorageDriveType
 from storage_drive import StorageDrive
 
+from power_supply_brand import PowerSupplyBrand
+from power_supply_line import PowerSupplyLine
+from power_supply_power import PowerSupplyPower
+from power_supply_certification import PowerSupplyCertification
+from power_supply_size import PowerSupplySize
+from power_supply_power_connector import PowerSupplyPowerConnector
+from power_supply_has_power_connector import PowerSupplyHasPowerConnector
+from power_supply import PowerSupply
+
+
 
 __all__ = [ 
             'InterfaceBrand',
@@ -446,5 +456,12 @@ __all__ = [
             'StorageDriveSize',
             'StorageDriveType',
             'StorageDrive',
+            'PowerSupplyBrand',
+            'PowerSupplyLine',
+            'PowerSupplyPower',
+            'PowerSupplyCertification',
+            'PowerSupplySize',
+            'PowerSupplyPowerConnector',
+            'PowerSupplyHasPowerConnector',
+            'PowerSupply'
             ]
-

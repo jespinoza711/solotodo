@@ -1,0 +1,8 @@
+{% extends "templatetags/div_base.html" %}
+
+{% block specs %}
+<li><strong>Potencia:</strong> {{ product.power }}</li>
+<li><strong>Certificación:</strong> {{ product.certification }}</li>
+<li><strong>Corriente 12V:</strong> {{ product.pretty_currents_on_12V_rails }}</li>
+<li><strong>PFC activo:</strong> {{ product.has_active_pfc|yesno:"Sí,No" }}</li>
+{% endblock %}

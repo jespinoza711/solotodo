@@ -1,0 +1,28 @@
+<h1>{{ powersupply }}</h1>
+<h3 class="subtitle">Especificaciones principales</h3>
+<strong>Potencia: </strong> {{ powersupply.power }}
+<br />
+<strong>Certificación: </strong> {{ powersupply.certification }}
+<br />
+<strong>Tamaño: </strong> {{ powersupply.size }}
+<br />
+<strong>PFC activo:</strong> {{ powersupply.has_active_pfc|yesno:"Sí,No" }}
+<br />
+<strong>Modular:</strong> {{ powersupply.is_modular|yesno:"Sí,No" }}
+<br />
+
+<h3 class="subtitle">Especificaciones técnicas</h3>
+<strong>Corriente en la línea de 12 V: </strong> {{ powersupply.pretty_currents_on_12V_rails }}
+<br />
+<strong>Corriente en la línea de 5 V: </strong> {{ powersupply.pretty_currents_on_5V_rails }}
+<br />
+<strong>Corriente en la línea de 3.3 V: </strong> {{ powersupply.pretty_currents_on_33V_rails }}
+<br />
+<strong>Conectores de energía: </strong>
+    <ul class="sub_ul">
+        {% for connector in powersupply.power_connectors.all %}
+            <li>{{ connector }}</li>
+        {% endfor %}
+    </ul>
+<br />
+<br />

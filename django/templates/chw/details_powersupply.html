@@ -1,0 +1,21 @@
+{% extends "chw/base.html" %}
+
+{% block product_details %}
+    <ul class="description-list">
+        <li>
+            <strong>Potencia: </strong> {{ product.power }}
+        </li>
+        <li>
+            <strong>Certificación: </strong> {{ product.certification }}
+        </li>
+        <li>
+            <strong>Amp. 12V: </strong> {{ product.pretty_currents_on_12V_rails }}
+        </li>
+        <li>
+            <strong>PFC activo: </strong> {{ product.has_active_pfc|yesno:"Sí,No" }}
+        </li>
+        <li>
+            <strong>Modular: </strong> {{ product.is_modular|yesno:"Sí,No" }}
+        </li>
+    </ul>
+{% endblock %}
