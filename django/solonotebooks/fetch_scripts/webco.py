@@ -64,6 +64,10 @@ class Webco(FetchStore):
             ['n_new_productos.asp?CATEGORIA={80024ADB-0B06-4281-8CB6-7649D9E2C29B}#ct_421', 'StorageDrive'],
             # HDD IDE
             ['n_new_productos.asp?CATEGORIA={518AE532-05F0-4FEB-9FBE-3E67CA383E91}#ct_421', 'StorageDrive'],
+            # RAM Desktop
+            ['n_new_productos.asp?CATEGORIA={CB3ACADF-536F-4513-BD91-41E5E210B742}#ct_31', 'Ram'],
+            # RAM Notebook
+            ['n_new_productos.asp?CATEGORIA={B77F75B2-F280-4385-892A-01109D48ABD3}#ct_31', 'Ram'],
         ]
         
         product_links = []                    

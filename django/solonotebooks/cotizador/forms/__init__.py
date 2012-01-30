@@ -15,6 +15,7 @@ from search_shpe_form import SearchShpeForm
 from competitivity_report_ordering import CompetitivityReportOrdering
 from ram_search_form import RamSearchForm
 from storage_drive_search_form import StorageDriveSearchForm
+from power_supply_search_form import PowerSupplySearchForm
 
 __all__ = [ 
             'SearchForm', 
@@ -34,4 +35,5 @@ __all__ = [
             'CompetitivityReportOrdering',
             'RamSearchForm',
             'StorageDriveSearchForm',
+            'PowerSupplySearchForm',
             ]
