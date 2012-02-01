@@ -3,9 +3,11 @@
     <head>
         <title>SoloTodo</title>
         <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" type="text/css" href="/media/cssv2/bootstrap.min.css" media="screen" />
+        <!--<link rel="stylesheet" type="text/css" href="/media/cssv2/bootstrap.min.css" media="screen" />-->
+        <link rel="stylesheet" type="text/less" href="/media/less/bootstrap.less" media="screen" />
         <link rel="stylesheet" type="text/css" href="/media/cssv2/custom.css" media="screen" />
         <script type="text/javascript" src="/media/jsv2/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/media/jsv2/less-1.2.1.min.js"></script>
     </head>
     <body>
         <div id="header-fluid" class="row-fluid">
@@ -39,6 +41,28 @@
                         <a href="/screens/catalog/">Partes de PC</a>
                     </li>
                 </ul>
+            </div>
+            <div class="row-fluid" id="submenu">
+                <div id="subnav-fixed" class="subnav container">
+                    <ul class="nav nav-pills">
+                        <li><a href="#labels">Procesadores</a></li>
+                        <li><a href="#thumbnails">Tarjetas de video</a></li>
+                        <li><a href="#alerts">Placas madre</a></li>
+                        <li><a href="#progress">RAM</a></li>
+                        <li><a href="#misc">Discos duros y SSD</a></li>
+                        <li><a href="#misc">Fuentes de poder</a></li>
+                        <li><a href="#misc">Gabinetes</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container top-margin">
+            <div class="row">
+                <div id="banner-top"></div>
+            </div>
+            <div class="row top-margin">
+                <div id="presentation" class="span8"></div>
+                <div id="featured-articles" class="span4"></div>
             </div>
         </div>
     </body>
