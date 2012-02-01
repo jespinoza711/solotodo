@@ -1,0 +1,117 @@
+/* The background of the header that spans infinetely to both sides */
+div#header-fluid {
+    background: url("img/bg-head.jpg") repeat-x scroll 0 0 transparent;
+    height: 164px;
+}
+
+/* The narrow black stripe at the top of the page */
+div#login-information {
+    height: 24px;
+    color: #CCCCCC;
+    padding-top: 4px;
+}
+
+/* The links inside the black stripe described above */
+div#login-information a:link,
+div#login-information a:visited,
+div#login-information a:hover,
+div#login-information a:active {
+    color: inherit;
+}
+
+/* The Navy blue stripe with the logo and the search bar  */
+div#title-and-search {
+    height: 70px;
+    background: url("img/main_logo.png") no-repeat 40px 10px;
+    padding-top: 30px;
+    padding-left: 220px;
+    width: 720px;
+}
+
+/* Search form at the top */
+
+form#keyword-search-form {
+    width: 410px;
+    float: left;
+}
+
+input#search-input {
+    background: url("img/input-search-background.jpg") no-repeat scroll 0 0 transparent;
+    border: 0 none;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: bold;
+    height: 39px;
+    line-height: 10px;
+    padding: 2px 0 0 10px;
+    text-shadow: 0 1px 0 #041C2F;
+    width: 359px;
+}
+
+input#search-button {
+    background: url("img/search-button-background.jpg") repeat scroll 0 0 transparent;
+    border: 0 none;
+    cursor: pointer;
+    height: 40px;
+    margin-left: -10px;
+    width: 42px;
+}
+
+input#search-button:hover {
+    background: url("img/search-button-background.jpg") repeat scroll 0 -40px transparent;
+}
+
+div#blog-icon {
+    background: url("img/blog-icon.png") no-repeat scroll 9px 0 transparent;
+    padding: 25px 0 2px;
+    float:left;
+    margin-left: 40px;
+}
+
+div#blog-icon:hover {
+    background: url("img/blog-icon.png") no-repeat scroll 9px -50px transparent;
+}
+
+div#blog-icon a {
+    color: #DEE8F2;
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 30px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #010407;
+}
+
+div#navigator {
+    height: 36px;
+    padding-left: 60px;
+}
+
+div#navigator li {
+    background: url("img/tabs.jpg") repeat-x scroll 0 0 transparent;
+    border-left: 1px solid #5D90BD;
+    border-right: 1px solid #5D90BD;
+    border-top: 1px solid #5D90BD;
+    color: #DEE8F2;
+    display: block;
+    float: left;
+    font-size: 14px;
+    margin-right: 3px;
+    line-height: 21px;
+}
+
+div#navigator li a {
+    color: #DEE8F2;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #224B70;
+    display: block;
+    text-decoration: none;
+    height: 18px;
+    padding: 8px 14px;
+}
+
+div#navigator li:hover {
+    background: url("img/tabs-hover.jpg") repeat-x scroll 0 0 transparent;
+    border-left: 1px solid #AFD69E;
+    border-right: 1px solid #AFD69E;
+    border-top: 1px solid #AFD69E;
+}
