@@ -9,7 +9,8 @@ handler404 = 'solonotebooks.cotizador.views.index'
 urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOC_ROOT}),
-    (r'^admin/', include(admin.site.urls)))
+    (r'^admin/', include(admin.site.urls)),
+    (r'^accounts/', include('registration.urls')),)
 
 urlpatterns += patterns('solonotebooks.cotizador.views_notebooks',
     (r'^notebooks/processor_lines/(?P<processor_line_id>\d+)/$', 'processor_line_details'),

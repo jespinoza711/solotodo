@@ -8,7 +8,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
 from utils import *
-    
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import login
 # Main landing page (/)    
 def index(request):
     #highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
@@ -19,9 +20,11 @@ def index(request):
         'popular': Product.get_valid().order_by('-week_visitor_count')[:5],
         'selected': Product.get_valid().order_by('?')[:5]
     }
+
+    login_form = AuthenticationForm()
     
     return append_metadata_to_response(request, 'cotizador/index.html', {
-        #'hnf': highlighted_products_form,
+        'login_form': login_form,
         'products': products,
         'ptypes': ProductType.objects.all(),
     })

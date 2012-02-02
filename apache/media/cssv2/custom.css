@@ -25,6 +25,38 @@ div#login-information a:active {
     color: inherit;
 }
 
+/* The login modal window */
+#login-modal .modal-footer a, #header-fluid .modal-footer input {
+    float: left;
+}
+
+#login-modal .row-fluid > div:first-child {
+    border-right: solid 1px #d3d3d3;
+}
+
+#login-modal .row-fluid div:last-child {
+    margin-left: 10px;
+}
+
+#login-modal .row-fluid div:last-child div {
+    padding-top: 40px;
+    padding-left: 60px;
+}
+
+#login-modal {
+    overflow: hidden;
+}
+
+#login-modal form {
+    margin: 0;
+}
+
+.ticker {
+    float: right;
+    color: #808080;
+    padding-top: 4px;
+}
+
 /* The Navy blue stripe with the logo, the search bar and the important links */
 div#title-and-search {
     height: 100px;
@@ -152,7 +184,7 @@ div#submenu {
     border-bottom-width: 1px;
     border-radius: 0 0 0 0;
     box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1030;
+    display: none;
 }
 
 div#submenu li a {
@@ -210,6 +242,7 @@ span.price {
     color: #990000;
 }
 
+/* Footer */
 div#footer-fluid {
     background: #F5F5F5;
 }

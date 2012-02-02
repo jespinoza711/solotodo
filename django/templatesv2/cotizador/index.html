@@ -1,23 +1,79 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
     <head>
         <title>{{ site_name }}</title>
         <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" type="text/less" href="/media/less/bootstrap.less" media="screen" />
         <link rel="stylesheet" type="text/css" href="/media/cssv2/custom.css" media="screen" />
+        <link rel="shortcut icon" href="/media/img/favicon-solotodo.ico" type="image/x-icon" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="/media/jsv2/bootstrap.min.js"></script>
         <script type="text/javascript" src="/media/jsv2/less-1.2.1.min.js"></script>
+        <script type="text/javascript" src="/media/jsv2/common_features.js"></script>
     </head>
     <body>
         <div id="header-fluid" class="row-fluid">
+            <div id="login-modal" class="modal hide fade">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Iniciar sesión</h3>
+                </div>
+                <form method="post" action="{% url django.contrib.auth.views.login %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row-fluid">
+                            <div class="span6">
+                                {{ login_form.as_p }}
+
+                                <p>
+                                    ¿No tienes cuenta? <a href="#">¡Regístrate!</a>
+                                </p>
+                                
+                                <p>
+                                    <a href="#">¿Olvidaste tu contraseña?</a>
+                                </p>
+                            </div>
+                            <div class="span6">
+                                <div id="fb-root"></div>
+                                <div>
+                                    <fb:login-button perms="email">Entrar con Facebook</fb:login-button>
+                                </div>
+                                <script>
+                                    window.fbAsyncInit = function() {
+                                        FB.init({
+                                            appId      : '{{ settings.FACEBOOK_ID }}',
+                                            status     : true,
+                                            cookie     : true,
+                                            xfbml      : true,
+                                            oauth      : true
+                                        });
+                                    };
+                                    (function(d){
+                                        var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+                                        js = d.createElement('script'); js.id = id; js.async = true;
+                                        js.src = "//connect.facebook.net/es_CL/all.js";
+                                        d.getElementsByTagName('head')[0].appendChild(js);
+                                    }(document));
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Entrar" class="btn btn-primary" />
+                        <a href="#" class="btn cancel">Cancelar</a>
+
+                        <div class="ticker"></div>
+                    </div>
+                </form>
+            </div>
+
             <div id="login-information" class="container">
-                <strong>Usuario anónimo</strong> | <a href="#">Iniciar sesión</a> | <a href="#">¡Regístrate!</a>
+                <strong>Usuario anónimo</strong> | <a id="login-link" href="#">Iniciar sesión</a> | <a href="#">¡Regístrate!</a>
             </div>
             <div id="title-and-search" class="container">
                 <div class="span2" id="logo-container">
                     <a href="{% url solonotebooks.cotizador.views.index %}">
-                        <img src="/media/img/main_logo.png" />
+                        <img src="/media/img/main-logo.png" />
                     </a>
                 </div>
                 <div class="span9" id="keyword-search-and-links">
@@ -132,28 +188,10 @@
                 </div>
                 <div class="span4">
                     <div class="thumbnail products-table-container">
-                        <h3>Seleccionados por el staff</h3>
-                        <table>
-                            {% for product in products.selected %}
-                            <tr>
-                                <td>
-                                    {{ product.picture.thumbnail_tag }}
-                                </td>
-                                <td>
-                                    {{ product }}
-                                    <br />
-                                    <br />
-                                    {% if product.week_discount >= 10 %}
-                                        <span class="product-before-discount">{{ product.price_before_discount }}</span>
-                                    {% endif %}
-
-                                    <span class="price">
-                                        {{ product.pretty_min_price }}
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
+                        <h3>Últimos comentarios</h3>
+                        <div id="recentcomments" class="dsq-widget">
+                            <script type="text/javascript" src="http://{{ settings.DISQUS_SHORTNAME }}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=32&excerpt_length=200"></script>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -202,7 +240,7 @@
                             (09) 83705241 <br />
                         </address>
                         
-                        <a href="/blog/contacto/">Contáctenos vía web</a>
+                        <a href="/blog/contacto/">Contáctanos vía web</a>
                     </div>
                 </div>
             </div>

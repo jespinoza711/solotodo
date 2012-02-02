@@ -1,17 +1,9 @@
 #-*- coding: UTF-8 -*-
-from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect
 from django.contrib import auth
-from django.utils.http import urlquote
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from solonotebooks.cotizador.views import append_metadata_to_response
+from django.utils.datastructures import MultiValueDictKeyError
 import simplejson
-from models import *
-from fields import *
-from exceptions import *
-from utils import *
 from views import *
 
 def append_account_ptype_to_response(request, template, args):
@@ -22,20 +14,41 @@ def append_account_ptype_to_response(request, template, args):
     tabs.append([-1, name, url])
     
     if request.user.is_authenticated() and not request.user.get_profile().facebook_name:
-	name = 'Cambiar correo electrónico'
+        name = 'Cambiar correo electrónico'
         url = reverse('solonotebooks.cotizador.views_account.change_email')
         tabs.append([-1, name, url])
-        
+
         name = u'Cambiar contraseña'
         url = reverse('solonotebooks.cotizador.views_account.change_password')
         tabs.append([-1, name, url])
-        
+
         name = 'Fusionar con Facebook'
         url = reverse('solonotebooks.cotizador.views_account.fuse_facebook_account')
         tabs.append([-1, name, url])
     
     args['tabs'] = ['', tabs]
     return append_metadata_to_response(request, template, args)
+
+def login(request):
+    import json
+
+    response = {
+        'code': 'ERROR'
+    }
+
+    try:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user:
+            auth.login(request, user)
+            response['code'] = 'OK'
+    except MultiValueDictKeyError:
+        pass
+
+    return HttpResponse(json.dumps(response))
     
 def facebook_login(request):
     next = '/'
@@ -280,29 +293,6 @@ def request_password_regeneration(request):
 
     data = simplejson.dumps(response, indent=4)    
     return HttpResponse(data, mimetype='application/javascript')
-    
-# Deprecated
-def login(request):
-    next_url = '/'
-    if 'next' in request.GET:
-        next_url = request.GET['next']
-        
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username = username, password = password)
-        
-        if user is not None:
-            auth.login(request, user)
-        else:
-            request.flash['error'] = 'Nombre de usuario o contraseña incorrectos'
-            return HttpResponseRedirect('/account/login/?next=%s' % urlquote(next_url))
-    
-    if request.user.is_authenticated():
-        return HttpResponseRedirect(next_url)
-    else:
-        return append_metadata_to_response(request, 'account/login.html', {
-            })
 
 # Deprecated    
 @login_required
@@ -316,9 +306,9 @@ def validate_email(request):
         if validation_key != orig_validation_key:
             raise MailValidationException('Error en código de validación')
             
-        user.is_active = True;
-        user.get_profile().change_mails_sent = 0;
-        user.get_profile().confirmation_mails_sent = 0;
+        user.is_active = True
+        user.get_profile().change_mails_sent = 0
+        user.get_profile().confirmation_mails_sent = 0
         user.get_profile().save()
         
         user.save()
@@ -347,7 +337,7 @@ def regenerate_password(request):
         
         send_new_password_mail(user, new_password)
         
-        user.set_password(new_password);
+        user.set_password(new_password)
         user.save()
         
         request.flash['message'] = 'La nueva contraseña ha sido enviada a su correo'
