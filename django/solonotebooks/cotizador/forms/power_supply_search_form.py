@@ -65,7 +65,7 @@ class PowerSupplySearchForm(SearchForm):
         elif key == 'certification':
             value = u'Certificación mínima: ' + unicode(PowerSupplyCertification.objects.get(pk=pk_value))
         elif key == 'size':
-            value = u'Tamaño ' + unicode(PowerSupplyLine.objects.get(pk=pk_value))
+            value = u'Tamaño ' + unicode(PowerSupplySize.objects.get(pk=pk_value))
         elif key == 'is_modular':
             value = ['No modular', 'Modular'][pk_value - 1]
         elif key == 'has_active_pfc':
