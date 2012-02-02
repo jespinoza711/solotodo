@@ -14,3 +14,8 @@ sorl-thumbnail==3.2.5
 wsgiref==0.1.2
 xlwt==0.7.2
 yolk==0.4.1
+celery==2.4.6
+django-celery==2.4.2
+django-kombu==0.9.4
+django-registration==0.7
+kombu==1.5.1

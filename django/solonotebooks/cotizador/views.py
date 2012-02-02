@@ -9,24 +9,18 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
 from utils import *
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import login
-# Main landing page (/)    
+from registration.views import register
+# Main landing page (/)
 def index(request):
-    #highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
-    #result_products = highlighted_products_form.apply_filter(Product.get_available())[:10]
-
     products = {
         'offers': Product.get_valid().order_by('-week_discount')[:5],
         'popular': Product.get_valid().order_by('-week_visitor_count')[:5],
         'selected': Product.get_valid().order_by('?')[:5]
     }
 
-    login_form = AuthenticationForm()
-    
     return append_metadata_to_response(request, 'cotizador/index.html', {
-        'login_form': login_form,
+        'login_form': AuthenticationForm(),
         'products': products,
-        'ptypes': ProductType.objects.all(),
     })
     
 def product_type_index(request, product_type_urlname):
@@ -193,80 +187,52 @@ def search(request):
         'ptype': ptype,
         'ptypes': ProductType.get_valid()
     })
-    
-def append_metadata_to_response(request, template, args):
-    args['side_ad'] = load_advertisement('Side')
-    args['top_ad'] = load_advertisement('Top')
+
+def get_common_args(request):
+    args = {
+        'side_ad': load_advertisement('Side'),
+        'top_ad': load_advertisement('Top'),
+        'login_form': AuthenticationForm(),
+    }
 
     authenticated_user = False
     username = ''
-    
+
     if request.user.is_authenticated():
         authenticated_user = True
         username = request.user.username
-        
+
     args['user'] = request.user
     args['authenticated_user'] = authenticated_user
     args['flash'] = request.flash
     args['username'] = username
     args['server_name'] = settings.SERVER_NAME
     args['settings'] = settings
-    
-    if 'PATH_INFO' in request.META:
-        next = urlquote(request.META['PATH_INFO'])
-        next += concat_dictionary(request.GET)
-            
-        args['next'] = next
-        
-    if 'signup_key' not in request.session:
-        request.session['signup_key'] = int(time())
-        
+
     ptype = None
     if 'ptype' in args:
         ptype = args['ptype']
-        
+
     if 'form' not in args:
-        args['form'] = initialize_search_form(request, ptype)        
-    
+        args['form'] = initialize_search_form(request, ptype)
+
     try:
-        url_extension = args['form'].generate_url_without_main_category()        
         search_form = args['form']
-            
+
         main_category_comparison_key = search_form.main_category_key()
     except Exception, e:
-        url_extension = ''
         main_category_comparison_key = 0
-        
-    args['main_category_comparison_key'] = main_category_comparison_key
-    
-    if 'tabs' not in args:
-        from solonotebooks.cotizador.forms import *
-        
-        if ptype:
-            classname = ptype.classname
-            s_form = args['form']
 
-            url = reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])
-            tabs = [[0, 'Todos', url + '?' + url_extension]]
-            
-            options = s_form.main_category().choices.queryset
-            for option in options:
-                option_url = url + '?' + url_extension + '&' + s_form.main_category_string() + '=' + str(option.id)
-                tabs.append([option.id, str(option), option_url])
-                    
-            args['tabs'] = ['Tipos de ' + ptype.displayname, tabs]
-        else:
-            '''
-            tabs = []
-            for ptype in ProductType.objects.all():
-                tabs.append([ptype.id, ptype.indexname, reverse('solonotebooks.cotizador.views.product_type_catalog', args = [ptype.urlname])])
-            tabs = ['', tabs]
-            args['tabs'] = tabs
-            '''
-    
-    args['signup_key'] = request.session['signup_key']
+    args['main_category_comparison_key'] = main_category_comparison_key
+
     args['site_name'] = settings.SITE_NAME
-    
+
+    return args
+
+
+def append_metadata_to_response(request, template, args):
+    args = dict(get_common_args(request).items() + args.items())
+
     return render_to_response(template, args)
     
 # View for displaying every single product in the DB

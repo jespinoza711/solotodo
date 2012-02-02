@@ -1,4 +1,10 @@
 $(function() {
+    $.each($('.errorlist'), function(index, value) {
+        var field_container = $(value).next();
+        field_container.addClass('control-group');
+        field_container.addClass('error');
+    });
+
     /* When the user hovers the mouse over the PC Parts
      * show submenu, and only hide it when the user scrolls
      * over another category (like notebooks) */
@@ -47,7 +53,7 @@ $(function() {
                 ticker,
                 'Ingresando',
                 function() {
-                    $.post('http://localhost:8000/account/login/', {
+                    $.post('/accounts/login/', {
                         username: values[0],
                         password: values[1]
                     }, function(data) {
@@ -78,7 +84,6 @@ $(function() {
 
         return false;
     });
-
 });
 
 function show_ticker_message(ticker, message, callback) {
@@ -93,4 +98,22 @@ function show_ticker_message(ticker, message, callback) {
     } else {
         callback();
     }
+}
+
+function handle_facebook_login(response) {
+    var data = response.authResponse;
+    $.post(
+        '/accounts/facebook_login/',
+        {
+            access_token: data.accessToken,
+            user_id: data.userID
+        },
+        function(data) {
+            console.log(data);
+            if (data.code == 'OK') {
+                window.location = ''
+            }
+        },
+        'json'
+    );
 }

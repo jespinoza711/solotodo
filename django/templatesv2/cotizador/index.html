@@ -1,249 +1,70 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
-    <head>
-        <title>{{ site_name }}</title>
-        <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" type="text/less" href="/media/less/bootstrap.less" media="screen" />
-        <link rel="stylesheet" type="text/css" href="/media/cssv2/custom.css" media="screen" />
-        <link rel="shortcut icon" href="/media/img/favicon-solotodo.ico" type="image/x-icon" />
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/media/jsv2/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/media/jsv2/less-1.2.1.min.js"></script>
-        <script type="text/javascript" src="/media/jsv2/common_features.js"></script>
-    </head>
-    <body>
-        <div id="header-fluid" class="row-fluid">
-            <div id="login-modal" class="modal hide fade">
-                <div class="modal-header">
-                    <a class="close" data-dismiss="modal">×</a>
-                    <h3>Iniciar sesión</h3>
-                </div>
-                <form method="post" action="{% url django.contrib.auth.views.login %}">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                {{ login_form.as_p }}
+{% extends "base.html" %}
 
-                                <p>
-                                    ¿No tienes cuenta? <a href="#">¡Regístrate!</a>
-                                </p>
-                                
-                                <p>
-                                    <a href="#">¿Olvidaste tu contraseña?</a>
-                                </p>
-                            </div>
-                            <div class="span6">
-                                <div id="fb-root"></div>
-                                <div>
-                                    <fb:login-button perms="email">Entrar con Facebook</fb:login-button>
-                                </div>
-                                <script>
-                                    window.fbAsyncInit = function() {
-                                        FB.init({
-                                            appId      : '{{ settings.FACEBOOK_ID }}',
-                                            status     : true,
-                                            cookie     : true,
-                                            xfbml      : true,
-                                            oauth      : true
-                                        });
-                                    };
-                                    (function(d){
-                                        var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-                                        js = d.createElement('script'); js.id = id; js.async = true;
-                                        js.src = "//connect.facebook.net/es_CL/all.js";
-                                        d.getElementsByTagName('head')[0].appendChild(js);
-                                    }(document));
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="submit" value="Entrar" class="btn btn-primary" />
-                        <a href="#" class="btn cancel">Cancelar</a>
+{% block body %}
+<div class="row">
+    <div id="presentation" class="span8"></div>
+    <div id="featured-articles" class="span4"></div>
+</div>
+<div class="row top-margin">
+    <div class="span4">
+        <div class="thumbnail products-table-container">
+            <h3>Ofertas del día</h3>
+            <table>
+                {% for product in products.offers %}
+                    <tr>
+                        <td>
+                            {{ product.picture.thumbnail_tag }}
+                        </td>
+                        <td>
+                            {{ product }}
+                            <br />
+                            <br />
+                                {% if product.week_discount >= 10 %}
+                                    <span class="product-before-discount">{{ product.price_before_discount }}</span>
+                                {% endif %}
 
-                        <div class="ticker"></div>
-                    </div>
-                </form>
-            </div>
+                                <span class="price">
+                                    {{ product.pretty_min_price }}
+                                </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="thumbnail products-table-container">
+            <h3>Populares</h3>
+            <table>
+                {% for product in products.popular %}
+                <tr>
+                    <td>
+                        {{ product.picture.thumbnail_tag }}
+                    </td>
+                    <td>
+                        {{ product }}
+                        <br />
+                        <br />
+                        {% if product.week_discount >= 10 %}
+                            <span class="product-before-discount">{{ product.price_before_discount }}</span>
+                        {% endif %}
 
-            <div id="login-information" class="container">
-                <strong>Usuario anónimo</strong> | <a id="login-link" href="#">Iniciar sesión</a> | <a href="#">¡Regístrate!</a>
-            </div>
-            <div id="title-and-search" class="container">
-                <div class="span2" id="logo-container">
-                    <a href="{% url solonotebooks.cotizador.views.index %}">
-                        <img src="/media/img/main-logo.png" />
-                    </a>
-                </div>
-                <div class="span9" id="keyword-search-and-links">
-                    <form action="{% url solonotebooks.cotizador.views.search %}" method="get">
-                        <input type="text" id="search-input" value="¿Qué estás buscando?" name="search_keywords">
-                        <input type="submit" value="" id="search-button">
-                    </form>
-
-                    <div id="blog-icon">
-                        <a title="Blog" href="/blog/">Blog</a>
-                    </div>
-                    <div id="contact-icon">
-                        <a title="Blog" href="/blog/">Contacto</a>
-                    </div>
-                </div>
-            </div>
-            <div id="navigator" class="container">
-                <ul>
-                    <li>
-                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'notebooks' %}">Notebooks</a>
-                    </li>
-
-                    <li>
-                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'cellphones' %}">Celulares</a>
-                    </li>
-
-                    <li>
-                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'screens' %}">Televisores y Monitores</a>
-                    </li>
-
-                    <li>
-                        <a href="#">Partes de PC</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="row-fluid" id="submenu">
-                <div class="container">
-                    <ul class="nav nav-pills">
-                        <li><a href="#labels">Procesadores</a></li>
-                        <li><a href="#thumbnails">Tarjetas de video</a></li>
-                        <li><a href="#alerts">Placas madre</a></li>
-                        <li><a href="#progress">RAM</a></li>
-                        <li><a href="#misc">Discos duros y SSD</a></li>
-                        <li><a href="#misc">Fuentes de poder</a></li>
-                        <li><a href="#misc">Gabinetes</a></li>
-                    </ul>
-                </div>
+                        <span class="price">
+                            {{ product.pretty_min_price }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="thumbnail products-table-container">
+            <h3>Últimos comentarios</h3>
+            <div id="recentcomments" class="dsq-widget">
+                <script type="text/javascript" src="http://{{ settings.DISQUS_SHORTNAME }}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=32&excerpt_length=200"></script>
             </div>
         </div>
-        <div class="container top-margin">
-            <div class="row">
-                <div id="banner-top">
-                    {{ top_ad.embedding_html|safe }}
-                </div>
-            </div>
-            <div class="row top-margin">
-                <div id="presentation" class="span8"></div>
-                <div id="featured-articles" class="span4"></div>
-            </div>
-            <div class="row top-margin">
-                <div class="span4">
-                    <div class="thumbnail products-table-container">
-                        <h3>Ofertas del día</h3>
-                        <table>
-                            {% for product in products.offers %}
-                                <tr>
-                                    <td>
-                                        {{ product.picture.thumbnail_tag }}
-                                    </td>
-                                    <td>
-                                        {{ product }}
-                                        <br />
-                                        <br />
-                                            {% if product.week_discount >= 10 %}
-                                                <span class="product-before-discount">{{ product.price_before_discount }}</span>
-                                            {% endif %}
-
-                                            <span class="price">
-                                                {{ product.pretty_min_price }}
-                                            </span>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </div>
-                <div class="span4">
-                    <div class="thumbnail products-table-container">
-                        <h3>Populares</h3>
-                        <table>
-                            {% for product in products.popular %}
-                            <tr>
-                                <td>
-                                    {{ product.picture.thumbnail_tag }}
-                                </td>
-                                <td>
-                                    {{ product }}
-                                    <br />
-                                    <br />
-                                    {% if product.week_discount >= 10 %}
-                                        <span class="product-before-discount">{{ product.price_before_discount }}</span>
-                                    {% endif %}
-
-                                    <span class="price">
-                                        {{ product.pretty_min_price }}
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </div>
-                <div class="span4">
-                    <div class="thumbnail products-table-container">
-                        <h3>Últimos comentarios</h3>
-                        <div id="recentcomments" class="dsq-widget">
-                            <script type="text/javascript" src="http://{{ settings.DISQUS_SHORTNAME }}.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=32&excerpt_length=200"></script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="footer-fluid" class="top-margin">
-            <div class="container">
-                <div class="row">
-                    <div class="span4">
-                        <h3>Acerca de SoloTodo</h3>
-                        <hr />
-                        Le facilitamos la vida a los que desean estrujar hasta el último peso de su compra.
-                    </div>
-                    <div class="span4">
-                        <h3>Apariciones en los medios</h3>
-                        <hr />
-                        <table id="press-table">
-                            <tr>
-                                <td>
-                                    <a href="http://www.lun.com/Pages/NewsDetail.aspx?dt=2010-08-19&PaginaId=18&bodyid=0" target="_blank">
-                                        <img src="/media/img/press-lun.jpg" alt="LUN" />
-                                    </a>
-                                </td>
-                                <td>
-                                    "Ofrece el llamativo servicio de regatear y encontrar el precio más conveniente de notebooks"
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                <a href="http://tele13.13.cl/noticias/tecnologia/20255.htm" target="_blank">
-                                    <img src="/media/img/press-c13.png" alt="Canal 13" />
-                                </a>
-                                </td>
-                                <td>
-                                    "Una cotización podía tomar horas buscando y ahora se reduce a minutos"
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="span4">
-                        <h3>Contacto</h3>
-                        <hr />
-                        <address>
-                            Vijay Khemlani C. <br />
-                            Mamiña 87, La Cisterna <br />
-                            Santiago, Región Metropolitana - Chile <br />
-                            (09) 83705241 <br />
-                        </address>
-                        
-                        <a href="/blog/contacto/">Contáctanos vía web</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}

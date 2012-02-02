@@ -1,8 +1,11 @@
 #-*- coding: UTF-8 -*-
+import json
+import urllib
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.utils.datastructures import MultiValueDictKeyError
+from registration.views import register as django_registration_register
 import simplejson
 from views import *
 
@@ -49,32 +52,25 @@ def login(request):
         pass
 
     return HttpResponse(json.dumps(response))
-    
+
 def facebook_login(request):
-    next = '/'
-    if 'next' in request.GET:
-        next = request.GET['next']
-        
-    try:
-        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
-        if facebook_cookie_name in request.COOKIES:
-            cookie = request.COOKIES[facebook_cookie_name]
-            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
-            uid = cookie_info['uid']
-            access_token = cookie_info['access_token']
-            
-            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
-            user_data = simplejson.load(urllib.urlopen(url))
-            
-            user = auth.authenticate(username = uid, email = user_data['email'], facebook_name = user_data['name'])
-            if user:
-                auth.login(request, user)
-            return HttpResponseRedirect(next)
-        else:
-            return HttpResponseRedirect(next)
-    except:
-        return HttpResponseRedirect(next)
-        
+    response = {
+        'code': 'ERROR'
+    }
+
+    access_token = request.POST['access_token']
+    user_id = request.POST['user_id']
+
+    user = auth.authenticate(user_id=user_id, access_token=access_token)
+    if user:
+        auth.login(request, user)
+        response['code'] = 'OK'
+    return HttpResponse(json.dumps(response))
+
+def register(request):
+    return django_registration_register(request, extra_context=get_common_args(request))
+
+
 def facebook_ajax_login(request):
     response = {'code': 'ERROR'}
     try:

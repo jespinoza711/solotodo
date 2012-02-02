@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="row">
+        <div class="span6">
+            <h1>Formulario de registro</h1>
+            <hr>
+            <form method="post" action=".">
+                {{ form.as_p }}
+                <hr />
+                <input type="submit" class="btn btn-primary" value="Continuar" />
+            </form>
+        </div>
+        <div class="span6">
+            <h3>Beneficios</h3>
+        </div>
+    </div>
+{% endblock %}

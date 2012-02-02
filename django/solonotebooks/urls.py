@@ -9,8 +9,7 @@ handler404 = 'solonotebooks.cotizador.views.index'
 urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': settings.STATIC_DOC_ROOT}),
-    (r'^admin/', include(admin.site.urls)),
-    (r'^accounts/', include('registration.urls')),)
+    (r'^admin/', include(admin.site.urls)))
 
 urlpatterns += patterns('solonotebooks.cotizador.views_notebooks',
     (r'^notebooks/processor_lines/(?P<processor_line_id>\d+)/$', 'processor_line_details'),
@@ -28,10 +27,12 @@ urlpatterns += patterns('solonotebooks.cotizador.views_cellphones',
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_account',
-    (r'^account/facebook_login/$', 'facebook_login'),
+    (r'^accounts/login/$', 'login'),
+    (r'^accounts/facebook_login/$', 'facebook_login'),
+    (r'^accounts/register/$', 'register'),
+
     (r'^account/facebook_fusion/$', 'facebook_fusion'),
     (r'^account/facebook_ajax_login/$', 'facebook_ajax_login'),
-    (r'^account/login/$', 'login'),
     (r'^account/logout/$', 'logout'),
     (r'^account/validate_email/$', 'validate_email'),
     (r'^account/fuse_facebook_account/$', 'fuse_facebook_account'),
@@ -103,6 +104,9 @@ urlpatterns += patterns('solonotebooks.cotizador.views_services',
 urlpatterns += patterns('solonotebooks.cotizador.views_chw',
     (r'^mini/(?P<product_id>\d+)/$', 'inline_forum_post'),
 )
+
+urlpatterns += patterns('',
+    (r'^accounts/', include('registration.urls')))
    
 urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^$', 'index'),
