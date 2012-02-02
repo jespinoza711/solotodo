@@ -252,6 +252,14 @@ class Product(models.Model):
             return prettyPrice(self.latest_price())
         else:
             return 'No disponible'
+
+    def price_before_discount(self):
+        if self.shp:
+            price_after_discount = self.latest_price()
+            price_before_discount = price_after_discount / (0.01 * (100 - self.week_discount))
+            return prettyPrice(price_before_discount)
+        else:
+            return 'No disponible'
         
     def price_at(self, date):
         from . import StoreProductHistory

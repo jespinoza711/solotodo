@@ -21,16 +21,20 @@ div#login-information a:active {
 
 /* The Navy blue stripe with the logo and the search bar  */
 div#title-and-search {
-    height: 70px;
-    background: url("../img/main_logo.png") no-repeat 40px 10px;
-    padding-top: 30px;
-    padding-left: 220px;
-    width: 720px;
+    height: 100px;
+}
+
+div#logo-container {
+    margin-top: 10px;
+}
+
+div#keyword-search-form-container {
+    margin-top: 30px;
 }
 
 /* Search form at the top */
 
-form#keyword-search-form {
+div#keyword-search-form-container form {
     width: 410px;
     float: left;
 }
@@ -131,18 +135,15 @@ div#navigator li:hover {
 }
 
 div#submenu {
-    background-color: #EEEEEE;
-    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
-    background-repeat: repeat-x;
+    background: #EEEEEE -moz-linear-gradient(center top, #F5F5F5 0%, #EEEEEE 100%) repeat-x;
     height: 36px;
     font-weight: bold;
 
-    border-color: #D5D5D5;
+    border: 0 solid #D5D5D5;
+    border-bottom-width: 1px;
     border-radius: 0 0 0 0;
-    border-width: 0 0 1px;
     box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 5px rgba(0, 0, 0, 0.1);
     z-index: 1030;
-    border-style: solid;
 }
 
 div#subnav-fixed ul {
@@ -177,10 +178,51 @@ body > div.container {
 }
 
 div#banner-top {
-    background-image: url(http://placehold.it/728x90);
-    background-repeat: no-repeat;
     height: 90px;
     width: 728px;
     margin-left: auto;
     margin-right: auto;
+}
+
+div#discount-products-container {
+    background: url(http://placehold.it/300x400);
+    height: 400px
+}
+
+div#popular-products-container {
+    background: url(http://placehold.it/300x400);
+    height: 400px
+}
+
+div#selected-products-container {
+    background: url(http://placehold.it/300x400);
+    height: 400px
+}
+
+div.products-table-container {
+    border: none;
+}
+
+div.products-table-container table {
+    margin-top: 15px;
+}
+
+div.products-table-container table td {
+    vertical-align: top;
+    padding: 4px 5px;
+}
+
+span.product-before-discount {
+    color: #808080;
+    text-decoration: line-through;
+}
+
+span.product-discount {
+    color: green;
+    font-weight: bold;
+}
+
+span.price {
+    /*font-weight: bold;*/
+    color: #990000;
 }

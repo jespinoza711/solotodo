@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>SoloTodo</title>
+        <title>{{ site_name }}</title>
         <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-        <!--<link rel="stylesheet" type="text/css" href="/media/cssv2/bootstrap.min.css" media="screen" />-->
         <link rel="stylesheet" type="text/less" href="/media/less/bootstrap.less" media="screen" />
         <link rel="stylesheet" type="text/css" href="/media/cssv2/custom.css" media="screen" />
         <script type="text/javascript" src="/media/jsv2/bootstrap.min.js"></script>
@@ -15,30 +14,37 @@
                 <strong>Usuario anónimo</strong> | <a href="#">Iniciar sesión</a> | <a href="#">¡Regístrate!</a>
             </div>
             <div id="title-and-search" class="container">
-                <form id="keyword-search-form" action="/search/" method="get">
-                    <input type="text" id="search-input" value="¿Qué estás buscando?" name="search_keywords">
-                    <input type="submit" value="" id="search-button">
-                </form>
-                <div id="blog-icon">
-                    <a title="Blog" href="/blog/">Blog</a>
+                <div class="span2" id="logo-container">
+                    <a href="{% url solonotebooks.cotizador.views.index %}">
+                        <img src="/media/img/main_logo.png" />
+                    </a>
+                </div>
+                <div class="span9" id="keyword-search-form-container">
+                    <form action="{% url solonotebooks.cotizador.views.search %}" method="get">
+                        <input type="text" id="search-input" value="¿Qué estás buscando?" name="search_keywords">
+                        <input type="submit" value="" id="search-button">
+                    </form>
+                    <div id="blog-icon">
+                        <a title="Blog" href="/blog/">Blog</a>
+                    </div>
                 </div>
             </div>
             <div id="navigator" class="container">
                 <ul>
                     <li>
-                        <a href="/notebooks/catalog/">Notebooks</a>
+                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'notebooks' %}">Notebooks</a>
                     </li>
 
                     <li>
-                        <a href="/cellphones/catalog/">Celulares</a>
+                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'cellphones' %}">Celulares</a>
                     </li>
 
                     <li>
-                        <a href="/screens/catalog/">Televisores y Monitores</a>
+                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'screens' %}">Televisores y Monitores</a>
                     </li>
 
                     <li>
-                        <a href="/screens/catalog/">Partes de PC</a>
+                        <a href="#">Partes de PC</a>
                     </li>
                 </ul>
             </div>
@@ -58,11 +64,96 @@
         </div>
         <div class="container top-margin">
             <div class="row">
-                <div id="banner-top"></div>
+                <div id="banner-top">
+                    {{ top_ad.embedding_html|safe }}
+                </div>
             </div>
             <div class="row top-margin">
                 <div id="presentation" class="span8"></div>
                 <div id="featured-articles" class="span4"></div>
+            </div>
+            <div class="row top-margin">
+                <div class="span4">
+                    <div class="thumbnail products-table-container">
+                        <h3>Ofertas del día</h3>
+                        <table>
+                            {% for product in products.offers %}
+                                <tr>
+                                    <td>
+                                        {{ product.picture.thumbnail_tag }}
+                                    </td>
+                                    <td>
+                                        {{ product }}
+                                        <br />
+                                        <br />
+                                            {% if product.week_discount >= 10 %}
+                                                <span class="product-before-discount">{{ product.price_before_discount }}</span>
+                                            {% endif %}
+
+                                            <span class="price">
+                                                {{ product.pretty_min_price }}
+                                            </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="thumbnail products-table-container">
+                        <h3>Populares</h3>
+                        <table>
+                            {% for product in products.popular %}
+                            <tr>
+                                <td>
+                                    {{ product.picture.thumbnail_tag }}
+                                </td>
+                                <td>
+                                    {{ product }}
+                                    <br />
+                                    <br />
+                                    {% if product.week_discount >= 10 %}
+                                    <span class="product-before-discount">{{ product.price_before_discount }}</span>
+                                    {% endif %}
+
+                                            <span class="price">
+                                                {{ product.pretty_min_price }}
+                                            </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="thumbnail products-table-container">
+                        <h3>Seleccionados por el staff</h3>
+                        <table>
+                            {% for product in products.selected %}
+                            <tr>
+                                <td>
+                                    {{ product.picture.thumbnail_tag }}
+                                </td>
+                                <td>
+                                    {{ product }}
+                                    <br />
+                                    <br />
+                                    {% if product.week_discount >= 10 %}
+                                    <span class="product-before-discount">{{ product.price_before_discount }}</span>
+                                    {% endif %}
+
+                                            <span class="price">
+                                                {{ product.pretty_min_price }}
+                                            </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <!--<div id="discount-products-container" class="span4 thumbnail"></div>
+                <div id="popular-products-container" class="span4"></div>
+                <div id="selected-products-container" class="span4"></div>-->
             </div>
         </div>
     </body>

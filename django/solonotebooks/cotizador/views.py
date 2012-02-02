@@ -1,36 +1,28 @@
 #-*- coding: UTF-8 -*-
-import os
-import sys
-import hashlib
 import operator
-import urllib
 import re
-from datetime import date, timedelta
 from time import time
 from math import ceil
-from django.db.models import Min, Max, Q
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
-from django.contrib import auth
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.validators import email_re
-from solonotebooks import settings
-from models import *
-from fields import *
-from exceptions import *
 from utils import *
     
 # Main landing page (/)    
 def index(request):
-    highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
-    result_products = highlighted_products_form.apply_filter(Product.get_available())[:10]
+    #highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
+    #result_products = highlighted_products_form.apply_filter(Product.get_available())[:10]
+
+    products = {
+        'offers': Product.get_valid().order_by('-week_discount')[:5],
+        'popular': Product.get_valid().order_by('-week_visitor_count')[:5],
+        'selected': Product.get_valid().order_by('?')[:5]
+    }
     
     return append_metadata_to_response(request, 'cotizador/index.html', {
-        'hnf': highlighted_products_form,
-        'products': result_products,
+        #'hnf': highlighted_products_form,
+        'products': products,
         'ptypes': ProductType.objects.all(),
     })
     
