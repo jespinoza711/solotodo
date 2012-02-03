@@ -61,6 +61,18 @@ class Notebook(Product):
         
     def get_display_name(self):
         return unicode(self.line) + ' ' + self.name
+
+    def short_description(self):
+        result = 'Notebook '
+        result += unicode(self.line.brand)
+        result += ' / %s %s' % (unicode(self.processor.line.family.name), unicode(self.processor.frequency))
+        result += ' / %s RAM' % (unicode(self.ram_quantity))
+        if self.best_video_card().card_type.name == 'Dedicada':
+            result += ' / Tarjeta de video dedicada'
+        return result
+
+    def best_video_card(self):
+        return self.video_card.order_by('-speed_score')[0]
         
     def load_similar_products(self):
         threshold = 4

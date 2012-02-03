@@ -45,6 +45,12 @@ class Processor(Product):
     
     def get_display_name(self):
         return unicode(self.line) + self.line.family.separator + self.name
+
+    def short_description(self):
+        result = 'Procesador ' + unicode(self)
+        result += ' / %s %d MHz' % (unicode(self.core_count),  self.frequency)
+
+        return result
         
     def raw_text(self):
         result = super(Processor, self).base_raw_text()

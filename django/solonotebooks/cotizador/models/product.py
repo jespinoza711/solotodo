@@ -291,6 +291,15 @@ class Product(models.Model):
         t = date.today()
         d = timedelta(days = 1)
         self.week_visitor_count = len(self.productvisit_set.filter(date__gte = t - d))
+
+    def small_table_row(self):
+        entity = self
+        if entity.__class__.__name__ == 'Product':
+            entity = entity.get_polymorphic_instance()
+            return entity.small_table_row()
+
+        template_file = 'custom/small_table_row/base.html'
+        return render_to_string(template_file, { 'product': entity })
         
     def generate_chart(self):
         import cairo

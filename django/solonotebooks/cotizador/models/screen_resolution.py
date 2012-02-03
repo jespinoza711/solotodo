@@ -13,6 +13,12 @@ class ScreenResolution(models.Model):
         if self.commercial_name.strip():
             value = self.commercial_name + ' (' + value + ')'
         return value
+
+    def short_representation(self):
+        if self.commercial_name.strip():
+            return self.commercial_name
+        else:
+            return '%d x %d' % (self.h_value, self.v_value)
         
     def raw_text(self):
         result = str(self.h_value) + ' ' + str(self.v_value)

@@ -6,10 +6,10 @@ class ScreenDisplay(models.Model):
     dtype = models.ForeignKey(ScreenDisplayType)
     
     def __unicode__(self):
-        return unicode(self.dtype) + ' ' + self.backlight
+        return self.backlight
         
     def raw_text(self):
-        return self.backlight + ' ' + self.dtype.raw_text()
+        return self.dtype.raw_text()
             
     class Meta:
         ordering = ['dtype']

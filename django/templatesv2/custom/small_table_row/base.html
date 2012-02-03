@@ -1,0 +1,17 @@
+<tr>
+    <td>
+        {{ product.picture.thumbnail_tag }}
+    </td>
+    <td>
+        {{ product.short_description }}
+        <br />
+        <br />
+        {% if product.week_discount >= 10 %}
+            <span class="product-before-discount">{{ product.price_before_discount }}</span>
+        {% endif %}
+
+        <span class="price">
+            {{ product.pretty_min_price|safe }}
+        </span>
+    </td>
+</tr>

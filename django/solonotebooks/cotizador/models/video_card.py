@@ -30,6 +30,12 @@ class VideoCard(Product):
     
     def get_display_name(self):
         return unicode(self.brand) + ' ' + self.gpu.name + ' (' + self.name + ')'
+
+    def short_description(self):
+        result = 'Tarjeta de video %s %s' % (unicode(self.brand), unicode(self.gpu))
+        result += ' / %s %s' % (unicode(self.memory_quantity), unicode(self.memory_type))
+
+        return result
         
     def raw_text(self):
         result = super(VideoCard, self).base_raw_text()

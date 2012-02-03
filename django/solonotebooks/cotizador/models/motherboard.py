@@ -33,6 +33,12 @@ class Motherboard(Product):
         if self.allows_cf:
             result += ' CF CrossFire CrossFireX'
         return result
+
+    def short_description(self):
+        result = 'Placa madre ' + unicode(self)
+        result += ' / Chipset ' + unicode(self.chipset)
+
+        return result
         
     def load_similar_products(self):
         self.similar_products = ''

@@ -35,6 +35,20 @@ class Screen(Product):
         if self.has_analog_tuner:
             result += u' sintonizador analogo análogo'
         return result
+
+    def short_description(self):
+        result = unicode(self.display)
+        result += ' ' + unicode(self.line.brand)
+        result += ' ' + unicode(self.size)
+        result += ' ' + unicode(self.resolution.short_representation())
+
+        if self.digital_tuner:
+            result += ' con sintonizador digital'
+
+        if self.contrast:
+            result += ' / Contraste de %d:1' % self.contrast
+
+        return result
         
     def load_similar_products(self):
         similar_products = Screen.objects.filter(size__family = self.size.family).order_by('?')[:4]

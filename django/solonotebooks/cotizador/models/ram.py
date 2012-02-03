@@ -36,6 +36,11 @@ class Ram(Product):
         if self.is_ecc:
             result += ' ecc'
         return result
+
+    def short_description(self):
+        result = '%s RAM  %s %s' % (unicode(self.capacity), unicode(self.line.brand), unicode(self.bus))
+
+        return result
         
     def load_similar_products(self):
         self.similar_products = ''

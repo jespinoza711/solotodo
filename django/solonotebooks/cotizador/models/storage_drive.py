@@ -29,6 +29,17 @@ class StorageDrive(Product):
         else:
             result += ' (%s, %s, %s)' % (unicode(self.size), unicode(self.rpm), unicode(self.bus))
         return result
+
+    def short_description(self):
+        result = '%s %s %s ' % (unicode(self.type), unicode(self.line.family.brand), unicode(self.capacity))
+        result += ' / ' + unicode(self.size)
+
+        if self.type.name == 'HDD':
+            result += ' / ' + unicode(self.rpm)
+        else:
+            result += ' / %d MB/s lectura' % self.sequential_read_speed
+
+        return result
         
     def raw_text(self):
         return super(StorageDrive, self).base_raw_text()

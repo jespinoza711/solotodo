@@ -11,23 +11,7 @@
             <h3>Ofertas del día</h3>
             <table>
                 {% for product in products.offers %}
-                    <tr>
-                        <td>
-                            {{ product.picture.thumbnail_tag }}
-                        </td>
-                        <td>
-                            {{ product }}
-                            <br />
-                            <br />
-                                {% if product.week_discount >= 10 %}
-                                    <span class="product-before-discount">{{ product.price_before_discount }}</span>
-                                {% endif %}
-
-                                <span class="price">
-                                    {{ product.pretty_min_price }}
-                                </span>
-                        </td>
-                    </tr>
+                    {{ product.small_table_row }}
                 {% endfor %}
             </table>
         </div>
@@ -37,23 +21,7 @@
             <h3>Populares</h3>
             <table>
                 {% for product in products.popular %}
-                <tr>
-                    <td>
-                        {{ product.picture.thumbnail_tag }}
-                    </td>
-                    <td>
-                        {{ product }}
-                        <br />
-                        <br />
-                        {% if product.week_discount >= 10 %}
-                            <span class="product-before-discount">{{ product.price_before_discount }}</span>
-                        {% endif %}
-
-                        <span class="price">
-                            {{ product.pretty_min_price }}
-                        </span>
-                    </td>
-                </tr>
+                    {{ product.small_table_row }}
                 {% endfor %}
             </table>
         </div>
