@@ -1,0 +1,13 @@
+Querido usuario,
+
+Gracias por registrarte en SoloTodo.
+
+Ahora podrás disfrutar de todos los servicios personalizados que SoloTodo ofrece.
+
+Para completar el registro, por favor haz click en el siguiente link para que podamos comprobar tu cuenta de correo.
+
+{{ site.domain }}{% url registration.views.activate activation_key %}
+
+Recuerda que solamente tienes {{ expiration_days }} días para activar tu cuenta.
+
+- El staff de SoloTodo

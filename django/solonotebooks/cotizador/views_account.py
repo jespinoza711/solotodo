@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.utils.datastructures import MultiValueDictKeyError
 from registration.views import register as django_registration_register
+from registration.views import activate as django_registration_activate
+
+
 import simplejson
 from views import *
 
@@ -69,6 +72,12 @@ def facebook_login(request):
 
 def register(request):
     return django_registration_register(request, extra_context=get_common_args(request))
+
+def register_complete(request):
+    return append_metadata_to_response(request, "registration/registration_complete.html", {})
+
+def activate(request, activation_key):
+    return django_registration_activate(request, activation_key, extra_context=get_common_args(request))
 
 
 def facebook_ajax_login(request):

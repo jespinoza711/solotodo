@@ -30,6 +30,8 @@ urlpatterns += patterns('solonotebooks.cotizador.views_account',
     (r'^accounts/login/$', 'login'),
     (r'^accounts/facebook_login/$', 'facebook_login'),
     (r'^accounts/register/$', 'register'),
+    (r'^accounts/register/complete/$', 'register_complete'),
+    (r'^accounts/activate/(?P<activation_key>\w+)/$', 'activate'),
 
     (r'^account/facebook_fusion/$', 'facebook_fusion'),
     (r'^account/facebook_ajax_login/$', 'facebook_ajax_login'),

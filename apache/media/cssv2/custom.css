@@ -167,7 +167,7 @@ div#navigator li a {
     padding: 8px 14px;
 }
 
-div#navigator li:hover {
+div#navigator li.menu-item-hover {
     background: url("../img/tabs-hover.jpg") repeat-x scroll 0 0 transparent;
     border-left: 1px solid #AFD69E;
     border-right: 1px solid #AFD69E;
@@ -276,4 +276,9 @@ ul.errorlist {
 
 .cell_pricing_span {
     font-size: 10px;
+}
+
+div#registration-benefits {
+    height: 260px;
+    background-image: url(http://placehold.it/620x260);
 }

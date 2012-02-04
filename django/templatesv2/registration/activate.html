@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block body %}
+        {% if account %}
+            <h1>Activación exitosa</h1>
+            <hr />
+        
+            <p>
+                ¡Felicitactiones! Ahora eres un usuario registrado de SoloTodo.
+            </p>
+
+            <p>
+                Ahora puedes guardar y compartir cotizaciones permanenentemente, además de suscribirte a las 
+                actualizaciones de tus productos favoritos.
+            </p>
+        
+            <p>
+                El staff de SoloTodo
+            </p>
+        {% else %}
+            <h1>Error en la activación</h1>
+            <hr />
+
+            <p>
+                Ha ocurrido un error en el proceso de activación de tu cuenta. Por favor verifica lo siguiente:
+            </p>
+            <br />
+
+            <ul>
+                <li>Que el link que llegó a tu correo es el mismo que aparece en la barra de direcciones de tu navegador</li>
+                <li>Que han pasado menos de {{ expiration_days }} días desde que te registraste.</li>
+            </ul>
+
+            <br />
+            <p>
+                Si el problema persiste por favor intenta <a href="{% url registration.views.register    %}">registrarte de nuevo</a>.
+            </p>
+
+            <br />
+            <p>
+                El staff de SoloTodo
+            </p>
+        {% endif %}
+{% endblock %}

@@ -68,7 +68,11 @@
             </div>
 
             <div id="login-information" class="container">
-                <strong>Usuario anónimo</strong> | <a id="login-link" href="#">Iniciar sesión</a> | <a href="{% url solonotebooks.cotizador.views_account.register %}">¡Regístrate!</a>
+                {% if user.is_authenticated %}
+                    <strong>{{ user.get_profile.name }}</strong> | <a href="#">Dashboard</a> | <a href="{% url solonotebooks.cotizador.views_account.logout %}">Logout</a>
+                {% else %}
+                    <strong>Usuario anónimo</strong> | <a id="login-link" href="#">Iniciar sesión</a> | <a href="{% url solonotebooks.cotizador.views_account.register %}">¡Regístrate!</a>
+                {% endif %}
             </div>
             <div id="title-and-search" class="container">
                 <div class="span2" id="logo-container">

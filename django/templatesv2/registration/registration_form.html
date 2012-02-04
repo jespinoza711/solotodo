@@ -2,17 +2,32 @@
 
 {% block body %}
     <div class="row">
-        <div class="span6">
-            <h1>Formulario de registro</h1>
-            <hr>
+        <h1>Formulario de registro</h1>
+        <hr>
+        <div class="span4">
             <form method="post" action=".">
-                {{ form.as_p }}
+                <div>
+                    {{ form.non_field_errors }}
+                </div>
+                <br />
+
+
+                {% for field in form %}
+                    {{ field.errors }}
+                    <div>
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
                 <hr />
                 <input type="submit" class="btn btn-primary" value="Continuar" />
             </form>
         </div>
-        <div class="span6">
-            <h3>Beneficios</h3>
+        <div class="span8">
+            <div id="registration-benefits">
+
+            </div>
         </div>
     </div>
 {% endblock %}

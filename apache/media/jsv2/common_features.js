@@ -10,6 +10,8 @@ $(function() {
      * over another category (like notebooks) */
     $('#navigator li').hover(
         function() {
+            $('#navigator li').removeClass('menu-item-hover');
+            $(this).addClass('menu-item-hover');
             var link_tag = $(this).children('a');
             /* If the link is actually a menu */
             if (link_tag.attr('href') == '#') {
@@ -17,6 +19,11 @@ $(function() {
             } else {
                 $('#submenu').hide();
             }
+        },
+        function() {
+            var link_tag = $(this).children('a');
+            if ( link_tag.attr('href') != '#')
+            $(this).removeClass('menu-item-hover');
         }
     );
 
