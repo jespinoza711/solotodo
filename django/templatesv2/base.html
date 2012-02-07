@@ -5,74 +5,21 @@
         <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
         <!--<link rel="stylesheet" type="text/less" href="/media/less/bootstrap.less" media="screen" />-->
         <link rel="stylesheet" type="text/css" href="/media/cssv2/bootstrap.min.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="/media/cssv2/ui.selectmenu.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="/media/cssv2/custom.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="/media/cssv2/smoothness/jquery-ui-1.8.17.custom.css" media="screen" />
         <link rel="shortcut icon" href="/media/img/favicon-solotodo.ico" type="image/x-icon" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="/media/jsv2/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/media/jsv2/jquery-ui-1.8.17.custom.min.js"></script>
+        <script type="text/javascript" src="/media/jsv2/ui.selectmenu.js"></script>
         <!--<script type="text/javascript" src="/media/jsv2/less-1.2.1.min.js"></script>-->
         <script type="text/javascript" src="/media/jsv2/common_features.js"></script>
     </head>
     <body>
         <div id="header-fluid" class="row-fluid">
-            <div id="login-modal" class="modal hide fade">
-                <div class="modal-header">
-                    <a class="close" data-dismiss="modal">×</a>
-                    <h3>Iniciar sesión</h3>
-                </div>
-                <form method="post" action="{% url django.contrib.auth.views.login %}">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                {{ login_form.as_p }}
+            <div class="row" id="login-information">
 
-                                <p>
-                                    ¿No tienes cuenta? <a href="{% url solonotebooks.cotizador.views_account.register %}">¡Regístrate!</a>
-                                </p>
-                                
-                                <p>
-                                    <a href="#">¿Olvidaste tu contraseña?</a>
-                                </p>
-                            </div>
-                            <div class="span6">
-                                <div id="fb-root"></div>
-                                <div>
-                                    <fb:login-button size="large" scope="email" onlogin="handle_facebook_login(response)">Entrar con Facebook</fb:login-button>
-                                </div>
-                                <script>
-                                    window.fbAsyncInit = function() {
-                                        FB.init({
-                                            appId      : '{{ settings.FACEBOOK_ID }}',
-                                            status     : true,
-                                            cookie     : true,
-                                            xfbml      : true
-                                        });
-                                    };
-                                    (function(d){
-                                        var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-                                        js = d.createElement('script'); js.id = id; js.async = true;
-                                        js.src = "//connect.facebook.net/es_CL/all.js";
-                                        d.getElementsByTagName('head')[0].appendChild(js);
-                                    }(document));
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="submit" value="Entrar" class="btn btn-primary" />
-                        <a href="#" class="btn cancel">Cancelar</a>
-
-                        <div class="ticker"></div>
-                    </div>
-                </form>
-            </div>
-
-            <div id="login-information" class="container">
-                {% if user.is_authenticated %}
-                    <strong>{{ user.get_profile.name }}</strong> | <a href="#">Dashboard</a> | <a href="{% url solonotebooks.cotizador.views_account.logout %}">Logout</a>
-                {% else %}
-                    <strong>Usuario anónimo</strong> | <a id="login-link" href="#">Iniciar sesión</a> | <a href="{% url solonotebooks.cotizador.views_account.register %}">¡Regístrate!</a>
-                {% endif %}
             </div>
             <div id="title-and-search" class="container">
                 <div class="span2" id="logo-container">
@@ -80,59 +27,40 @@
                         <img src="/media/img/main-logo.png" />
                     </a>
                 </div>
-                <div class="span9" id="keyword-search-and-links">
-                    <form action="{% url solonotebooks.cotizador.views.search %}" method="get">
-                        <input type="text" id="search-input" value="¿Qué estás buscando?" name="search_keywords">
-                        <input type="submit" value="" id="search-button">
-                    </form>
-
-                    <div id="blog-icon">
-                        <a title="Blog" href="/blog/">Blog</a>
-                    </div>
-                    <div id="contact-icon">
-                        <a title="Blog" href="/blog/">Contacto</a>
-                    </div>
+                <div class="span9" id="motivation-message">
+                    <h1>Encuentra el mejor notebook para tu presupuesto y necesidades</h1>
                 </div>
-            </div>
-            <div id="navigator" class="container">
-                <ul>
-                    <li>
-                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'notebooks' %}">Notebooks</a>
-                    </li>
-
-                    <li>
-                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'cellphones' %}">Celulares</a>
-                    </li>
-
-                    <li>
-                        <a href="{% url solonotebooks.cotizador.views.product_type_catalog 'screens' %}">Televisores y Monitores</a>
-                    </li>
-
-                    <li>
-                        <a href="#">Partes de PC</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="row-fluid" id="submenu">
-                <div class="container">
-                    <ul class="nav nav-pills">
-                        <li><a href="#labels">Procesadores</a></li>
-                        <li><a href="#thumbnails">Tarjetas de video</a></li>
-                        <li><a href="#alerts">Placas madre</a></li>
-                        <li><a href="#progress">RAM</a></li>
-                        <li><a href="#misc">Discos duros y SSD</a></li>
-                        <li><a href="#misc">Fuentes de poder</a></li>
-                        <li><a href="#misc">Gabinetes</a></li>
-                    </ul>
+                <div class="span9 thumbnail" id="main-price-slider">
+                    <div id="budget">
+                        <h2>¿Cuánto quieres gastar?</h2>
+                        <div id="slider-range-min"></div>
+                        <div id="amount"></div>
+                    </div>
+                    <div id="usage">
+                        <h2>¿Para qué lo quieres?</h2>
+                        <div>
+                            <select>
+                                <option value="1">General - Navegar por Internet, Office, Facebook y trabajo </option>
+                                <option value="2" selected="selected">Juegos - Correr juegos 3D modernos (Call of Duty, PES, etc.)</option>
+                                <option value="3">Netbook - Pequeños, ligeros y económicos, pero no muy rápidos</option>
+                                <option value="4">Ultraportátiles - Pequeños y ligeros, pero mucho más rápidos que los netbooks</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="search">
+                        <input class="btn btn-success" type="submit" value="Buscar" />
+                    </div>
                 </div>
             </div>
         </div>
         <div class="container top-margin">
+            {% comment %}
             <div class="row">
                 <div id="banner-top">
                     {{ top_ad.embedding_html|safe }}
                 </div>
             </div>
+            {% endcomment %}
             <div class="top-margin">
                 {% block body %}
                 {% endblock %}

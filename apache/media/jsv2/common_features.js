@@ -1,4 +1,44 @@
+var addressFormatting = function(text){
+    var newText = text;
+    //array of find replaces
+    var findreps = [
+        {find:/^([^\-]+) \- /g, rep: '<span class="ui-selectmenu-item-header">$1</span>'},
+        {find:/([^\|><]+) \| /g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
+        {find:/([^\|><\(\)]+) (\()/g, rep: '<span class="ui-selectmenu-item-content">$1</span>$2'},
+        {find:/([^\|><\(\)]+)$/g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
+        {find:/(\([^\|><]+\))$/g, rep: '<span class="ui-selectmenu-item-footer">$1</span>'}
+    ];
+
+    for(var i in findreps){
+        newText = newText.replace(findreps[i].find, findreps[i].rep);
+    }
+    return newText;
+}
+
+
 $(function() {
+    /* Price slider */
+    $( "#slider-range-min" ).slider({
+        range: "min",
+        value: 300000,
+        min: 100000,
+        max: 800000,
+        step: 10000,
+        slide: function( event, ui ) {
+            $("#amount").html("$" + ui.value);
+        }
+    });
+
+    $('#usage select').selectmenu(
+        {
+            width: 250,
+            style: 'dropdown',
+            format: addressFormatting
+        }
+    );
+
+    $("#amount").html("$" + $("#slider-range-min").slider("value"));
+
     $.each($('.errorlist'), function(index, value) {
         var field_container = $(value).next();
         field_container.addClass('control-group');

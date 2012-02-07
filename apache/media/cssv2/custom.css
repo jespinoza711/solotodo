@@ -1,3 +1,7 @@
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: 0.35em; }
+.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+
 /* Common classes */
 
 .top-margin {
@@ -6,7 +10,7 @@
 
 /* The background of the header that spans infinetely to both sides */
 div#header-fluid {
-    background: url("../img/header-background.jpg") repeat-x scroll 0 0 transparent;
+    background: url("../img/new-header-background.jpg") repeat-x scroll 0 0 transparent;
     height: 200px;
 }
 
@@ -59,12 +63,25 @@ div#login-information a:active {
 
 /* The Navy blue stripe with the logo, the search bar and the important links */
 div#title-and-search {
-    height: 100px;
+    height: 140px;
+}
+
+div#title-and-search h1 {
+    color: #EEEEEE;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+div#title-and-search h2 {
+    color: #EEEEEE;
+    font-size: 16px;
+    margin-bottom: 18px;
 }
 
 /* The container of the main logo on the top of the page */
 div#logo-container {
-    margin-top: 10px;
+    margin-top: 40px;
+    margin-right: 10px;
 }
 
 /* The container of the keyword search form and the important links */
@@ -281,4 +298,61 @@ ul.errorlist {
 div#registration-benefits {
     height: 260px;
     background-image: url(http://placehold.it/620x260);
+}
+
+#main-price-slider {
+    height: 75px;
+    padding: 5px 15px 15px 15px;
+    background-color: rgba(0,0,0,0.20);
+    border-width: 0;
+}
+
+#amount {
+    color: #EEEEEE;
+    font-size: 20px;
+    font-weight: bold;
+    float: left;
+    margin-left: 10px;
+    margin-top: -4px;
+}
+
+#motivation-message {
+    margin-top: 15px;
+}
+
+#slider-range-min {
+    width: 200px;
+    float: left;
+}
+
+#budget {
+    width: 300px;
+    float: left;
+}
+
+#usage {
+    width: 270px;
+    float: left;
+    margin-left: 20px;
+}
+
+#usage select {
+    font-size: 16px;
+    margin-top: -5px;
+}
+
+#usage div {
+    margin-top: -10px;
+}
+
+div#search {
+    float: left;
+    width: 50px;
+    padding-top: 41px;
+}
+
+div#search input {
+    font-weight: bold;
+    font-size: 18px;
+    padding: 5px 20px;
 }
