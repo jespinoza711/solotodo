@@ -3,6 +3,7 @@ from django.db import models
 class NotebookType(models.Model):
     name = models.CharField(max_length = 255)
     css_name = models.CharField(max_length = 255)
+    description = models.CharField(max_length=255)
     
     ordering = models.IntegerField()
     
@@ -27,7 +28,7 @@ class NotebookType(models.Model):
         return total_score
     
     def __unicode__(self):
-        return unicode(self.name)
+        return '%s - %s' % (unicode(self.name), self.description)
         
     def raw_text(self):
         return self.name

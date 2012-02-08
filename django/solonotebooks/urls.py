@@ -112,6 +112,8 @@ urlpatterns += patterns('',
    
 urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^$', 'index'),
+    (r'^advanced/$', 'index_advanced'),
+    (r'^simple_search/$', 'simple_search'),
     (r'^products/(?P<product_id>\d+)/$', 'product_details_legacy'),
     (r'^products/(?P<product_url>\S+)/$', 'product_details'),
     (r'^store_product/(?P<store_product_id>\d+)/$', 'store_product_redirect'),

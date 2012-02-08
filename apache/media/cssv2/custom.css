@@ -312,7 +312,7 @@ div#registration-benefits {
     font-size: 20px;
     font-weight: bold;
     float: left;
-    margin-left: 10px;
+    margin-left: 15px;
     margin-top: -4px;
 }
 
@@ -355,4 +355,29 @@ div#search input {
     font-weight: bold;
     font-size: 18px;
     padding: 5px 20px;
+}
+
+#step-list td {
+    vertical-align: top;
+    padding-left: 10px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.big {
+    font-size: 18px;
+}
+
+.blue {
+    color: #10314b;
+}
+
+.full-width-cell {
+    width: 100%;
+}
+
+.left-padding {
+    padding-left: 10px;
 }

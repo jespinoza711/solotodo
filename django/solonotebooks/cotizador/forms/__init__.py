@@ -16,6 +16,7 @@ from competitivity_report_ordering import CompetitivityReportOrdering
 from ram_search_form import RamSearchForm
 from storage_drive_search_form import StorageDriveSearchForm
 from power_supply_search_form import PowerSupplySearchForm
+from simple_notebook_search_form import SimpleNotebookSearchForm
 
 __all__ = [ 
             'SearchForm', 
@@ -36,4 +37,5 @@ __all__ = [
             'RamSearchForm',
             'StorageDriveSearchForm',
             'PowerSupplySearchForm',
+            'SimpleNotebookSearchForm',
             ]

@@ -30,28 +30,27 @@
                 <div class="span9" id="motivation-message">
                     <h1>Encuentra el mejor notebook para tu presupuesto y necesidades</h1>
                 </div>
-                <div class="span9 thumbnail" id="main-price-slider">
-                    <div id="budget">
-                        <h2>¿Cuánto quieres gastar?</h2>
-                        <div id="slider-range-min"></div>
-                        <div id="amount"></div>
-                    </div>
-                    <div id="usage">
-                        <h2>¿Para qué lo quieres?</h2>
-                        <div>
-                            <select>
-                                <option value="1">General - Navegar por Internet, Office, Facebook y trabajo </option>
-                                <option value="2" selected="selected">Juegos - Correr juegos 3D modernos (Call of Duty, PES, etc.)</option>
-                                <option value="3">Netbook - Pequeños, ligeros y económicos, pero no muy rápidos</option>
-                                <option value="4">Ultraportátiles - Pequeños y ligeros, pero mucho más rápidos que los netbooks</option>
-                            </select>
+                <form method="post" action="{% url solonotebooks.cotizador.views.simple_search %}">
+                    <div class="span9 thumbnail" id="main-price-slider">
+                        <div id="budget">
+                            <h2>¿Cuánto quieres gastar?</h2>
+
+                            <div id="slider-range-min"></div>
+                            <div id="amount"></div>
+                            <input type="hidden" name="id_max_price" id="id_max_price"/>
+                        </div>
+                        <div id="usage">
+                            <h2>¿Para qué lo quieres?</h2>
+                            <div>
+                                {{ search_form.notebook_type }}
+                            </div>
+                        </div>
+                        <div id="search">
+                            <input class="btn btn-success" type="submit" value="Buscar" />
                         </div>
                     </div>
-                    <div id="search">
-                        <input class="btn btn-success" type="submit" value="Buscar" />
-                    </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="container top-margin">
             {% comment %}
@@ -72,7 +71,7 @@
                     <div class="span4">
                         <h3>Acerca de SoloTodo</h3>
                         <hr />
-                        Le facilitamos la vida a los que desean estrujar hasta el último peso de su compra.
+                        Nuestra misión es ayudar a los consumidores a escoger el mejor producto de acuerdo a sus necesidades y presupuesto.
                     </div>
                     <div class="span4">
                         <h3>Apariciones en los medios</h3>
@@ -104,8 +103,8 @@
                         <h3>Contacto</h3>
                         <hr />
                         <address>
-                            Vijay Khemlani C. <br />
-                            Mamiña 87, La Cisterna <br />
+                            SoloNotebooks EIRL <br />
+                            Monseñor Felix Cabrera 62 - Oficina 3a, Providencia <br />
                             Santiago, Región Metropolitana - Chile <br />
                             (09) 83705241 <br />
                         </address>

@@ -11,7 +11,7 @@ from utils import *
 from django.contrib.auth.forms import AuthenticationForm
 from registration.views import register
 # Main landing page (/)
-def index(request):
+def index_advanced(request):
     products = {
         'offers': Product.get_valid().order_by('-week_discount')[:5],
         'popular': Product.get_valid().order_by('-week_visitor_count')[:5],
@@ -22,6 +22,18 @@ def index(request):
         'login_form': AuthenticationForm(),
         'products': products,
     })
+
+def index(request):
+    popular_notebooks = Notebook.get_valid().order_by('-week_visitor_count')[:5]
+    search_form = SimpleNotebookSearchForm()
+
+    return append_metadata_to_response(request, 'cotizador/index.html', {
+        'popular_notebooks': popular_notebooks,
+        'search_form': search_form
+        })
+
+def simple_search(request):
+    pass
     
 def product_type_index(request, product_type_urlname):
     ptype = get_object_or_404(ProductType, urlname = product_type_urlname)

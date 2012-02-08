@@ -1,9 +1,105 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <img src="/media/img/steps-select.png" />
-    <img src="/media/img/steps-search.png" />
-    <img src="/media/img/steps-cash.png" />
+    <div class="row">
+        <div class="span8">
+            <div class="bold blue big">¿Qué necesitas saber?</div>
+            <table id="step-list" class="top-margin">
+                <tr>
+                    <td>
+                        <img src="/media/img/steps-select.png" />
+                    </td>
+                    <td>
+                        <img src="/media/img/steps-search.png" />
+                    </td>
+                    <td>
+                        <img src="/media/img/steps-cash.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Paso 1:</strong> Selecciona tu presupuesto y el uso que quieras darle a tu nuevo notebook.
+                    </td>
+                    <td>
+                        <strong>Paso 2:</strong> SoloTodo te mostrará las mejores opciones del mercado. Escoge la que más te guste.
+                    </td>
+                    <td>
+                        <strong>Paso 3:</strong> Compra el notebook directamente desde nuestro sitio o nuestras tiendas asociadas.
+                    </td>
+                </tr>
+            </table>
+
+            <div class="top-margin">
+                <div class="bold blue big">Cotiza también</div>
+
+                <div class="row-fluid top-margin">
+                    <div class="span4">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="/media/img/icon-tv.png" />
+                                </td>
+                                <td class="full-width-cell left-padding">
+                                    <strong>Televisores</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Busca tu nuevo LCD, LED o Plasma.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="span4">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="/media/img/icon-phone.png" />
+                                </td>
+                                <td class="full-width-cell left-padding">
+                                    <strong>Celulares</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Cotiza celulares y smartphones de prepago o plan.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="span4">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="/media/img/icon-pc.png" />
+                                </td>
+                                <td class="full-width-cell left-padding">
+                                    <strong>Computadores</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Revisa nuestras configuraciones seleccionadas o esocoge tú las piezas.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 100px;">
+                <a class="btn btn-success" href="{% url solonotebooks.cotizador.views.index_advanced %}">Ir a SoloTodo Avanzado</a>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="bold blue big">Productos populares</div>
+            <table class="top-margin">
+                {% for notebook in popular_notebooks %}
+                    {{ notebook.small_table_row }}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
 {% comment %}
 <div class="row">
     <div id="presentation" class="span8"></div>

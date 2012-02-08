@@ -15,7 +15,7 @@ $(function() {
     $('.price_range_select').selectToUISlider({
         labelSrc: 'text',
         tooltipSrc: 'text',
-        labels: 2,
+        labels: 2
     }).hide();
     
     /* Each time the user changes the ordering criteria in the combobox, reload 

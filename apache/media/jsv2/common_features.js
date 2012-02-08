@@ -1,3 +1,16 @@
+function add_thousands_separators(nStr)
+{
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + '.' + '$2');
+    }
+    return x1 + x2;
+}
+
 var addressFormatting = function(text){
     var newText = text;
     //array of find replaces
@@ -9,7 +22,8 @@ var addressFormatting = function(text){
         {find:/(\([^\|><]+\))$/g, rep: '<span class="ui-selectmenu-item-footer">$1</span>'}
     ];
 
-    for(var i in findreps){
+    var i;
+    for(i in findreps){
         newText = newText.replace(findreps[i].find, findreps[i].rep);
     }
     return newText;
@@ -20,12 +34,13 @@ $(function() {
     /* Price slider */
     $( "#slider-range-min" ).slider({
         range: "min",
-        value: 300000,
+        value: 400000,
         min: 100000,
         max: 800000,
         step: 10000,
         slide: function( event, ui ) {
-            $("#amount").html("$" + ui.value);
+            $("#amount").html("$" + add_thousands_separators(ui.value));
+            $("#id_max_price").val(ui.value);
         }
     });
 
@@ -37,7 +52,8 @@ $(function() {
         }
     );
 
-    $("#amount").html("$" + $("#slider-range-min").slider("value"));
+    $("#amount").html("$" + add_thousands_separators($("#slider-range-min").slider("value")));
+    $("#id_max_price").val($("#slider-range-min").slider("value"));
 
     $.each($('.errorlist'), function(index, value) {
         var field_container = $(value).next();
