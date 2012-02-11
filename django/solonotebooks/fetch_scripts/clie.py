@@ -96,17 +96,15 @@ class Clie(FetchStore):
                 baseSoup = BeautifulSoup(baseData)
 
                 # Obtain the links to the other pages of the catalog (2, 3, ...)
-                productNameCells = baseSoup.findAll("td", { "colspan" : "2" })
+                productNameCells = baseSoup.findAll("td", { "colspan" : "2" })[1:]
                 
-                names = []
-                prices = []
-                
-                if len(productNameCells) == 0:
-                    break;
-                    
+                if not productNameCells:
+                    break
+
                 for productNameCell in productNameCells:
-                    link = productNameCell.find('a')['onclick'].split('\'')[1]
-                    product_links.append([urlBase + link, ptype])
+                    link = productNameCell.find('a')
+                    url = link['onclick'].split('\'')[1]
+                    product_links.append([urlBase + url, ptype])
                     
                 num_page += 1
 

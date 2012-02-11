@@ -14,7 +14,7 @@ def main():
     models
     """
 
-    blacklist = ['FetchStore', 'ProductData', 'TecnoGroup', 'Cintegral', 'TecnoCl', 'Impulso', 'Eprod']
+    blacklist = ['FetchStore', 'ProductData', 'TecnoGroup', 'Cintegral', 'TecnoCl', 'Impulso', 'Eprod', 'Racle']
 
     classnames = [classname for classname in dir(fetch_scripts) if inspect.isclass(getattr(fetch_scripts, classname)) and classname not in blacklist]
     

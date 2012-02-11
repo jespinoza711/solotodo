@@ -75,8 +75,8 @@ class NotebookCenter(FetchStore):
                     js_data = product_container.find('a')['href']
 
                     js_arguments = [int(s) for s in js_data.replace("'", ' ').split() if s.isdigit()]
-                    id_prod = js_arguments[1]
-                    link = urlBase + '?p=productos&op=1&i_p=' + str(id_prod)
+                    id_prod = js_arguments[2]
+                    link = urlBase + '?p=2&op=1&i_p=' + str(id_prod)
                     product_links.append([link, ptype])
 
                 index += 1
