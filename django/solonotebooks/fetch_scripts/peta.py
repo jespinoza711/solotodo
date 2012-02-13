@@ -59,6 +59,7 @@ class Peta(FetchStore):
             ['peta-cl/placas-madre-1.html', 'Motherboard'],
             ['partes-y-piezas/memorias.html', 'Ram'],
             ['partes-y-piezas/discos-duros.html', 'StorageDrive'],
+            ['partes-y-piezas/fuentes-de-poder.html', 'PowerSupply'],
         ]
                           
         product_links = []
