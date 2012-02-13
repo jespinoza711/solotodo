@@ -301,6 +301,7 @@ def store_product_redirect(request, store_product_id):
         external_visit = ExternalVisit()
         external_visit.shpe = store_product
         external_visit.date = date.today()
+        external_visit.price = store_product.latest_price
         external_visit.save()
 
     url = store_product.url

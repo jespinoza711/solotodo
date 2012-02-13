@@ -5,6 +5,7 @@ from store_has_product_entity import StoreHasProductEntity
 class ExternalVisit(models.Model):
     date = models.DateField(db_index=True)
     shn = models.ForeignKey(StoreHasProductEntity)
+    price = models.IntegerField(default=0)
     
     def set_shpe(self, shpe):
         self.shn = shpe
