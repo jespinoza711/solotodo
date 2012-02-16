@@ -58,17 +58,16 @@ class Paris(FetchStore):
         
         urls = [
                     # Notebooks
-                    ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51049202_18877035_si_2__18877035,50999203,51049192,51049202_', 'Notebook'],
+                    ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51145648_18877035_si_2__18877035,50999203,51145648_', 'Notebook'],
                     # Netbooks
-                    ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056269_18877035_si_2__18877035,51039699,51056269_', 'Notebook'],
+                    ['http://www.paris.cl/webapp/wcs/stores/servlet/category_10001_40000000577_-5_51056269_18877035_51039699_18877035,51039699,51056269', 'Notebook'],
                     # LCD
-                    ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056205_20096521_si_2__20096521,51056194,51056195,51056205_', 'Screen'],
+                    ['http://www.paris.cl/webapp/wcs/stores/servlet/categoryTodos_10001_40000000577_-5_51056211_20096521_si_2__20096521,51056194,51056196,51056211_', 'Screen'],
                     ]
         
         product_links = []          
         for url, ptype in urls:
             # Obtain and parse HTML information of the base webpage
-            print url
             baseData = browser.open(url).get_data()
             baseData = unicode(baseData, errors='ignore')
             baseSoup = BeautifulSoup(baseData)
