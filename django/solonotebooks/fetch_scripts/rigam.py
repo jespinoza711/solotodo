@@ -50,6 +50,7 @@ class Rigam(FetchStore):
             ['index.php?act=viewCat&catId=35', 'Ram'], # RAM
             ['index.php?act=viewCat&catId=70', 'StorageDrive'], # HDD Notebook
             ['index.php?act=viewCat&catId=58', 'StorageDrive'], # HDD SATA
+            ['index.php?act=viewCat&catId=59', 'PowerSupply'], # Fuentes de poder
         ]
         
         product_links = []                    
