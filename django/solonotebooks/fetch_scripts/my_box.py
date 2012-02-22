@@ -46,6 +46,7 @@ class MyBox(FetchStore):
             ['54-tarjetas-de-video', 'VideoCard'],
             ['28-memoria-ram', 'Ram'],
             ['5-discos-duros', 'StorageDrive'],
+            ['19-fuentes-de-poder', 'PowerSupply'],
         ]
                             
         for url_extension, ptype in url_extensions:

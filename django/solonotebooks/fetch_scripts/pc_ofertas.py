@@ -87,6 +87,8 @@ class PCOfertas(FetchStore):
             ['28', 'Screen'],   # Monitores
             ['108', 'Motherboard'],   # Monitores
             ['17', 'Ram'],   # RAM
+            ['20', 'StorageDrive'],   # Almacenamiento
+            ['72', 'PowerSupply'],   # Fuentes de poder
         ]
         
         for url_extension, ptype in url_extensions:
