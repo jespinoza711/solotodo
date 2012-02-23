@@ -131,11 +131,15 @@ function getCookie(name) {
 function subscribe(registered, reload_on_finish, include_email) {
     if (!registered) {
         FB.login(function(response) {
-          if (response.session && response.perms) {
+          if (response.authResponse) {
             $.ajax({
                 type: 'POST',
                 url: '/account/facebook_ajax_login/',
                 dataType: 'json',
+                data: {
+                    user_id: response.authResponse.userID,
+                    access_token: response.authResponse.accessToken
+                },
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
                 },
@@ -148,7 +152,7 @@ function subscribe(registered, reload_on_finish, include_email) {
           } else {
             // user cancelled login
           }
-        }, { perms: 'email' });
+        }, { scope: 'email' });
     } else {
         url = '/account/add_subscription?product=' + product_id + '&email_notifications=' + include_email
         window.location = url

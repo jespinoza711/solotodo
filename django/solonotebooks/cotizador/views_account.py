@@ -53,27 +53,18 @@ def facebook_login(request):
     return HttpResponse(json.dumps(response))
         
 def facebook_ajax_login(request):
-    response = {'code': 'ERROR'}
-    try:
-        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
-        if facebook_cookie_name in request.COOKIES:
-            cookie = request.COOKIES[facebook_cookie_name]
-            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
-            uid = cookie_info['uid']
-            access_token = cookie_info['access_token']
-            
-            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
-            user_data = simplejson.load(urllib.urlopen(url))
-            
-            user = auth.authenticate(username = uid, email = user_data['email'], facebook_name = user_data['name'])
-            if user:
-                auth.login(request, user)
-                response['code'] = 'OK'
-    except:
-        pass
-        
-    data = simplejson.dumps(response, indent=4)
-    return HttpResponse(data, mimetype='application/javascript')  
+    response = {
+        'code': 'ERROR'
+    }
+
+    access_token = request.POST['access_token']
+    user_id = request.POST['user_id']
+
+    user = auth.authenticate(user_id=user_id, access_token=access_token)
+    if user:
+        auth.login(request, user)
+        response['code'] = 'OK'
+    return HttpResponse(json.dumps(response))
 
 @login_required        
 def facebook_fusion(request):
