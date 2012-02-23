@@ -155,8 +155,22 @@ function subscribe(registered, reload_on_finish, include_email) {
     }
 }
 
-function handle_facebook_login() {
-    window.location = '/account/facebook_login?next=' + location.pathname;
+function handle_facebook_login(response) {
+    var data = response.authResponse;
+    $.post(
+        '/account/facebook_login/',
+        {
+            access_token: data.accessToken,
+            user_id: data.userID
+        },
+        function(data) {
+            console.log(data);
+            if (data.code == 'OK') {
+                window.location = ''
+            }
+        },
+        'json'
+    );
 }
 
 function handle_facebook_fusion() {

@@ -18,11 +18,9 @@
    	 	<link rel="shortcut icon" href="/media/icons/favicon_solotodo.ico" type="image/x-icon" />
    	 	<script type="text/javascript" src="/media/js/jquery-1.4.3.min.js"></script>
    	 	<script type="text/javascript" src="/media/js/dialog/jquery-ui-1.8.10.custom.min.js"></script>
-   	 	<script type="text/javascript" src="/media/js/account_script.js"></script>
+   	 	<script type="text/javascript" src="/media/js/accounts_script.js"></script>
         <script type="text/javascript" src="/media/js/comparison_list.js"></script>
         <script type="text/javascript" src="/media/js/store.js"></script>
-        <script src="http://connect.facebook.net/es_CL/all.js"></script>
-        
 
         <script type="text/javascript">
             authenticated_user = {% if user.is_authenticated %}true{% else %}false{% endif %}
@@ -60,7 +58,7 @@
                         <div id="logout">
                             <div>
                                 <span id="logout_links">
-                                {{ user.get_profile.name }} | 
+                                <span class="full_name">{{ user.get_profile.name }}</span> |
                                 <a href="{% url solonotebooks.cotizador.views_account.subscriptions %}" class="toplink">Mis Productos</a> | 
                                 {% if user.is_superuser %}
                                 <a href="{% url solonotebooks.cotizador.views_manager.news %}" class="toplink">Administrador</a> | 
@@ -88,7 +86,25 @@
                                 
                             </form>
                             <div id="fb-root"></div>
-                            <fb:login-button perms="email" onlogin="handle_facebook_login()">Entrar con Facebook</fb:login-button>
+                            <div>
+                                <fb:login-button size="large" scope="email" onlogin="handle_facebook_login(response)">Entrar con Facebook</fb:login-button>
+                            </div>
+                            <script>
+                                window.fbAsyncInit = function() {
+                                    FB.init({
+                                        appId : '{{ settings.FACEBOOK_ID }}',
+                                        status : true,
+                                        cookie : true,
+                                        xfbml : true
+                                    });
+                                };
+                                (function(d){
+                                    var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+                                    js = d.createElement('script'); js.id = id; js.async = true;
+                                    js.src = "//connect.facebook.net/es_CL/all.js";
+                                    d.getElementsByTagName('head')[0].appendChild(js);
+                                }(document));
+                            </script>
                         </div>
                     {% endif %}
 					
@@ -220,8 +236,7 @@
 		<!-- !end content global -->
 		
 		<div id="footer"></div> <!-- end #footer -->
-		<div id="fb-root"></div>
-		
+
 		{% if not user.is_authenticated %}
             <div class="dialog_form" id="dialog_regenerate" title="Regeneración de contraseña" style="display: none;">
 	            <div>
@@ -241,14 +256,6 @@
 	            </div>
             </div>
             {% endif %}
-            
-    <script>
-    FB.init({ 
-        appId: '{{ settings.FACEBOOK_ID }}', cookie:true, 
-        status:true, xfbml:true 
-    });
-    
-    </script>
     <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

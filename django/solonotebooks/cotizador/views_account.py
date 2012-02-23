@@ -13,6 +13,7 @@ from fields import *
 from exceptions import *
 from utils import *
 from views import *
+import json
 
 def append_account_ptype_to_response(request, template, args):
     tabs = []
@@ -22,7 +23,7 @@ def append_account_ptype_to_response(request, template, args):
     tabs.append([-1, name, url])
     
     if request.user.is_authenticated() and not request.user.get_profile().facebook_name:
-	name = 'Cambiar correo electrónico'
+        name = 'Cambiar correo electrónico'
         url = reverse('solonotebooks.cotizador.views_account.change_email')
         tabs.append([-1, name, url])
         
@@ -38,29 +39,18 @@ def append_account_ptype_to_response(request, template, args):
     return append_metadata_to_response(request, template, args)
     
 def facebook_login(request):
-    next = '/'
-    if 'next' in request.GET:
-        next = request.GET['next']
-        
-    try:
-        facebook_cookie_name = 'fbs_' + settings.FACEBOOK_ID
-        if facebook_cookie_name in request.COOKIES:
-            cookie = request.COOKIES[facebook_cookie_name]
-            cookie_info = dict([elem.split('=') for elem in cookie.split('&')])
-            uid = cookie_info['uid']
-            access_token = cookie_info['access_token']
-            
-            url = 'https://graph.facebook.com/' + uid + '?access_token=' + access_token
-            user_data = simplejson.load(urllib.urlopen(url))
-            
-            user = auth.authenticate(username = uid, email = user_data['email'], facebook_name = user_data['name'])
-            if user:
-                auth.login(request, user)
-            return HttpResponseRedirect(next)
-        else:
-            return HttpResponseRedirect(next)
-    except:
-        return HttpResponseRedirect(next)
+    response = {
+        'code': 'ERROR'
+    }
+
+    access_token = request.POST['access_token']
+    user_id = request.POST['user_id']
+
+    user = auth.authenticate(user_id=user_id, access_token=access_token)
+    if user:
+        auth.login(request, user)
+        response['code'] = 'OK'
+    return HttpResponse(json.dumps(response))
         
 def facebook_ajax_login(request):
     response = {'code': 'ERROR'}
