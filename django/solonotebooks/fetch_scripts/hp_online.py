@@ -12,6 +12,8 @@ class HPOnline(FetchStore):
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
+        # Double open URL because the first redirects to home and sets a cookie
+        BeautifulSoup(browser.open(product_link).get_data())
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         product_name = product_soup.findAll('h2')[-1].string.encode('ascii', 'ignore')

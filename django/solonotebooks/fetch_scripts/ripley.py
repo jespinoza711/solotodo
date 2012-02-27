@@ -59,55 +59,41 @@ class Ripley(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.ripley.cl/webapp/wcs/stores/servlet/'
-        
+        url_base = 'http://www.ripley.cl/webapp/wcs/stores/servlet/'
+
         category_urls = [
-            ['categoria-TVRipley-10051-001772-130000-ESP-N--', 'Notebook'],   # Notebooks
-            ['categoria-TVRipley-10051-001830-130000-ESP-N--', 'Notebook'],   # Netbooks
-            ['categoria-TVRipley-10051-013040-230000-ESP-N', 'Screen'],     # LCDs
-                        ]
-        
-        # Browser initialization
+            ['categoria-TVRipley-10051-001772-130000-ESP-N--', 'Notebook'],
+            ['categoria-TVRipley-10051-001860-130000-ESP-N--', 'Notebook'],
+            ['categoria-TVRipley-10051-013040-230000-ESP-N', 'Television'],
+        ]
+
         browser = mechanize.Browser()
-        
-        product_links = []
-        links = []
-        
+
+        product_links = {}
+
         for category_url, ptype in category_urls:
-            j = 1                    
+            j = 1
             while True:
-                urlWebpage = urlBase + category_url + '?curPg=' + str(j)
+                url = url_base + category_url + '?curPg=' + str(j)
 
-                # Obtain and parse HTML information of the base webpage
-                baseData = browser.open(urlWebpage).get_data()
-                baseSoup = BeautifulSoup(baseData)
+                soup = BeautifulSoup(browser.open(url).get_data())
 
-                # Obtain the links to the other pages of the catalog (2, 3, ...)
-                productParagraphs = baseSoup.findAll('td', { 'class' : 'grisCatalogo' })
-                productParagraphs = productParagraphs[1::3]
-                productParagraphs = [pp.parent.parent for pp in productParagraphs]
-                
-                if not productParagraphs:
-                    break
-                    
-                break_flag = False
-                    
-                for p in productParagraphs:
-                    url = urlBase + p.find('a')['href']
-                    
-                    if url in links:
-                        break_flag = True
-                        break
-                        
+                p_paragraphs = soup.findAll('td', {'class': 'grisCatalogo'})
+                p_paragraphs = p_paragraphs[1::3]
+                p_paragraphs = [pp.parent.parent for pp in p_paragraphs]
+
+                for p in p_paragraphs:
+                    url = url_base + p.find('a')['href']
                     url = url.encode('ascii', 'ignore')
-                    links.append(url)
-                    product_links.append([url, ptype])
-                    
-                if break_flag:
-                    break
-                    
-                j += 1          
+                    if url not in product_links:
+                        product_links[url] = ptype
 
-        return product_links
+                next_page_link = soup.findAll('a',
+                        {'class': 'linknormal4'})[-1]
+                if next_page_link.string.strip() != '&gt;&gt;':
+                    break
+
+                j += 1
+
+        return product_links.items()
 

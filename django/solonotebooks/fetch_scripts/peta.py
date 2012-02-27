@@ -42,62 +42,52 @@ class Peta(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.peta.cl/'
-        
-        # Browser initialization
         browser = mechanize.Browser()
-        
+
         url_extensions = [
             ['computadores-1/netbooks.html', 'Notebook'],
             ['computadores-1/notebooks.html', 'Notebook'],
             ['computadores-1/apple.html?appletype=898,903', 'Notebook'],
             ['peta-cl/tarjetas-de-video.html', 'VideoCard'],
             ['peta-cl/procesadores.html', 'Processor'],
-            ['peta-cl/monitores.html', 'Screen'],
-            ['audio-y-video-1/televisores.html', 'Screen'],
+            ['peta-cl/monitores.html', 'Monitor'],
+            ['audio-y-video-1/televisores.html', 'Television'],
             ['peta-cl/placas-madre-1.html', 'Motherboard'],
             ['partes-y-piezas/memorias.html', 'Ram'],
             ['partes-y-piezas/discos-duros.html', 'StorageDrive'],
             ['partes-y-piezas/fuentes-de-poder.html', 'PowerSupply'],
         ]
-                          
+
         product_links = []
-        links = []                            
         for url_extension, ptype in url_extensions:
-            urlWebpage = urlBase + url_extension
-            pageNumber = 1
-                
-            while True:
-                completeWebpage = urlWebpage + '?limit=36&p=' + str(pageNumber)
 
-                baseData = browser.open(completeWebpage).get_data()
-                baseSoup = BeautifulSoup(baseData)
+            url = 'http://www.peta.cl/' + url_extension
+            first_page_url = url + '?limit=36&p=1'
 
-                baseSoup = baseSoup.find('div', 'category-products')
-                ntbkCells = []
-                ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item first'}))
-                ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item'}))
-                ntbkCells.extend(baseSoup.findAll('li', { 'class': 'item last'}))
+            soup = BeautifulSoup(browser.open(first_page_url).get_data())
 
-                if not ntbkCells:
-                    break
+            page_count = soup.find('div', {'class': 'pages'})
+            if page_count:
+                page_count = int(page_count.findAll('a')[-2].string)
+            else:
+                page_count = 1
 
-                trigger = False
-                for ntbkCell in ntbkCells:
-                    link = ntbkCell.find('a')['href']
-                        
-                    if link in links:
-                        trigger = True
-                        break
-                        
-                    links.append(link)
+            for page_number in range(page_count):
+                page_number += 1
+                complete_url = url + '?limit=36&p=' + str(page_number)
+
+                soup = BeautifulSoup(browser.open(complete_url).get_data())
+                soup = soup.find('div', 'category-products')
+
+                p_cells = []
+                p_cells.extend(soup.findAll('li', {'class': 'item first'}))
+                p_cells.extend(soup.findAll('li', {'class': 'item'}))
+                p_cells.extend(soup.findAll('li', {'class': 'item last'}))
+
+                for cell in p_cells:
+                    link = cell.find('a')['href']
+
                     product_links.append([link, ptype])
-                    
-                if trigger:
-                    break
-                    
-                pageNumber += 1
 
         return product_links
 
