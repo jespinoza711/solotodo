@@ -77,6 +77,9 @@ class Webco(FetchStore):
             # RAM Notebook
             ['n_new_productos.asp?CATEGORIA={B77F75B2-F280-4385-892A-'
              '01109D48ABD3}#ct_31', 'Ram'],
+            # Fuentes de poder
+            ['n_new_productos.asp?CATEGORIA={B54741A6-B995-4AB3-8FC5-'
+             'BFB1FB1B5464}#ct_22', 'PowerSupply'],
             ]
 
         product_links = {}
