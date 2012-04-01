@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
 class PCFactory(FetchStore):
@@ -16,12 +14,13 @@ class PCFactory(FetchStore):
         baseSoup = BeautifulSoup(baseData)
         product_data = ProductData()
         
-        titleSpan = baseSoup.find('span', { 'class' : 'men_confirmacion' })
-        product_data.custom_name = titleSpan.string.encode('ascii', 'ignore').strip()
+        titleSpan = baseSoup.find('span', { 'class' : 'main_titulo_ficha_bold' })
+        name = titleSpan.string.encode('ascii', 'ignore').strip().split()
+        product_data.custom_name = ' '.join(name)
         product_data.url = product_link
         product_data.comparison_field = product_link
         
-        price_data = int(baseSoup.find('span', { 'class' : 'texto_Precio_Oferta_Internet_BIG' }).string.replace('.', '').replace('&nbsp;', ''))
+        price_data = int(baseSoup.find('span', { 'class' : 'main_precio_efectivo' }).find('strong').string.replace('.', '').replace('&nbsp;', ''))
         product_data.price = price_data
         
         return product_data
