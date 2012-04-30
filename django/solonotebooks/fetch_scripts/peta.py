@@ -47,7 +47,7 @@ class Peta(FetchStore):
         url_extensions = [
             ['computadores-1/netbooks.html', 'Notebook'],
             ['computadores-1/notebooks.html', 'Notebook'],
-            ['computadores-1/apple.html?appletype=898,903', 'Notebook'],
+            ['apple-1.html', 'Notebook'],
             ['peta-cl/tarjetas-de-video.html', 'VideoCard'],
             ['peta-cl/procesadores.html', 'Processor'],
             ['peta-cl/monitores.html', 'Monitor'],
