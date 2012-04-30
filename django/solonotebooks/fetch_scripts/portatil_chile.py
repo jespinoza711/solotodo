@@ -2,9 +2,8 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+from solonotebooks.cotizador.utils import clean_price_string
 
 class PortatilChile(FetchStore):
     name = 'PortatilChile'
@@ -14,13 +13,25 @@ class PortatilChile(FetchStore):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
-        product_name = product_soup.find('th', { 'colspan': '2' }).string.encode('ascii', 'ignore').split('"')[1]
-        product_price = int(product_soup.find('table', { 'cellspacing': '1' }).find('table').findAll('td')[3].find('strong').string.replace('.', '').replace('&nbsp;', '').replace('$', '').strip())
-        
+
+        try:
+            name = product_soup.find('th', {'colspan': '2'}).string
+        except AttributeError:
+            return None
+        name = name.encode('ascii', 'ignore').split('"')[1]
+
+        prices = {}
+
+        cash_price = product_soup.find('table',
+                {'cellspacing': '1'}).find('table')
+        cash_price = cash_price.findAll('td')[3].find('strong').string
+        cash_price = int(clean_price_string(cash_price))
+
+        for p in ['cash', 'deposit', 'wire_transfer']:
+            prices[p] = cash_price
         product_data = ProductData()
-        product_data.custom_name = product_name
-        product_data.price = product_price
+        product_data.custom_name = name
+        product_data.price = cash_price
         product_data.url = product_link
         product_data.comparison_field = product_link
         
@@ -28,22 +39,17 @@ class PortatilChile(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.portatilchile.cl/productos.html'
-        
-        # Browser initialization
-        browser = mechanize.Browser()
-        
-        baseData = browser.open(urlBase).get_data()
-        baseSoup = BeautifulSoup(baseData)
-        
-        product_tables = baseSoup.findAll('table', { 'width': '226' })
 
-        products_data = []
+        browser = mechanize.Browser()
+        soup = BeautifulSoup(browser.open(urlBase).get_data())
+
+        product_tables = soup.findAll('table', {'width': '226'})
+
+        product_links = []
 
         for product_table in product_tables:
             link = product_table.find('a')['href']
-            products_data.append([link, 'Notebook'])
+            product_links.append([link, 'Notebook'])
 
-        return products_data
-
+        return product_links

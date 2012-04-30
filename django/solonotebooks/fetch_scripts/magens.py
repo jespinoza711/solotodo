@@ -2,43 +2,39 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+from solonotebooks.cotizador.utils import clean_price_string
 
 class Magens(FetchStore):
     name = 'Magens'
     use_existing_links = False
     
-    def retrieve_product_data(self, product_link, already_tried=False):
+    def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        try:
-            product_data = browser.open(product_link).get_data()
-        except: 
-            return None
+        product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
 
+        name = product_soup.find('div', {'class': 'titleContent'}).string
+        name = name.encode('ascii', 'ignore')
+
         try:
-            availability = product_soup.find('div', { 'class': 'stock' }).contents[4]
+            availability = product_soup.find('div', {'class': 'stock'})
+            availability = availability.contents[4]
         except AttributeError:
-            if already_tried:
-                return None
-            else:
-                return self.retrieve_product_data(product_link, already_tried=True)
+            return None
 
         if 'Agotado' in availability:
             return None
-        
-        product_name = product_soup.find('div', { 'class': 'titleContent' }).string.encode('ascii', 'ignore')
-        try:
-            product_price = int(product_soup.findAll('div', { 'class': 'precioDetalle' })[1].string.split('$')[1].replace(',', ''))
-        except:
-            product_price = int(product_soup.findAll('div', { 'class': 'precioDetalle' })[0].string.split('$')[1].replace(',', ''))
+
+        cash_price = product_soup.findAll('div', {'class': 'precioDetalle'})[1]
+        cash_price = cash_price.string.split('$')[1]
+        cash_price = int(clean_price_string(cash_price))
+
         part_number = product_soup.find('div', { 'class': 'codProduct' }).string.replace('[', '').replace(']', '').encode('ascii', 'ignore').strip()
-        
+
         product_data = ProductData()
-        product_data.custom_name = product_name
-        product_data.price = product_price
+        product_data.custom_name = name
+        product_data.price = cash_price
         product_data.url = product_link
         product_data.comparison_field = product_link
         product_data.part_number = part_number
@@ -48,32 +44,28 @@ class Magens(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.magens.cl'
-        urlBuscarProductos = '/catalog/'
-        
-        # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
-        
-        url_extensions = [  
-            ['notebooks-netbooks-netbooks-11-c-15_199.html', 'Notebook'], 
-            ['notebooks-netbooks-notebooks-12-13-c-15_202.html', 'Notebook'], 
-            ['notebooks-netbooks-notebooks-14-c-15_203.html', 'Notebook'], 
-            ['notebooks-netbooks-notebooks-15-c-15_204.html', 'Notebook'], 
-            ['notebooks-netbooks-notebooks-16-mas-c-15_205.html', 'Notebook'], 
-            ['video-c-24_128.html', 'VideoCard'], 
-            ['video-pcie-c-24_130.html', 'VideoCard'], 
-            ['video-pcie-nvidia-c-24_129.html', 'VideoCard'], 
-            ['video-profesionales-c-24_131.html', 'VideoCard'], 
-            ['sam2-c-1_196.html', 'Processor'], 
-            ['sam3-c-1_31.html', 'Processor'], 
-            ['intel-s1156-c-1_197.html', 'Processor'], 
-            ['intel-s775-c-1_32.html', 'Processor'], 
-            ['server-c-1_30.html', 'Processor'], 
-            ['monitores-televisores-c-13.html', 'Screen'], 
+
+        url_extensions = [
+            ['netbooks-c-15_199.html', 'Notebook'],
+            ['notebooks-c-15_202.html', 'Notebook'],
+            ['notebooks-c-15_203.html', 'Notebook'],
+            ['notebooks-c-15_204.html', 'Notebook'],
+            ['notebooks-mas-c-15_205.html', 'Notebook'],
+            ['video-pcie-ati-c-24_130.html', 'VideoCard'],
+            ['video-pcie-nvidia-c-24_129.html', 'VideoCard'],
+            ['video-profesionales-c-24_131.html', 'VideoCard'],
+            ['promo-nvidia-c-24_275.html', 'VideoCard'],
+            ['cpu-amd-am3-c-1_302.html', 'Processor'],
+            ['cpu-amd-sam3-c-1_31.html', 'Processor'],
+            ['cpu-fm1-c-1_441.html', 'Processor'],
+            ['cpu-intel-s1156-c-1_197.html', 'Processor'],
+            ['cpu-intel-s775-c-1_32.html', 'Processor'],
+            ['cpu-server-c-1_30.html', 'Processor'],
+            ['monitores-lcd-c-13_90.html', 'Monitor'],
+            ['monitores-led-c-13_200.html', 'Monitor'],
+            ['televisores-lcdtv-c-13_91.html', 'Television'],
+            ['televisores-ledtv-c-13_210.html', 'Television'],
             ['placas-madre-c-2.html', 'Motherboard'],
             ['memorias-c-12.html', 'Ram'],
             ['discos-duros-c-3_35.html', 'StorageDrive'],
@@ -81,19 +73,17 @@ class Magens(FetchStore):
             ['ssd-c-3_215.html', 'StorageDrive'],
             ['fuentes-poder-c-10_76.html', 'PowerSupply'],
         ]
-                
-        product_links = []            
+
+        product_links = []
         for url_extension, ptype in url_extensions:
-            urlWebpage = urlBase + urlBuscarProductos + url_extension + '?mostrar=1000'
-            
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
+            url = 'http://www.magens.cl/' + url_extension +\
+                  '?mostrar=1000'
+            soup = BeautifulSoup(browser.open(url).get_data())
 
-            nameDivs = baseSoup.findAll('div', { 'class': 'text11 uppercase tituloProducto' })
-            for i in range(len(nameDivs)):
-                link = nameDivs[i].find('a')['href']
+            product_containers = soup.findAll('div',
+                    {'class': 'text11 uppercase tituloProducto'})
+            for container in product_containers:
+                link = container.find('a')['href']
                 product_links.append([link.split('?osCsid')[0], ptype])
-            
-        return product_links
 
+        return product_links

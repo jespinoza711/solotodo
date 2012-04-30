@@ -2,12 +2,9 @@
 
 import mechanize
 from mechanize import HTTPError
-import re
-import htmlentitydefs
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+from solonotebooks.cotizador.utils import clean_price_string
 
 def unescape(s):
     s = s.replace("&lt;", "<")
@@ -22,26 +19,26 @@ class AbcDin(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
-        product_details_url = product_link.split('#')[1]
         try:
-            product_webpage = mechanize.urlopen(product_details_url)
-        except HTTPError, e:
+            product_webpage = mechanize.urlopen(product_link)
+        except HTTPError:
             return None
+
         product_soup = BeautifulSoup(product_webpage.read())
-        
-        av_span = product_soup.find('div', { 'id': 'caja-compra' }).find('span')
-        if av_span:
-            return None
-        
-        product_name = product_soup.find('td', { 'id': 'mainDescr' }).find('h2').contents[0].encode('ascii', 'ignore')
+
         try:
-            product_price = int(product_soup.find('div', { 'id': 'precioProducto' }).find('strong').string.replace('Precio Tarjetas ABCDIN $', '').replace(',', ''))
-        except:
-            try:
-                product_price = int(product_soup.find('div', { 'id': 'precioProducto' }).find('strong').string.replace('Precio Internet: $', '').replace(',', ''))
-            except:
-                product_price = int(product_soup.find('div', { 'id': 'precioNormal' }).find('span').string.replace('$', '').replace(',', ''))
-        
+            product_name = product_soup.find('h1', {'id': 'catalog_link'}).string
+        except AttributeError:
+            return None
+        product_name = product_name.strip().encode('ascii', 'ignore')
+
+        # Product not available check
+        if product_soup.find('span', 'button_bottom'):
+            return None
+
+        product_price = product_soup.find('span', {'id': 'offerPrice'}).string
+        product_price = int(clean_price_string(product_price))
+
         product_data = ProductData()
         product_data.custom_name = product_name
         product_data.url = product_link
@@ -51,33 +48,28 @@ class AbcDin(FetchStore):
         return product_data
 
     def retrieve_product_links(self):
-        cookies = mechanize.CookieJar()
-        opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
-        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
-                 ("From", "responsible.person@example.com")]
-        mechanize.install_opener(opener)
-        
-        xml_resources = [
-                    ['notebooks', 'Notebook'],
-                    ['netbooks', 'Notebook'],
-                    ['LCD', 'Screen'],
-                        ]
-                        
+        ajax_resources = [
+            ['11620', 'Notebook'],
+            ['11619', 'Notebook'],
+            ['11607', 'Television'],
+        ]
+
         product_links = []
-                        
-        for xml_resource, ptype in xml_resources:
-            # Obtain and parse HTML information of the base webpage
-            base_data = mechanize.urlopen('https://www.abcdin.cl/abcdin/catabcdin.nsf/%28webProductosxAZ%29?readviewentries&restricttocategory=' + xml_resource)
+
+        for category_id, ptype in ajax_resources:
+            url = 'http://www.abcdin.cl/webapp/wcs/stores/servlet/'\
+                  'AjaxCatalogSearchResultView?searchTermScope=&'\
+                  'searchType=1000&filterTerm=&orderBy=&maxPrice=&'\
+                  'showResultsPage=true&langId=-5&beginIndex=0&'\
+                  'sType=SimpleSearch&metaData=&pageSize=1000&'\
+                  'manufacturer=&resultCatEntryType=&catalogId='\
+                  '10001&pageView=image&searchTerm=&minPrice=&'\
+                  'categoryId={0}&storeId=10001'.format(category_id)
+            base_data = mechanize.urlopen(url)
             base_soup = BeautifulSoup(base_data.read())
 
-            # Obtain the links to the other pages of the catalog (2, 3, ...)
-            ntbks_data = base_soup.findAll('text')
-            
-            for ntbk_data in ntbks_data:
-                ntbk_data = unescape(ntbk_data.contents[0])
-                temp_soup = BeautifulSoup(ntbk_data)
-                div = temp_soup.find('div')
-                link = 'https://www.abcdin.cl/abcdin/abcdin.nsf#https://www.abcdin.cl' + div.find('a')['href']
-                product_links.append([link, ptype])
-                
+            for ntbk_data in base_soup.findAll('td', 'item'):
+                url = ntbk_data.find('a')['href']
+                product_links.append([url, ptype])
+
         return product_links

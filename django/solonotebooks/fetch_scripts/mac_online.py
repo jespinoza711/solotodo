@@ -2,9 +2,8 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+from solonotebooks.cotizador.utils import clean_price_string
 
 class MacOnline(FetchStore):
     name = 'MacOnline'
@@ -13,14 +12,17 @@ class MacOnline(FetchStore):
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
-        product_soup = BeautifulSoup(product_data)
+        soup = BeautifulSoup(product_data)
 
-        product_name = product_soup.find('td', { 'class': 'tit_categoria_despliegue' }).contents[0].strip().encode('ascii', 'ignore')
-        product_price = int(product_soup.find('em').string.split('$')[1].replace('.', ''))
-        
+        name = soup.findAll('h2')[1]
+        name = name.string.strip().encode('ascii', 'ignore')
+
+        price = soup.find('span', {'itemprop': 'price'}).contents[0]
+        price = int(clean_price_string(price))
+
         product_data = ProductData()
-        product_data.custom_name = product_name
-        product_data.price = product_price
+        product_data.custom_name = name
+        product_data.price = price
         product_data.url = product_link
         product_data.comparison_field = product_link
         
@@ -29,47 +31,31 @@ class MacOnline(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.maconline.cl'
-        urlBuscarProductos = '/catalogo/'
-        
-        # Browser initialization
+        url_base = 'http://www.maconline.cl'
         browser = mechanize.Browser()
         product_links = []
-        
+
         url_extensions = [
             ['397.html', 'Notebook'],
             ['421.html', 'Notebook'],
-            ['384.html', 'Notebook'],
-            ['288.html', 'Screen'],
-            ['435.html', 'Notebook'],
-            ['293', 'StorageDrive'],
+            ['513.html', 'Monitor'],
         ]
-                            
+
         for url_extension, ptype in url_extensions:
             page_number = 0
             while True:
-                urlWebpage = urlBase + urlBuscarProductos + url_extension + '?pagina=' + str(page_number)
-                
-                # Obtain and parse HTML information of the base webpage
-                baseData = browser.open(urlWebpage).get_data()
-                
-                baseSoup = BeautifulSoup(baseData)
+                url = url_base + '/catalogo/' + url_extension +\
+                      '?pagina=' + str(page_number)
 
-                # Obtain the links to the other pages of the catalog (2, 3, ...)
-                titles = baseSoup.findAll('td', { 'class' : 'nombre_producto' })
-                
-                if not titles:
+                soup = BeautifulSoup(browser.open(url).get_data())
+                cells = soup.findAll('td', 'dd')
+
+                if not cells:
                     break
 
-                for i in range(len(titles)):
-                    link = urlBase + titles[i].find('a')['href']
-                    if link in product_links:
-                        continue
-                    
+                for cell in cells:
+                    link = url_base + cell.find('a')['href']
                     product_links.append([link, ptype])
-                    
                 page_number += 1
 
         return product_links
-

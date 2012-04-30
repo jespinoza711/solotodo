@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+import urllib2
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
 from . import ProductData, FetchStore
+from solonotebooks.cotizador.utils import clean_price_string
 
 class Dell(FetchStore):
     name = 'Dell'
@@ -13,19 +15,24 @@ class Dell(FetchStore):
         br = mechanize.Browser()
         data = br.open(productUrl).get_data()
         soup = BeautifulSoup(data)
-        
-        try:
-            title = soup.find('div', { 'id': 'scpcc_title' }).find('img')['alt'].encode('ascii', 'ignore')
-        except Exception:
-            return None
-        price = int(soup.find(['tr', 'td'], { 'class': 'pricing_dotdotdot' }).findAll('span')[-1].string.split('$')[1].replace('.', ''))
-        
+
+        title = soup.find('div', {'id': 'scpcc_title'}).find('img')['alt']
+        title = title.encode('ascii', 'ignore')
+
+        price = soup.find(['tr', 'td'], {'class': 'pricing_dotdotdot'})
+        price = price.findAll('span')[-1].string.split('$')[1]
+        price = int(clean_price_string(price))
+
+        prices = {}
+        for p in ['credit_card', 'deposit', 'wire_transfer']:
+            prices[p] = price
         productData = ProductData()
 
         productData.custom_name = title
         productData.price = price
         productData.url = productUrl
         productData.comparison_field = productData.url
+
         return productData
 
     def retrieve_product_links(self):
@@ -83,7 +90,6 @@ class Dell(FetchStore):
                     product_links.append([url, 'Notebook'])
 
         # Start Monitor
-
         url_extensions = [
             '/content/products/compare.aspx/19_22widescreen'
             '?c=cl&cs=cldhs1&l=es&s=dhs',
@@ -124,7 +130,10 @@ class Dell(FetchStore):
         return urls
 
     def retrieve_line_links(self, url):
-        me = mechanize.urlopen(url)
+        try:
+            me = mechanize.urlopen(url)
+        except urllib2.HTTPError:
+            return []
         soup = BeautifulSoup(me.read())
         custom_config_containers = soup.findAll('div', 'buttons')
 

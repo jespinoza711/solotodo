@@ -2,9 +2,8 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+from solonotebooks.cotizador.utils import clean_price_string
 
 class Webco(FetchStore):
     name = 'Webco'
@@ -12,15 +11,22 @@ class Webco(FetchStore):
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
-        product_soup = BeautifulSoup(product_data)
-        
-        product_name = product_soup.find('h1').contents[0].encode('ascii', 'ignore')
-        product_price = int(product_soup.findAll('h2')[1].string.replace('.', '').replace('$', '').replace('cash', ''))
-        
+        try:
+            product_soup = BeautifulSoup(browser.open(product_link).get_data())
+        except Exception:
+            return None
+
+        name = product_soup.find('h1').contents[0].encode('ascii', 'ignore')
+        name = name.strip()
+
+        prices = {}
+
+        cash_price = product_soup.findAll('h2')[1].string.replace('cash', '')
+        cash_price = int(clean_price_string(cash_price))
+
         product_data = ProductData()
-        product_data.custom_name = product_name
-        product_data.price = product_price
+        product_data.custom_name = name
+        product_data.price = cash_price
         product_data.url = product_link
         product_data.comparison_field = product_link
         
@@ -98,5 +104,3 @@ class Webco(FetchStore):
                     continue
 
         return product_links.items()
-
-

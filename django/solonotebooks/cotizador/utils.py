@@ -13,6 +13,19 @@ from forms import *
 from exceptions import *
 from string import digits, lowercase
 
+def clean_price_string(price_string):
+    """
+    Removes most common formatting of a string that represents a price
+    leaving it only with its numbers.
+    """
+
+    blacklist = ['CLP$', '$', '.', ',', '&nbsp;', '\r', '\n', '\t']
+
+    for item in blacklist:
+        price_string = price_string.replace(item, '')
+
+    return price_string
+
 def stringCompare(comp1, comp2):
     comp1_words = comp1.lower().split()
     comp2_words = comp2.lower().split()
