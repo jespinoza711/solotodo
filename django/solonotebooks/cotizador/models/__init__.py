@@ -236,7 +236,13 @@ from power_supply_power_connector import PowerSupplyPowerConnector
 from power_supply_has_power_connector import PowerSupplyHasPowerConnector
 from power_supply import PowerSupply
 
-
+from computer_case_fan import ComputerCaseFan
+from computer_case_brand import ComputerCaseBrand
+from computer_case_fan_distribution import ComputerCaseFanDistribution
+from computer_case_motherboard_format import ComputerCaseMotherboardFormat
+from computer_case_power_supply import ComputerCasePowerSupply
+from computer_case_power_supply_position import ComputerCasePowerSupplyPosition
+from computer_case import ComputerCase
 
 __all__ = [ 
             'InterfaceBrand',
@@ -465,5 +471,12 @@ __all__ = [
             'PowerSupplySize',
             'PowerSupplyPowerConnector',
             'PowerSupplyHasPowerConnector',
-            'PowerSupply'
+            'PowerSupply',
+            'ComputerCaseFan',
+            'ComputerCaseBrand',
+            'ComputerCaseFanDistribution',
+            'ComputerCaseMotherboardFormat',
+            'ComputerCasePowerSupply',
+            'ComputerCasePowerSupplyPosition',
+            'ComputerCase',
             ]

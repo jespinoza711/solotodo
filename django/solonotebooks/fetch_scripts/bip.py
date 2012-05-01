@@ -77,6 +77,7 @@ class Bip(FetchStore):
             ['categoria=125&categoria_papa=123', 'StorageDrive'],   # Disco Duro 2,5"
             ['categoria=124&categoria_papa=123', 'StorageDrive'],   # Disco Duro 3,5"
             ['categoria=88&categoria_papa=114', 'PowerSupply'],     # Fuentes de poder
+            ['categoria=8&categoria_papa=114', 'ComputerCase'],     # Gabinetes
         ]
                             
         product_links = []

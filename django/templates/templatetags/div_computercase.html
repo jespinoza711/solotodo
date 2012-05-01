@@ -1,0 +1,14 @@
+{% extends "templatetags/div_base.html" %}
+
+{% block specs %}
+<li><strong>Marca:</strong> {{ product.brand }}</li>
+<li><strong>Formato:</strong> {{ product.largest_motherboard_format }}</li>
+<li><strong>Fuente de poder:</strong> {{ product.power_supply }}</li>
+<li><strong>Tamaño:</strong>
+    {% if product.length %}
+        {{ product.length }} x {{ product.height }} x {{ product.width }} mm.
+    {% else %}
+        Desconocido
+    {% endif %}
+</li>
+{% endblock %}

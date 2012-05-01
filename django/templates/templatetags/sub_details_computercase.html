@@ -1,0 +1,99 @@
+<h1>{{ computercase }}</h1>
+<h3 class="subtitle">Especificaciones esenciales</h3>
+<strong>Fabricante: </strong> {{ computercase.brand }}
+<br />
+<strong>Formato: </strong> {{ computercase.largest_motherboard_format }}
+<br />
+<strong>Fuente de poder: </strong> {{ computercase.power_supply }}
+<br />
+<strong>Tamaño: </strong>
+    {% if computercase.length %}
+        {{ computercase.length }} x {{ computercase.height }} x {{ computercase.width }} mm.
+    {% else %}
+        Desconocido
+    {% endif %}
+<br />
+<h3 class="subtitle">Especificaciones secundarias</h3>
+<strong>Peso: </strong>
+    {% if computercase.weight %}
+        {{ computercase.weight }} g.
+    {% else %}
+        Desconocido
+    {% endif %}
+<br />
+<strong>Ubicación de la PSU: </strong> {{ computercase.power_supply_position }}
+<br />
+<strong>Slots de expansión: </strong> {{ computercase.rear_expansion_slots }}
+<br />  
+<strong>Puertos USB frontales: </strong> {{ computercase.front_usb_ports }}
+<br />  
+<strong>¿Puertos de audio frontales?: </strong> {{ computercase.has_front_audio_ports|yesno:'Sí,No' }}
+<br/>
+<strong>¿Puerto eSATA frontal?: </strong> {{ computercase.has_front_esata_port|yesno:'Sí,No' }}
+<br/>
+<strong>¿Puerto Firewire frontal?: </strong> {{ computercase.has_front_firewire_port|yesno:'Sí,No' }}
+<br/>
+<strong>Bahías: </strong>
+<ul class="sub_ul">
+    <li>5¼ externas: {{ computercase.external_5_1_4_bays }}</li>
+    <li>3½ externas: {{ computercase.external_3_1_2_bays }}</li>
+    <li>3½ internas: {{ computercase.internal_3_1_2_bays }}</li>
+    <li>2½ internas: {{ computercase.internal_2_1_2_bays }}</li>
+</ul>
+<br />
+<h3 class="subtitle">Ventilación</h3>
+<strong>Espacios para ventiladores frontales: </strong>
+{% if computercase.frontal_fan_slots.all %}
+<ul class="sub_ul">
+    {% for slot in computercase.frontal_fan_slots.all %}
+        <li>{{ slot }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
+<strong>Espacios para ventiladores traseros: </strong>
+{% if computercase.rear_fan_slots.all %}
+    <ul class="sub_ul">
+        {% for slot in computercase.rear_fan_slots.all %}
+            <li>{{ slot }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
+<strong>Espacios para ventiladores laterales: </strong>
+{% if computercase.side_fan_slots.all %}
+    <ul class="sub_ul">
+        {% for slot in computercase.side_fan_slots.all %}
+            <li>{{ slot }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
+<strong>Espacios para ventiladores superiores: </strong>
+{% if computercase.top_fan_slots.all %}
+    <ul class="sub_ul">
+        {% for slot in computercase.top_fan_slots.all %}
+            <li>{{ slot }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
+<strong>Ventiladores incluidos: </strong>
+{% if computercase.included_fans.all %}
+    <ul class="sub_ul">
+        {% for slot in computercase.included_fans.all %}
+            <li>{{ slot }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}

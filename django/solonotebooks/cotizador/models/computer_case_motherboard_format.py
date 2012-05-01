@@ -1,7 +1,7 @@
 from django.db import models
 from solonotebooks.cotizador.models.interface_motherboard_format import InterfaceMotherboardFormat
 
-class MotherboardFormat(models.Model):
+class ComputerCaseMotherboardFormat(models.Model):
     format = models.ForeignKey(InterfaceMotherboardFormat)
     
     def __unicode__(self):
