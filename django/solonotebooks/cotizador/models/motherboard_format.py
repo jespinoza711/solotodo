@@ -1,12 +1,11 @@
 from django.db import models
+from solonotebooks.cotizador.models.interface_motherboard_format import InterfaceMotherboardFormat
 
 class MotherboardFormat(models.Model):
-    name = models.CharField(max_length = 255)
-    width = models.IntegerField()
-    height = models.IntegerField()
+    format = models.ForeignKey(InterfaceMotherboardFormat, null=True)
     
     def __unicode__(self):
-        return self.name
+        return unicode(self.format)
         
     def raw_text(self):
         return unicode(self)

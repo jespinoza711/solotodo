@@ -12,6 +12,7 @@ from interface_memory_type import InterfaceMemoryType
 from interface_memory_bus import InterfaceMemoryBus
 from interface_bus import InterfaceBus
 from interface_power_connector import InterfacePowerConnector
+from interface_motherboard_format import InterfaceMotherboardFormat
 from solonotebooks.cotizador.models.product_type import ProductType
 from solonotebooks.cotizador.models.notebook_processor_brand import NotebookProcessorBrand
 from solonotebooks.cotizador.models.notebook_processor_line_family import NotebookProcessorLineFamily
@@ -246,6 +247,7 @@ __all__ = [
             'InterfacePort',
             'InterfaceMemoryType',
             'InterfaceBus',
+            'InterfaceMotherboardFormat',
             'InterfacePowerConnector',
             'NotebookProcessorBrand', 
             'NotebookProcessorLineFamily',

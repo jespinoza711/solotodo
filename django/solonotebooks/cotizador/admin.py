@@ -21,6 +21,7 @@ admin.site.register(InterfaceMemoryType)
 admin.site.register(InterfaceBus)
 admin.site.register(InterfaceMemoryFormat)
 admin.site.register(InterfaceMemoryBus)
+admin.site.register(InterfaceMotherboardFormat)
 
 admin.site.register(ProductType)
 admin.site.register(ProductComment)
