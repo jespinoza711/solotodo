@@ -40,6 +40,7 @@ from movistar import Movistar
 from entel import Entel
 from my_box import MyBox
 from eprod import Eprod
+from onak import Onak
 
 __all__ = [ 
             'ProductData',
@@ -84,4 +85,5 @@ __all__ = [
             'Entel',
             'MyBox',
             'Eprod',
+            'Onak'
         ]
