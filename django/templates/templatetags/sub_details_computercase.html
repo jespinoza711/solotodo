@@ -24,8 +24,10 @@
 <strong>Ubicación de la PSU: </strong> {{ computercase.power_supply_position }}
 <br />
 <strong>Slots de expansión: </strong> {{ computercase.rear_expansion_slots }}
-<br />  
+<br />
 <strong>Puertos USB frontales: </strong> {{ computercase.front_usb_ports }}
+<br/>
+<strong>¿Bandeja de placa madre removible?: </strong> {{ computercase.has_motherboard_tray|yesno:'Sí,No' }}
 <br />  
 <strong>¿Puertos de audio frontales?: </strong> {{ computercase.has_front_audio_ports|yesno:'Sí,No' }}
 <br/>
@@ -79,6 +81,17 @@
 {% if computercase.top_fan_slots.all %}
     <ul class="sub_ul">
         {% for slot in computercase.top_fan_slots.all %}
+            <li>{{ slot }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    No posee
+    <br />
+{% endif %}
+<strong>Espacios para ventiladores inferiores: </strong>
+{% if computercase.bottom_fan_slots.all %}
+    <ul class="sub_ul">
+        {% for slot in computercase.bottom_fan_slots.all %}
             <li>{{ slot }}</li>
         {% endfor %}
     </ul>

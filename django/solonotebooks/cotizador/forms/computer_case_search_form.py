@@ -9,8 +9,11 @@ class ComputerCaseSearchForm(SearchForm):
     brand = ClassChoiceField(ComputerCaseBrand, 'Marca')
     motherboard_format = ClassChoiceField(ComputerCaseMotherboardFormat, 'Formato')
     power_supply = ClassChoiceField(ComputerCasePowerSupply, 'PSU')
-    power_supply_position = ClassChoiceField(ComputerCasePowerSupplyPosition, 'Ubic. PSU')
-    
+    power_supply_position = ClassChoiceField(ComputerCasePowerSupplyPosition, 'Ubi. PSU')
+
+    motherboard_tray_choices = (('0', 'Cualquiera'), ('1', 'No'), ('2', 'Sí'))
+    motherboard_tray = CustomChoiceField(choices=motherboard_tray_choices).set_name('Bandeja')
+
     ordering_choices = (
         ('1', 'Precio'),
         ('2', 'Peso'),
@@ -30,6 +33,7 @@ class ComputerCaseSearchForm(SearchForm):
                      'motherboard_format',
                      'power_supply',
                      'power_supply_position',
+                     'motherboard_tray'
                      ]],
                      ]      
         return self.parse_model(model)
@@ -51,6 +55,8 @@ class ComputerCaseSearchForm(SearchForm):
             value = 'Formato: ' + unicode(ComputerCaseMotherboardFormat.objects.get(pk = pk_value))
         if key == 'power_supply_position':
             value = u'Posición PSU: ' + unicode(ComputerCasePowerSupplyPosition.objects.get(pk = pk_value))
+        if key == 'motherboard_tray':
+            value = ('Sin', 'Con')[pk_value - 1] + ' bandeja para placa madre removible'
 
         return value
         
@@ -68,6 +74,8 @@ class ComputerCaseSearchForm(SearchForm):
             value = 'Gabinetes ' + unicode(ComputerCaseMotherboardFormat.objects.get(pk = pk_value))
         if key == 'power_supply_position':
             value = 'Gabinetes con fuente de poder ' + unicode(ComputerCasePowerSupplyPosition.objects.get(pk = pk_value))
+        if key == 'motherboard_tray':
+            value = 'Gabinetes ' + ('sin', 'con')[pk_value - 1] + ' bandeja para placa madre removible'
         return value
         
     def filter_products(self, computer_cases):
@@ -83,6 +91,8 @@ class ComputerCaseSearchForm(SearchForm):
             computer_cases = computer_cases.filter(largest_motherboard_format=self.motherboard_format)
         if self.power_supply_position:
             computer_cases = computer_cases.filter(power_supply_position=self.power_supply_position)
+        if self.motherboard_tray:
+            computer_cases = computer_cases.filter(has_motherboard_tray=self.motherboard_tray-1)
 
         if self.min_price:
             computer_cases = computer_cases.filter(shp__shpe__latest_price__gte = int(self.min_price))

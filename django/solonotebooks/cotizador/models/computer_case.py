@@ -21,6 +21,7 @@ class ComputerCase(Product):
     has_front_audio_ports = models.BooleanField(default=True)
     has_front_esata_port = models.BooleanField()
     has_front_firewire_port = models.BooleanField()
+    has_motherboard_tray = models.BooleanField()
 
     brand = models.ForeignKey(ComputerCaseBrand)
     largest_motherboard_format = models.ForeignKey(ComputerCaseMotherboardFormat)
@@ -31,6 +32,7 @@ class ComputerCase(Product):
     rear_fan_slots = models.ManyToManyField(ComputerCaseFanDistribution, related_name='rfs', blank=True, null=True)
     side_fan_slots = models.ManyToManyField(ComputerCaseFanDistribution, related_name='sfs', blank=True, null=True)
     top_fan_slots = models.ManyToManyField(ComputerCaseFanDistribution, related_name='tfs', blank=True, null=True)
+    bottom_fan_slots = models.ManyToManyField(ComputerCaseFanDistribution, related_name='bfs', blank=True, null=True)
     included_fans = models.ManyToManyField(ComputerCaseFanDistribution, related_name='if', blank=True, null=True)
     
     # Interface methods
