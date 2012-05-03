@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 
 class Clie(FetchStore):
@@ -35,78 +33,78 @@ class Clie(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.clie.cl/'
-        urlBuscarProductos = '?ver=4&categoria_producto='
-        
-        # Browser initialization
+        url_base = 'http://www.clie.cl/'
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        products_data = []
-        
-        url_extensions = [  
-            ['561', 'Notebook'],
-            ['542', 'Notebook'],
-            ['580', 'Notebook'],
-            ['564', 'Notebook'],
-            ['581', 'Notebook'],
-            ['562', 'Notebook'],
-            ['579', 'Notebook'],
-            ['575', 'Notebook'],
-            ['612', 'Notebook'],
-            ['598', 'Notebook'],
-            ['596', 'Notebook'],
-            ['595', 'Notebook'],
-            ['178', 'Notebook'],
-            ['500', 'Notebook'],
-            ['158', 'Notebook'],
-            ['307', 'Notebook'],
-            ['308', 'Notebook'],
-            ['646', 'Processor'],  # Procesadores Intel
-            ['167', 'Screen'],  # LCD monitor
-            ['551', 'Screen'],
-            ['19', 'Screen'],
-            ['536', 'Screen'],
-            ['156', 'Screen'],
-            ['310', 'Screen'],  # LCD TV monitor
-            ['266', 'Screen'],
-            ['550', 'Screen'],
-            ['560', 'Screen'],
-            ['632', 'Screen'], # LED monitor
-            ['616', 'Screen'],
-            ['614', 'Screen'],  # LED TV monitor
-            ['26', 'Ram'],
-            ['446', 'Ram'],
-            ['438', 'StorageDrive'],
-            ['434', 'StorageDrive'],
-            ['738', 'StorageDrive'],
-            ['642', 'StorageDrive'],
+
+        category_codes = [
+            ['157', 'Notebook'],        # Notebooks
+            ['433', 'StorageDrive'],    # PC HDDs
+            ['275', 'StorageDrive'],    # Notebook HDDs
+            ['25', 'Ram'],              # PC Ram
+            ['25', 'Ram'],              # PC Ram
+            ['392', 'Ram'],             # Notebook Ram
+            ['615', 'Monitor'],         # LED Monitor
+            ['18', 'Monitor'],          # LCD Monitor
+            ['265', 'Television'],      # LCD Television
+            ['613', 'Television'],      # LED Television
+            ['645', 'Processor'],       # Processors
+            ['759', 'ComputerCase'],    # Computer cases
         ]
-                            
+
         product_links = []
-                            
-        for url_extension, ptype in url_extensions:
+
+        product_pages_urls = []
+
+        for code, ptype in category_codes:
+            category_url = 'http://www.clie.cl/?categoria=' + code
+            soup = BeautifulSoup(browser.open(category_url).get_data())
+
+            brands_table = soup.find('table', {'width': '150'})
+            brand_links = brands_table.findAll('a', {'id': 'ocultar'})
+
+            for link in brand_links:
+                complete_url = 'http://www.clie.cl/' + link['href']
+                product_pages_urls.append([complete_url, ptype])
+
+        manual_brand_urls = [
+            # HP Netbooks
+            ['http://www.clie.cl/?categoria_producto=561&categoria=&ver=4',
+             'Notebook'],
+            # Toshiba Netbooks
+            ['http://www.clie.cl/?categoria_producto=564&categoria=&ver=4',
+             'Notebook'],
+            # Acer Netbooks
+            ['http://www.clie.cl/?categoria_producto=562&categoria=&ver=4',
+             'Notebook'],
+            # Lenovo Netbooks
+            ['http://www.clie.cl/?categoria_producto=579&categoria=&ver=4',
+             'Notebook'],
+            # Apple Macbook Air
+            ['http://www.clie.cl/?categoria_producto=726&categoria=0&ver=4',
+             'Notebook'],
+            # Apple Macbook Pro
+            ['http://www.clie.cl/?categoria_producto=725&categoria=0&ver=4',
+             'Notebook'],
+            ]
+
+        product_pages_urls.extend(manual_brand_urls)
+
+        for page_url, ptype in product_pages_urls:
             num_page = 1
             while True:
-                urlWebpage = urlBase + urlBuscarProductos + url_extension + '&pagina=' + str(num_page)
+                url_webpage = page_url + '&pagina=' + str(num_page)
 
-                # Obtain and parse HTML information of the base webpage
-                baseData = browser.open(urlWebpage).get_data()
-                baseSoup = BeautifulSoup(baseData)
+                soup = BeautifulSoup(browser.open(url_webpage).get_data())
+                product_cells = soup.findAll('td', {'colspan': '2'})[1:]
 
-                # Obtain the links to the other pages of the catalog (2, 3, ...)
-                productNameCells = baseSoup.findAll("td", { "colspan" : "2" })[1:]
-                
-                if not productNameCells:
+                if not product_cells:
                     break
 
-                for productNameCell in productNameCells:
-                    link = productNameCell.find('a')
+                for product_cell in product_cells:
+                    link = product_cell.find('a')
                     url = link['onclick'].split('\'')[1]
-                    product_links.append([urlBase + url, ptype])
-                    
+                    product_links.append([url_base + url, ptype])
+
                 num_page += 1
 
         return product_links
-

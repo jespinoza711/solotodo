@@ -65,6 +65,7 @@ class Bym(FetchStore):
             ['subpro.php?ic=10&isc=5', 'StorageDrive'], # Discos duros SATA
             ['subpro.php?ic=10&isc=7', 'StorageDrive'], # SSD
             ['catpro.php?ic=12', 'PowerSupply'],        # Fuentes de poder
+            ['catpro.php?ic=13', 'ComputerCase'],        # Fuentes de poder
         ]
                             
         for url_extension, ptype in url_extensions:
