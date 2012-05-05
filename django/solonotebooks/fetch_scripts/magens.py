@@ -72,6 +72,8 @@ class Magens(FetchStore):
             ['discos-notebook-c-3_37.html', 'StorageDrive'],
             ['ssd-c-3_215.html', 'StorageDrive'],
             ['fuentes-poder-c-10_76.html', 'PowerSupply'],
+            ['gabinetes-con-fuente-c-10_75.html', 'ComputerCase'],
+            ['gabinetes-sin-fuente-c-10_299.html', 'ComputerCase'],
         ]
 
         product_links = []
