@@ -41,6 +41,7 @@ from entel import Entel
 from my_box import MyBox
 from eprod import Eprod
 from onak import Onak
+from dristore import Dristore
 
 __all__ = [ 
             'ProductData',
@@ -85,5 +86,6 @@ __all__ = [
             'Entel',
             'MyBox',
             'Eprod',
-            'Onak'
+            'Onak',
+            'Dristore'
         ]
