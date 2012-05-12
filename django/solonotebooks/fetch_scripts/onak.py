@@ -50,6 +50,7 @@ class Onak(FetchStore):
             ['componentes/placas-madre.html', 'Motherboard'],
             ['componentes/tarjetas-video.html', 'VideoCard'],
             ['componentes/monitores.html', 'Screen'],
+            ['componentes/gabinetes.html', 'ComputerCase'],
         ]
         
         product_urls = {}
@@ -62,6 +63,10 @@ class Onak(FetchStore):
                 soup = BeautifulSoup(browser.open(url).get_data())
 
                 product_table = soup.find('table', {'id': 'product-list-table'})
+
+                if not product_table:
+                    break
+
                 product_paragraphs = product_table.findAll('p', 'product-image')
 
                 done = False

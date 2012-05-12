@@ -61,6 +61,8 @@ class PCExpress(FetchStore):
             ['62_101', 'StorageDrive'],   # HDD PC
             ['62_103', 'StorageDrive'],   # HDD Notebook
             ['70_118', 'PowerSupply'],   # Fuentes de poder
+            ['70_119', 'ComputerCase'],   # Gabinete basico
+            ['70_120', 'ComputerCase'],   # Gabinete de lujo
         ]
                             
         product_links = []
