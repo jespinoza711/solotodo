@@ -15,6 +15,10 @@ class PCFactory(FetchStore):
         product_data = ProductData()
         
         titleSpan = baseSoup.find('span', { 'class' : 'main_titulo_ficha_bold' })
+
+        if not titleSpan:
+            return None
+
         name = titleSpan.string.encode('ascii', 'ignore').strip().split()
         product_data.custom_name = ' '.join(name)
         product_data.url = product_link
