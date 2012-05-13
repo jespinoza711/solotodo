@@ -58,6 +58,8 @@ class PCFactory(FetchStore):
             ['?papa=312&categoria=340', 'StorageDrive'], # HDD PC
             ['?papa=312&categoria=421', 'StorageDrive'], # HDD Notebook
             ['?papa=326&categoria=54', 'PowerSupply'], # Fuentes de poder
+            ['?papa=326&categoria=16', 'ComputerCase'], # Gabinetes con PSU
+            ['?papa=326&categoria=328', 'ComputerCase'], # Gabinetes sin PSU
         ]
                           
         products_data = []                      

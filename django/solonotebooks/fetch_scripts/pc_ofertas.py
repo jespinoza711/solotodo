@@ -89,6 +89,7 @@ class PCOfertas(FetchStore):
             ['17', 'Ram'],   # RAM
             ['20', 'StorageDrive'],   # Almacenamiento
             ['72', 'PowerSupply'],   # Fuentes de poder
+            ['69', 'ComputerCase'],   # Gabinetes
         ]
         
         for url_extension, ptype in url_extensions:
