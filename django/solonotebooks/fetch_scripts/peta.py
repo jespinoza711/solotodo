@@ -47,16 +47,16 @@ class Peta(FetchStore):
         url_extensions = [
             ['computadores-1/netbooks.html', 'Notebook'],
             ['computadores-1/notebooks.html', 'Notebook'],
+            ['computadores-1/ultrabooks.html', 'Notebook'],
             ['apple-1.html', 'Notebook'],
-            ['peta-cl/tarjetas-de-video.html', 'VideoCard'],
-            ['peta-cl/procesadores.html', 'Processor'],
-            ['peta-cl/monitores.html', 'Monitor'],
-            ['audio-y-video-1/televisores.html', 'Television'],
-            ['peta-cl/placas-madre-1.html', 'Motherboard'],
+            ['partes-y-piezas/tarjetas-de-video.html', 'VideoCard'],
+            ['partes-y-piezas/procesadores.html', 'Processor'],
+            ['partes-y-piezas/monitores.html', 'Screen'],
+            ['partes-y-piezas/placas-madre.html', 'Motherboard'],
             ['partes-y-piezas/memorias.html', 'Ram'],
             ['partes-y-piezas/discos-duros.html', 'StorageDrive'],
             ['partes-y-piezas/fuentes-de-poder.html', 'PowerSupply'],
-            ['partes-y-piezas/gabinetes.html', 'ComputerCase'],
+            ['audio-y-video-1/televisores.html', 'Screen'],
         ]
 
         product_links = []
