@@ -56,6 +56,7 @@ class Peta(FetchStore):
             ['partes-y-piezas/memorias.html', 'Ram'],
             ['partes-y-piezas/discos-duros.html', 'StorageDrive'],
             ['partes-y-piezas/fuentes-de-poder.html', 'PowerSupply'],
+            ['partes-y-piezas/gabinetes.html', 'ComputerCase'],
         ]
 
         product_links = []
