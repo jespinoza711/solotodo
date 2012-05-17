@@ -58,6 +58,7 @@ class Sym(FetchStore):
             ['?cat=29_62', 'StorageDrive'], # HDD SATA
             ['?cat=29_129', 'StorageDrive'], # SSD
             ['?cat=40', 'PowerSupply'], # Fuentes de poder
+            ['?cat=39', 'ComputerCase'], # Gabinetes
         ]
                             
         productLinks = []

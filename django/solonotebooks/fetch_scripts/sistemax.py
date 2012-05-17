@@ -45,6 +45,7 @@ class Sistemax(FetchStore):
             ['69', 'Motherboard'],  # MB Intel
             ['24', 'Ram'],          # RAM
             ['21', 'PowerSupply'],  # Fuentes de poder
+            ['19', 'ComputerCase'],  # Gabinetes
         ]
                         
         # Array containing the data for each product
