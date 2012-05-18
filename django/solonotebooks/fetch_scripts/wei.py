@@ -65,6 +65,7 @@ class Wei(FetchStore):
             ['71', 'StorageDrive'],     # HDD SATA
             ['78', 'StorageDrive'],     # HDD Notebook
             ['9', 'PowerSupply'],     # Fuentes de poder
+            ['95', 'ComputerCase'],     # Gabinetes
         ]
                      
         

@@ -86,7 +86,10 @@ class Webco(FetchStore):
             # Fuentes de poder
             ['n_new_productos.asp?CATEGORIA={B54741A6-B995-4AB3-8FC5-'
              'BFB1FB1B5464}#ct_22', 'PowerSupply'],
-            ]
+            # Gabinetes
+            ['n_new_productos.asp?CATEGORIA={CBA00C58-09FD-4F3C-9060-'
+             'F8CAFFDA9AEB}#ct_222', 'ComputerCase'],
+        ]
 
         product_links = {}
         for url_extension, ptype in url_extensions:

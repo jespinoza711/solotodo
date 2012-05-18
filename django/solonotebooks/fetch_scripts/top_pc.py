@@ -48,6 +48,7 @@ class TopPC(FetchStore):
             ['34', 'StorageDrive'],   # HDD IDE Desktop
             ['35', 'StorageDrive'],   # HDD IDE Notebook
             ['20', 'PowerSupply'],   # Fuentes de poder
+            ['19', 'ComputerCase'],   # Gabinetes
         ]
 
         productLinks = []
