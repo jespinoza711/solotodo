@@ -26,7 +26,7 @@ class Magens(FetchStore):
         if 'Agotado' in availability:
             return None
 
-        cash_price = product_soup.findAll('div', {'class': 'precioDetalle'})[1]
+        cash_price = product_soup.findAll('div', {'class': 'precioDetalle'})[-1]
         cash_price = cash_price.string.split('$')[1]
         cash_price = int(clean_price_string(cash_price))
 
