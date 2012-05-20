@@ -29,7 +29,7 @@
 				<?php _e('on', 'zbench'); ?> <a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( get_the_time() ); ?>" rel="bookmark"><?php the_time(get_option( 'date_format' )); ?></a>
 				<?php edit_post_link(__('Edit','zbench'), '[', ']'); ?>
 			</span>
-			<span id="gotocomments"><?php comments_popup_link(__('No comments', 'zbench'), '1 '.__('comment', 'zbench'), '% '.__('comments', 'zbench')); ?><?php if(function_exists('the_views')) { echo " | ";the_views(); } ?></span>
+			<span class="gotocomments"><?php comments_popup_link(__('No comments', 'zbench'), '1 '.__('comment', 'zbench'), '% '.__('comments', 'zbench')); ?><?php if(function_exists('the_views')) { echo " | ";the_views(); } ?></span>
 		</div>
 		<div class="clear"></div>
 		<div class="entry">

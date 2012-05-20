@@ -3,13 +3,16 @@
 <head profile="http://gmpg.org/xfn/11">
 	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 	<title>
-	<?php $the_title = wp_title('', false);
-		if ($the_title != '') :
-			echo wp_title('',false),' | '; bloginfo('name');
-		else :
-			bloginfo('name');
-			if ($paged > 1) { echo ' - page '.$paged; } else { if ($blogdesc=get_bloginfo('description')) echo ' - '.$blogdesc; }
-		endif; ?>
+	<?php
+	global $page, $paged;
+	wp_title( '|', true, 'right' );
+	bloginfo( 'name' );
+	$site_description = get_bloginfo( 'description', 'display' );
+	if ( $site_description && ( is_home() || is_front_page() ) )
+		echo " | $site_description";
+	if ( $paged >= 2 || $page >= 2 )
+		echo ' | ' . sprintf( __( 'Page %s', 'zbench' ), max( $paged, $page ) );
+	?>
 	</title>
 	<?php if ( is_singular() && get_option('thread_comments') ) wp_enqueue_script('comment-reply'); ?>
 	<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo('stylesheet_url'); ?>" />
@@ -19,15 +22,16 @@
 <body <?php body_class(); ?>>
 <div id="nav">
 	<div id="menus">
-		<ul><li<?php if (is_home()) echo ' class="current_page_item"'; ?>><a href="<?php echo home_url('/'); ?>"><?php _e('Home', 'zbench'); ?></a></li></ul>
-		<?php wp_nav_menu( array( 'container' => 'none', 'theme_location' => 'primary' ) ); ?>
+		<ul><li<?php if (is_home() || is_front_page()) echo ' class="current_page_item"'; ?>><a href="<?php echo home_url('/'); ?>"><?php _e('Home', 'zbench'); ?></a></li></ul>
+		<?php wp_nav_menu( array( 'theme_location' => 'primary', 'fallback_cb' => 'zbench_wp_list_pages', 'container' => 'false', 'items_wrap' => '<ul id="%1$s" class="%2$s">%3$s</ul>' ) ); ?>
 	</div>
 	<div id="search">
 		<?php get_search_form(); ?>
 	</div>
 </div>
-<div id="wrapper">
-	<div id="header"><?php global $zbench_options; $logo=''; if($zbench_options['logo_url']!='') $logo=' class="header_logo" style="background:url('.$zbench_options['logo_url'].') no-repeat 0 0"'; ?>
+<?php global $zbench_options; ?>
+<div id="wrapper"<?php if($zbench_options['left_sidebar']==TRUE) echo ' class="LorR"'; ?>>
+	<div id="header"><?php $logo=''; if($zbench_options['logo_url']!='') $logo=' class="header_logo" style="background:url('.$zbench_options['logo_url'].') no-repeat 0 0"'; ?>
 		<h1<?php if($zbench_options['hide_title']!='') echo ' class="hidden"'; ?>><a href="<?php echo home_url('/'); ?>"<?php if($logo) echo $logo; ?>><?php bloginfo('name'); ?></a></h1>
 		<h2<?php if($logo || $zbench_options['hide_title']!='') echo ' class="hidden"'; ?>><?php bloginfo('description');?></h2>
 		<div class="clear"></div>

@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zBench 1.2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-06 13:47+0800\n"
-"PO-Revision-Date: 2011-10-14 15:33+0100\n"
-"Last-Translator: Bortnyák Roland <antivirtel@gmail.com>\n"
+"POT-Creation-Date: 2011-12-03 19:41+0800\n"
+"PO-Revision-Date: 2011-12-03 19:41+0800\n"
+"Last-Translator: zwwooooo <zwwblog@gmail.com>\n"
 "Language-Team: zwwooooo <zwwooooo@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -122,7 +122,7 @@ msgid "comments"
 msgstr "hozzászólás"
 
 #: archive.php:36
-#: functions.php:110
+#: functions.php:109
 #: index.php:25
 msgid "Read more &raquo;"
 msgstr "Még nincs vége, tovább &raquo;"
@@ -142,6 +142,7 @@ msgid "This post is password protected. Enter the password to view comments."
 msgstr "Ez a bejegyzés jelszóval védett. Add meg a jelszót, hogy megtekinthesd!"
 
 #: comments.php:18
+#: page-without-sidebar.php:12
 #: page.php:8
 #: single.php:14
 msgid "Leave a comment ?"
@@ -204,197 +205,51 @@ msgstr "Szerzői jog által védett tartalom"
 msgid "Top"
 msgstr "fel"
 
-#: functions.php:4
+#: functions.php:5
 msgid "Primary Widget Area"
 msgstr "Fő terület"
 
-#: functions.php:6
+#: functions.php:7
 msgid "The primary widget area"
 msgstr "A fő widget terület"
 
-#: functions.php:13
+#: functions.php:14
 msgid "Singular Widget Area"
 msgstr "Egyetlen bejegyzés"
 
-#: functions.php:15
+#: functions.php:16
 msgid "The singular widget area"
 msgstr "Az egyetlen bejegyzést megjelenítő oldalon megjelenő widget terület"
 
-#: functions.php:22
+#: functions.php:23
 msgid "Not Singular Widget Area"
 msgstr "Több bejegyzés"
 
-#: functions.php:24
+#: functions.php:25
 msgid "Not the singular widget area"
 msgstr "A több bejegyzést megjelenítő oldalon megjelenő widget terület"
 
-#: functions.php:31
+#: functions.php:32
 msgid "Footer Widget Area"
 msgstr "Alsó terület"
 
-#: functions.php:33
+#: functions.php:34
 msgid "The footer widget area"
 msgstr "Az alsó widget terület"
 
-#: functions.php:52
-#: functions.php:64
+#: functions.php:53
+#: functions.php:65
 #, php-format
 msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s"
 
-#: functions.php:64
+#: functions.php:65
 msgid "[Edit]"
 msgstr "[szerkesztés]"
 
-#: functions.php:67
+#: functions.php:70
 msgid "Your comment is awaiting moderation."
 msgstr "A hozzászólás moderálás alatt."
-
-#: functions.php:202
-msgid "Logo URL"
-msgstr "Logó URL"
-
-#: functions.php:203
-msgid "Put your full logo image address here.(with http://) Image Height: 36px"
-msgstr "Add meg a logó teljes címét ide (http://-vel együtt)! Magasság: 36px"
-
-#: functions.php:207
-msgid "Hide the title and description"
-msgstr "Cím és leírás elrejtése"
-
-#: functions.php:208
-msgid "If your set the \"Header image\", you can check it to hide the title and description."
-msgstr "Ha \"Fejléc képet\" állítasz be, akkor jelöld meg ezt, hogy eltűnjön az oldal címe és leírása."
-
-#: functions.php:212
-msgid "Header image link"
-msgstr "Fejléc kép hivatkozás"
-
-#: functions.php:213
-msgid "Custom header image link. The default is Home Page."
-msgstr "Saját fejléc kép hivatkozás. Az alapvető a kezdőlapra mutat."
-
-#: functions.php:217
-msgid "RSS URL"
-msgstr "RSS URL"
-
-#: functions.php:218
-msgid "Put your full rss subscribe address here.(with http://)"
-msgstr "Add meg a teljes RSS címet ide (http://-vel együtt)."
-
-#: functions.php:222
-msgid "twitter URL"
-msgstr "Twitter URL"
-
-#: functions.php:223
-msgid "Put your full twitter address here.(with http:// , leave it blank for display none.)"
-msgstr "Add meg ide a teljes Twitter címet (http://-vel együtt), vagy hagyd üresen az elrejtéshez."
-
-#: functions.php:227
-msgid "facebook URL"
-msgstr "Facebook URL"
-
-#: functions.php:228
-msgid "Put your full facebook address here.(with http:// , leave it blank for no display none.)"
-msgstr "Add meg a teljes Facebook címet ide (http://-vel együtt), vagy hagyd üresen az elrejtéshez."
-
-#: functions.php:232
-msgid "Google+ URL"
-msgstr "Google+ URL"
-
-#: functions.php:233
-msgid "Put your full Google+ address here.(with http:// , leave it blank for no display none.)"
-msgstr "Add meg a teljes Google+ címet ide (http://-vel együtt), vagy hagyd üresen az elrejtéshez."
-
-#: functions.php:237
-msgid "Custom social network 1"
-msgstr "Egyéb közösségi háló 1"
-
-#: functions.php:238
-#: functions.php:253
-msgid "Social network name:"
-msgstr "Név:"
-
-#: functions.php:243
-#: functions.php:258
-msgid "Social network icon address: (image size limits: 16px*16px)"
-msgstr "Az ikon URL-je (max. 16x16px):"
-
-#: functions.php:248
-#: functions.php:263
-msgid "Social network links address:"
-msgstr "URL:"
-
-#: functions.php:252
-msgid "Custom social network 2"
-msgstr "Egyéb közösségi háló 2"
-
-#: functions.php:267
-msgid "Excerpt?"
-msgstr "Kivonat"
-
-#: functions.php:268
-msgid "If excerpt of posts display in home and archive page, check."
-msgstr "Jelöld be ha csak a kivonatot szeretnéd megjeleníteni a főoldalon és az archívumban! (A bejegyzés első része, összefoglalója.)"
-
-#: functions.php:272
-msgid "Disable the comment notes"
-msgstr "Hozzászólás alatti megjegyzés kikapcsolása"
-
-#: functions.php:273
-msgid "Disabling this will remove the note text that displays with more options for adding to comments (html)."
-msgstr "Megjelölésével a hozzászólás alatt megjelenő további lehetőségekről szóló megjegyzést tüntethetjük el."
-
-#: functions.php:277
-msgid "Disable the comments smilies"
-msgstr "Grafikus hangulatjelek kikapcsolása"
-
-#: functions.php:278
-msgid "Disabling this will remove the comments smilies."
-msgstr "Megjelölésével a hozzászólásokban nem lesznek grafikus hangulatjelek."
-
-#: functions.php:290
-msgid "Theme Options"
-msgstr "Sablon beállítások"
-
-#: functions.php:313
-#, php-format
-msgid "%1$s Theme Options"
-msgstr "%1$s sablon beállítása"
-
-#: functions.php:320
-#: functions.php:398
-msgid "Save Options"
-msgstr "Mentés"
-
-#: functions.php:323
-msgid "Header settings"
-msgstr "Fejléc beállítások"
-
-#: functions.php:375
-msgid "General settings"
-msgstr "Általános beállítások"
-
-#: functions.php:391
-msgid "Social network settings"
-msgstr "Közösségi háló beállítások"
-
-#: functions.php:403
-msgid "Reset All Settings"
-msgstr "Reset All Settings"
-
-#: functions.php:403
-msgid "Click OK to reset. Any settings will be lost!"
-msgstr "Click OK to reset. Any settings will be lost!"
-
-#: functions.php:409
-msgid "Donation"
-msgstr "Támogatás"
-
-#: functions.php:411
-#, php-format
-msgid "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
-msgstr "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
 
 #: header.php:22
 msgid "Home"
@@ -412,21 +267,25 @@ msgstr "Ez egy kiemelt bejegyzés!"
 msgid "continue reading?"
 msgstr "olvass tovább..."
 
+#: page-without-sidebar.php:12
 #: page.php:8
 #: single.php:14
 msgid "Leave a comment"
 msgstr "Hozzászólás"
 
+#: page-without-sidebar.php:13
 #: page.php:9
 #: single.php:15
 msgid "Go to comments ?"
 msgstr "Ugrás a hozzászólásokhoz"
 
+#: page-without-sidebar.php:13
 #: page.php:9
 #: single.php:15
 msgid "Go to comments"
 msgstr "Ugrás a hozzászólásokhoz"
 
+#: page-without-sidebar.php:21
 #: page.php:17
 #: single.php:21
 msgid "Pages:"
@@ -480,9 +339,162 @@ msgstr "Általános"
 msgid "Related Posts"
 msgstr "Kapcsolódó bejegyzések"
 
+#: library/theme-options.php:7
+msgid "Logo URL"
+msgstr "Logó URL"
+
+#: library/theme-options.php:8
+msgid "Put your full logo image address here.(with http://) Image Height: 36px"
+msgstr "Add meg a logó teljes címét ide (http://-vel együtt)! Magasság: 36px"
+
+#: library/theme-options.php:12
+msgid "Hide the title and description"
+msgstr "Cím és leírás elrejtése"
+
+#: library/theme-options.php:13
+msgid "If your set the \"Header image\", you can check it to hide the title and description."
+msgstr "Ha \"Fejléc képet\" állítasz be, akkor jelöld meg ezt, hogy eltűnjön az oldal címe és leírása."
+
+#: library/theme-options.php:17
+msgid "Header image link"
+msgstr "Fejléc kép hivatkozás"
+
+#: library/theme-options.php:18
+msgid "Custom header image link. The default is Home Page."
+msgstr "Saját fejléc kép hivatkozás. Az alapvető a kezdőlapra mutat."
+
+#: library/theme-options.php:22
+msgid "RSS URL"
+msgstr "RSS URL"
+
+#: library/theme-options.php:23
+msgid "Put your full rss subscribe address here.(with http://)"
+msgstr "Add meg a teljes RSS címet ide (http://-vel együtt)."
+
+#: library/theme-options.php:27
+msgid "twitter URL"
+msgstr "Twitter URL"
+
+#: library/theme-options.php:28
+msgid "Put your full twitter address here.(with http:// , leave it blank for display none.)"
+msgstr "Add meg ide a teljes Twitter címet (http://-vel együtt), vagy hagyd üresen az elrejtéshez."
+
+#: library/theme-options.php:32
+msgid "facebook URL"
+msgstr "Facebook URL"
+
+#: library/theme-options.php:33
+msgid "Put your full facebook address here.(with http:// , leave it blank for no display none.)"
+msgstr "Add meg a teljes Facebook címet ide (http://-vel együtt), vagy hagyd üresen az elrejtéshez."
+
+#: library/theme-options.php:37
+msgid "Google+ URL"
+msgstr "Google+ URL"
+
+#: library/theme-options.php:38
+msgid "Put your full Google+ address here.(with http:// , leave it blank for no display none.)"
+msgstr "Add meg a teljes Google+ címet ide (http://-vel együtt), vagy hagyd üresen az elrejtéshez."
+
+#: library/theme-options.php:42
+msgid "Custom social network 1"
+msgstr "Egyéb közösségi háló 1"
+
+#: library/theme-options.php:43
+#: library/theme-options.php:58
+msgid "Social network name:"
+msgstr "Név:"
+
+#: library/theme-options.php:48
+#: library/theme-options.php:63
+msgid "Social network icon address: (image size limits: 16px*16px)"
+msgstr "Az ikon URL-je (max. 16x16px):"
+
+#: library/theme-options.php:53
+#: library/theme-options.php:68
+msgid "Social network links address:"
+msgstr "URL:"
+
+#: library/theme-options.php:57
+msgid "Custom social network 2"
+msgstr "Egyéb közösségi háló 2"
+
+#: library/theme-options.php:72
+msgid "The left Sidebar style?"
+msgstr "The left Sidebar style?"
+
+#: library/theme-options.php:73
+msgid "If like \"left Sidebar style\", check."
+msgstr "If like \"left Sidebar style\", check."
+
+#: library/theme-options.php:77
+msgid "Excerpt?"
+msgstr "Kivonat"
+
+#: library/theme-options.php:78
+msgid "If excerpt of posts display in home and archive page, check."
+msgstr "Jelöld be ha csak a kivonatot szeretnéd megjeleníteni a főoldalon és az archívumban! (A bejegyzés első része, összefoglalója.)"
+
+#: library/theme-options.php:82
+msgid "Disable the comment notes"
+msgstr "Hozzászólás alatti megjegyzés kikapcsolása"
+
+#: library/theme-options.php:83
+msgid "Disabling this will remove the note text that displays with more options for adding to comments (html)."
+msgstr "Megjelölésével a hozzászólás alatt megjelenő további lehetőségekről szóló megjegyzést tüntethetjük el."
+
+#: library/theme-options.php:87
+msgid "Disable the comments smilies"
+msgstr "Grafikus hangulatjelek kikapcsolása"
+
+#: library/theme-options.php:88
+msgid "Disabling this will remove the comments smilies."
+msgstr "Megjelölésével a hozzászólásokban nem lesznek grafikus hangulatjelek."
+
+#: library/theme-options.php:100
+msgid "Theme Options"
+msgstr "Sablon beállítások"
+
+#: library/theme-options.php:123
+#, php-format
+msgid "%1$s Theme Options"
+msgstr "%1$s sablon beállítása"
+
+#: library/theme-options.php:130
+#: library/theme-options.php:208
+msgid "Save Options"
+msgstr "Mentés"
+
+#: library/theme-options.php:133
+msgid "Header settings"
+msgstr "Fejléc beállítások"
+
+#: library/theme-options.php:185
+msgid "General settings"
+msgstr "Általános beállítások"
+
+#: library/theme-options.php:201
+msgid "Social network settings"
+msgstr "Közösségi háló beállítások"
+
+#: library/theme-options.php:214
+msgid "Reset All Settings"
+msgstr "Reset All Settings"
+
+#: library/theme-options.php:214
+msgid "Click OK to reset. Any settings will be lost!"
+msgstr "Click OK to reset. Any settings will be lost!"
+
+#: library/theme-options.php:220
+msgid "Donation"
+msgstr "Támogatás"
+
+#: library/theme-options.php:222
+#, php-format
+msgid "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
+msgstr "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
+
 #~ msgid ""
 #~ "If the home page and archive pages to display excerpt of post, check."
 #~ msgstr ""
 #~ "Anklicken, wenn die Hauptseite und die Archive nur Auszüge deiner Artikel "
 #~ "zeigen sollen."
-

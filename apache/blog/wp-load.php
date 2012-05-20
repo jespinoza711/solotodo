@@ -53,7 +53,7 @@ if ( file_exists( ABSPATH . 'wp-config.php') ) {
 	require_once( ABSPATH . '/wp-includes/functions.php' );
 	require_once( ABSPATH . '/wp-includes/plugin.php' );
 	$text_direction = /*WP_I18N_TEXT_DIRECTION*/'ltr'/*/WP_I18N_TEXT_DIRECTION*/;
-	wp_die(sprintf(/*WP_I18N_NO_CONFIG*/'No parece ser un archivo <code>wp-config.php</code>. Necesito esto antes para que podamos empezar. &iquest;Necesita m&aacute;s ayuda? <a href=\'http://codex.wordpress.org/Editing_wp-config.php\'>Te la damos</a>. Usted puede crear un archivo <code>wp-config.php</code> a trav&eacute;s de la interfaz de su web, pero esto no funciona para todas las configuraciones de los servidores. La forma m&aacute;s segura es crear manualmente el archivo.</p><p><a href=\'%ssetup-config.php\' class=\'button\'>Crear un Archivo de Configuraci&oacute;n</a>'/*/WP_I18N_NO_CONFIG*/, $path), /*WP_I18N_ERROR_TITLE*/'WordPress &rsaquo; Error'/*/WP_I18N_ERROR_TITLE*/, array('text_direction' => $text_direction));
+	wp_die(sprintf(/*WP_I18N_NO_CONFIG*/'<p>Aparentemente falta el archivo <code>wp-config.php</code>. Este archivo es necesario para empezar. ¿Necesitas ayuda? <a href=\'http://codex.wordpress.org/Editing_wp-config.php\'>La encontrarás aquí</a> (en inglés).</p><p>Puedes crear un archivo <code>wp-config.php</code> a través de la web, pero esto no funciona en algunos servidores. Lo más seguro es crear el archivo manualmente.</p><p><a href=\'%ssetup-config.php\' class=\'button\'>Crear un archivo de configuración</a></p>'/*/WP_I18N_NO_CONFIG*/, $path), /*WP_I18N_ERROR_TITLE*/'WordPress &rsaquo; Error'/*/WP_I18N_ERROR_TITLE*/, array('text_direction' => $text_direction));
 
 }
 

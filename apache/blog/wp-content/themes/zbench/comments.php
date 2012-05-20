@@ -15,16 +15,17 @@
 <!-- You can start editing here. -->
 
 	<?php if ( have_comments() ) { ?>
-			<div id="comments-div"><?php if ( comments_open() ) { ?><span id="comments-addcomment"><a href="#respond"  rel="nofollow" title="<?php _e('Leave a comment ?', 'zbench'); ?>"><?php _e('Leave a comment ?', 'zbench'); ?></a></span><?php } ?><h2 id="comments"><?php comments_number('0', '1', '%' );?> <?php _e('Comments.','zbench'); ?></h2></div>
-			<ol class="commentlist" id="thecomments">
-					<?php wp_list_comments('type=all&callback=zbench_mytheme_comment'); ?>
-			</ol>
-			<div class="navigation"><?php paginate_comments_links(); ?></div>
+		<div id="comments-div"><?php if ( comments_open() ) { ?><span id="comments-addcomment"><a href="#respond"  rel="nofollow" title="<?php _e('Leave a comment ?', 'zbench'); ?>"><?php _e('Leave a comment ?', 'zbench'); ?></a></span><?php } ?><h2 id="comments"><?php comments_number('0', '1', '%' );?> <?php _e('Comments.','zbench'); ?></h2></div>
+		<ol class="commentlist" id="thecomments">
+				<?php wp_list_comments('type=all&callback=zbench_mytheme_comment'); ?>
+		</ol>
+		<div class="navigation"><?php paginate_comments_links(); ?></div>
 	<?php } else { // this is displayed if there are no comments so far ?>
-	<?php if ( ! comments_open() && !is_page() ) { ?>
+		<?php if ( comments_open() ) { ?>
+			<div id="comments-div"><?php if ( comments_open() ) { ?><span id="comments-addcomment"><a href="#respond"  rel="nofollow" title="<?php _e('Leave a comment ?', 'zbench'); ?>"><?php _e('Leave a comment ?', 'zbench'); ?></a></span><?php } ?><h2 id="comments"><?php comments_number('0', '1', '%' );?> <?php _e('Comments.','zbench'); ?></h2></div>
+		<?php } elseif ( ! comments_open() && !is_page() ) { ?>
 			<div id="comments-div"><h2 id="comments"><?php _e('Comments are closed.','zbench'); ?></h2></div>
-	<?php } // end ! comments_open() ?>
-
+		<?php } // end ! comments_open() ?>
 	<?php } // end have_comments()
 
 global $zbench_options;

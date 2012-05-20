@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zbench\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-06 13:48+0800\n"
-"PO-Revision-Date: 2011-09-06 13:49+0800\n"
+"POT-Creation-Date: 2011-12-03 19:41+0800\n"
+"PO-Revision-Date: 2011-12-03 19:41+0800\n"
 "Last-Translator: zwwooooo <zwwblog@gmail.com>\n"
 "Language-Team:  <fcoj.santos@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -121,7 +121,7 @@ msgid "comments"
 msgstr "comentarios"
 
 #: archive.php:36
-#: functions.php:110
+#: functions.php:109
 #: index.php:25
 msgid "Read more &raquo;"
 msgstr "Leer más &raquo;"
@@ -141,6 +141,7 @@ msgid "This post is password protected. Enter the password to view comments."
 msgstr "Este post está protegido por contraseña. Introduzca la clave para ver los comentarios."
 
 #: comments.php:18
+#: page-without-sidebar.php:12
 #: page.php:8
 #: single.php:14
 msgid "Leave a comment ?"
@@ -203,197 +204,51 @@ msgstr "Copyright"
 msgid "Top"
 msgstr "Subir"
 
-#: functions.php:4
+#: functions.php:5
 msgid "Primary Widget Area"
 msgstr "Primary Widget Area"
 
-#: functions.php:6
+#: functions.php:7
 msgid "The primary widget area"
 msgstr "The primary widget area"
 
-#: functions.php:13
+#: functions.php:14
 msgid "Singular Widget Area"
 msgstr "Singular Widget Area"
 
-#: functions.php:15
+#: functions.php:16
 msgid "The singular widget area"
 msgstr "The singular widget area"
 
-#: functions.php:22
+#: functions.php:23
 msgid "Not Singular Widget Area"
 msgstr "Not Singular Widget Area"
 
-#: functions.php:24
+#: functions.php:25
 msgid "Not the singular widget area"
 msgstr "Not the singular widget area"
 
-#: functions.php:31
+#: functions.php:32
 msgid "Footer Widget Area"
 msgstr "Footer Widget Area"
 
-#: functions.php:33
+#: functions.php:34
 msgid "The footer widget area"
 msgstr "The footer widget area"
 
-#: functions.php:52
-#: functions.php:64
+#: functions.php:53
+#: functions.php:65
 #, php-format
 msgid "%1$s at %2$s"
 msgstr "%1$s @%2$s"
 
-#: functions.php:64
+#: functions.php:65
 msgid "[Edit]"
 msgstr "[Editar]"
 
-#: functions.php:67
+#: functions.php:70
 msgid "Your comment is awaiting moderation."
 msgstr "Tu comentario está esperando ser moderado."
-
-#: functions.php:202
-msgid "Logo URL"
-msgstr "Logo URL"
-
-#: functions.php:203
-msgid "Put your full logo image address here.(with http://) Image Height: 36px"
-msgstr "Put your full logo image address here.(with http://) Image Height: 36px"
-
-#: functions.php:207
-msgid "Hide the title and description"
-msgstr "Hide the title and description"
-
-#: functions.php:208
-msgid "If your set the \"Header image\", you can check it to hide the title and description."
-msgstr "If your set the \"Header image\", you can check it to hide the title and description."
-
-#: functions.php:212
-msgid "Header image link"
-msgstr "Header image link"
-
-#: functions.php:213
-msgid "Custom header image link. The default is Home Page."
-msgstr "Custom header image link. The default is Home Page."
-
-#: functions.php:217
-msgid "RSS URL"
-msgstr "RSS URL"
-
-#: functions.php:218
-msgid "Put your full rss subscribe address here.(with http://)"
-msgstr "Introduce tu direccion RSS de suscripcion completa aquí (con http://)."
-
-#: functions.php:222
-msgid "twitter URL"
-msgstr "twitter URL"
-
-#: functions.php:223
-msgid "Put your full twitter address here.(with http:// , leave it blank for display none.)"
-msgstr "Introduce tu direccion de twitter completa aquí (con http://, deja en blanco para mostrar vacio)."
-
-#: functions.php:227
-msgid "facebook URL"
-msgstr "facebook URL"
-
-#: functions.php:228
-msgid "Put your full facebook address here.(with http:// , leave it blank for no display none.)"
-msgstr "Introduce tu direccion de facebook completa aquí (con http://, deja en blanco para mostrar vacio)."
-
-#: functions.php:232
-msgid "Google+ URL"
-msgstr "Google+ URL"
-
-#: functions.php:233
-msgid "Put your full Google+ address here.(with http:// , leave it blank for no display none.)"
-msgstr "Put your full Google+ address here.(with http:// , leave it blank for no display none.)"
-
-#: functions.php:237
-msgid "Custom social network 1"
-msgstr "Custom social network 1"
-
-#: functions.php:238
-#: functions.php:253
-msgid "Social network name:"
-msgstr "Social network name:"
-
-#: functions.php:243
-#: functions.php:258
-msgid "Social network icon address: (image size limits: 16px*16px)"
-msgstr "Social network icon address: (image size limits: 16px*16px)"
-
-#: functions.php:248
-#: functions.php:263
-msgid "Social network links address:"
-msgstr "Social network links address:"
-
-#: functions.php:252
-msgid "Custom social network 2"
-msgstr "Custom social network 2"
-
-#: functions.php:267
-msgid "Excerpt?"
-msgstr "Extracto?"
-
-#: functions.php:268
-msgid "If excerpt of posts display in home and archive page, check."
-msgstr "If excerpt of posts display in home and archive page, check."
-
-#: functions.php:272
-msgid "Disable the comment notes"
-msgstr "Descativar las notas de comentarios"
-
-#: functions.php:273
-msgid "Disabling this will remove the note text that displays with more options for adding to comments (html)."
-msgstr "Disabling this will remove the note text that displays with more options for adding to comments (html)."
-
-#: functions.php:277
-msgid "Disable the comments smilies"
-msgstr "Desabilitar smilies en comentarios"
-
-#: functions.php:278
-msgid "Disabling this will remove the comments smilies."
-msgstr "Desabilitando esto eliminará los smilies de los comentarios."
-
-#: functions.php:290
-msgid "Theme Options"
-msgstr "Opciones del tema"
-
-#: functions.php:313
-#, php-format
-msgid "%1$s Theme Options"
-msgstr "%1$s Opciones de tema"
-
-#: functions.php:320
-#: functions.php:398
-msgid "Save Options"
-msgstr "Guardar Opciones"
-
-#: functions.php:323
-msgid "Header settings"
-msgstr "Header settings"
-
-#: functions.php:375
-msgid "General settings"
-msgstr "General settings"
-
-#: functions.php:391
-msgid "Social network settings"
-msgstr "Social network settings"
-
-#: functions.php:403
-msgid "Reset All Settings"
-msgstr "Reset All Settings"
-
-#: functions.php:403
-msgid "Click OK to reset. Any settings will be lost!"
-msgstr "Click OK to reset. Any settings will be lost!"
-
-#: functions.php:409
-msgid "Donation"
-msgstr "Donar"
-
-#: functions.php:411
-#, php-format
-msgid "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
-msgstr "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
 
 #: header.php:22
 msgid "Home"
@@ -411,21 +266,25 @@ msgstr "Esto es un Post permanente"
 msgid "continue reading?"
 msgstr "Seguir leyendo?"
 
+#: page-without-sidebar.php:12
 #: page.php:8
 #: single.php:14
 msgid "Leave a comment"
 msgstr "Deje un comentario"
 
+#: page-without-sidebar.php:13
 #: page.php:9
 #: single.php:15
 msgid "Go to comments ?"
 msgstr "Ir a comentarios"
 
+#: page-without-sidebar.php:13
 #: page.php:9
 #: single.php:15
 msgid "Go to comments"
 msgstr "Ir a comentarios"
 
+#: page-without-sidebar.php:21
 #: page.php:17
 #: single.php:21
 msgid "Pages:"
@@ -478,6 +337,160 @@ msgstr "Meta"
 #: single.php:24
 msgid "Related Posts"
 msgstr "Post relacionados"
+
+#: library/theme-options.php:7
+msgid "Logo URL"
+msgstr "Logo URL"
+
+#: library/theme-options.php:8
+msgid "Put your full logo image address here.(with http://) Image Height: 36px"
+msgstr "Put your full logo image address here.(with http://) Image Height: 36px"
+
+#: library/theme-options.php:12
+msgid "Hide the title and description"
+msgstr "Hide the title and description"
+
+#: library/theme-options.php:13
+msgid "If your set the \"Header image\", you can check it to hide the title and description."
+msgstr "If your set the \"Header image\", you can check it to hide the title and description."
+
+#: library/theme-options.php:17
+msgid "Header image link"
+msgstr "Header image link"
+
+#: library/theme-options.php:18
+msgid "Custom header image link. The default is Home Page."
+msgstr "Custom header image link. The default is Home Page."
+
+#: library/theme-options.php:22
+msgid "RSS URL"
+msgstr "RSS URL"
+
+#: library/theme-options.php:23
+msgid "Put your full rss subscribe address here.(with http://)"
+msgstr "Introduce tu direccion RSS de suscripcion completa aquí (con http://)."
+
+#: library/theme-options.php:27
+msgid "twitter URL"
+msgstr "twitter URL"
+
+#: library/theme-options.php:28
+msgid "Put your full twitter address here.(with http:// , leave it blank for display none.)"
+msgstr "Introduce tu direccion de twitter completa aquí (con http://, deja en blanco para mostrar vacio)."
+
+#: library/theme-options.php:32
+msgid "facebook URL"
+msgstr "facebook URL"
+
+#: library/theme-options.php:33
+msgid "Put your full facebook address here.(with http:// , leave it blank for no display none.)"
+msgstr "Introduce tu direccion de facebook completa aquí (con http://, deja en blanco para mostrar vacio)."
+
+#: library/theme-options.php:37
+msgid "Google+ URL"
+msgstr "Google+ URL"
+
+#: library/theme-options.php:38
+msgid "Put your full Google+ address here.(with http:// , leave it blank for no display none.)"
+msgstr "Put your full Google+ address here.(with http:// , leave it blank for no display none.)"
+
+#: library/theme-options.php:42
+msgid "Custom social network 1"
+msgstr "Custom social network 1"
+
+#: library/theme-options.php:43
+#: library/theme-options.php:58
+msgid "Social network name:"
+msgstr "Social network name:"
+
+#: library/theme-options.php:48
+#: library/theme-options.php:63
+msgid "Social network icon address: (image size limits: 16px*16px)"
+msgstr "Social network icon address: (image size limits: 16px*16px)"
+
+#: library/theme-options.php:53
+#: library/theme-options.php:68
+msgid "Social network links address:"
+msgstr "Social network links address:"
+
+#: library/theme-options.php:57
+msgid "Custom social network 2"
+msgstr "Custom social network 2"
+
+#: library/theme-options.php:72
+msgid "The left Sidebar style?"
+msgstr "The left Sidebar style?"
+
+#: library/theme-options.php:73
+msgid "If like \"left Sidebar style\", check."
+msgstr "If like \"left Sidebar style\", check."
+
+#: library/theme-options.php:77
+msgid "Excerpt?"
+msgstr "Extracto?"
+
+#: library/theme-options.php:78
+msgid "If excerpt of posts display in home and archive page, check."
+msgstr "If excerpt of posts display in home and archive page, check."
+
+#: library/theme-options.php:82
+msgid "Disable the comment notes"
+msgstr "Descativar las notas de comentarios"
+
+#: library/theme-options.php:83
+msgid "Disabling this will remove the note text that displays with more options for adding to comments (html)."
+msgstr "Disabling this will remove the note text that displays with more options for adding to comments (html)."
+
+#: library/theme-options.php:87
+msgid "Disable the comments smilies"
+msgstr "Desabilitar smilies en comentarios"
+
+#: library/theme-options.php:88
+msgid "Disabling this will remove the comments smilies."
+msgstr "Desabilitando esto eliminará los smilies de los comentarios."
+
+#: library/theme-options.php:100
+msgid "Theme Options"
+msgstr "Opciones del tema"
+
+#: library/theme-options.php:123
+#, php-format
+msgid "%1$s Theme Options"
+msgstr "%1$s Opciones de tema"
+
+#: library/theme-options.php:130
+#: library/theme-options.php:208
+msgid "Save Options"
+msgstr "Guardar Opciones"
+
+#: library/theme-options.php:133
+msgid "Header settings"
+msgstr "Header settings"
+
+#: library/theme-options.php:185
+msgid "General settings"
+msgstr "General settings"
+
+#: library/theme-options.php:201
+msgid "Social network settings"
+msgstr "Social network settings"
+
+#: library/theme-options.php:214
+msgid "Reset All Settings"
+msgstr "Reset All Settings"
+
+#: library/theme-options.php:214
+msgid "Click OK to reset. Any settings will be lost!"
+msgstr "Click OK to reset. Any settings will be lost!"
+
+#: library/theme-options.php:220
+msgid "Donation"
+msgstr "Donar"
+
+#: library/theme-options.php:222
+#, php-format
+msgid "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
+msgstr "Created, Developed and maintained by %s . If you feel my work is useful and want to support the development of more free resources, you can donate me. Thank you very much!"
 
 #~ msgid ""
 #~ "If the home page and archive pages to display excerpt of post, check."

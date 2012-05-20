@@ -94,8 +94,10 @@ if ( ! isset( $content_width ) )
 	$content_width = 620;
 	
 //////// WP nav menu
-if (function_exists('wp_nav_menu')) {
-	register_nav_menus(array('primary' => 'Primary Navigation'));
+register_nav_menus(array('primary' => 'Primary Navigation'));
+//////// Custom wp_list_pages
+function zbench_wp_list_pages(){
+	echo '<ul>' , wp_list_pages('title_li=') , '</ul>';
 }
 
 //////// LOCALIZATION

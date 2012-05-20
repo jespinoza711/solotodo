@@ -40,9 +40,38 @@ License URI:http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 * Spanish (es_ES): Francisco Santos
 * Czech (cs_CZ): Jirka Vilim
 * Hungarian (hu_HU): Bortny¨¢k Roland
-
+* Portuguese (pt_PT): Pedro Fonseca
+* Bulgarian (bg_BG): Marin Draganov
+* Polish (pl_PL): Andrzej Pauli
+* Dutch (nl_NL): Danny Klaassen
+* Indonesian (id_ID): Ivo Idham Perdameian
+* Japanese (ja_JP): Hide Uehara
+* Swedish (sv_SE): Per-Erik Eriksson
 
 == Changelog ==
+
+= 1.3.5 =
+
+* Any details of the changes
+* Fix: "home link" style in front page.
+* Add Japanese, Swedish translation files
+
+= 1.3.4 =
+* Forgot few files to upload...
+
+= 1.3.3 =
+* Fix: comments state tips.
+* Fix and Modify: #gotocomments change to .gotocomments, #addcomment change to .addcomment
+* Modify: the parameters of function wp_nav_menu()
+* Modify: Any element's css property in class "entry"
+* Add Bulgarian, Polish, Dutch, Indonesian translation files
+
+= 1.3.2 =
+* Remove function_exists() conditional wrappers from wp_nav_menu()
+* Add "comment content" css style
+* Add css properties "max-width" to limit class "wp-caption" width
+* Add new Option: Left Sidebar style select
+* Add Portuguese translation files
 
 = 1.3.1 =
 * Update Hungarian translation files

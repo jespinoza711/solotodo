@@ -68,6 +68,11 @@ function zbench_options_items() {
 			'desc' => __('Social network links address:', 'zbench')
 		),
 		array(
+			'id' => 'left_sidebar',
+			'name' => __('The left Sidebar style?', 'zbench'),
+			'desc' => __('If like "left Sidebar style", check.', 'zbench')
+		),
+		array(
 			'id' => 'excerpt_check',
 			'name' => __('Excerpt?', 'zbench'),
 			'desc' => __('If excerpt of posts display in home and archive page, check.', 'zbench')
@@ -114,7 +119,8 @@ function zbench_theme_options_do_page() {
 		zbench_default_options();
 	}
 ?>
-	<div class="wrap">
+	<div class="wrap zbench_wrap">
+		<style>.zbench_wrap label{cursor:text;}</style>
 		<?php screen_icon(); echo "<h2>" . sprintf( __( '%1$s Theme Options', 'zbench' ), get_current_theme() )	 . "</h2>"; ?>
 		<?php settings_errors(); ?>
 		<div id="poststuff" class="metabox-holder">
@@ -128,7 +134,7 @@ function zbench_theme_options_do_page() {
 					<h3><label for="link_url"><?php _e( 'Header settings', 'zbench' ); ?></label></h3>
 					<table class="form-table">
 					<?php foreach (zbench_options_items() as $item) { ?>
-						<?php if ($item['id'] == 'hide_title' || $item['id'] == 'excerpt_check' || $item['id'] == 'comment_notes' || $item['id'] == 'smilies') { ?>
+						<?php if ($item['id'] == 'hide_title' || $item['id'] == 'excerpt_check' || $item['id'] == 'comment_notes' || $item['id'] == 'smilies' || $item['id'] == 'left_sidebar') { ?>
 						<tr valign="top">
 							<th scope="row"><?php echo $item['name']; ?></th>
 							<td>
