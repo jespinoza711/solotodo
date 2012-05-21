@@ -1,3 +1,22 @@
+<?php
+function my_wp_link_page( $i ) {
+	global $post, $wp_rewrite;
+
+	if ( 1 == $i ) {
+		$url = get_permalink();
+	} else {
+		if ( '' == get_option('permalink_structure') || in_array($post->post_status, array('draft', 'pending')) )
+			$url = add_query_arg( 'page', $i, get_permalink() );
+		elseif ( 'page' == get_option('show_on_front') && get_option('page_on_front') == $post->ID )
+			$url = trailingslashit(get_permalink()) . user_trailingslashit("$wp_rewrite->pagination_base/" . $i, 'single_paged');
+		else
+			$url = trailingslashit(get_permalink()) . user_trailingslashit($i, 'single_paged');
+	}
+
+	return esc_url( $url );
+}
+?>
+
 <?php get_header(); ?>
 <div id="content">
 	<?php the_post(); ?>
@@ -18,7 +37,43 @@
 		<div class="clear"></div>
 		<div class="entry">
 			<?php the_content(); ?>
-			<?php wp_link_pages( array( 'before' => '<div class="page_link"><strong>' . __( 'Pages:', 'zbench' ) . '</strong>' , 'after' => '</div>' ) ); ?>
+			
+			<?php
+    			$subject = $post->post_content;
+                $pattern = '/<h1>(?P<name>.*)<\/h1>/';
+                $num_matches = preg_match_all($pattern, $subject, $matches, PREG_OFFSET_CAPTURE, 3);
+                $matches = $matches['name'];
+            ?>
+			
+			<br />
+			<div style="font-size: 18px;">
+			<?php
+			    if ($page > 1) {
+			        echo '<a style="width: 290px; float:left;" href="' . my_wp_link_page($page - 1) .'">« ' . $matches[$page - 2][0] . '</a>';
+			    }
+			    
+			    if ($page < $numpages && $numpages > 1) {
+			        echo '<a style="width: 290px; float:right; text-align: right;" href="' . my_wp_link_page($page + 1) . '">' . $matches[$page][0] . ' »</a>';
+			    }
+			    
+			?>
+			</div>
+
+            <?php            
+                if ($num_matches > 1) {
+                    echo '<select class="custom_paginator" style="width: 400px; margin-top: 30px; margin-bottom: 30px;">';
+                    foreach ($matches as $i => $value) {
+                        echo '<option value="' . my_wp_link_page($i + 1) . '"';
+                        if ($i == $page - 1) {
+                            echo ' selected="selected"';
+                        }
+                        echo '>' . ($i + 1) . ' - ' . $value[0] . '</option>';
+                    }
+                    echo '</select>';
+                }
+            ?>
+            
+			
 		</div><!-- END entry -->
 		<div class="add-info">
 			<?php if(function_exists('st_related_posts')) { st_related_posts('title=<h3>'._e('Related Posts','zbench').'</h3>'); } ?>
