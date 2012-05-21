@@ -8,14 +8,24 @@
         <li>
             <strong>Capacidad: </strong> {{ product.capacity }}
         </li>
-        <li>
-            <strong>RPM: </strong> {{ product.rpm }}
-        </li>
+
+        {% if product.rpm.value %}
+            <li>
+                <strong>RPM: </strong> {{ product.rpm }}
+            </li>
+            <li>
+                <strong>Búfer: </strong> {{ product.buffer }}
+            </li>
+        {% else %}
+            <li>
+                <strong>Velocidad de lectura: </strong> {{ product.sequential_read_speed }} MB/s
+            </li>
+            <li>
+                <strong>Velocidad de escritura: </strong> {{ product.sequential_write_speed }} MB/s
+            </li>
+        {% endif %}
         <li>
             <strong>Bus: </strong> {{ product.bus }}
-        </li>
-        <li>
-            <strong>Búfer: </strong> {{ product.buffer }}
         </li>
     </ul>
 {% endblock %}
