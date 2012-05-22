@@ -17,6 +17,7 @@ from ram_search_form import RamSearchForm
 from storage_drive_search_form import StorageDriveSearchForm
 from power_supply_search_form import PowerSupplySearchForm
 from computer_case_search_form import ComputerCaseSearchForm
+from hponline_search_form import HponlineSearchForm
 
 __all__ = [ 
             'SearchForm', 
@@ -38,4 +39,5 @@ __all__ = [
             'StorageDriveSearchForm',
             'PowerSupplySearchForm',
             'ComputerCaseSearchForm',
+            'HponlineSearchForm'
             ]

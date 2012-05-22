@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>HP Online - Buscador de notebooks</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/media/css/hponline/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/media/css/hponline/styles.css">
+    <link rel="stylesheet" type="text/css" href="/media/css/hponline/jquery-ui-1.8.20.custom.css">
+    <link rel="stylesheet" type="text/css" href="/media/css/hponline/jquery.ui.selectmenu.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/media/js/hponline/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/media/js/hponline/jquery-ui-1.8.20.custom.min.js"></script>
+    <script type="text/javascript" src="/media/js/hponline/jquery.ui.selectmenu.js"></script>
+    <script type="text/javascript" src="/media/js/hponline/searcher.js"></script>
+</head>
+<body>
+    <div id="account_options">
+        <!-- Account options go here -->
+    </div>
+    <div class="container">
+        <div id="header" class="row">
+            <a>
+                <img src="img/logo.gif" />
+            </a>
+            <h3>BUSCADOR DE PRODUCTOS</h3>
+        </div>
+        <div id="content" class="row">
+            <div class="span6">
+                <img src="/media/img/hponline/stock_notebook.png" />
+            </div>
+            <div class="span6" id="searcher">
+                <h6>
+                    Encuentra el notebook HP perfecto para tus necesidades
+                </h6>
+
+                <br />
+
+                <div id="maximum_price_text">
+                    Hasta <span id="maximum_price">$600.000</span>
+                </div>
+
+                <br />
+
+                <form method="get" action=".">
+                    <div class="row-fluid">
+                        <div class="span7" id="slider-range-container">
+                            <div id="slider-range-min"></div>
+                        </div>
+                        <div class="span4">
+                            {{ form.notebook_type }}
+                        </div>
+                    </div>
+
+                    <br />
+
+                    {{ form.max_price }}
+                    <input type="submit" name="submit" class="btn btn-large btn-success" value="¡Buscar!" />
+                </form>
+            </div>
+        </div>
+
+        {% if form.is_bound %}
+        <div id="best_result" class="row">
+            {% if notebook %}
+            <div class="row-fluid">
+                <div class="span6">
+                    <img src="/media/img/hponline/dv6.png"/>
+                    <div class="row-fluid">
+                        <div class="span1">
+                            &nbsp;
+                        </div>
+                        <div class="span7">
+                            <span class="price">{{ shpe.pretty_price }}</span>
+                        </div>
+                        <div class="span3">
+                            <a class="btn btn-primary btn-large" href="{{ shpe.url }}">Ver detalle</a>
+                        </div>
+                        <div class="span1">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="span6" id="">
+                    <h3>{{ notebook }}</h3>
+                    <br />
+                    <h4>Especificaciones</h4>
+                    <br />
+                    <ul>
+                        <li>Procesador {{ notebook.processor }}</li>
+                        <li>{{ notebook.ram_quantity.value|floatformat:0 }} GB de RAM</li>
+                        <li>Disco duro de {{ notebook.storage_drive.all.0.capacity }}</li>
+                        {% if notebook.video_card.count > 1 %}
+                            <li>Gráficos duales
+                                <ul>
+                                    <li>{{ notebook.video_card.all.0 }}</li>
+                                    <li>{{ notebook.video_card.all.1 }}</li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li>Gráficos {{ notebook.video_card.all.0 }}</li>
+                        {% endif %}
+                        <li>Pantalla
+                            {% if notebook.screen.is_led %}
+                                LED
+                            {% endif %}
+                            de {{ notebook.screen.size }}
+                        </li>
+                    </ul>
+                    <br />
+
+                    <h4>Evaluación</h4>
+                    <br />
+                    <table>
+                        <tr>
+                            <td>Desempeño en aplicaciones</td>
+                            <td class="progressbar_container">
+                                <div class="progress progress-{{ processor_tuple.1 }} progress-striped">
+                                    <div style="width: {{ processor_tuple.0 }}%" class="bar"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Desempeño en juegos</td>
+                            <td class="progressbar_container">
+                                <div class="progress progress-{{ graphics_tuple.1 }} progress-striped">
+                                    <div style="width: {{ graphics_tuple.0 }}%" class="bar"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Movilidad</td>
+                            <td class="progressbar_container">
+                                <div class="progress progress-{{ mobility_tuple.1 }} progress-striped">
+                                    <div style="width: {{ mobility_tuple.0 }}%" class="bar"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+                <h4>No hemos encontrado ningún equipo de acuerdo a tus criteros
+                    de búsqueda, por favor ajusta tu presupuesto o necesidades.</h4>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

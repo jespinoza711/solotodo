@@ -102,7 +102,12 @@ urlpatterns += patterns('solonotebooks.cotizador.views_services',
 urlpatterns += patterns('solonotebooks.cotizador.views_chw',
     (r'^mini/(?P<product_id>\d+)/$', 'inline_forum_post'),
 )
-   
+
+urlpatterns += patterns('solonotebooks.cotizador.views_hponline',
+    (r'^hponline/$', 'index'),
+)
+
+
 urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^$', 'index'),
     (r'^products/(?P<product_id>\d+)/$', 'product_details_legacy'),
