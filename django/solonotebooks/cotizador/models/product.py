@@ -26,6 +26,7 @@ class Product(models.Model):
     week_external_visits = models.IntegerField(default = 0)
     long_description = models.TextField(default = ' ')
     display_name = models.CharField(max_length = 255, default = '')
+    review_url = models.CharField(max_length = 255, blank=True, null=True)
 
     similar_products = models.CommaSeparatedIntegerField(max_length = 30, default = '0')
     created_by = models.ForeignKey(User, blank=True, null=True)

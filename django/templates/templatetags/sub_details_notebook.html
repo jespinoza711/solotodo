@@ -1,4 +1,10 @@
 <h1>{{ notebook }}</h1>
+    {% if notebook.review_url %}
+    <div class="review_container">
+        <a href="{{ notebook.review_url }}">Lee nuestra completa revisión de este producto</a>
+    </div>
+    {% endif %}
+
     <h3 class="subtitle">Especificaciones esenciales</h3>
     <strong>Procesador: </strong> <a href="{% url solonotebooks.cotizador.views_notebooks.processor_line_details notebook.processor.line.family.id %}?processor={{ notebook.processor.id }}">{{ notebook.processor.pretty_print }}</a>
     <br />

@@ -407,3 +407,16 @@ div#cell_tier_details {
 .cell_pricing_span {
     font-size: 12px;
 }
+
+div.review_container a {
+    display: block;
+    padding: 5px 10px;
+    color: white;
+    font-weight: bold;
+    width: 350px;
+    border-radius: 3px;
+    background-color: #11558a;
+    width: 350px;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
