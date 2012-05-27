@@ -18,8 +18,8 @@ class MyBox(FetchStore):
             return None
         product_soup = BeautifulSoup(product_data)
         
-        product_title = product_soup.find('h2').string
-        product_price = int(product_soup.find('span', { 'id': 'our_price_display'}).string.replace('$', '').replace('.', ''))
+        product_title = product_soup.find('h1').string
+        product_price = int(product_soup.find('span', 'our_price_display').contents[1].string.replace('$', '').replace('.', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_title
@@ -65,7 +65,7 @@ class MyBox(FetchStore):
             prod_cells = prod_list.findAll('li')
 
             for cell in prod_cells:
-                product_links.append([urlBase + cell.find('a')['href'], ptype])
+                product_links.append([cell.find('a')['href'], ptype])
                 
         return product_links
 

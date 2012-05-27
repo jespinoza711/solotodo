@@ -28,19 +28,19 @@ class SearchForm(forms.Form):
             qd['min_price'] = self.price_choices[0][0]
         if 'ordering' not in qd:
             qd['ordering'] = '1'
+
+        default_ordering_choices = self.ordering_choices
+        last_ordering_index = int(default_ordering_choices[-1][0])
+        new_ordering_choices = list(default_ordering_choices)
+
+        new_ordering_choice = (str(last_ordering_index + 1), u'Popularidad en SoloTodo')
+        new_ordering_choices.append(new_ordering_choice)
         
         if extra_permissions:
-            default_ordering_choices = self.ordering_choices
-            last_ordering_index = int(default_ordering_choices[-1][0])
-            new_ordering_choices = list(default_ordering_choices)
-            
-            new_ordering_choice = (str(last_ordering_index + 1), u'Popularidad en SoloTodo')
-            new_ordering_choices.append(new_ordering_choice)
-            
             new_ordering_choice = (str(last_ordering_index + 2), u'Número de clicks a tiendas')
             new_ordering_choices.append(new_ordering_choice)
             
-            self.ordering_choices = tuple(new_ordering_choices)
+        self.ordering_choices = tuple(new_ordering_choices)
             
         super(SearchForm, self).__init__(qd)
         

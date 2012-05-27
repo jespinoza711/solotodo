@@ -21,11 +21,13 @@ class NotebookSearchForm(SearchForm):
     storage_rpm = ClassChoiceField(NotebookStorageDriveRpm, 'RPM', requires_advanced_controls = True)
     min_size, max_size = ClassChoiceField.generate_slider(NotebookScreenSizeFamily)
     screen_resolution = ClassChoiceField(NotebookScreenResolution, 'Resolución', requires_advanced_controls = True)
-    operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Nombre')
+    operating_system = ClassChoiceField(NotebookOperatingSystemFamily, 'Sist. op.')
     video_card_brand = ClassChoiceField(NotebookVideoCardBrand, 'Marca', requires_advanced_controls = True)
     video_card_line = ClassChoiceField(NotebookVideoCardLine, 'Línea', requires_advanced_controls = True)
     video_card_type = ClassChoiceField(NotebookVideoCardType, 'Tipo', in_quick_search = True, quick_search_name = 'Tarjeta de video')
     video_card = ClassChoiceField(NotebookVideoCard, 'Modelo', requires_advanced_controls = True)
+    optical_drive = ClassChoiceField(NotebookOpticalDrive, 'Un. opt.', requires_advanced_controls = True)
+
     
     ordering_choices = (('1', 'Precio'), ('2', 'Capacidad para correr aplicaciones'), ('3', 'Capacidad para correr juegos'),
     ('6', 'Peso'))
@@ -65,8 +67,9 @@ class NotebookSearchForm(SearchForm):
                      'video_card_brand',
                      'video_card_line',
                      'video_card']],
-                 ['Sistema operativo',
-                    ['operating_system'],
+                 ['Otros',
+                    ['operating_system',
+                     'optical_drive'],
                      ]]
                      
         return self.parse_model(model)
@@ -123,6 +126,8 @@ class NotebookSearchForm(SearchForm):
             value = ['Sin', 'Con'][pk_value - 1] + ' pantalla táctil'
         if key == 'ntype':
             value = unicode(NotebookType.objects.get(pk = pk_value))
+        if key == 'optical_drive':
+            value = u'Unidad óptica: ' + unicode(NotebookOpticalDrive.objects.get(pk = pk_value))
         return value
         
     # Method that, given a key (e.g.: notebook_brand, processor, etc) and a
@@ -170,6 +175,8 @@ class NotebookSearchForm(SearchForm):
             value = 'Notebooks ' + ['sin', 'con'][pk_value - 1] + ' pantalla táctil'
         if key == 'ntype':
             value = unicode(NotebookType.objects.get(pk = pk_value))
+        if key == 'optical_drive':
+            value = u'Notebooks con unidad óptica: ' + unicode(NotebookOpticalDrive.objects.get(pk = pk_value))
         return value        
         
     def filter_products(self, notebooks):
@@ -232,6 +239,9 @@ class NotebookSearchForm(SearchForm):
             
         if self.video_card and self.advanced_controls:
             notebooks = notebooks.filter(video_card__id = self.video_card).distinct()
+
+        if self.optical_drive and self.advanced_controls:
+            notebooks = notebooks.filter(optical_drive__id = self.optical_drive)
             
         if self.min_price:
             notebooks = notebooks.filter(shp__shpe__latest_price__gte = int(self.min_price))
