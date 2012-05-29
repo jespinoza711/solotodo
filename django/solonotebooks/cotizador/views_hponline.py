@@ -1,18 +1,21 @@
 from django.shortcuts import render_to_response
-from solonotebooks.cotizador.forms.hponline_search_form import HponlineSearchForm
+from solonotebooks.cotizador.forms.simple_notebook_search_form import SimpleNotebookSearchForm
 
 def index(request):
     notebook = None
     shpe = None
 
     if 'submit' in request.GET:
-        form = HponlineSearchForm(request.GET)
+        form = SimpleNotebookSearchForm(request.GET)
         if form.is_valid():
-            notebook, shpe = form.find_best_notebook()
+            notebooks, shpes = form.find_best_notebooks()
+            if notebooks:
+                notebook = notebooks[0]
+                shpe = shpes[0]
         else:
-            form = HponlineSearchForm()
+            form = SimpleNotebookSearchForm()
     else:
-        form = HponlineSearchForm()
+        form = SimpleNotebookSearchForm()
 
     processor_tuple = []
     graphics_tuple = []
@@ -53,9 +56,6 @@ def index(request):
             mobility_tuple = [75, 'success']
         else:
             mobility_tuple = [100, 'primary']
-
-        print screen_mobility_normalized_score
-        print cpu_mobility_normalized_score
 
     return render_to_response('hponline/index.html', {
         'form': form,

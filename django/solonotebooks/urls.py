@@ -107,6 +107,10 @@ urlpatterns += patterns('solonotebooks.cotizador.views_hponline',
     (r'^hponline/$', 'index'),
 )
 
+urlpatterns += patterns('solonotebooks.cotizador.views_tablet',
+    (r'^tablet/$', 'index'),
+)
+
 
 urlpatterns += patterns('solonotebooks.cotizador.views',
     (r'^$', 'index'),

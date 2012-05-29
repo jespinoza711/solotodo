@@ -1,0 +1,24 @@
+<h1>{{ notebook }}</h1>
+<h2>Especificaciones</h2>
+<ul>
+    <li>Procesador {{ notebook.processor }}</li>
+    <li>{{ notebook.ram_quantity.value|floatformat:0 }} GB de RAM</li>
+    <li>Disco duro de {{ notebook.storage_drive.all.0.capacity }}</li>
+    {% if notebook.video_card.count > 1 %}
+        <li>Gráficos duales
+            <ul>
+                <li>{{ notebook.video_card.all.0 }}</li>
+                <li>{{ notebook.video_card.all.1 }}</li>
+            </ul>
+        </li>
+    {% else %}
+        <li>Gráficos {{ notebook.video_card.all.0 }}</li>
+    {% endif %}
+    <li>Pantalla
+        {% if notebook.screen.is_led %}
+            LED
+        {% endif %}
+        de {{ notebook.screen.size }}
+    </li>
+</ul>
+<br />
