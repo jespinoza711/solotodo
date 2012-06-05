@@ -41,9 +41,10 @@ class PCFactory(FetchStore):
         # Array containing the data for each product
         productsData = []
         
-        url_extensions = [  
-            ['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 11
-            ['?papa=24&categoria=449', 'Notebook'],   # Notebooks 12 a 13
+        url_extensions = [
+            ['?papa=24&categoria=519', 'Notebook'],   # Ultrabooks
+            ['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 10
+            ['?papa=24&categoria=449', 'Notebook'],   # Notebooks 11 a 13
             ['?papa=24&categoria=410', 'Notebook'],   # Notebooks 14
             ['?papa=24&categoria=437', 'Notebook'],   # Notebooks 15
             ['?papa=24&categoria=436', 'Notebook'],   # Notebooks 16 y +
