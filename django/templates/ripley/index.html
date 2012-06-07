@@ -30,10 +30,10 @@
     {% for notebook in notebooks %}
         <div class="row-fluid div_notebook">
             <div class="span4">
-                <a href="{{ notebook.id }}"><img src="{{ notebook.picture.extra_thumbnails.medium }}" /></a>
+                <a href="notebooks/{{ notebook.id }}"><img src="{{ notebook.picture.extra_thumbnails.medium }}" /></a>
             </div>
             <div class="span6">
-                <h4><a href="{{ notebook.id }}">{{ notebook }}</a></h4>
+                <h4><a href="notebooks/{{ notebook.id }}">{{ notebook }}</a></h4>
                 <br/>
                 <ul>
                     <li>Procesador {{ notebook.processor }}</li>
@@ -48,7 +48,7 @@
                 </ul>
             </div>
             <div class="span2 notebook_price">
-                <a href="{{ notebook.id }}">{{ notebook.formatted_price }}</a>
+                <a href="notebooks/{{ notebook.id }}">{{ notebook.formatted_price }}</a>
             </div>
         </div>
     {% endfor %}

@@ -18,7 +18,7 @@ considered_store_ids = [
 epoch = date(1970, 1, 1)
 
 def milliseconds_since_epoch(date):
-    return long(1000 * (date - epoch).total_seconds())
+    return long(1000 * (date - epoch).days * (60*60*24))
 
 def index(request):
     form = RipleyNotebookSearchForm(request.GET)
