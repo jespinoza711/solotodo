@@ -18,6 +18,7 @@ from storage_drive_search_form import StorageDriveSearchForm
 from power_supply_search_form import PowerSupplySearchForm
 from computer_case_search_form import ComputerCaseSearchForm
 from simple_notebook_search_form import SimpleNotebookSearchForm
+from ripley_notebook_search_form import RipleyNotebookSearchForm
 
 __all__ = [ 
             'SearchForm', 
@@ -39,5 +40,6 @@ __all__ = [
             'StorageDriveSearchForm',
             'PowerSupplySearchForm',
             'ComputerCaseSearchForm',
-            'SimpleNotebookSearchForm'
+            'SimpleNotebookSearchForm',
+            'RipleyNotebookSearchForm'
             ]

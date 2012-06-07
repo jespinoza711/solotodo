@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Ripley - Demostración de comparador de precios</title>
+    <meta charset="UTF-8">
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/media/css/ripley/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/media/css/ripley/styles.css">
+    <link rel="stylesheet" type="text/css" href="/media/css/ripley/jquery-ui-1.8.20.custom.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/media/js/ripley/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/media/js/ripley/bootstrap-tab.js"></script>
+    <script type="text/javascript" src="/media/js/ripley/jquery-ui-1.8.20.custom.min.js"></script>
+    <script type="text/javascript" src="/media/js/ripley/scripts.js"></script>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <div class="container" id="div_header">
+        <img src="/media/css/ripley/img/logo_ripley.gif" />
+    </div>
+    <div class="container-fluid subnav subnav-fixed">
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li class="active dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Computación <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/ripley/notebooks">Notebooks</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Electrónica <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">LCD y LED</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container" id="div_content">
+        <div class="row">
+        {% block content %}
+        {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

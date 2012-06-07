@@ -1,5 +1,5 @@
 #-*- coding: UTF-8 -*-
-import operator
+from decimal import Decimal
 from datetime import datetime, date, timedelta
 from django.db import models
 from django.db.models import Min, Max
@@ -11,6 +11,56 @@ from solonotebooks import settings
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+
+def count_decimals(value):
+    """
+    Returns the number of decimals in a Decimal value
+    e.g.; count_decimals(Decimal("1234.56")) = 2
+    """
+    return abs(value.as_tuple().exponent)
+
+def format_currency(value, curr='$', sep='.', dp=',',
+                    pos='', neg='-', trailneg=''):
+    """Convert Decimal to a money formatted string.
+
+    curr: optional currency symbol before the sign (may be blank)
+    sep: optional grouping separator (comma, period, space, or blank)
+    dp: decimal point indicator (comma or period)
+    only specify as blank when places is zero
+    pos: optional sign for positive numbers: '+', space or blank
+    neg: optional sign for negative numbers: '-', '(', space or blank
+    trailneg:optional trailing minus indicator: '-', ')', space or blank
+
+    """
+
+    places = count_decimals(value)
+
+    if not places:
+        dp = ''
+
+    q = Decimal(10) ** -places  # 2 places --> '0.01'
+    sign, digits, exp = value.quantize(q).as_tuple()
+    result = []
+    digits = map(str, digits)
+    build, next = result.append, digits.pop
+    if sign:
+        build(trailneg)
+    for i in range(places):
+        build(next() if digits else '0')
+    build(dp)
+    if not digits:
+        build('0')
+    i = 0
+    while digits:
+        build(next())
+        i += 1
+        if i == 3 and digits:
+            i = 0
+            build(sep)
+    build(curr)
+    build(neg if sign else pos)
+
+    return unicode(''.join(reversed(result)))
 
 class Product(models.Model):
     name = models.CharField(max_length = 255)
@@ -35,6 +85,7 @@ class Product(models.Model):
         thumbnail = { 'size': (100, 100), },
         extra_thumbnails = {
             'large': {'size': (300, 300)},
+            'medium': {'size': (200, 200)},
             'gallery_thumb': {'size': (90, 90)},
         },                                          
         upload_to = 'notebook_pics',
@@ -403,6 +454,9 @@ class Product(models.Model):
 
         clone_prod.save()
         return clone_prod
+
+    def formatted_price(self):
+        return format_currency(Decimal(self.price))
     
     class Meta:
         app_label = 'cotizador'

@@ -12,7 +12,11 @@ class Magens(FetchStore):
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
-        product_soup = BeautifulSoup(product_data)
+
+        try:
+            product_soup = BeautifulSoup(product_data)
+        except UnicodeEncodeError:
+            return None
 
         name = product_soup.find('div', {'class': 'titleContent'}).string
         name = name.encode('ascii', 'ignore')

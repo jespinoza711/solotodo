@@ -1,0 +1,123 @@
+{% extends 'ripley/base.html' %}
+
+{% block head %}
+    <script type="text/javascript" src="/media/js/ripley/highcharts.js"></script>
+    <script type="text/javascript" src="/media/js/ripley/price_evolution_chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="span12">
+    <h1>{{ notebook }}</h1>
+    <br />
+
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">General</a></li>
+        <li><a href="#profile" data-toggle="tab" class="chart_link">Historial de precio</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active row-fluid" id="home">
+            <div class="span7 notebook_details">
+            <h1>Características</h1>
+            <h3>Especificaciones esenciales</h3>
+            <strong>Procesador: </strong> {{ notebook.processor.pretty_print }}
+            <br />
+            <strong>Pantalla: </strong> {{ notebook.screen.pretty_display }}
+            <br />
+            <strong>Memoria RAM: </strong> {{ notebook.ram_quantity }} ({{notebook.ram_type}}-{{notebook.ram_frequency.value}})
+            <br />
+            <strong>Almacenamiento: </strong>
+            {% ifequal notebook.storage_drive.all.count 1 %}
+                {{ notebook.storage_drive.all.0 }}
+            {% else %}
+                <ul>
+                    {% for storage in notebook.storage_drive.all %}
+                        <li>{{ storage }}</li>
+                    {% endfor %}
+                </ul>
+            {% endifequal %}
+            <br />
+            <strong>Tarjeta de video: </strong>
+            {% ifequal notebook.video_card.all.count 1 %}
+                {{ notebook.video_card.all.0 }}
+            {% else %}
+                <ul class="sub_ul">
+                    {% for video_card in notebook.video_card.all %}
+                        <li>{{ video_card }}</li>
+                    {% endfor %}
+                </ul>
+            {% endifequal %}
+            <br />
+
+            <h3>Especificaciones secundarias</h3>
+            <strong>Batería: </strong> {% if notebook.prettyBattery %} {{ notebook.prettyBattery }} {% else %} No hay información disponible {% endif %}
+            <br />
+            <strong>Chipset: </strong> {{ notebook.chipset }}
+            <br/>
+            <strong>Peso: </strong> {% if notebook.weight %} {{ notebook.weight }} g. {% else %} No hay información disponible {% endif %}
+            <br />
+            <strong>Dimensiones: </strong> {% if notebook.prettyDimensions %} {{ notebook.prettyDimensions }} {% else %} No hay información disponible{% endif %}
+            <br />
+            <strong>Sistema Operativo: </strong> {{ notebook.operating_system }}
+            <br />
+            <strong>Unidad óptica: </strong> {{ notebook.optical_drive }}
+            <br />
+            <strong>WiFi: </strong> {{ notebook.wifi_card }}
+            <br />
+
+            <h3>Accesorios</h3>
+            <strong>Puertos USB: </strong> {% if notebook.usb_port_count %} {{ notebook.usb_port_count }} {% else %} No hay información disponible{% endif %}
+            <br />
+            <strong>Webcam: </strong> {% if notebook.webcam_mp %} {{ notebook.webcam_mp }} MP {% else %} No posee{% endif %}
+            <br />
+            <strong>LAN: </strong> {{ notebook.lan }}
+            <br />
+            <strong>Adaptador de energía: </strong> {{ notebook.power_adapter }}
+            <br />
+            <strong>Lector de tarjetas: </strong> {{ notebook.card_reader }}
+            <br />
+            <strong>Puertos de video: </strong> {{ notebook.prettyVideoPorts }}
+            <br />
+            <strong>¿RAM de doble canal?: </strong> {% if notebook.is_ram_dual_channel %} Sí {% else %} No {% endif %}
+            <br />
+            <strong>¿Bluetooth?: </strong> {% if notebook.has_bluetooth %} Sí {% else %} No {% endif %}
+            <br />
+            <strong>¿Conexión eSATA?: </strong> {% if notebook.has_esata %} Sí {% else %} No {% endif %}
+            <br />
+            <strong>¿Lector de huellas digitales?: </strong> {% if notebook.has_fingerprint_reader %} Sí {% else %} No {% endif %}
+            <br />
+            <strong>¿Conexión Firewire?: </strong> {% if notebook.has_firewire %} Sí {% else %} No {% endif %}
+
+            </div>
+
+            <div class="span5">
+                <img src="{{ notebook.picture.extra_thumbnails.large }}"/>
+
+                <table id="notebook_prices">
+                    {% for product_price in notebook_shps %}
+                        <tr>
+                            <td class="notebook_price_store_logo">
+                                <a href="/store_product/{{product_price.shpe.id}}/" rel="nofollow">{{ product_price.store.picture.thumbnail_tag }}</a>
+                            </td>
+                            <td class="notebook_price_value">
+                                <a href="/store_product/{{product_price.shpe.id}}/" rel="nofollow">{{ product_price.shpe.pretty_price }}</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="2" class="product_availability_message">
+                                Este producto no está disponible actualmente
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade in row-fluid" id="profile">
+            <h1>Historial de precio</h1>
+            <div id="chart_container" style="width: 100%; height: 100%">
+                <div id="detail-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
