@@ -37,22 +37,6 @@
 	</head>
 	
 	<body>
-    <!--
-	<script type="text/javascript">var _kiq = _kiq || [];</script>
-	<script type="text/javascript" src="//s3.amazonaws.com/ki.js/29097/5IK.js" async="true"></script>	
-	<script type="text/javascript">
-	_kiq.push(function(){
-		var surveys = [50298, 50301, 50304, 50314, 50315, 50321, 50324, 50325, 50502, 50505]; // Replace with ID’s
-		var ab = new $KI.Cookie("ab_test_1", surveys[Math.floor(Math.random() * surveys.length)]);
-		if(ab) {
-			KI.show_by_id("survey", ab.get());
-		}
-	});
-
-
-	</script>
-	-->
-	
 		<div id="head">
 			<div id="content-head" class="container">
 				<div id="nav-user" class="nav-mine">
@@ -270,5 +254,14 @@
     var pageTracker = _gat._getTracker("UA-11970222-1");
     pageTracker._trackPageview();
     } catch(err) {}</script>
+
+    <script type="text/javascript">
+        var uvOptions = {};
+        (function() {
+            var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+            uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/4WVfWANMOsQ8OjCU4pVA.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+        })();
+    </script>
 	</body>
 </html>
