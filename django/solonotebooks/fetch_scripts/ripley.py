@@ -64,7 +64,7 @@ class Ripley(FetchStore):
         category_urls = [
             ['categoria-TVRipley-10051-001772-130000-ESP-N--', 'Notebook'],
             ['categoria-TVRipley-10051-001860-130000-ESP-N--', 'Notebook'],
-            ['categoria-TVRipley-10051-013040-230000-ESP-N', 'Television'],
+            ['categoria-TVRipley-10051-013040-230000-ESP-N', 'Screen'],
         ]
 
         browser = mechanize.Browser()

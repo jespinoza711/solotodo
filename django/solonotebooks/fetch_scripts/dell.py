@@ -114,7 +114,7 @@ class Dell(FetchStore):
             links = soup.findAll('a', {'class': 'lnk'})
             for link in links:
                 if 'configure' in link['href']:
-                    product_links.append([link['href'], 'Monitor'])
+                    product_links.append([link['href'], 'Screen'])
 
         return product_links
 

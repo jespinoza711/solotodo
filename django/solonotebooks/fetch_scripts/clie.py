@@ -43,10 +43,10 @@ class Clie(FetchStore):
             ['25', 'Ram'],              # PC Ram
             ['25', 'Ram'],              # PC Ram
             ['392', 'Ram'],             # Notebook Ram
-            ['615', 'Monitor'],         # LED Monitor
-            ['18', 'Monitor'],          # LCD Monitor
-            ['265', 'Television'],      # LCD Television
-            ['613', 'Television'],      # LED Television
+            ['615', 'Screen'],         # LED Monitor
+            ['18', 'Screen'],          # LCD Monitor
+            ['265', 'Screen'],      # LCD Television
+            ['613', 'Screen'],      # LED Television
             ['645', 'Processor'],       # Processors
             ['759', 'ComputerCase'],    # Computer cases
         ]

@@ -55,10 +55,10 @@ class Webco(FetchStore):
              '01EE820BEDF8}#ct_39', 'Processor'],
             # LCD TV
             ['n_new_productos.asp?CATEGORIA={E49A199E-214A-4658-99AA-'
-             '7E6220434D8D}#ct_32', 'Television'],
+             '7E6220434D8D}#ct_32', 'Screen'],
             # LCD
             ['n_new_productos.asp?CATEGORIA={79A1AF72-4B4D-4368-9205-'
-             'FC0D646A1145}#ct_32', 'Monitor'],
+             'FC0D646A1145}#ct_32', 'Screen'],
             # MB AMD
             ['n_new_productos.asp?CATEGORIA={C29A8E9A-5B73-4BEC-B6D7-'
              '665BA1B0D087}#ct_38', 'Motherboard'],

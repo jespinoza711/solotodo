@@ -51,7 +51,7 @@ class AbcDin(FetchStore):
         ajax_resources = [
             ['11620', 'Notebook'],
             ['11619', 'Notebook'],
-            ['11607', 'Television'],
+            ['11607', 'Screen'],
         ]
 
         product_links = []
