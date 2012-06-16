@@ -19,6 +19,12 @@
     Disponibilidad: {% if shpe.is_available %} Disponible {% else %} No disponible {% endif %} / Visibilidad: {% if shpe.is_hidden %} No visible {% else %} Visible {% endif %}
 </h4>
 
+<form id="filtrar_form">
+    <label for="staff_filtrar">Filtrar</label>
+    <input type="text" id="staff_filtrar"/>
+    <input type="submit" id="button_filtrar" value="Filtrar"/>
+</form>
+
 <form method="post" action="">
     <select id="id_product" name="product">
         <option value="">---------</option>

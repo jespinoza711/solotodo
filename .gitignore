@@ -10,6 +10,7 @@ apache/blog/wp-content/uploads/**/**/*
 apache/sitemap.xml
 apache/robots.txt
 django/*.txt
+django/dump*.py
 *~
 *.pyc
 *.db

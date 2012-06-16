@@ -1,4 +1,5 @@
 var clear_search_field = true
+var options = new Array();
 
 $(function() {
     // Show error and info messages
@@ -52,6 +53,35 @@ $(function() {
     })
     
     refresh_product_link()
+
+
+    $.each($('#id_product option'), function(idx, value) {
+        if (idx == 0) {
+            return true
+        }
+        options.push($(value))
+    });
+
+    $('#filtrar_form').submit(function(event) {
+        var text = $('#staff_filtrar').val().toLowerCase()
+        if (text.length == 0) {
+            return false
+        }
+
+        $('#id_product').empty()
+        var re = new RegExp(text, "i");
+
+        $.each(options, function(idx, option) {
+            var option_text = option.text();
+
+            if (option_text.search(re) >= 0) {
+                $('#id_product').append(option);
+            }
+        });
+
+        return false
+    });
+
 })
 
 function refresh_product_link() {
