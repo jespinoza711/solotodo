@@ -79,6 +79,8 @@ $(function() {
             }
         });
 
+        refresh_product_link()
+
         return false
     });
 
