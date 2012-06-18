@@ -1,6 +1,6 @@
 from datetime import date
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from solonotebooks.cotizador.forms.ripley_notebook_search_form import RipleyNotebookSearchForm
 from solonotebooks.cotizador.models.notebook import Notebook
@@ -21,6 +21,9 @@ def milliseconds_since_epoch(date):
     return long(1000 * (date - epoch).days * (60*60*24))
 
 def index(request):
+    return HttpResponseRedirect('/ripley/notebooks/')
+
+def notebooks(request):
     form = RipleyNotebookSearchForm(request.GET)
     notebooks = form.notebook_list()
 

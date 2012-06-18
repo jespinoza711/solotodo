@@ -30,10 +30,10 @@
     {% for notebook in notebooks %}
         <div class="row-fluid div_notebook">
             <div class="span4">
-                <a href="notebooks/{{ notebook.id }}"><img src="{{ notebook.picture.extra_thumbnails.medium }}" /></a>
+                <a href="{{ notebook.id }}"><img src="{{ notebook.picture.extra_thumbnails.medium }}" /></a>
             </div>
-            <div class="span6">
-                <h4><a href="notebooks/{{ notebook.id }}">{{ notebook }}</a></h4>
+            <div class="span5">
+                <h4><a href="{{ notebook.id }}">{{ notebook }}</a></h4>
                 <br/>
                 <ul>
                     <li>Procesador {{ notebook.processor }}</li>
@@ -47,8 +47,17 @@
                     </li>
                 </ul>
             </div>
-            <div class="span2 notebook_price">
-                <a href="notebooks/{{ notebook.id }}">{{ notebook.formatted_price }}</a>
+            <div class="span3 notebook_price">
+                <a href="{{ notebook.id }}">{{ notebook.formatted_price }}</a>
+                <ul>
+                {% for store_name, price in notebook.other_prices.items %}
+                    {% if price %}
+                    <li>
+                        {{ price }} ({{ store_name }})
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
             </div>
         </div>
     {% endfor %}

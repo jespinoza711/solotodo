@@ -113,7 +113,7 @@ urlpatterns += patterns('solonotebooks.cotizador.views_tablet',
 
 urlpatterns += patterns('solonotebooks.cotizador.views_ripley',
     (r'^ripley/$', 'index'),
-    (r'^ripley/notebooks/$', 'index'),
+    (r'^ripley/notebooks/$', 'notebooks'),
     (r'^ripley/notebooks/(?P<notebook_id>\d+)/$', 'notebook_details'),
     (r'^ripley/notebooks/(?P<notebook_id>\d+)/json/$', 'notebook_details_json'),
 )

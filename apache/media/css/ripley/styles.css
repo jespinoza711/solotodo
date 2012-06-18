@@ -17,7 +17,14 @@ body {
 .notebook_price {
     color: #DA4F49;
     font-size: 20px;
-    padding-top: 60px;
+    padding-top: 0px;
+}
+
+.notebook_price ul {
+    list-style: none;
+    padding-top: 5px;
+    margin-left: 0;
+    font-size: 14px;
 }
 
 .notebook_details h3 {
