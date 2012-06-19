@@ -8,6 +8,7 @@ from solonotebooks.cotizador.models.store_has_product import StoreHasProduct
 from solonotebooks.cotizador.models.store_product_history import StoreProductHistory
 
 considered_store_ids = [
+    5,      # La Polar
     30,     # AbcDin
     9,      # Falabella
     18,     # Ripley
