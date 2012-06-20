@@ -50,7 +50,7 @@ for old_notebook in old_notebooks:
     # Create notebook
     notebook = old_notebook
     
-    notebook['fields']['picture'] = product_fields['picture']
+    notebook['fields']['picture'] = product_fields['picture'].replace('notebook_pics', 'notebooks')
     notebook['model'] = 'notebooks.Notebook'
     result.append(notebook)
     
