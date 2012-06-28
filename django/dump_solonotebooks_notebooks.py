@@ -51,6 +51,9 @@ for old_notebook in old_notebooks:
     notebook = old_notebook
     
     notebook['fields']['picture'] = product_fields['picture'].replace('notebook_pics', 'notebooks')
+    notebook['fields']['score_general'] = 0
+    notebook['fields']['score_games'] = 0
+    notebook['fields']['score_mobility'] = 0
     notebook['model'] = 'notebooks.Notebook'
     result.append(notebook)
     
