@@ -3,7 +3,6 @@
 import mechanize
 from BeautifulSoup import BeautifulSoup
 from . import ProductData, FetchStore
-from django.utils.http import urlquote
 
 
 class Sistemax(FetchStore):
@@ -11,9 +10,8 @@ class Sistemax(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link):
-        new_product_link = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(product_link)
         browser = mechanize.Browser()
-        product_data = browser.open(new_product_link).get_data()
+        product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
         
         product_name = product_soup.findAll('h2')[3].find('font').string.encode('ascii', 'ignore')
@@ -29,41 +27,39 @@ class Sistemax(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        baseUrl = 'http://www.sistemax.cl/webstore/'
-        url_buscar_productos = 'index.php?op=seccion/id='
-        
+        base_url = 'http://www.sistemax.cl/webstore/'
+
         extensions = [
-            ['112', 'Notebook'],    # Netbooks
-            ['27', 'Notebook'],     # Notebooks
-            ['35', 'VideoCard'],    # Tarjetas de video
-            ['58', 'Processor'],    # Procesadores AMD
-            ['59', 'Processor'],    # Procesadores Intel
+            ['112', 'Notebook'],     # Netbooks
+            ['27', 'Notebook'],      # Notebooks
+            ['35', 'VideoCard'],     # Tarjetas de video
+            ['58', 'Processor'],     # Procesadores AMD
+            ['59', 'Processor'],     # Procesadores Intel
             ['25', 'Screen'],       # Monitores
-            ['82', 'Notebook'],     # Mac / iPod
-            ['30', 'Motherboard'],  # MB AMD
-            ['69', 'Motherboard'],  # MB Intel
-            ['24', 'Ram'],          # RAM
-            ['21', 'PowerSupply'],  # Fuentes de poder
+            ['125', 'Screen'],   # Televisores
+            ['82', 'Notebook'],      # Mac / iPod
+            ['30', 'Motherboard'],   # MB AMD
+            ['69', 'Motherboard'],   # MB Intel
+            ['24', 'Ram'],           # RAM
+            ['16', 'StorageDrive'],  # Discos duros y SSD
+            ['21', 'PowerSupply'],   # Fuentes de poder
             ['19', 'ComputerCase'],  # Gabinetes
         ]
-                        
-        # Array containing the data for each product
-        product_links = []                
+
+        product_links = []
         for extension, ptype in extensions:
-            urlWebpage = baseUrl + url_buscar_productos + extension + '&page=-1&listar=true'
-            urlWebpage = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(urlWebpage)
-            
+            url = base_url + 'index.php?op=seccion/id=' + extension +\
+                  '&page=-1&listar=true'
+
             browser = mechanize.Browser()
 
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
-            info_cells = baseSoup.findAll("td", { 'scope' : 'col'})
-            
+            soup = BeautifulSoup(browser.open(url).get_data())
+            info_cells = soup.findAll('td', {'scope': 'col'})
+
             url_cells = info_cells[3::5]
-            urls = [baseUrl + url_cell.contents[2]['href'] for url_cell in url_cells]
+            urls = [base_url + url_cell.contents[2]['href']
+                    for url_cell in url_cells]
             for url in urls:
                 product_links.append([url, ptype])
 
         return product_links
-

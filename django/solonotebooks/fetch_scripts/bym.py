@@ -10,45 +10,40 @@ class Bym(FetchStore):
     use_existing_links = False
     
     def retrieve_product_data(self, product_link, already_tried = False):
-        new_product_link = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(product_link)
         try:
-            base_data = mechanize.urlopen(new_product_link)
+            base_data = mechanize.urlopen(product_link)
         except Exception:
             if already_tried:
                 return None
             else:
                 return self.retrieve_product_data(product_link, already_tried = True)
-        base_soup = BeautifulSoup(base_data)
-        
-        product_data = ProductData()
-        
-        stock_image_url = base_soup.findAll('div', { 'class' : 'textOtrosPrecios' })[2].find('img')['src']
-        if 'agotado' in stock_image_url or 'proximo' in stock_image_url:
-            return None
-        
-        title = base_soup.find('div', { 'class' : 'textTituloProducto'}).string.strip().encode('ascii', 'ignore')
-        
-        prices = base_soup.findAll('div', { 'class' : 'textPrecioContado' })
-        price = prices[0].string
-        price = int(price.replace('.', '').replace('$', ''))
 
+        base_soup = BeautifulSoup(base_data)
+
+        title = base_soup.find('div', 'textTituloProducto')
+        title = title.string.strip().encode('ascii', 'ignore')
+
+        image = base_soup.findAll('div', 'textOtrosPrecios')[2]
+        image = image.find('img')['src']
+        if 'agotado' in image or 'proximo' in image:
+            return None
+
+        cash_price = base_soup.find('div', 'textPrecioContado')
+        cash_price = int(cash_price.string.replace('$', '').replace('.', ''))
+
+        product_data = ProductData()
         product_data.custom_name = title
-        product_data.price = price
+        product_data.price = cash_price
         product_data.url = product_link.split('&osCsid')[0]
-        product_data.comparison_field = product_data.url	 
-        
+        product_data.comparison_field = product_data.url
+
         return product_data
 
     def retrieve_product_links(self):
-        cookies = mechanize.CookieJar()
-        opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
-        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
-                 ("From", "responsible.person@example.com")]
-        mechanize.install_opener(opener)
-        urlBase = 'http://www.ttchile.cl/'        
-        product_links = []
-        
-        url_extensions = [  
+        url_base = 'http://www.ttchile.cl/'
+        product_urls_and_types = []
+
+        url_extensions = [
             ['subpro.php?ic=21&isc=20', 'Notebook'],    # Notebooks
             ['catpro.php?ic=31', 'VideoCard'],          # Tarjetas de video
             ['catpro.php?ic=25', 'Processor'],          # Procesadores AMD
@@ -60,33 +55,34 @@ class Bym(FetchStore):
             ['subpro.php?ic=16&isc=11', 'Ram'],         # RAM DDR2
             ['subpro.php?ic=16&isc=12', 'Ram'],         # RAM DDR3
             ['subpro.php?ic=16&isc=13', 'Ram'],         # RAM Notebook
-            ['subpro.php?ic=10&isc=4', 'StorageDrive'], # Discos duros IDE
-            ['subpro.php?ic=10&isc=6', 'StorageDrive'], # Discos duros Notebook
-            ['subpro.php?ic=10&isc=5', 'StorageDrive'], # Discos duros SATA
-            ['subpro.php?ic=10&isc=7', 'StorageDrive'], # SSD
+            ['subpro.php?ic=10&isc=4', 'StorageDrive'],  # HDD IDE
+            ['subpro.php?ic=10&isc=6', 'StorageDrive'],  # HDD Notebook
+            ['subpro.php?ic=10&isc=5', 'StorageDrive'],  # HDD SATA
+            ['subpro.php?ic=10&isc=7', 'StorageDrive'],  # SSD
             ['catpro.php?ic=12', 'PowerSupply'],        # Fuentes de poder
-            ['catpro.php?ic=13', 'ComputerCase'],        # Fuentes de poder
+            ['catpro.php?ic=13', 'ComputerCase'],        # Gabinetes
         ]
-                            
+
         for url_extension, ptype in url_extensions:
             page_number = 1
-            
+
             while True:
-                initial_url = urlBase + url_extension + '&pagina=' + str(page_number)
-                urlWebpage = 'http://www.dcc.uchile.cl/~vkhemlan/index.php?url=' + urlquote(initial_url)
-                base_data = mechanize.urlopen(urlWebpage)
+                url = url_base + url_extension + '&pagina=' +\
+                      str(page_number)
+                base_data = mechanize.urlopen(url)
                 base_soup = BeautifulSoup(base_data)
-                
-                productLinks = [div.find('a')['href'] for div in base_soup.findAll('div', {'class': 'linkTitPro'})]
-                
-                if not productLinks:
+
+                divs = base_soup.findAll('div', 'linkTitPro')
+                product_links = [div.find('a')['href'] for div in divs]
+
+                if not product_links:
                     break
-                
-                for productLink in productLinks:
-                    url = urlBase + productLink
-                    product_links.append([url, ptype])
-                
+
+                for product_link in product_links:
+                    url = url_base + product_link
+                    product_urls_and_types.append([url, ptype])
+
                 page_number += 1
 
-        return product_links
+        return product_urls_and_types
 

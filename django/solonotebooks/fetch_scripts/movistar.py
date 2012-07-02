@@ -3,12 +3,8 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
-from django.db.models import Q
 from solonotebooks.cotizador.models import CellPricingTier, CellCompany, CellPricingPlan
-import pdb
 import re
 
 class Movistar(FetchStore):
@@ -17,53 +13,53 @@ class Movistar(FetchStore):
 
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        try:
-            product_data = browser.open(product_link).get_data()
-        except mechanize.HTTPError:
-            return None
-        product_soup = BeautifulSoup(product_data)
-        
-        product_title = product_soup.find('h2').string.encode('ascii', 'ignore')
-        product_price = 0
+
+        product_data = browser.open(product_link).get_data()
+
+        soup = BeautifulSoup(product_data)
+        name = soup.find('h1').contents[2].encode('ascii', 'ignore').strip()
+
+        prepago_price_container = soup.find('li', 'pnormalForeverAlone')
+
+        if prepago_price_container:
+            price = prepago_price_container.find('span').string
+            price = int(price.replace('$', '').replace('.', ''))
+        else:
+            price = 0
                 
         product_data = ProductData()
-        product_data.custom_name = product_title
-        product_data.price = product_price
+        product_data.custom_name = name
+        product_data.price = price
         product_data.url = product_link
         product_data.comparison_field = product_link
         
         return product_data
 
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://hogar.movistar.cl'
-        urlBuscarProductos = '/equipos/index.php/catalogo/pagina/'
-        
-        # Browser initialization
         browser = mechanize.Browser()
 
         product_links = []
-        page_number = 1                    
+        page_number = 1
         while True:
-            urlWebpage = urlBase + urlBuscarProductos + str(page_number)
+            url = 'http://hogar.movistar.cl/equipos/index.php/catalogo'\
+                  '/pagina/' + str(page_number)
 
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
+            soup = BeautifulSoup(browser.open(url).get_data())
 
-            prod_list = baseSoup.findAll('div', {'class': 'producto'})
-            
+            prod_list = soup.findAll('div', 'producto')
+
             if not prod_list:
                 break
-        
+
             for prod in prod_list:
                 link = prod.find('a')['href']
                 product_links.append([link, 'Cell'])
-                    
+
             page_number += 1
-                
+
         return product_links
-        
+
+
     def get_plans(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.movistar.cl/PortalMovistarWeb/appmanager/PortalMovistar/portal?_nfpb=true&_pageLabel='

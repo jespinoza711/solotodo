@@ -6,6 +6,31 @@ from solonotebooks.cotizador import models
 from subprocess import *
 import simplejson
 
+black_list = [
+    'Cintegral',
+    'Compumanque',
+    'Eprod',
+    'FullNotebook',
+    'Impulso',
+    'Racle',
+    'rK-Notebooks',
+    'Tecno.cl',
+    'TecnoGroup',
+]
+
+scrap_conversion_dict = {
+    'PCExpress': 'PcExpress',
+    'PCFactory': 'PcFactory',
+    'PCOfertas': 'PcOfertas',
+    'TopPC': 'TopPc',
+    'HPOnline': 'HpOnline',
+    'Bym': 'TtChile'
+}
+
+name_conversion_dict = {
+    'Bym': 'TtChile'
+}
+
 def run_cmd(cmd):
     p = Popen(cmd, shell=True, stdout=PIPE)
     output = p.communicate()[0]
@@ -20,8 +45,9 @@ providers = []
 for store in json:
     f = store['fields']
     new_fields = dict()
-    new_fields['name'] = f['name']
-    new_fields['scrapper_class_name'] = f['classname']
+    new_fields['name'] = name_conversion_dict.get(f['name'], f['name'])
+    new_fields['scrapper_class_name'] = scrap_conversion_dict.get(f['classname'], f['classname'])
+    new_fields['is_active'] = f['name'] not in black_list
     new_fields['logo'] = f['picture'].replace('store_logos', 'stores/logos')
     store['fields'] = new_fields
 

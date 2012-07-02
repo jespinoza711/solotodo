@@ -12,20 +12,17 @@ class Clie(FetchStore):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
-        
-        availability_text = product_soup.findAll('td', { 'class': 'texto-neg-bold' })[-1].find('a').string.strip()
-        if availability_text[0] == '0':
-            return None
-        
-        product_name = product_soup.find('td', { 'class': 'tit-nar-bold' }).contents[0].split('&#8226;')[0].replace('&nbsp;&raquo; ', '').strip()
-        product_price = int(product_soup.find('td', { 'background': 'images/ficha/bg_efectivo_d.gif' }).find('a').string.replace('$', '').replace('.', ''))
-        
-        if not product_price:
-            return None
+
+        product_name = product_soup.find('title').string
+
+        cash_product_price =\
+        product_soup.find('td', {'background':
+                                     'images/ficha/bg_efectivo_d.gif'})
+        cash_product_price = int(cash_product_price.find('a').string.replace('$', '').replace('.', ''))
         
         product_data = ProductData()
         product_data.custom_name = product_name
-        product_data.price = product_price
+        product_data.price = cash_product_price
         product_data.url = product_link
         product_data.comparison_field = product_link
         

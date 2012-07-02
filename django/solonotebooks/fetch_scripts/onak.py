@@ -34,11 +34,11 @@ class Onak(FetchStore):
     def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
         urlBase = 'http://www.onak.cl/'
-        
+
         # Browser initialization
         browser = mechanize.Browser()
-        
-        
+
+
         url_extensions = [
             ['pc-servidores/notebooks.html', 'Notebook'],
             ['pc-servidores/netbooks.html', 'Notebook'],
@@ -52,9 +52,9 @@ class Onak(FetchStore):
             ['componentes/monitores.html', 'Screen'],
             ['componentes/gabinetes.html', 'ComputerCase'],
         ]
-        
+
         product_urls = {}
-        
+
         for url_extension, ptype in url_extensions:
             page_number = 1
 
