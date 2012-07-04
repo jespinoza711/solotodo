@@ -8,6 +8,10 @@ def run_cmd(cmd):
     p = Popen(cmd, shell=True, stdout=PIPE)
     output = p.communicate()[0]
     return output
+
+ptypes_dict = {
+    'Screen': 'Monitor'
+}
     
 json = run_cmd('python solonotebooks/manage.py dumpdata cotizador.ProductType')
 json = simplejson.loads(json.replace('cotizador.', 'backend.'))
@@ -17,9 +21,11 @@ conversion_dict = {
 }
 
 for ptype in json:
-    new_fields = dict()
-    new_fields['name'] = conversion_dict.get(ptype['fields']['classname'], ptype['fields']['classname'])
-    new_fields['scrap_name'] = conversion_dict.get(ptype['fields']['classname'], ptype['fields']['classname'])
+    new_fields = {}
+    f = ptypes_dict.get(ptype['fields']['classname'], ptype['fields']['classname'])
+    new_fields['name'] = f
+    new_fields['scrap_name'] = f
+    new_fields['associated_site'] = 1
     ptype['fields'] = new_fields
 
 json.append({
