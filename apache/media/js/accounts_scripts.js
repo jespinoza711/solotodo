@@ -191,16 +191,16 @@ function subscribe(registered, reload_on_finish, include_email) {
     }
 }
 
-function handle_facebook_login(response) {
-    var data = response.authResponse;
+function handle_facebook_login(authResponse) {
+    myauthResponse = authResponse
+
     $.post(
         '/account/facebook_login/',
         {
-            access_token: data.accessToken,
-            user_id: data.userID
+            access_token: authResponse.authResponse.accessToken,
+            user_id: authResponse.authResponse.userID
         },
         function(data) {
-            console.log(data);
             if (data.code == 'OK') {
                 window.location = ''
             }
