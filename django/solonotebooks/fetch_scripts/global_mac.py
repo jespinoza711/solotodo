@@ -46,12 +46,12 @@ class GlobalMac(FetchStore):
         browser = mechanize.Browser()
         
         url_extensions = [
-            ['MacBook/', 'Notebook'],
+            ['MacBook-Air/', 'Notebook'],
             ['MacBook-Pro/', 'Notebook'],
-            ['Monitores-LCD/', 'Screen'],
-            ['Cinema-Display/', 'Screen'],
+            ['MacBook-Pro-CTO/', 'Notebook'],
+            ['Monitores-LCD/', 'Monitor'],
+            ['Cinema-Display-Thunderbolt_Display/', 'Monitor'],
             ['Disco-Duro-SATA-2.5/', 'StorageDrive'],
-            ['Discos-Duros-ATA-2.5/', 'StorageDrive'],
             ['Discos-Duros-SATA/', 'StorageDrive'],
         ]
 
