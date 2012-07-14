@@ -3,6 +3,7 @@
 import mechanize
 from BeautifulSoup import BeautifulSoup
 from . import ProductData, FetchStore
+from solonotebooks.cotizador.utils import clean_price_string
 
 class GlobalMac(FetchStore):
     name = 'GlobalMac'
@@ -11,19 +12,21 @@ class GlobalMac(FetchStore):
     def retrieve_product_data(self, product_link):
         cookies = mechanize.CookieJar()
         opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
-        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
-                 ("From", "responsible.person@example.com")]
+        opener.addheaders = [('User-agent', 'Mozilla/5.0 (MyProgram/0.1)'),
+            ('From', 'responsible.person@example.com')]
         mechanize.install_opener(opener)
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
-        product_soup = BeautifulSoup(product_data)
-        
-        product_name = product_soup.find('h1').string.encode('ascii', 'ignore')
-        try:
-            product_price = int(product_soup.find('span', { 'id': 'product_price' }).string.replace('.', ''))
-        except Exception:
+        soup = BeautifulSoup(product_data)
+
+        product_name = soup.find('h1').string.encode('ascii', 'ignore')
+        product_price = soup.find('span', {'id': 'product_price'})
+
+        if not product_price:
             return None
-        
+
+        product_price = int(clean_price_string(product_price.string))
+
         product_data = ProductData()
         product_data.custom_name = product_name
         product_data.price = product_price
@@ -36,44 +39,42 @@ class GlobalMac(FetchStore):
     def retrieve_product_links(self):
         cookies = mechanize.CookieJar()
         opener = mechanize.build_opener(mechanize.HTTPCookieProcessor(cookies))
-        opener.addheaders = [("User-agent", "Mozilla/5.0 (compatible; MyProgram/0.1)"),
-                 ("From", "responsible.person@example.com")]
+        opener.addheaders = [('User-agent', 'Mozilla/5.0 (MyProgram/0.1)'),
+            ('From', 'responsible.person@example.com')]
         mechanize.install_opener(opener)
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.globalmac.cl/'
-        
-        # Browser initialization
+        url_base = 'http://www.globalmac.cl/'
+
         browser = mechanize.Browser()
-        
+
         url_extensions = [
-            ['MacBook-Air/', 'Notebook'],
-            ['MacBook-Pro/', 'Notebook'],
-            ['MacBook-Pro-CTO/', 'Notebook'],
-            ['Monitores-LCD/', 'Monitor'],
-            ['Cinema-Display-Thunderbolt_Display/', 'Monitor'],
-            ['Disco-Duro-SATA-2.5/', 'StorageDrive'],
-            ['Discos-Duros-SATA/', 'StorageDrive'],
+            ['home.php?cat=51', 'Notebook'],
+            ['home.php?cat=52', 'Notebook'],
+            ['home.php?cat=156', 'Notebook'],
+            ['home.php?cat=47', 'Monitor'],
+            ['home.php?cat=87', 'Monitor'],
+            ['home.php?cat=81', 'StorageDrive'],
+            ['home.php?cat=84', 'StorageDrive'],
         ]
 
-        memory_catalog_url = urlBase + 'Memorias/'
-        baseData = browser.open(memory_catalog_url).get_data()
-        baseSoup = BeautifulSoup(baseData)
-        subcats = baseSoup.findAll('span', {'class': 'subcategories'})
+        memory_catalog_url = url_base + 'home.php?cat=7'
+        base_data = browser.open(memory_catalog_url).get_data()
+        soup = BeautifulSoup(base_data)
+        subcats = soup.findAll('span', 'subcategories')
         for subcat in subcats:
-            link = subcat.find('a')['href'].replace('http://www.globalmac.cl/', '')
-            url_extensions.append([link, 'RAM'])
+            link = subcat.find('a')['href'].replace(url_base, '')
+            url_extensions.append([link, 'Ram'])
 
         product_links = []
-                            
+
         for url_extension, ptype in url_extensions:
-            urlWebpage = urlBase + url_extension
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
-            
-            titles = baseSoup.findAll('a', {'class': 'product-title'})
+            url = url_base + url_extension
+
+            base_data = browser.open(url).get_data()
+            soup = BeautifulSoup(base_data)
+
+            titles = soup.findAll('a', 'product-title')
 
             for title in titles:
-                product_links.append([title['href'], ptype])
-            	
-        return product_links
+                product_links.append([url_base + title['href'], ptype])
 
+        return product_links

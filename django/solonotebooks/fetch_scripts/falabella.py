@@ -2,8 +2,6 @@
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
 import re
 
@@ -16,12 +14,17 @@ class Falabella(FetchStore):
         product_data = browser.open(product_link).get_data()
         product_soup = BeautifulSoup(product_data)
 
-        product_name = product_soup.find('div', { 'id' : 'destacadoRuta' }).find('a').string
+        pn = product_soup.find('div',
+                {'id': 'destacadoRuta'})
 
-        if not product_name:
+        if not pn:
             return None
 
-        product_name = ' '.join(re.split('\s+', product_name.replace('&nbsp;', ' ').replace('\r', ' ').replace('\n', ' ').replace('\t', ' '))).encode('ascii', 'ignore')
+        pn = pn.find('a').string
+
+        pn = pn.replace('&nbsp;', ' ').replace('\r', ' ').replace('\n', ' ')
+        pn = ' '.join(re.split('\s+', pn.replace('\t', ' ')))
+        product_name = pn.encode('ascii', 'ignore')
 
         product_price = int(product_soup.find('div', { 'class' : 'precio1' }).contents[2].replace('.', ''))
             

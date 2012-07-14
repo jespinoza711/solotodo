@@ -16,7 +16,10 @@ class Dell(FetchStore):
         data = br.open(productUrl).get_data()
         soup = BeautifulSoup(data)
 
-        title = soup.find('div', {'id': 'scpcc_title'}).find('img')['alt']
+        try:
+            title = soup.find('span', 'para_intropara').string
+        except AttributeError:
+            title = soup.find('div', {'id': 'scpcc_title'}).find('img')['alt']
         title = title.encode('ascii', 'ignore')
 
         price = soup.find(['tr', 'td'], {'class': 'pricing_dotdotdot'})
