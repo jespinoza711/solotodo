@@ -75,6 +75,6 @@ class GlobalMac(FetchStore):
             titles = soup.findAll('a', 'product-title')
 
             for title in titles:
-                product_links.append([url_base + title['href'], ptype])
+                product_links.append([title['href'], ptype])
 
         return product_links
