@@ -22,7 +22,10 @@ class Paris(FetchStore):
 
         product_soup = BeautifulSoup(product_data)
         
-        product_name = product_soup.find('div', { 'id': 'ficha-producto-nombre' }).string.encode('ascii', 'ignore').strip()
+        product_name = product_soup.find('div', { 'id': 'ficha-producto-nombre' })
+        if not product_name:
+            return None
+        product_name = product_name.string.encode('ascii', 'ignore').strip()
                 
         product_prices = []
         
