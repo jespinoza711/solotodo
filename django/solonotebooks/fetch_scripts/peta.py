@@ -22,7 +22,7 @@ class Peta(FetchStore):
         product_name = product_soup.find('h1').string.encode('ascii', 'ignore').strip()
 
         try:
-            product_price = int(int(product_soup.find('span', 'price').string.split('$')[1].replace('.', ''))*0.97)
+            product_price = int(product_soup.find('span', 'price').string.split('$')[1].replace('.', ''))
         except AttributeError:
             return None
 
