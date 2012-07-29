@@ -36,9 +36,11 @@ class MacOnline(FetchStore):
         product_links = []
 
         url_extensions = [
-            ['397.html', 'Notebook'],
-            ['421.html', 'Notebook'],
-            ['513.html', 'Screen'],
+            ['549-Nuevo_MacBook_Air.html', 'Notebook'],
+            ['548-Nuevo_MacBook_Pro.html', 'Notebook'],
+            ['397-MacBook_Pro.html', 'Notebook'],
+            ['551-MacBook_Pro_Retina.html', 'Notebook'],
+            ['513-Pantallas_y_Gr_fica.html', 'Screen'],
         ]
 
         for url_extension, ptype in url_extensions:

@@ -6,7 +6,7 @@ class NotebookStorageDriveRpm(models.Model):
     def __unicode__(self):
         result = unicode(self.value) + ' rpm'
         if not self.value:
-            result += ' (SSD)'
+            result += ' (SSD / mSATA)'
         return result
     
     class Meta:

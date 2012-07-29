@@ -3,7 +3,7 @@ from . import InterfaceBrand
 
 class ProcessorBrand(models.Model):
     brand = models.ForeignKey(InterfaceBrand)
-    
+
     def __unicode__(self):
         return unicode(self.brand)
         
