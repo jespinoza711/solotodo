@@ -116,7 +116,7 @@ h2.title a:hover{color:#4a630f;}
 .comment-text h1,.comment-text h2,.comment-text h3,.comment-text h4,.comment-text h5,.comment-text h6{margin:0 0 22px 0;color:#555;}
 .entry a{color:#4a630f;}
 .entry a:hover{color:#333;text-decoration:underline;}
-.entry img{max-width:610px;height:auto;margin:10px 0;padding:4px;background:#fff;border:1px solid #ddd;}
+.entry img{height:auto;margin:10px 0;background:#fff;}
 .entry img.attachment-extra-featured-image{margin:0 0 22px;}
 .post_ns .entry img{max-width:930px;}
 .entry img.wp-smiley{background:#fff;border:none;margin:0;padding:0;}

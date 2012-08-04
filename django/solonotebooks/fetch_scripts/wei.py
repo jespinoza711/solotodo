@@ -1,8 +1,7 @@
 import mechanize
 from BeautifulSoup import BeautifulSoup
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import Element
 from . import ProductData, FetchStore
+import re
 
 class Wei(FetchStore):
     name = 'Wei'
@@ -67,7 +66,8 @@ class Wei(FetchStore):
             ['9', 'PowerSupply'],     # Fuentes de poder
             ['95', 'ComputerCase'],     # Gabinetes
         ]
-                     
+
+        link_pattern = r'ir\(\'(.+)\'\);$'
         
         for category_url, ptype in category_urls:
             desde = 1
@@ -85,12 +85,12 @@ class Wei(FetchStore):
                     break
                     
                 for cell in product_cells:
-                    link = urlStore + cell.parent['href']
-                    if link in links:
+                    url = re.match(link_pattern, cell['onclick']).groups()[0]
+                    if url in links:
                         flag = True
                         break
-                    product_links.append([link, ptype])
-                    links.append(link)
+                    product_links.append([url, ptype])
+                    links.append(url)
                 
                 if flag:
                     break
