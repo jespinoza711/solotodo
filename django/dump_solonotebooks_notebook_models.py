@@ -1,4 +1,3 @@
-import sys
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
@@ -20,6 +19,14 @@ final_result = simplejson.loads('[]')
 for model_name in chosen_models:
     json = run_cmd('python solonotebooks/manage.py dumpdata cotizador.%s --indent=4' % (model_name))
     json = simplejson.loads(json.replace('cotizador.', 'notebooks.'))
+
+    if model_name == 'NotebookType':
+        for idx, json_entry in enumerate(json):
+            json_entry['fields'] = {
+                'name': json_entry['fields']['name'],
+                'description': '',
+                'ordering': idx + 1
+            }
     final_result.extend(json)
-    
+
 print simplejson.dumps(final_result, sort_keys=True, indent=4)

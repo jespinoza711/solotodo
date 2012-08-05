@@ -56,6 +56,7 @@ for old_notebook in old_notebooks:
     notebook['fields']['score_mobility'] = 0
     notebook['model'] = 'notebooks.Notebook'
     result.append(notebook)
+    break
     
 print simplejson.dumps(result, sort_keys=True, indent=4)
     

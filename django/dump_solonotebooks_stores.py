@@ -1,8 +1,6 @@
-import sys
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
-from solonotebooks.cotizador import models
 from subprocess import *
 import simplejson
 
@@ -21,6 +19,7 @@ for store in json:
     f = store['fields']
     new_fields = dict()
     new_fields['name'] = f['name']
+    new_fields['is_active'] = True
     store['fields'] = new_fields
 
     im = dict()
