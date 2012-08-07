@@ -1,8 +1,6 @@
-import sys
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
-from solonotebooks.cotizador import models
 from subprocess import *
 import simplejson
 from datetime import *
@@ -56,7 +54,6 @@ for old_notebook in old_notebooks:
     notebook['fields']['score_mobility'] = 0
     notebook['model'] = 'notebooks.Notebook'
     result.append(notebook)
-    break
     
 print simplejson.dumps(result, sort_keys=True, indent=4)
     
