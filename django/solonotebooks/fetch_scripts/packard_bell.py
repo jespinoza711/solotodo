@@ -13,24 +13,20 @@ class PackardBell(FetchStore):
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
         product_data = browser.open(product_link).get_data()
-        product_soup = BeautifulSoup(product_data)
+        soup = BeautifulSoup(product_data)
 
-        try:
-            avail = int(product_soup.find('span', { 'class': 'unidades' }).string)
-            if not avail:
-                return None
-        except:
+        name = soup.find('div', 'dnombre_producto').string
+        name = name.encode('ascii', 'ignore').strip()
+
+        if soup.find('div', 'dboton_sinstock'):
             return None
-        
-        product_name = product_soup.find('div', { 'class': 'tit_prod_det' }).string.encode('ascii', 'ignore').strip()
-        try:
-            product_price = int(product_soup.find('div', { 'class': 'precio_det' }).contents[1].replace('.', ''))
-        except:
-            return None
+
+        price = soup.find('div', 'dprecio_oferta').contents[1]
+        price = int(price.replace('$', '').replace('.', ''))
         
         product_data = ProductData()
-        product_data.custom_name = product_name
-        product_data.price = product_price
+        product_data.custom_name = name
+        product_data.price = price
         product_data.url = product_link
         product_data.comparison_field = product_link
         
@@ -39,29 +35,25 @@ class PackardBell(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.packardbell.cl'
-        urlCatalog = '/2010/catalogo/'
-        
-        # Browser initialization
         browser = mechanize.Browser()
-        
-        url_extensions = [  ['116-Netbook.html', 'Notebook'],
-                            ['112-Notebook.html', 'Notebook'],
-                            ]
-                            
-        product_links = []          
-        for url_extension, ptype in url_extensions:
-            urlWebpage = urlBase + urlCatalog + url_extension
 
-            # Obtain and parse HTML information of the base webpage
-            baseData = browser.open(urlWebpage).get_data()
-            baseSoup = BeautifulSoup(baseData)
-            imgTags = baseSoup.findAll('div', { 'class' : 'img_prod' })            
-            
-            for i in range(len(imgTags)):
-                link = imgTags[i]['onclick'].replace('javascript:location.href=\'', '').replace('\'', '')
-                product_links.append([link, ptype])
-                
+        url_extensions = [
+            ['151-Ultrabook.html', 'Notebook'],
+            ['127-Notebooks.html', 'Notebook'],
+            ['128-Netbooks.html', 'Notebook'],
+            ['146-Monitores.html', 'Screen'],
+        ]
+
+        product_links = []
+        for url_extension, ptype in url_extensions:
+            url = 'http://www.netnow.cl/catalogo/' + url_extension
+
+            soup = BeautifulSoup(browser.open(url).get_data())
+            links = soup.findAll('a', 'Producto_Detalles')
+
+            for link in links:
+                url = link['href']
+                product_links.append([url, ptype])
+
         return product_links
 

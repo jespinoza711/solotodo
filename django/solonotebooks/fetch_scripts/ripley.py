@@ -88,8 +88,13 @@ class Ripley(FetchStore):
                     if url not in product_links:
                         product_links[url] = ptype
 
-                next_page_link = soup.findAll('a',
-                        {'class': 'linknormal4'})[-1]
+                paginator_links = soup.findAll('a', 'linknormal4')
+
+                if not paginator_links:
+                    break
+
+                next_page_link = paginator_links[-1]
+
                 if next_page_link.string.strip() != '&gt;&gt;':
                     break
 
