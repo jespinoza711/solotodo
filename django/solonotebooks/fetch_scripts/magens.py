@@ -56,6 +56,7 @@ class Magens(FetchStore):
             ['notebooks-c-15_203.html', 'Notebook'],
             ['notebooks-c-15_204.html', 'Notebook'],
             ['notebooks-mas-c-15_205.html', 'Notebook'],
+            ['promo-notebooks-c-15_449.html', 'Notebook'],
             ['video-pcie-ati-c-24_130.html', 'VideoCard'],
             ['video-pcie-nvidia-c-24_129.html', 'VideoCard'],
             ['video-profesionales-c-24_131.html', 'VideoCard'],

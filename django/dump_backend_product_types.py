@@ -25,7 +25,7 @@ for ptype in json:
     f = ptypes_dict.get(ptype['fields']['classname'], ptype['fields']['classname'])
     new_fields['name'] = f
     new_fields['scrap_name'] = f
-    new_fields['associated_site'] = 1
+    new_fields['associated_site'] = None
     ptype['fields'] = new_fields
 
 json.append({
