@@ -58,7 +58,7 @@ def product_type_catalog(request, product_type_urlname):
     result_products = search_form.filter(product_type_class)
     num_results = len(result_products)
     
-    page_count = ceil(len(result_products) / 10.0);        
+    page_count = ceil(len(result_products) / 10.0)
     
     pages = filter(lambda(x): x > 0 and x <= page_count, range(search_form.page_number - 3, search_form.page_number + 3))
     try:
@@ -83,15 +83,12 @@ def product_type_catalog(request, product_type_urlname):
     for product in filtered_sponsored_products:
         if product not in result_products:
             selected_sponsored_products.append(product)
-            if len(selected_sponsored_products) == search_form.page_number * 2:
+            if len(selected_sponsored_products) == search_form.page_number:
                 break
-    if len(selected_sponsored_products) > (search_form.page_number - 1) * 2:
-        selected_sponsored_products = selected_sponsored_products[(search_form.page_number - 1) * 2::]
-        for product in selected_sponsored_products:
-            product.is_sponsored = True
-        result_products.insert(2, selected_sponsored_products[0])
-        if len(selected_sponsored_products) == 2:
-            result_products.insert(6, selected_sponsored_products[1])
+    if len(selected_sponsored_products) > (search_form.page_number - 1):
+        sponsored_product = selected_sponsored_products[(search_form.page_number - 1)]
+        sponsored_product.is_sponsored = True
+        result_products.insert(0, sponsored_product)
         
     d = dict(search_form.price_choices)
     

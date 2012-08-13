@@ -358,12 +358,18 @@ br.product_details_comment_separator {
 
 .sponsored-li {
     border: 1px dashed #4E7DA5;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .sponsored-result-text {
     font-size: 10px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-bottom: 0;
+    margin-right: -40px;
+    margin-top: 30px;
     color: green;
 }
 
