@@ -3,32 +3,30 @@
 import mechanize
 from BeautifulSoup import BeautifulSoup
 from . import ProductData, FetchStore
+from utils import clean_price_string
 
 class Peta(FetchStore):
     name = 'Peta'
     use_existing_links = False
     
-    def retrieve_product_data(self, product_link, already_tried = False):
+    def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        try:
-            product_data = browser.open(product_link).get_data()
-        except Exception:
-            if already_tried:
-                return None
-            else:
-                return self.retrieve_product_data(product_link, already_tried = True)
-        product_soup = BeautifulSoup(product_data)
+        product_data = browser.open(product_link).get_data()
+        soup = BeautifulSoup(product_data)
 
-        product_name = product_soup.find('h1').string.encode('ascii', 'ignore').strip()
+        name = soup.find('h1').string.encode('ascii', 'ignore').strip()
 
-        try:
-            product_price = int(product_soup.find('span', 'price').string.split('$')[1].replace('.', ''))
-        except AttributeError:
-            return None
+        if len(soup.findAll('span', 'price')) == 4:
+            price_index = 3
+        else:
+            price_index = 0
+
+        cash_price = int(clean_price_string(
+            soup.findAll('span', 'price')[price_index].string))
 
         product_data = ProductData()
-        product_data.custom_name = product_name
-        product_data.price = product_price
+        product_data.custom_name = name
+        product_data.price = cash_price
         product_data.url = product_link
         product_data.comparison_field = product_link
         
