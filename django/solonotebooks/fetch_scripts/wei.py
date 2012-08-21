@@ -16,13 +16,13 @@ class Wei(FetchStore):
         availabilities = soup.find('table', { 'class' : 'pdisponibilidad' }).findAll('td')
         
         for availability in availabilities:
-            if 'Producto agotado' in availability.contents[1]:
+            if len(availability.contents) > 1 and 'Producto agotado' in availability.contents[1]:
                 return None
         
         productData = ProductData()
 
-        title = soup.find('title').string.split('WEI CHILE S. A. - ')[1]
-
+        title = soup.find('title').string.split(
+            'WEI CHILE - ')[1].encode('ascii', 'ignore')
 
         price = int(soup.find('table', { 'class' : 'pprecio' }).find('h1').string.replace('&nbsp;', '').strip().replace('.', ''))
         productData.custom_name = title.encode('ascii','ignore')
@@ -35,68 +35,54 @@ class Wei(FetchStore):
 
     # Main method
     def retrieve_product_links(self):
-        # Basic data of the target webpage and the specific catalog
-        urlStore = 'http://www.wei.cl/'
-        urlBase = urlStore + 'index.htm?op=categoria&ccode='
-        
-        # Browser initialization
+        base_url = 'http://www.wei.cl/'
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        product_links = []
-        links = []
-        
+
         category_urls = [
-            ['252', 'Notebook'],      # Notebooks
-            ['175', 'VideoCard'],     # Tarjetas de video AGP
-            ['176', 'VideoCard'],     # Tarjetas de video PCI Express
-            ['119', 'Processor'],     # Procesadores AMD
-            ['120', 'Processor'],     # Procesadores Intel
-            ['205', 'Screen'],    # LCD TV
-            ['80', 'Screen'],     # Monitores LCD
-            ['65', 'Motherboard'],     # MB AMD
-            ['84', 'Motherboard'],     # MB Intel
-            ['68', 'Ram'],     # RAM Notebook
-            ['89', 'Ram'],     # RAM DDR
-            ['195', 'Ram'],     # RAM DDR2
-            ['199', 'Ram'],     # RAM DDR3
-            ['70', 'StorageDrive'],     # HDD IDE
-            ['71', 'StorageDrive'],     # HDD SATA
-            ['78', 'StorageDrive'],     # HDD Notebook
-            ['9', 'PowerSupply'],     # Fuentes de poder
-            ['95', 'ComputerCase'],     # Gabinetes
+            ['1261', 'Notebook'],      # Notebooks
+            ['1312', 'VideoCard'],     # Tarjetas de video AGP
+            ['1313', 'VideoCard'],     # Tarjetas de video PCI Express
+            ['1117', 'Processor'],     # Procesadores
+            ['1248', 'Screen'],    # LCD TV
+            ['1245', 'Screen'],     # Monitores LCD
+            ['1126', 'Motherboard'],     # MB
+            ['1239', 'Ram'],     # RAM PC
+            ['1241', 'Ram'],     # RAM Notebook
+            ['1135', 'StorageDrive'],     # HDD PC
+            ['1137', 'StorageDrive'],     # HDD Notebook
+            ['1222', 'PowerSupply'],     # Fuentes de poder
+            ['1220', 'ComputerCase'],     # Gabinetes c/ PSU
+            ['1221', 'ComputerCase'],     # Gabinetes s/ PSU
         ]
 
         link_pattern = r'ir\(\'(.+)\'\);$'
-        
+
+        product_links = {}
         for category_url, ptype in category_urls:
             desde = 1
-            while True:
-                urlWebpage = urlBase + category_url + '&desde=' + str(desde)
-                
-                # Obtain and parse HTML information of the base webpage
-                baseData = browser.open(urlWebpage).get_data()
-                baseSoup = BeautifulSoup(baseData)
 
-                product_cells = baseSoup.findAll('div', { 'class': 'box1'})
+            while True:
+                url = base_url + 'index.htm?op=categoria&ccode=' +\
+                      category_url + '&desde=' + str(desde)
+
+                soup = BeautifulSoup(browser.open(url).get_data())
+
+                product_cells = soup.findAll('div', 'box1')
                 flag = False
-                
+
                 if not product_cells:
                     break
-                    
+
                 for cell in product_cells:
                     url = re.match(link_pattern, cell['onclick']).groups()[0]
-                    if url in links:
+                    if url in product_links:
                         flag = True
                         break
-                    product_links.append([url, ptype])
-                    links.append(url)
-                
+                    product_links[url] = ptype
+
                 if flag:
                     break
-                    
+
                 desde += 20
 
-        return product_links
-
-
+        return product_links.items()
