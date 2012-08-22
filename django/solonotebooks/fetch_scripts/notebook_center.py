@@ -63,11 +63,10 @@ class NotebookCenter(FetchStore):
             index = 0
             while True:
                 urlWebpage = urlBase + urlBuscarProductos + url_extension + '&i_p=' + str(index)
-                
                 baseData = browser.open(urlWebpage).get_data()
                 baseSoup = BeautifulSoup(baseData)
                     
-                product_containers = baseSoup.findAll("div", { "id" : "producto_inicio" })
+                product_containers = baseSoup.findAll("div", { "id" : "producto_inicio_inicio3" })
                 if not product_containers:
                     break
 
@@ -75,7 +74,7 @@ class NotebookCenter(FetchStore):
                     js_data = product_container.find('a')['href']
 
                     js_arguments = [int(s) for s in js_data.replace("'", ' ').split() if s.isdigit()]
-                    id_prod = js_arguments[2]
+                    id_prod = js_arguments[4]
                     link = urlBase + '?p=2&op=1&i_p=' + str(id_prod)
                     product_links.append([link, ptype])
 
