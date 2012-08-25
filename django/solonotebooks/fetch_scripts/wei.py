@@ -40,16 +40,20 @@ class Wei(FetchStore):
 
         category_urls = [
             ['1261', 'Notebook'],      # Notebooks
+            ['1306', 'VideoCard'],     # Tarjetas de video NVIDIA
+            ['1307', 'VideoCard'],     # Tarjetas de video AMD
             ['1312', 'VideoCard'],     # Tarjetas de video AGP
-            ['1313', 'VideoCard'],     # Tarjetas de video PCI Express
             ['1117', 'Processor'],     # Procesadores
             ['1248', 'Screen'],    # LCD TV
             ['1245', 'Screen'],     # Monitores LCD
             ['1126', 'Motherboard'],     # MB
             ['1239', 'Ram'],     # RAM PC
             ['1241', 'Ram'],     # RAM Notebook
-            ['1135', 'StorageDrive'],     # HDD PC
-            ['1137', 'StorageDrive'],     # HDD Notebook
+            ['511', 'StorageDrive'],     # HDD PC SATA
+            ['512', 'StorageDrive'],     # HDD PC IDE
+            ['513', 'StorageDrive'],     # HDD Notebook SATA
+            ['514', 'StorageDrive'],     # HDD Notebook IDE
+            ['515', 'StorageDrive'],     # SSD
             ['1222', 'PowerSupply'],     # Fuentes de poder
             ['1220', 'ComputerCase'],     # Gabinetes c/ PSU
             ['1221', 'ComputerCase'],     # Gabinetes s/ PSU
@@ -62,10 +66,10 @@ class Wei(FetchStore):
             desde = 1
 
             while True:
-                url = base_url + 'index.htm?op=categoria&ccode=' +\
+                page_url = base_url + 'index.htm?op=categoria&ccode=' +\
                       category_url + '&desde=' + str(desde)
 
-                soup = BeautifulSoup(browser.open(url).get_data())
+                soup = BeautifulSoup(browser.open(page_url).get_data())
 
                 product_cells = soup.findAll('div', 'box1')
                 flag = False
