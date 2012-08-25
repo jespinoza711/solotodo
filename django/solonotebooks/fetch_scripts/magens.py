@@ -85,12 +85,14 @@ class Magens(FetchStore):
         for url_extension, ptype in url_extensions:
             url = 'http://www.magens.cl/' + url_extension +\
                   '?mostrar=1000'
+
+            print url
             soup = BeautifulSoup(browser.open(url).get_data())
 
-            product_containers = soup.findAll('div',
-                    {'class': 'text11 uppercase tituloProducto'})
+            product_containers = soup.findAll('div', 'modulProducto')
             for container in product_containers:
                 link = container.find('a')['href']
-                product_links.append([link.split('?osCsid')[0], ptype])
+                print link
+                product_links.append([link, ptype])
 
         return product_links

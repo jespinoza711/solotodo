@@ -91,9 +91,9 @@ class Dell(FetchStore):
             r = mechanize.urlopen(url_webpage)
             soup = BeautifulSoup(r.read())
 
-            line_links = soup.find('div', 'content').findAll('a')
-            for link in line_links:
-                url = url_base + link['href']
+            product_containers = soup.findAll('div', 'carouselProduct')
+            for container in product_containers:
+                url = url_base + container.find('a')['href']
                 for url in self.retrieve_enteprise_links(url):
                     product_links.append([url, 'Notebook'])
 
@@ -132,8 +132,7 @@ class Dell(FetchStore):
 
         urls = []
         for link in soup.findAll('a', 'purchase'):
-            url = 'http://www.dell.com' + link['href']
-            urls.extend(self.retrieve_line_links(url))
+            urls.append(link['href'])
 
         return urls
 
