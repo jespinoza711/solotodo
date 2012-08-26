@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from urllib2 import URLError
 
 import mechanize
 from BeautifulSoup import BeautifulSoup
@@ -11,7 +12,12 @@ class Falabella(FetchStore):
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
-        product_data = browser.open(product_link).get_data()
+
+        try:
+            product_data = browser.open(product_link).get_data()
+        except URLError:
+            return None
+
         product_soup = BeautifulSoup(product_data)
 
         pn = product_soup.find('div',
@@ -22,7 +28,11 @@ class Falabella(FetchStore):
 
         pn = pn.find('a').string
 
-        pn = pn.replace('&nbsp;', ' ').replace('\r', ' ').replace('\n', ' ')
+        try:
+            pn = pn.replace('&nbsp;', ' ').replace('\r', ' ').replace('\n', ' ')
+        except AttributeError:
+            return None
+
         pn = ' '.join(re.split('\s+', pn.replace('\t', ' ')))
         product_name = pn.encode('ascii', 'ignore')
 

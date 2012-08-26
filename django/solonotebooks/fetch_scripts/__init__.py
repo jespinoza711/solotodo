@@ -34,6 +34,7 @@ from cintegral import Cintegral
 from rigam import Rigam
 from pc_ofertas import PCOfertas
 from pc_express import PCExpress
+from samsung_store import SamsungStore
 from top_pc import TopPC
 from compumanque import Compumanque
 from movistar import Movistar
@@ -89,5 +90,6 @@ __all__ = [
             'Eprod',
             'Onak',
             'Dristore',
-            'Lider'
+            'Lider',
+            'SamsungStore'
         ]
