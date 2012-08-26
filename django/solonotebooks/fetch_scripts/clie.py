@@ -42,8 +42,8 @@ class Clie(FetchStore):
             ['392', 'Ram'],             # Notebook Ram
             ['615', 'Screen'],         # LED Monitor
             ['18', 'Screen'],          # LCD Monitor
-            ['265', 'Screen'],      # LCD Television
-            ['613', 'Screen'],      # LED Television
+            ['265', 'Screen'],      # LCD Televisor
+            ['613', 'Screen'],      # LED Televisor
             ['645', 'Processor'],       # Processors
             ['759', 'ComputerCase'],    # Computer cases
         ]

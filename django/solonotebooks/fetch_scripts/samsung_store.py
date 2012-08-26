@@ -31,8 +31,8 @@ class SamsungStore(FetchStore):
             ['computacion-1/notebook.html', 'Notebook'],
             ['computacion-1/netbook.html', 'Notebook'],
             ['computacion-1/monitores/monitor.html', 'Monitor'],
-            ['computacion-1/monitores/monitor-tv-1.html', 'Television'],
-            ['tv-audio-video-1/televisores.html', 'Television'],
+            ['computacion-1/monitores/monitor-tv-1.html', 'Screen'],
+            ['tv-audio-video-1/televisores.html', 'Screen'],
         ]
 
         product_urls_and_types = {}

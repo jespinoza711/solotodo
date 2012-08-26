@@ -50,8 +50,8 @@ class GlobalMac(FetchStore):
             ['home.php?cat=51', 'Notebook'],
             ['home.php?cat=52', 'Notebook'],
             ['home.php?cat=156', 'Notebook'],
-            ['home.php?cat=47', 'Monitor'],
-            ['home.php?cat=87', 'Monitor'],
+            ['home.php?cat=47', 'Screen'],
+            ['home.php?cat=87', 'Screen'],
             ['home.php?cat=81', 'StorageDrive'],
             ['home.php?cat=84', 'StorageDrive'],
         ]
