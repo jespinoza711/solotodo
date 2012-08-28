@@ -11,6 +11,7 @@ class Paris(FetchStore):
     
     def retrieve_product_data(self, product_link):
         browser = mechanize.Browser()
+        browser.set_handle_robots(False)
         product_data = browser.open(product_link).get_data()
         soup = BeautifulSoup(product_data)
 
@@ -43,6 +44,7 @@ class Paris(FetchStore):
     # Main method
     def retrieve_product_links(self):
         browser = mechanize.Browser()
+        browser.set_handle_robots(False)
         
         urls = [
                     # Notebooks

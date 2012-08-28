@@ -132,7 +132,9 @@ class Dell(FetchStore):
 
         urls = []
         for link in soup.findAll('a', 'purchase'):
-            urls.append(link['href'])
+            url = link['href']
+            if 'configure' in url:
+                urls.append(url)
 
         return urls
 
