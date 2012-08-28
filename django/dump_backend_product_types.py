@@ -30,7 +30,7 @@ for ptype in json:
 
 json.append({
     'fields': {
-        'associated_site': 1,
+        'associated_site': None,
         'name': 'Television',
         'scrap_name': 'Television'
     },

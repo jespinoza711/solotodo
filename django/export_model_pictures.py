@@ -7,6 +7,9 @@ from boto.s3.connection import S3Connection
 from django.conf import settings
 from django.db.models import get_model
 
+# python export_model_pictures [Model] [bucket] [directory] [initial_id]
+# python export_model_pictures Notebook solonotebooks notebooks
+
 def main():
     Model = get_model('cotizador', sys.argv[1])
 
