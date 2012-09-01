@@ -51,34 +51,29 @@ class Magens(FetchStore):
         browser = mechanize.Browser()
 
         url_extensions = [
-            ['netbooks-c-15_199.html', 'Notebook'],
-            ['notebooks-c-15_202.html', 'Notebook'],
-            ['notebooks-c-15_203.html', 'Notebook'],
-            ['notebooks-c-15_204.html', 'Notebook'],
-            ['notebooks-mas-c-15_205.html', 'Notebook'],
-            ['promo-notebooks-c-15_449.html', 'Notebook'],
-            ['video-pcie-ati-c-24_130.html', 'VideoCard'],
-            ['video-pcie-nvidia-c-24_129.html', 'VideoCard'],
-            ['video-profesionales-c-24_131.html', 'VideoCard'],
-            ['promo-nvidia-c-24_275.html', 'VideoCard'],
-            ['cpu-amd-am3-c-1_302.html', 'Processor'],
-            ['cpu-amd-sam3-c-1_31.html', 'Processor'],
-            ['cpu-fm1-c-1_441.html', 'Processor'],
-            ['cpu-intel-s1156-c-1_197.html', 'Processor'],
-            ['cpu-intel-s775-c-1_32.html', 'Processor'],
-            ['cpu-server-c-1_30.html', 'Processor'],
-            ['monitores-lcd-c-13_90.html', 'Monitor'],
-            ['monitores-led-c-13_200.html', 'Monitor'],
-            ['televisores-lcdtv-c-13_91.html', 'Television'],
-            ['televisores-ledtv-c-13_210.html', 'Television'],
-            ['placas-madre-c-2.html', 'Motherboard'],
-            ['memorias-c-12.html', 'Ram'],
-            ['discos-duros-c-3_35.html', 'StorageDrive'],
-            ['discos-notebook-c-3_37.html', 'StorageDrive'],
-            ['ssd-c-3_215.html', 'StorageDrive'],
-            ['fuentes-poder-c-10_76.html', 'PowerSupply'],
-            ['gabinetes-con-fuente-c-10_75.html', 'ComputerCase'],
-            ['gabinetes-sin-fuente-c-10_299.html', 'ComputerCase'],
+#            ['promo-notebooks-c-15_449.html', 'Notebook'],
+#            ['notebooks-c-15_202.html', 'Notebook'],
+#            ['notebooks-c-15_203.html', 'Notebook'],
+#            ['netbooks-c-15_199.html', 'Notebook'],
+#            ['notebooks-c-15_204.html', 'Notebook'],
+#            ['notebooks-mas-c-15_205.html', 'Notebook'],
+#            ['nvidia-festi-game-c-24_448.html', 'VideoCard'],
+#            ['video-pcie-ati-c-24_130.html', 'VideoCard'],
+#            ['video-pcie-nvidia-c-24_129.html', 'VideoCard'],
+#            ['video-profesionales-c-24_131.html', 'VideoCard'],
+            ['procesadores-c-1.html', 'Processor'],
+#            ['monitores-lcd-c-13_90.html', 'Screen'],
+#            ['monitores-led-c-13_200.html', 'Screen'],
+#            ['televisores-ledtv-c-13_210.html', 'Screen'],
+#            ['televisores-lcdtv-c-13_91.html', 'Screen'],
+#            ['placas-madre-c-2.html', 'Motherboard'],
+#            ['memorias-c-12.html', 'Ram'],
+#            ['discos-duros-c-3_35.html', 'StorageDrive'],
+#            ['ssd-c-3_215.html', 'StorageDrive'],
+#            ['discos-notebook-c-3_37.html', 'StorageDrive'],
+#            ['fuentes-poder-c-10_76.html', 'PowerSupply'],
+#            ['gabinetes-con-fuente-c-10_75.html', 'ComputerCase'],
+#            ['gabinetes-sin-fuente-c-10_299.html', 'ComputerCase'],
         ]
 
         product_links = []
@@ -86,7 +81,6 @@ class Magens(FetchStore):
             url = 'http://www.magens.cl/' + url_extension +\
                   '?mostrar=1000'
 
-            print url
             soup = BeautifulSoup(browser.open(url).get_data())
 
             product_containers = soup.findAll('div', 'modulProducto')

@@ -37,10 +37,8 @@ for old_notebook in old_notebooks:
         'pk': old_notebook['pk'],
         'model': 'backend_interface.product',
         'fields': {
-            'creation_date': str(datetime.strptime(creation_date, '%Y-%m-%d %H:%M:%S').date()),
             'display_name': product_fields['display_name'],
-            'name': product_fields['name'],
-            'creator': product_fields['created_by'] or 507
+            'name': product_fields['name']
         }
     }
     result.append(product)
