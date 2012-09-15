@@ -51,6 +51,9 @@ class Dristore(FetchStore):
 
                 product_urls = [li.find('a')['href'] for li in base_soup.findAll('li', 'ajax_block_product')]
 
+                if not product_urls:
+                    break
+
                 flag = False
 
                 for url in product_urls:

@@ -2,6 +2,7 @@
 import mechanize
 from BeautifulSoup import BeautifulSoup
 from . import ProductData, FetchStore
+from utils import clean_price_string
 
 class Lider(FetchStore):
     name = 'Lider'
@@ -15,7 +16,8 @@ class Lider(FetchStore):
 
         name = soup.find('h3').string.encode('ascii', 'ignore')
 
-        internet_price = int(soup.find('p', 'precio').find('em').string.replace('$', '').replace('.', ''))
+        internet_price = int(clean_price_string(
+            soup.find('p', 'precio').find('em').contents[-1]))
 
         productData = ProductData()
         productData.custom_name = name
