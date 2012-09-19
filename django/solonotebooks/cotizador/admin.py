@@ -3,6 +3,7 @@ from django.contrib import admin
 
 admin.site.register(UserProfile)
 admin.site.register(AdvertisementPosition)
+admin.site.register(AdvertisementImpression)
 admin.site.register(Advertisement)
 admin.site.register(AdvertisementVisit)
 admin.site.register(SearchRegistry)

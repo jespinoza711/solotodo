@@ -54,31 +54,30 @@ def product_type_catalog(request, product_type_urlname):
     pages = filter(lambda(x): x > 0 and x <= page_count, range(search_form.page_number - 3, search_form.page_number + 3))
     try:
         left_page = pages[0]
-    except:
+    except IndexError:
         left_page = 0
         
     try:
         right_page = pages[len(pages) - 1]
-    except:
+    except IndexError:
         right_page = 0
+
+    all_sponsored_products = product_type_class.get_available().filter(sponsored_shp__isnull = False)
+    try:
+        sponsored_product = search_form.filter_products(all_sponsored_products)[search_form.page_number - 1]
+        sponsored_product.is_sponsored = True
+    except IndexError:
+        sponsored_product = None
     
     first_result_index = (search_form.page_number - 1) * 10 + 1
     last_result_index = search_form.page_number * 10
     if last_result_index > num_results:
         last_result_index = num_results
+
     result_products = result_products[first_result_index - 1 : last_result_index]
-    
-    all_sponsored_products = product_type_class.get_available().filter(sponsored_shp__isnull = False)
-    filtered_sponsored_products = search_form.filter_products(all_sponsored_products)
-    selected_sponsored_products = []
-    for product in filtered_sponsored_products:
-        if product not in result_products:
-            selected_sponsored_products.append(product)
-            if len(selected_sponsored_products) == search_form.page_number:
-                break
-    if len(selected_sponsored_products) > (search_form.page_number - 1):
-        sponsored_product = selected_sponsored_products[(search_form.page_number - 1)]
-        sponsored_product.is_sponsored = True
+    result_products = filter(lambda x: x != sponsored_product, result_products)
+
+    if sponsored_product:
         result_products.insert(0, sponsored_product)
         
     d = dict(search_form.price_choices)

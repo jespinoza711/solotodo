@@ -43,6 +43,8 @@ def load_advertisement(position):
         ad = ads[ad_index]
         ad.impressions += 1
         ad.save()
+
+        AdvertisementImpression.objects.create(advertisement=ad)
     except:
         ad = None
         

@@ -75,6 +75,7 @@ from solonotebooks.cotizador.models.external_visit import ExternalVisit
 from solonotebooks.cotizador.models.sponsored_visit import SponsoredVisit
 from solonotebooks.cotizador.models.advertisement_position import AdvertisementPosition
 from solonotebooks.cotizador.models.advertisement import Advertisement
+from solonotebooks.cotizador.models.advertisement_impression import AdvertisementImpression
 from solonotebooks.cotizador.models.advertisement_visit import AdvertisementVisit
 from solonotebooks.cotizador.models.search_registry import SearchRegistry
 from solonotebooks.cotizador.models.product_subscription import ProductSubscription
@@ -313,6 +314,7 @@ __all__ = [
             'SponsoredVisit',
             'AdvertisementPosition',
             'Advertisement',
+            'AdvertisementImpression',
             'AdvertisementVisit',
             'SearchRegistry',
             'ProductSubscription',
