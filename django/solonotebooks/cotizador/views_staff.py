@@ -4,11 +4,10 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.db.models import Count
+from django.contrib.auth.models import User
 from models import *
-from fields import *
 from utils import *
 from views import *
-from forms import *
 import random
 
 def staff_login_required(f):

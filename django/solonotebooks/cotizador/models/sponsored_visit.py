@@ -7,7 +7,8 @@ class SponsoredVisit(models.Model):
     shp = models.ForeignKey(StoreHasProduct)
 
     def __unicode__(self):
-        return 'Visita a ' + unicode(self.shp)
+        return '{0} - {1}'.format(self.shp, self.date)
     
     class Meta:
+        ordering = ['-date']
         app_label = 'cotizador'
