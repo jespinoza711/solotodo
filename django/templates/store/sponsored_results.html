@@ -1,0 +1,48 @@
+{% extends "store/base.html" %}
+
+{% block header_content %}
+    <script type="text/javascript" src="/media/js/date_range_form.js"></script>
+    <script type="text/javascript" src="/media/js/highcharts.js"></script>
+    <script type="text/javascript" src="/media/js/line_chart.js"></script>
+{% endblock %}
+
+{% block title %}
+    Resultados patrocinados - {{ store }}
+{% endblock %}
+
+{% block content %}
+
+<h1>Resultados patrocinados</h1>
+    <form method="get">
+        {{ form.as_p }}
+        <input type="submit" value="Actualizar" />
+    </form>
+
+    {% if form.is_valid %}
+        <br />
+        <h2>Clicks por fecha</h2>
+        <p>
+            <strong>Clicks totales en el periodo:</strong> {{ total_clicks }}
+        </p>
+        <br />
+
+
+        <div id="chart_container">
+        </div>
+
+        <h2>Clicks por producto</h2>
+
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Clicks</th>
+            </tr>
+            {% for product, clicks in clicks_per_store %}
+                <tr>
+                    <td><a href="{{ product.determine_url }}">{{ product }}</a></td>
+                    <td>{{ clicks }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

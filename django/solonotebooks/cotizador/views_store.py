@@ -1,47 +1,32 @@
 #-*- coding: UTF-8 -*-
-import os
-import sys
-import hashlib
-import operator
-import urllib
 from datetime import date, timedelta
-from time import time
-from math import ceil
-from django.db.models import Min, Max, Q, Avg, Count
+from django.db.models import Count
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.http import urlquote
-from django.contrib import auth
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.validators import email_re
+from django.utils import simplejson
 from solonotebooks import settings
 from solonotebooks.cotizador.views import append_metadata_to_response
 from solonotebooks.cotizador.tasks import UpdateStore
+from solonotebooks.cotizador.forms import DateRangeForm, SearchShpeForm, CompetitivityReportOrdering
 from models import *
-from fields import *
 from exceptions import *
 from utils import *
-from forms import *
 import xlwt
-from xlwt import Workbook, easyxf, Formula
 import random
 
 def append_store_metadata_to_response(request, template, args):
     tabs = [
-            u'Opciones de admistración', 
+            u'Opciones',
             [
                     ['Registro', reverse('solonotebooks.cotizador.views_store.registry')],
                     ['Estadísticas', reverse('solonotebooks.cotizador.views_store.statistics')],
-                    ['Actualizar precios', reverse('solonotebooks.cotizador.views_store.update_prices')]
+                    ['Resultados patrocinados', reverse('solonotebooks.cotizador.views_store.sponsored_results')],
+                    ['Publicidad', reverse('solonotebooks.cotizador.views_store.advertisement_results')]
             ]
         ]
-        
-    if request.user.get_profile().can_access_competitivity_report:
-        tabs[1].append(['Informe de competitividad', reverse('solonotebooks.cotizador.views_store.competition_report')],)
-        
+
     args['tabs'] = tabs
+    args['store'] = request.user.get_profile().assigned_store
     return append_metadata_to_response(request, template, args)
 
 def store_user_required(f):
@@ -477,3 +462,65 @@ def competition_report_excel(request):
 
     wb.save(response)
     return response
+
+@store_user_required
+def sponsored_results(request):
+    form, start_date, end_date = get_and_clean_form(request.GET)
+
+    sponsored_visits = SponsoredVisit.objects.filter(
+        shp__shpe__store=request.user.get_profile().assigned_store,
+        date__gte=start_date,
+        date__lte=end_date
+    )
+
+    if request.GET.get('format', 'html') == 'json':
+        data = sponsored_visits.values('date').annotate(data=Count('id')).order_by('date')
+
+        def label_function(ev):
+            return u'Número de clicks'
+
+        def f(start_date, end_date):
+            return fill_timelapse(data, start_date, end_date,
+                label_function)
+
+        chart_data = line_chart_data(
+            start_date, end_date, f)
+
+        return HttpResponse(simplejson.dumps(chart_data))
+    else:
+        clicks_per_store_data = sponsored_visits.values('shp__product').annotate(data=Count('id')).order_by('shp__product')
+
+        clicks_per_store = [(Product.objects.get(pk=e['shp__product']), e['data']) for e in clicks_per_store_data]
+        clicks_per_store = sorted(clicks_per_store, key=lambda x: x[1], reverse=True)
+
+        return append_store_metadata_to_response(request, 'store/sponsored_results.html', {
+            'form': form,
+            'total_clicks': sponsored_visits.count(),
+            'clicks_per_store': clicks_per_store
+            })
+
+@store_user_required
+def advertisement_results(request):
+    advertisement_visits = AdvertisementVisit.objects.filter(
+        advertisement__store=request.user.get_profile().assigned_store
+    ).values('advertisement').annotate(data=Count('id')).order_by('advertisement')
+
+    advertisement_visits_dict = dict([(e['advertisement'], e['data']) for e in advertisement_visits])
+
+    advertisements = Advertisement.objects.filter(
+        store=request.user.get_profile().assigned_store
+    )
+
+    result_data = []
+
+    for ad in advertisements:
+        clicks = advertisement_visits_dict.get(ad.id, 0)
+
+        result_data.append((
+            ad,
+            clicks,
+            100.0 * clicks / ad.impressions))
+
+    return append_store_metadata_to_response(request, 'store/advertisement_results.html', {
+        'result_data': result_data
+    })

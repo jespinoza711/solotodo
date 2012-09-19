@@ -59,6 +59,8 @@ urlpatterns += patterns('solonotebooks.cotizador.views_store',
     (r'^store/update_prices/$', 'update_prices'),
     (r'^store/competition_report/$', 'competition_report'),
     (r'^store/competition_report/excel$', 'competition_report_excel'),
+    (r'^store/sponsored_results/$', 'sponsored_results'),
+    (r'^store/advertisement_results/$', 'advertisement_results')
 )
 
 urlpatterns += patterns('solonotebooks.cotizador.views_manager',

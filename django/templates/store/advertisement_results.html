@@ -1,0 +1,26 @@
+{% extends "store/base.html" %}
+
+{% block title %}
+    Publicidad - {{ store }}
+{% endblock %}
+
+{% block content %}
+
+<h1>Publicidad</h1>
+    <table>
+        <tr>
+            <th>Publicidad</th>
+            <th>Impresiones</th>
+            <th>Clicks</th>
+            <th>Tasa de conversión</th>
+        </tr>
+        {% for advertisement, clicks, rate in result_data %}
+            <tr>
+                <td>{{ advertisement }}</td>
+                <td>{{ advertisement.impressions }}</td>
+                <td>{{ clicks }}</td>
+                <td>{{ rate|floatformat:2 }} %</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

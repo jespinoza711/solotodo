@@ -1,25 +1,16 @@
 #-*- coding: UTF-8 -*-
-import os
-import sys
-import hashlib
 import operator
-import urllib
 import re
-from datetime import date, timedelta
+from datetime import date
 from time import time
 from math import ceil
-from django.db.models import Min, Max, Q
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
-from django.contrib import auth
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.validators import email_re
 from solonotebooks import settings
+from solonotebooks.cotizador.forms import *
 from models import *
-from fields import *
 from exceptions import *
 from utils import *
     

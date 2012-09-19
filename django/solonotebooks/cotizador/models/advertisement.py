@@ -1,5 +1,5 @@
 from django.db import models
-from . import AdvertisementPosition
+from . import AdvertisementPosition, Store
 
 class Advertisement(models.Model):
     name = models.CharField(max_length = 255)
@@ -8,6 +8,7 @@ class Advertisement(models.Model):
     target_url = models.TextField()
     impressions = models.IntegerField()
     is_active = models.BooleanField()
+    store = models.ForeignKey(Store, null=True)
     
     def __unicode__(self):
         return unicode(self.name)   

@@ -1,15 +1,13 @@
 #-*- coding: UTF-8 -*-
 import hashlib
-from copy import deepcopy
 from random import randint
-from datetime import date, datetime, timedelta
-from django.db.models import Min, Max
+from datetime import date, timedelta
 from django.core.mail import send_mail
 from django.template import Context
 from django.template.loader import get_template
 from solonotebooks import settings
+from solonotebooks.cotizador.forms import DateRangeForm
 from models import *
-from forms import *
 from exceptions import *
 from string import digits, lowercase
 
@@ -29,11 +27,11 @@ def clean_price_string(price_string):
 def stringCompare(comp1, comp2):
     comp1_words = comp1.lower().split()
     comp2_words = comp2.lower().split()
-    counter = 0;
+    counter = 0
     for word in comp2_words:
         for comp1_word in comp1_words:
             if word in comp1_word:
-                counter += 1;
+                counter += 1
                 break
             
     return 100.0 * counter / len(comp2_words)
@@ -106,6 +104,8 @@ def send_new_password_mail(user, new_password):
     
 # Helper method to set the search_form for almost all of the views            
 def initialize_search_form(request, ptype = ProductType.default()):
+    from solonotebooks.cotizador.forms import *
+
     if not ptype:
         return None
     qd = request.GET.copy()
@@ -317,3 +317,144 @@ def latin1_to_ascii(unicrap):
         else:
             r += i
     return r
+
+def fill_timelapse(entries,
+                   start_date,
+                   end_date,
+                   series_name_function,
+                   value_function=None,
+                   date_function=None,
+                   null_value=0):
+    """
+    Function used to format data for line charts (with one or more series)
+
+    Entries is the input data, an iterable object sorted first by series and
+    second by date.
+
+    The function returns a dictionary series_name => series_data, where series
+    data is a list of (date, value) tuples sorted by date.
+
+    start_date and end_date define the limits of the function. For each series
+    all its dates between start and date will have a value. If the input
+    entries don't provide it then the "null_value" will be used.
+
+    label_function is a function that, given an element of entries, returns the
+    name of the series it must belong to.
+
+    value_function is a function that, given an element of entries, returns the
+    value to be used in the resulting structure. If not given the function will
+    try and access the 'data' element of the antry as if it were a dictionary.
+
+    date_function is a function that, given an element of entries, returns the
+    date to be used in the resulting structure to index the entry. If not given
+    the function will try and access the 'date' element of the antry as if it
+    were a dictionary.
+    """
+
+    if not value_function:
+        value_function = lambda x: x['data']
+
+    if not date_function:
+        date_function = lambda x: x['date']
+
+    one_day = timedelta(days=1)
+    next_function = lambda x: x + one_day
+
+    return generic_fill_lapse(
+        entries=entries,
+        start_key=start_date,
+        end_key=end_date,
+        next_function=next_function,
+        series_name_function=series_name_function,
+        key_function=date_function,
+        value_function=value_function,
+        null_value=null_value
+    )
+
+
+def generic_fill_lapse(entries,
+                       start_key,
+                       end_key,
+                       next_function,
+                       series_name_function,
+                       key_function,
+                       value_function,
+                       null_value=None):
+
+    result = {}
+    current_series_name = None
+
+    # next_expected_key will have a real value inside the loop, but we need
+    # to have it in scope
+    next_expected_key = None
+
+    series_names = []
+
+    for entry in entries:
+        entry_key = key_function(entry)
+        entry_series_name = series_name_function(entry)
+
+        if current_series_name != entry_series_name:
+            next_expected_key = start_key
+
+            current_series_name = entry_series_name
+            series_names.append(current_series_name)
+            result[current_series_name] = []
+
+        while next_expected_key < entry_key:
+            result[entry_series_name].append([next_expected_key, null_value])
+            next_expected_key = next_function(next_expected_key)
+
+        entry_value = value_function(entry)
+
+        result[entry_series_name].append([entry_key, entry_value])
+
+        next_expected_key = next_function(next_expected_key)
+
+    # Pad the end
+    for serie_name in series_names:
+        next_key = next_function(result[serie_name][-1][0])
+
+        while next_key <= end_key:
+            result[serie_name].append([next_key, null_value])
+            next_key = next_function(next_key)
+
+    return result
+
+
+epoch = date(1970, 1, 1)
+
+
+def milliseconds_since_epoch(date):
+    td = date - epoch
+    return long(td.seconds + (td.days * 24 * 3600) * 1000)
+
+
+# Utility methods for highcharts
+
+def get_and_clean_form(data, FormClass=DateRangeForm):
+    form = FormClass(data)
+
+    if form.is_valid():
+        start_date = form.cleaned_data['start_date']
+        end_date = form.cleaned_data['end_date']
+    else:
+        start_date, end_date = FormClass.default_dates()
+
+    return form, start_date, end_date
+
+def line_chart_data(start_date, end_date, data_calculation_method):
+    series = []
+
+    serie_history = data_calculation_method(start_date, end_date)
+
+    for series_name, date_value_tuple in serie_history.items():
+        result = [(milliseconds_since_epoch(d), p)
+                  for d, p in date_value_tuple]
+
+        series.append({
+            'name': series_name,
+            'data': result
+        })
+
+    return series

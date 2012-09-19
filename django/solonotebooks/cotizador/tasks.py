@@ -1,8 +1,6 @@
-from celery.task import Task
-from celery.registry import tasks
 from datetime import datetime
 
-class UpdateStore(Task):
+class UpdateStore(object):
     def run(self, registry):
         registry.status = 'En proceso'
         registry.save()
@@ -14,5 +12,3 @@ class UpdateStore(Task):
             registry.status = 'Error'
         
         registry.save()
-
-tasks.register(UpdateStore)
