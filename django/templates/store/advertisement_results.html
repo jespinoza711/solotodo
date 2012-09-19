@@ -4,23 +4,59 @@
     Publicidad - {{ store }}
 {% endblock %}
 
+{% block header_content %}
+    <script type="text/javascript" src="/media/js/date_range_form.js"></script>
+    <script type="text/javascript" src="/media/js/highcharts.js"></script>
+    <script type="text/javascript" src="/media/js/store_advertisement_results.js"></script>
+{% endblock %}
+
 {% block content %}
 
 <h1>Publicidad</h1>
-    <table>
+
+<form method="get">
+    {{ form.as_p }}
+    <input type="submit" value="Actualizar" />
+</form>
+
+{% if form.is_valid %}
+    
+<br />
+
+<h2>Resultados por día</h2>
+
+<p>
+    <strong>Impresiones totales:</strong> {{ total_impressions }}<br />
+    <strong>Clicks totales:</strong> {{ total_visits }}
+</p>
+
+<br />
+
+<div id="chart_container"></div>
+
+<h2>Resultados por banner</h2>
+
+<table>
+<thead>
+    <tr>
+        <th>Publicidad</th>
+        <th>Impresiones</th>
+        <th>Clicks</th>
+        <th>Tasa de conversión</th>
+    </tr>
+</thead>
+<tbody>
+    {% for advertisement, clicks, rate in result_data %}
         <tr>
-            <th>Publicidad</th>
-            <th>Impresiones</th>
-            <th>Clicks</th>
-            <th>Tasa de conversión</th>
+            <td>{{ advertisement }}</td>
+            <td>{{ advertisement.impressions }}</td>
+            <td>{{ clicks }}</td>
+            <td>{{ rate|floatformat:2 }} %</td>
         </tr>
-        {% for advertisement, clicks, rate in result_data %}
-            <tr>
-                <td>{{ advertisement }}</td>
-                <td>{{ advertisement.impressions }}</td>
-                <td>{{ clicks }}</td>
-                <td>{{ rate|floatformat:2 }} %</td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% endfor %}
+</tbody>
+</table>
+
+{% endif %}
+    
 {% endblock %}

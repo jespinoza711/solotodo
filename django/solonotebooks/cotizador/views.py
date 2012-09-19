@@ -4,6 +4,7 @@ import re
 from datetime import date
 from time import time
 from math import ceil
+from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
@@ -322,6 +323,14 @@ def ad_visited(request, advertisement_id):
     ad_visit.advertisement = advertisement
     ad_visit.save()
     return HttpResponseRedirect(advertisement.target_url)
+
+@csrf_exempt
+def ad_impressed(request):
+    ad_id = request.POST['ad_id']
+    ad = get_object_or_404(Advertisement, pk=ad_id)
+    ai = AdvertisementImpression.objects.create(advertisement=ad)
+
+    return HttpResponse(ai.id)
     
 def product_details_legacy(request, product_id):
     product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()

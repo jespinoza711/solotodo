@@ -41,10 +41,6 @@ def load_advertisement(position):
         ads = Advertisement.objects.filter(position__name = position).filter(is_active = True)
         ad_index = randint(0, len(ads) - 1)
         ad = ads[ad_index]
-        ad.impressions += 1
-        ad.save()
-
-        AdvertisementImpression.objects.create(advertisement=ad)
     except:
         ad = None
         

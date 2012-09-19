@@ -501,11 +501,58 @@ def sponsored_results(request):
 
 @store_user_required
 def advertisement_results(request):
-    advertisement_visits = AdvertisementVisit.objects.filter(
-        advertisement__store=request.user.get_profile().assigned_store
-    ).values('advertisement').annotate(data=Count('id')).order_by('advertisement')
+    form, start_date, end_date = get_and_clean_form(request.GET)
 
+    advertisement_impressions = AdvertisementImpression.objects.filter(
+        advertisement__store=request.user.get_profile().assigned_store,
+        date__gte=start_date,
+        date__lte=end_date
+    )
+
+    advertisement_visits = AdvertisementVisit.objects.filter(
+        advertisement__store=request.user.get_profile().assigned_store,
+        date__gte=start_date,
+        date__lte=end_date
+    )
+
+    if request.GET.get('format', 'html') == 'json':
+        data = advertisement_visits.values('date').annotate(data=Count('id')).order_by('date')
+
+        def label_function(ev):
+            return u'Número de clicks'
+
+        def f(start_date, end_date):
+            return fill_timelapse(data, start_date, end_date,
+                label_function)
+
+        chart_data = line_chart_data(
+            start_date, end_date, f)
+
+        data = advertisement_impressions.values('date').annotate(data=Count('id')).order_by('date')
+
+        def label_function(ev):
+            return u'Número de impresiones'
+
+        def f(start_date, end_date):
+            return fill_timelapse(data, start_date, end_date,
+                label_function)
+
+        chart_data.extend(line_chart_data(
+            start_date, end_date, f))
+
+        chart_data[0]['yAxis'] = 1
+        chart_data[1]['yAxis'] = 0
+
+        return HttpResponse(simplejson.dumps(chart_data))
+
+    total_visits = advertisement_visits.count()
+    total_impressions = advertisement_impressions.count()
+
+    advertisement_visits = advertisement_visits.values('advertisement').annotate(data=Count('id')).order_by('advertisement')
     advertisement_visits_dict = dict([(e['advertisement'], e['data']) for e in advertisement_visits])
+
+    advertisement_impressions = advertisement_impressions.values('advertisement').annotate(data=Count('id')).order_by('advertisement')
+    advertisement_impressions_dict = dict([(e['advertisement'], e['data']) for e in advertisement_impressions])
 
     advertisements = Advertisement.objects.filter(
         store=request.user.get_profile().assigned_store
@@ -515,12 +562,18 @@ def advertisement_results(request):
 
     for ad in advertisements:
         clicks = advertisement_visits_dict.get(ad.id, 0)
+        impressions = advertisement_impressions_dict.get(ad.id, 0)
 
-        result_data.append((
-            ad,
-            clicks,
-            100.0 * clicks / ad.impressions))
+        if impressions == 0:
+            ratio = 0
+        else:
+            ratio = 100.0 * clicks / impressions
+
+        result_data.append((ad, clicks, ratio))
 
     return append_store_metadata_to_response(request, 'store/advertisement_results.html', {
-        'result_data': result_data
+        'form': form,
+        'result_data': result_data,
+        'total_visits': total_visits,
+        'total_impressions': total_impressions
     })

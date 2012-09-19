@@ -138,7 +138,7 @@ def storehasproductentity_hide(request, staff, store_has_product_entity_id):
     shpe.save()
     shpe.update(recursive = True)
     url = reverse('solonotebooks.cotizador.views_staff.new_entities', args = [staff.id]) + '?refresh=true'
-    return HttpResponseRedirect(url);
+    return HttpResponseRedirect(url)
     
 @staff_login_required
 def storehasproductentity_show(request, staff, store_has_product_entity_id):
@@ -152,7 +152,7 @@ def storehasproductentity_show(request, staff, store_has_product_entity_id):
     shpe.save()
     shpe.update(recursive = True)
     url = reverse('solonotebooks.cotizador.views_staff.storehasproductentity_edit', args = [staff.id, shpe.id])    
-    return HttpResponseRedirect(url);
+    return HttpResponseRedirect(url)
     
 @staff_login_required
 def storehasproductentity_refresh_price(request, staff, store_has_product_entity_id):
@@ -203,7 +203,7 @@ def storehasproductentity_change_ptype(request, staff, store_has_product_entity_
     shpe.ptype = ptype
     shpe.save()
     url = reverse('solonotebooks.cotizador.views_staff.storehasproductentity_edit', args = [staff.id, shpe.id])
-    return HttpResponseRedirect(url);
+    return HttpResponseRedirect(url)
     
 @staff_login_required
 def registry(request, staff):
