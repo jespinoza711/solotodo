@@ -26,7 +26,6 @@ for old_notebook in old_notebooks:
             'class_name': 'Notebook'
         }
     }
-    result.append(inherited_field)
     
     product_fields = products_dict[old_notebook['pk']]
     
@@ -41,7 +40,6 @@ for old_notebook in old_notebooks:
             'name': product_fields['name']
         }
     }
-    result.append(product)
     
     # Create notebook
     notebook = old_notebook
@@ -51,7 +49,10 @@ for old_notebook in old_notebooks:
     notebook['fields']['score_games'] = 0
     notebook['fields']['score_mobility'] = 0
     notebook['model'] = 'notebooks.Notebook'
+
     result.append(notebook)
+    result.append(product)
+    result.append(inherited_field)
     
 print simplejson.dumps(result, sort_keys=True, indent=4)
     

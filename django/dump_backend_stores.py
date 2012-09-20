@@ -64,7 +64,7 @@ for store in json:
     p['fields'] = dict()
     providers.append(p)
 
-inherited_models.extend(providers)
-inherited_models.extend(json)
+json.extend(providers)
+json.extend(inherited_models)
 
-print simplejson.dumps(inherited_models, sort_keys=True, indent=4)
+print simplejson.dumps(json, sort_keys=True, indent=4)

@@ -43,7 +43,6 @@ for name in model_base_names:
                 'class_name': rname
             }
         }
-        result.append(inherited_field)
 
         product_fields = products_dict[old_product['pk']]
 
@@ -58,14 +57,16 @@ for name in model_base_names:
                 'name': product_fields['name']
             }
         }
-        result.append(product)
 
         # Create actual product
         new_product = old_product
 
         new_product['fields']['picture'] = product_fields['picture'].replace('notebook_pics', 'hardware')
         new_product['model'] = 'hardware.' + rname
+
         result.append(new_product)
+        result.append(product)
+        result.append(inherited_field)
     
 print simplejson.dumps(result, sort_keys=True, indent=4)
     
