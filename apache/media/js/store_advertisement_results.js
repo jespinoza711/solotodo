@@ -1,9 +1,7 @@
 var milliseconds_in_day = 86400000;
-var series;
-var chart;
 
 function create_chart() {
-    chart = new Highcharts.Chart({
+    new Highcharts.Chart({
         chart: {
             renderTo: 'chart_container',
             reflow: false,
@@ -40,7 +38,7 @@ function create_chart() {
                 return Highcharts.dateFormat('%d de %B de %Y', this.x) + ': <b>' + Highcharts.numberFormat(this.y, 0, ',', '.') + '</b>';
             }
         },
-        series: series,
+        series: chart_data,
 
         exporting: {
             enabled: false
@@ -62,19 +60,6 @@ $(function() {
     });
 
     if ($('ul.errorlist').length == 0) {
-        var current_url = document.location.href;
-
-        var target_url = current_url;
-
-        if ($.inArray('?', current_url) >= 0) {
-            target_url = target_url + '&format=json'
-        } else {
-            target_url = target_url + '?format=json'
-        }
-
-        $.getJSON(target_url, function(json_data) {
-            series = json_data;
-            create_chart();
-        });
+        create_chart();
     }
 });

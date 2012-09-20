@@ -8,6 +8,10 @@
     <script type="text/javascript" src="/media/js/date_range_form.js"></script>
     <script type="text/javascript" src="/media/js/highcharts.js"></script>
     <script type="text/javascript" src="/media/js/store_advertisement_results.js"></script>
+
+    <script type="text/javascript">
+        var chart_data = {{ chart_data|safe }};
+    </script>
 {% endblock %}
 
 {% block content %}

@@ -515,38 +515,35 @@ def advertisement_results(request):
         date__lte=end_date
     )
 
-    if request.GET.get('format', 'html') == 'json':
-        data = advertisement_visits.values('date').annotate(data=Count('id')).order_by('date')
+    data = advertisement_visits.values('date').annotate(data=Count('id')).order_by('date')
 
-        def label_function(ev):
-            return u'Número de clicks'
+    def label_function(ev):
+        return u'Número de clicks'
 
-        def f(start_date, end_date):
-            return fill_timelapse(data, start_date, end_date,
-                label_function)
+    def f(start_date, end_date):
+        return fill_timelapse(data, start_date, end_date,
+            label_function)
 
-        chart_data = line_chart_data(
-            start_date, end_date, f)
+    chart_data = line_chart_data(
+        start_date, end_date, f)
 
-        data = advertisement_impressions.values('date').annotate(data=Count('id')).order_by('date')
+    data = advertisement_impressions.values('date').annotate(data=Count('id')).order_by('date')
 
-        def label_function(ev):
-            return u'Número de impresiones'
+    def label_function(ev):
+        return u'Número de impresiones'
 
-        def f(start_date, end_date):
-            return fill_timelapse(data, start_date, end_date,
-                label_function)
+    def f(start_date, end_date):
+        return fill_timelapse(data, start_date, end_date,
+            label_function)
 
-        chart_data.extend(line_chart_data(
-            start_date, end_date, f))
+    chart_data.extend(line_chart_data(
+        start_date, end_date, f))
 
-        chart_data[0]['yAxis'] = 1
-        chart_data[1]['yAxis'] = 0
-
-        return HttpResponse(simplejson.dumps(chart_data))
+    chart_data[0]['yAxis'] = 1
+    chart_data[1]['yAxis'] = 0
 
     total_visits = advertisement_visits.count()
-    total_impressions = advertisement_impressions.count()
+    total_impressions = 0
 
     advertisement_visits = advertisement_visits.values('advertisement').annotate(data=Count('id')).order_by('advertisement')
     advertisement_visits_dict = dict([(e['advertisement'], e['data']) for e in advertisement_visits])
@@ -564,6 +561,8 @@ def advertisement_results(request):
         clicks = advertisement_visits_dict.get(ad.id, 0)
         impressions = advertisement_impressions_dict.get(ad.id, 0)
 
+        total_impressions += impressions
+
         if impressions == 0:
             ratio = 0
         else:
@@ -575,5 +574,6 @@ def advertisement_results(request):
         'form': form,
         'result_data': result_data,
         'total_visits': total_visits,
-        'total_impressions': total_impressions
+        'total_impressions': total_impressions,
+        'chart_data': simplejson.dumps(chart_data)
     })

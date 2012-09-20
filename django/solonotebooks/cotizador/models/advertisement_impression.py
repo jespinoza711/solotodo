@@ -2,7 +2,7 @@ from django.db import models
 from . import Advertisement
 
 class AdvertisementImpression(models.Model):
-    advertisement = models.ForeignKey(Advertisement)
+    advertisement = models.ForeignKey(Advertisement, db_index=True)
     date = models.DateField(auto_now_add=True, db_index=True)
 
     def __unicode__(self):

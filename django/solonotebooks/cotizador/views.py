@@ -328,9 +328,9 @@ def ad_visited(request, advertisement_id):
 def ad_impressed(request):
     ad_id = request.POST['ad_id']
     ad = get_object_or_404(Advertisement, pk=ad_id)
-    ai = AdvertisementImpression.objects.create(advertisement=ad)
+    AdvertisementImpression.objects.create(advertisement=ad)
 
-    return HttpResponse(ai.id)
+    return HttpResponse()
     
 def product_details_legacy(request, product_id):
     product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()
