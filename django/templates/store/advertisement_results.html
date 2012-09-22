@@ -50,10 +50,10 @@
     </tr>
 </thead>
 <tbody>
-    {% for advertisement, clicks, rate in result_data %}
+    {% for advertisement, impressions, clicks, rate in result_data %}
         <tr>
             <td>{{ advertisement }}</td>
-            <td>{{ advertisement.impressions }}</td>
+            <td>{{ impressions }}</td>
             <td>{{ clicks }}</td>
             <td>{{ rate|floatformat:2 }} %</td>
         </tr>

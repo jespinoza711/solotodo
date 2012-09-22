@@ -328,7 +328,20 @@ def ad_visited(request, advertisement_id):
 def ad_impressed(request):
     ad_id = request.POST['ad_id']
     ad = get_object_or_404(Advertisement, pk=ad_id)
-    AdvertisementImpression.objects.create(advertisement=ad)
+
+    try:
+        aipd = AdvertisementImpressionPerDay.objects.get(
+            advertisement=ad,
+            date=date.today()
+        )
+    except AdvertisementImpressionPerDay.DoesNotExist:
+        aipd = AdvertisementImpressionPerDay.objects.create(
+            advertisement=ad,
+            date=date.today(),
+            count=0
+        )
+    aipd.count += 1
+    aipd.save()
 
     return HttpResponse()
     

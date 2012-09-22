@@ -1,6 +1,6 @@
 #-*- coding: UTF-8 -*-
 from datetime import date, timedelta
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import simplejson
@@ -503,7 +503,7 @@ def sponsored_results(request):
 def advertisement_results(request):
     form, start_date, end_date = get_and_clean_form(request.GET)
 
-    advertisement_impressions = AdvertisementImpression.objects.filter(
+    aipds = AdvertisementImpressionPerDay.objects.filter(
         advertisement__store=request.user.get_profile().assigned_store,
         date__gte=start_date,
         date__lte=end_date
@@ -527,7 +527,7 @@ def advertisement_results(request):
     chart_data = line_chart_data(
         start_date, end_date, f)
 
-    data = advertisement_impressions.values('date').annotate(data=Count('id')).order_by('date')
+    data = aipds.values('date').annotate(data=Sum('count')).order_by('date')
 
     def label_function(ev):
         return u'Número de impresiones'
@@ -548,7 +548,7 @@ def advertisement_results(request):
     advertisement_visits = advertisement_visits.values('advertisement').annotate(data=Count('id')).order_by('advertisement')
     advertisement_visits_dict = dict([(e['advertisement'], e['data']) for e in advertisement_visits])
 
-    advertisement_impressions = advertisement_impressions.values('advertisement').annotate(data=Count('id')).order_by('advertisement')
+    advertisement_impressions = aipds.values('advertisement').annotate(data=Sum('count')).order_by('advertisement')
     advertisement_impressions_dict = dict([(e['advertisement'], e['data']) for e in advertisement_impressions])
 
     advertisements = Advertisement.objects.filter(
@@ -561,6 +561,7 @@ def advertisement_results(request):
         clicks = advertisement_visits_dict.get(ad.id, 0)
         impressions = advertisement_impressions_dict.get(ad.id, 0)
 
+        print total_impressions
         total_impressions += impressions
 
         if impressions == 0:
@@ -568,7 +569,9 @@ def advertisement_results(request):
         else:
             ratio = 100.0 * clicks / impressions
 
-        result_data.append((ad, clicks, ratio))
+        result_data.append((ad, impressions, clicks, ratio))
+
+    print total_impressions
 
     return append_store_metadata_to_response(request, 'store/advertisement_results.html', {
         'form': form,
