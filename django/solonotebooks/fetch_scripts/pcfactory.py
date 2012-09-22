@@ -37,10 +37,7 @@ class PCFactory(FetchStore):
         
         # Browser initialization
         browser = mechanize.Browser()
-        
-        # Array containing the data for each product
-        productsData = []
-        
+
         url_extensions = [
             ['?papa=24&categoria=519', 'Notebook'],   # Ultrabooks
             ['?papa=24&categoria=424', 'Notebook'],   # Notebooks 7 a 10

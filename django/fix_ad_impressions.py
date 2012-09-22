@@ -9,8 +9,16 @@ ais = AdvertisementImpression.objects.values('advertisement', 'date').annotate(d
 ads = dict([(ad.id, ad) for ad in Advertisement.objects.all()])
 
 for ai in ais:
-    AdvertisementImpressionPerDay.objects.create(
-        advertisement=ads[ai['advertisement']],
-        date=ai['date'],
-        count=ai['data']
-    )
+    try:
+        aipd = AdvertisementImpressionPerDay.objects.get(
+            advertisement=ads[ai['advertisement']],
+            date=ai['date'],
+        )
+    except AdvertisementImpressionPerDay.DoesNotExist:
+        aipd = AdvertisementImpressionPerDay(
+            advertisement=ads[ai['advertisement']],
+            date=ai['date']
+        )
+        aipd.count = 0
+    aipd.count += ai['data']
+    aipd.save()
