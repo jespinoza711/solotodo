@@ -3,7 +3,6 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 
 from subprocess import *
 import simplejson
-from datetime import *
 
 def run_cmd(cmd):
     p = Popen(cmd, shell=True, stdout=PIPE)
@@ -35,15 +34,6 @@ for name in model_base_names:
         rname = 'Monitor'
 
     for old_product in old_products:
-        # Create inherited field
-        inherited_field = {
-            'pk': old_product['pk'],
-            'model': 'backend_interface.inheritedmodel',
-            'fields': {
-                'class_name': rname
-            }
-        }
-
         product_fields = products_dict[old_product['pk']]
 
         # Create product
@@ -54,7 +44,8 @@ for name in model_base_names:
             'model': 'backend_interface.product',
             'fields': {
                 'display_name': product_fields['display_name'],
-                'name': product_fields['name']
+                'name': product_fields['name'],
+                'class_name': rname
             }
         }
 
@@ -66,8 +57,7 @@ for name in model_base_names:
 
         result.append(new_product)
         result.append(product)
-        result.append(inherited_field)
-    
+
 print simplejson.dumps(result, sort_keys=True, indent=4)
     
     
