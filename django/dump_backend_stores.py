@@ -39,7 +39,6 @@ def run_cmd(cmd):
 json = run_cmd('python solonotebooks/manage.py dumpdata cotizador.Store')
 json = simplejson.loads(json.replace('cotizador.', 'backend.'))
 
-inherited_models = []
 providers = []
 
 for store in json:
@@ -51,20 +50,13 @@ for store in json:
     new_fields['logo'] = f['picture'].replace('store_logos', 'stores/logos')
     store['fields'] = new_fields
 
-    im = dict()
-    im['model'] = 'backend.inheritedmodel'
-    im['pk'] = store['pk']
-    im['fields'] = dict()
-    im['fields']['class_name'] = 'Store'
-    inherited_models.append(im)
-
     p = dict()
     p['model'] = 'backend.provider'
     p['pk'] = store['pk']
     p['fields'] = dict()
+    p['fields']['class_name'] = 'Store'
     providers.append(p)
 
 json.extend(providers)
-json.extend(inherited_models)
 
 print simplejson.dumps(json, sort_keys=True, indent=4)
