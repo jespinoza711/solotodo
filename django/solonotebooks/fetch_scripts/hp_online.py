@@ -30,7 +30,7 @@ class HPOnline(FetchStore):
     # Main method
     def retrieve_product_links(self):
         # Basic data of the target webpage and the specific catalog
-        urlBase = 'http://www.hponline.cl'
+        urlBase = 'https://www.hponline.cl'
         urlBuscarProductos = '/personas/'
         
         # Browser initialization
