@@ -36,6 +36,9 @@ for name in model_base_names:
     for old_product in old_products:
         product_fields = products_dict[old_product['pk']]
 
+        if rname == 'Monitor' and old_product['fields']['stype'] == 1:
+            continue
+
         # Create product
         creation_date = product_fields['date_added']
 

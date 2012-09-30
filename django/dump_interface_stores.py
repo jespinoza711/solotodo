@@ -4,6 +4,22 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'solonotebooks.settings'
 from subprocess import *
 import simplejson
 
+black_list = [
+    'Cintegral',
+    'Compumanque',
+    'Eprod',
+    'FullNotebook',
+    'Impulso',
+    'Racle',
+    'rK-Notebooks',
+    'Tecno.cl',
+    'TecnoGroup',
+    ]
+
+name_conversion_dict = {
+    'Bym': 'TtChile'
+}
+
 def run_cmd(cmd):
     p = Popen(cmd, shell=True, stdout=PIPE)
     output = p.communicate()[0]
@@ -17,8 +33,8 @@ providers = []
 for store in json:
     f = store['fields']
     new_fields = dict()
-    new_fields['name'] = f['name']
-    new_fields['is_active'] = True
+    new_fields['name'] = name_conversion_dict.get(f['name'], f['name'])
+    new_fields['is_active'] = f['name'] not in black_list
     store['fields'] = new_fields
 
     p = dict()
