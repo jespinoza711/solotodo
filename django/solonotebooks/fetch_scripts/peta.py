@@ -16,13 +16,8 @@ class Peta(FetchStore):
 
         name = soup.find('h1').string.encode('ascii', 'ignore').strip()
 
-        if len(soup.findAll('span', 'price')) == 4:
-            price_index = 3
-        else:
-            price_index = 0
-
-        cash_price = int(clean_price_string(
-            soup.findAll('span', 'price')[price_index].string))
+        cash_price = int(round(int(clean_price_string(
+            soup.findAll('span', 'price')[-1].string)) * 0.97))
 
         product_data = ProductData()
         product_data.custom_name = name
