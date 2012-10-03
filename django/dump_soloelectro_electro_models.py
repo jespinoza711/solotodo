@@ -19,6 +19,8 @@ model_base_names = [
     'Screen'
 ]
 
+reputable_brand_ids = [17, 29, 19, 9, 4, 12, 32, 2, 5, 3, 21]
+
 for model_name in models.__all__:
     for name in model_base_names:
         if model_name.startswith(name) and model_name != name:
@@ -32,6 +34,9 @@ for model_name in chosen_models:
 
     for j in json:
         j['model'] = j['model'].replace('screen', 'television')
+
+        if model_name == 'ScreenBrand':
+            j['fields']['is_reputable'] = j['pk'] in reputable_brand_ids
 
     final_result.extend(json)
 
