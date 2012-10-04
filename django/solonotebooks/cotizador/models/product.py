@@ -455,6 +455,16 @@ class Product(models.Model):
         clone_prod.save()
         return clone_prod
 
+    def determine_site(self):
+        if self.ptype.id == 4:
+            o = self.get_polymorphic_instance()
+            if o.stype.name == 'Monitores':
+                return settings.MONITOR_SITE
+            else:
+                return settings.TELEVISION_SITE
+
+        return settings.D[self.ptype.id]
+
     def formatted_price(self):
         return format_currency(Decimal(self.price))
     

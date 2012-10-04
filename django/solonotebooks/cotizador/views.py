@@ -7,7 +7,7 @@ from math import ceil
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponsePermanentRedirect
 from django.utils.http import urlquote
 from solonotebooks import settings
 from solonotebooks.cotizador.forms import *
@@ -17,17 +17,22 @@ from utils import *
     
 # Main landing page (/)    
 def index(request):
-    highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
-    result_products = highlighted_products_form.apply_filter(Product.get_available())[:10]
-    
     return append_metadata_to_response(request, 'cotizador/index.html', {
-        'hnf': highlighted_products_form,
-        'products': result_products,
-        'ptypes': ProductType.objects.all(),
+        'notebook_site': settings.NOTEBOOK_SITE,
+        'hardware_site': settings.HARDWARE_SITE,
+        'electro_site': settings.TELEVISION_SITE,
     })
     
 def product_type_index(request, product_type_urlname):
     ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
+
+    if ptype.classname == 'Notebook':
+        url = settings.NOTEBOOK_SITE
+    else:
+        url = settings.HARDWARE_SITE + '/' + convert_camelcase_to_lowercase(ptype.classname) + '/search/'
+
+    return HttpResponsePermanentRedirect(url)
+
     product_type_class = ptype.get_class()
     
     highlighted_products_form = HighlightedProductsForm.initialize(request.GET)
@@ -39,10 +44,21 @@ def product_type_index(request, product_type_urlname):
         'products': result_products,
         'ptype': ptype
     })
+
+def convert_camelcase_to_lowercase(name):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
     
 def product_type_catalog(request, product_type_urlname):
     ptype = get_object_or_404(ProductType, urlname = product_type_urlname)
     product_type_class = ptype.get_class()
+
+    if ptype.classname == 'Notebook':
+        url = settings.NOTEBOOK_SITE
+    else:
+        url = settings.HARDWARE_SITE + '/' + convert_camelcase_to_lowercase(ptype.classname) + '/search/'
+
+    return HttpResponsePermanentRedirect(url)
 
     search_form = initialize_search_form(request, ptype)
     search_form.save()
@@ -348,7 +364,7 @@ def ad_impressed(request):
 def product_details_legacy(request, product_id):
     product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()
     url = reverse('solonotebooks.cotizador.views.product_details', args = [product.url])
-    return HttpResponseRedirect(url)
+    return HttpResponsePermanentRedirect(url)
     
 # View in charge of showing the details of a product and handle commment submissions        
 def product_details(request, product_url):
@@ -356,6 +372,10 @@ def product_details(request, product_url):
     product_id = int(match.groups()[0])
 
     product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()
+
+    url = product.determine_site() + '/products/' + str(product.id)
+
+    return HttpResponsePermanentRedirect(url)
     
     if product.url != product_url:
         url = reverse('solonotebooks.cotizador.views.product_details', args = [product.url])

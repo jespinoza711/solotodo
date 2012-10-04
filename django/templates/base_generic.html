@@ -10,6 +10,7 @@
 		        {{ site_name }}
 	        {% endblock %}
 	    </title>
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="/media/css/screen.css?v=3" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="/media/css/menu_style.css" type="text/css" media="screen, projection" />
    	 	<link rel="stylesheet" href="/media/css/layout.css?v=4" type="text/css" media="screen, projection" />
@@ -22,7 +23,6 @@
    	 	<script type="text/javascript" src="/media/js/accounts_scripts.js"></script>
         <script type="text/javascript" src="/media/js/comparison_list.js"></script>
         <script type="text/javascript" src="/media/js/store.js"></script>
-        <script type="text/javascript" src="/media/js/ad_manager.js"></script>
 
         <script type="text/javascript">
             authenticated_user = {% if user.is_authenticated %}true{% else %}false{% endif %}
@@ -38,87 +38,11 @@
 		<![endif]-->
 	</head>
 	
-	<body>
+	<body style="background: #151515;">
 		<div id="head">
 			<div id="content-head" class="container">
 				<div id="nav-user" class="nav-mine">
-					{% if authenticated_user %}    
-                        <div id="logout">
-                            <div>
-                                <span id="logout_links">
-                                <span class="full_name">{{ user.get_profile.name }}</span> |
-                                <a href="{% url solonotebooks.cotizador.views_account.subscriptions %}" class="toplink">Mis Productos</a> | 
-                                {% if user.is_superuser %}
-                                <a href="{% url solonotebooks.cotizador.views_manager.news %}" class="toplink">Administrador</a> | 
-                                {% endif %}
-                                {% if user.is_staff %}
-                                <a href="{% url solonotebooks.cotizador.views_staff.new_entities user.id %}" class="toplink">Staff</a> | 
-                                {% endif %}
-                                {% if user.get_profile.assigned_store %}
-                                <a href="{% url solonotebooks.cotizador.views_store.index %}" class="toplink">Gestor de tienda</a> | 
-                                {% endif %}
-                                <a href="{% url solonotebooks.cotizador.views_account.logout %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="toplink">Logout</a>
-                                </span>
-                            </div>
-                        </div>            
-                    {% else %}
-                        <div id="login">
-                            <form id="login-form" method="post" action="/account/login/{% if next %}?next={{ next|iriencode }}{% endif %}">
-                                <span class="toplink">Nombre:</span> <input class="login_input" type="text" name="username" id="username" />
-                                &nbsp;
-                                <span class="toplink">Contraseña:</span> <input class="login_input" type="password" name="password" id="password">
-                                <input type="submit" value="Entrar" class="login_button" />
-                                &nbsp;
-                                <span><a href="" class="regenerate_link toplink">¿Olvidaste tu contraseña?</a>
-                                </span>
-                                
-                            </form>
-                            <div id="fb-root"></div>
-                            <div id="fb-root"></div>
-                            <script>
-                                window.fbAsyncInit = function() {
-                                    FB.init({
-                                                appId      : '{{ FACEBOOK_ID }}', // App ID
-                                                status     : true, // check login status
-                                                cookie     : true, // enable cookies to allow the server to access the session
-                                                xfbml      : true  // parse XFBML
-                                            });
-                                };
-                                // Load the SDK Asynchronously
-                                (function(d){
-                                    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-                                    if (d.getElementById(id)) {return;}
-                                    js = d.createElement('script'); js.id = id; js.async = true;
-                                    js.src = "//connect.facebook.net/en_US/all.js";
-                                    ref.parentNode.insertBefore(js, ref);
-                                }(document));
-                            </script>
 
-                            <div class="fb-login-button" scope="email">Entrar con Facebook</div>
-                            <script>
-                                window.fbAsyncInit = function() {
-                                    FB.init({
-                                        appId : '{{ settings.FACEBOOK_ID }}',
-                                        status : true,
-                                        cookie : true,
-                                        xfbml : true
-                                    });
-
-                                    FB.Event.subscribe('auth.authResponseChange', function(authResponse){
-                                        handle_facebook_login(authResponse);
-                                    });
-                                };
-
-
-                                (function(d){
-                                    var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-                                    js = d.createElement('script'); js.id = id; js.async = true;
-                                    js.src = "//connect.facebook.net/es_CL/all.js";
-                                    d.getElementsByTagName('head')[0].appendChild(js);
-                                }(document));
-                            </script>
-                        </div>
-                    {% endif %}
 					
 				<br class="clear" />	
 				</div><!-- end nav user -->
@@ -126,106 +50,17 @@
 				<div id="menu">
 					<div id="combo-search" class="left">
 						<a href="{% url solonotebooks.cotizador.views.index %}" title="Inicio" title="{{ site_name }}" class="left main-logo"><img src="/media/css/img/logo_4.png" /></a>
-						<ol id="search" class="left">
-						    <form method="get" action="{% url solonotebooks.cotizador.views.search %}">
-							<li>
-    							    <input name="search_keywords" type="text" class="input-search" value="¿Qué{% if ptype %} {{ ptype.displayname }}{% endif %} estás buscando?" />
-    							    {% if ptype %}
-    							        <input name="product_type" type="hidden" value="{{ ptype.urlname }}" />
-    							    {% endif %}
-    							    </li>
-							<li><input type="submit" class="btn-search" value=""/></li>
-</form>
-						</ol>
 					<br class="clear" />
 					</div> <!-- end combo -->
-					
-					<div id="areas-site" class="right">
-						<ul>
-							<li class="sprite-inicio-active"><a href="{% url solonotebooks.cotizador.views.index %}" title="Inicio">Inicio</a></li>
-							<li class="sprite-catalogo">							    
-							    <a href="{% if ptype %}{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %} {% else %}/{% endif %}" title="Catálogo">
-							        Catálogo
-						        </a>
-						    </li>
-							<li class="sprite-blog"><a href="/blog/" title="Blog">Blog</a></li>
-						</ul>
-					</div> <!-- end areas -->
 				<br class="clear" />
 				</div> <!-- end menu -->
-				
-				{% block tabs %}
-				<div id="tabs">
-                    <ul class="catalogo left">
-                        {% if tabs %}
-                            <li class="intro-catalogo">{{ tabs.0 }}</li>
-                            {% for tab_option in tabs.1 %}
-                                <li {% ifequal tab_option.0 main_category_comparison_key %}class="active-menu"{% endifequal %}>
-                                    <a href="{{ tab_option.2 }}">{{ tab_option.1 }}</a>
-                                </li>
-                            {% endfor %}
-                        {% else %}
-                            <li class="intro-catalogo"></li>
-
-                            <li>
-                                <a href="/notebooks/catalog/">Notebooks</a>
-                            </li>
-
-                            <li>
-                                <a href="/cellphones/catalog/">Celulares</a>
-                            </li>
-
-                            <li>
-                                <a href="/screens/catalog/">Televisores y Monitores</a>
-                            </li>
-
-                            <li class="item-with-subcatalog">
-                                <a href="#">Partes de PC</a>
-
-                                <ul class="subcatalog">
-                                    <li>
-                                        <a href="/video_cards/catalog/">Tarjetas de video</a>
-                                    </li>
-                                    <li>
-                                        <a href="/processors/catalog/">Procesadores</a>
-                                    </li>
-                                    <li>
-                                        <a href="/motherboards/catalog/">Placas madre</a>
-                                    </li>
-                                    <li>
-                                        <a href="/ram/catalog/">Memoria RAM</a>
-                                    </li>
-                                    <li>
-                                        <a href="/storage_drives/catalog/">Discos duros y SSD</a>
-                                    </li>
-                                    <li>
-                                        <a href="/power_supplies/catalog/">Fuentes de poder</a>
-                                    </li>
-                                    <li>
-                                        <a href="/computer_cases/catalog/">Gabinetes</a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                        {% endif %}
-                    </ul>
-                </div>
-				{% endblock %}
 				
 			</div><!-- !end content head -->
 		</div> <!-- !end #head -->
 		
 		<!-- !end head global -->
-		
-		<div id="ad_top" class="container">
-		    <div id="ad_top_container">
-    			{{ top_ad.embedding_html|safe }}
-			</div>
-		</div> <!-- !end ads-top -->
-		
-		<a href="/blog/contacto" title="Contacto" class="contacto">&nbsp</a>
-		
-		<div id="content" class="container">
+
+		<div id="content" class="container" style="background: none;">
 		    {% block flash_message %}
                 {% if flash.message %}
                     <div id="info_message" class="info_message">
@@ -280,14 +115,5 @@
     var pageTracker = _gat._getTracker("UA-11970222-1");
     pageTracker._trackPageview();
     } catch(err) {}</script>
-
-    <script type="text/javascript">
-        var uvOptions = {};
-        (function() {
-            var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-            uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/4WVfWANMOsQ8OjCU4pVA.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-        })();
-    </script>
 	</body>
 </html>

@@ -6,66 +6,29 @@
 
 {% block content %}
 
-<div id="left">
-    {% include "news/np700g7a_s01cl.html" %}
+<h1 style="color: white; font-family: 'Droid Sans'; font-weight: bold; font-size: 26px;">
+    ¿Qué estás cotizando?
+</h1>
+    
+<br />
 
-    <div id="top-left">
-	    <img src="/media/css/img/fake-h1.png" class="left" />
-        <span class="left">Destacados por</span>
-		<ul class="right">
-		    {% for ordering_option in hnf.fields.highlighted_ordering.choices %}
-                <li {% ifequal hnf.cleaned_data.highlighted_ordering ordering_option.0 %} class="active-top-left" {% endifequal %}>
-                    <a href="?highlighted_ordering={{ ordering_option.0 }}" title="{{ ordering_option.1 }}">{{ordering_option.1}}</a>
-                </li>
-            {% endfor %}
-		</ul>
-		<br class="clear" />
-	</div> <!-- !end top left -->
-	<div id="cat-index">
-		{% for product in products %}
-		    {{ product.render_div }}
-        {% endfor %}
-	</div> <!-- !end cat index -->
-<!-- !end loop de producto -->	
-</div> 
-<!-- !end left -->
+<div style="text-align: center;">
+    <a href="{{ notebook_site }}">
+        <img src="/media/img/solotodo_solonotebooks.png" />
+    </a>
 
-<div id="right">
-    <div id="categories-index">
-	    <div class="categories" id="categoriesContainer">
-        {% for ptype in ptypes %}
-            <div class="categoryOff {% if forloop.last %} lastCategory {% endif %}">
-	            <span class="categoryTitle categoryName">
-		            <a href="{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %}">{{ ptype.indexname }}</a>
-	            </span>
-            </div>
-        {% endfor %}
-        </div>
+    <br />
+    <br />
 
-	</div> <!-- end search index -->
-	
-	<p id="product_like">
-        <fb:like href="{{ settings.SERVER_NAME }}" show_faces="true" width="250"></fb:like>
-    </p>
-	
-	<div id="facebook_recommendations">
-    	<fb:recommendations site="solotodo.net" width="250" height="300" header="true"></fb:recommendations>
-	</div>
-	
-	<div id="arbol-site">
-		<ul>
-			<li><span>Productos</span></li>
-			{% for ptype in ptypes %}
-                <li><a href="{% url solonotebooks.cotizador.views.product_type_catalog ptype.urlname %}" title="{{ ptype }}">{{ ptype.indexname }}</a></li>
-            {% endfor %}
-		</ul>
-		<ul>
-			<li><span>CATEGORIAS</span></li>
-			<li><a href="{% url solonotebooks.cotizador.views.index %}" title="Catálogo">Catálogo</a></li>
-			<li><a href="/blog" title="Blog">Blog</a></li>
-			<li><a href="/blog/about" title="Nosotros">Nosotros</a></li>
-			<li><a href="/blog/contacto" title="Contacto">Contacto</a></li>
-		</ul>
-	</div> <!-- end arbol site -->
-</div> <!-- !end right -->				
+    <a href="{{ hardware_site }}">
+        <img src="/media/img/solotodo_solohardware.png" />
+    </a>
+
+    <br />
+    <br />
+
+    <a href="{{ electro_site }}">
+        <img src="/media/img/solotodo_soloelectro.png" />
+    </a>
+</div>
 {% endblock %}

@@ -1,10 +1,15 @@
 #-*- coding: UTF-8 -*-
+from django.http import HttpResponsePermanentRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from solonotebooks.cotizador.models.product import Product
 
 def inline_forum_post(request, product_id):
     product = Product.objects.get(pk=product_id).get_polymorphic_instance()
+
+    url = product.determine_site() + '/products/' + str(product_id) + '/mini/'
+
+    return HttpResponsePermanentRedirect(url)
 
     stores_with_product_available = product.storehasproduct_set.filter(shpe__isnull = False).order_by('shpe__latest_price')[:3]
 

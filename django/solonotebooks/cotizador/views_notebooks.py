@@ -1,8 +1,10 @@
 #-*- coding: UTF-8 -*-
+from django.http import HttpResponsePermanentRedirect
 from models import *
 from views import append_metadata_to_response
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.conf import settings
 
 def append_notebook_ptype_to_response(request, template, args):
     ptype = ProductType.objects.get(classname = 'Notebook')
@@ -11,6 +13,15 @@ def append_notebook_ptype_to_response(request, template, args):
     
          
 def processor_line_details(request, processor_line_id):
+    redirect_url = settings.NOTEBOOK_SITE + '/processors/'
+
+    processor_id =  request.GET.get('processor', 0)
+
+    if processor_id:
+        redirect_url += '?processor=' + str(processor_id)
+
+    return HttpResponsePermanentRedirect(redirect_url)
+
     processor_line_family = get_object_or_404(NotebookProcessorLineFamily, pk = processor_line_id)
     other_processor_line_families = NotebookProcessorLineFamily.objects.filter(~Q(id = processor_line_family.id))
     
@@ -42,6 +53,15 @@ def processor_line_details(request, processor_line_id):
             })
             
 def video_card_line_details(request, video_card_line_id):
+    redirect_url = settings.NOTEBOOK_SITE + '/video_cards/'
+
+    video_card_id =  request.GET.get('video_card', 0)
+
+    if video_card_id:
+        redirect_url += '?video_card=' + str(video_card_id)
+
+    return HttpResponsePermanentRedirect(redirect_url)
+
     video_card_line = get_object_or_404(NotebookVideoCardLine, pk = video_card_line_id)
     other_video_card_lines = NotebookVideoCardLine.objects.filter(~Q(id = video_card_line.id))
     video_card_id = 0
@@ -72,6 +92,10 @@ def video_card_line_details(request, video_card_line_id):
             })            
             
 def processor_line(request):
+    redirect_url = settings.NOTEBOOK_SITE + '/processors/'
+
+    return HttpResponsePermanentRedirect(redirect_url)
+
     processor_line_families = NotebookProcessorLineFamily.objects.all()
     processors = NotebookProcessor.objects.order_by('-speed_score')
     return append_notebook_ptype_to_response(request, 'cotizador/notebook_all_processor_lines.html', {
@@ -80,6 +104,10 @@ def processor_line(request):
     })            
             
 def video_card_line(request):
+    redirect_url = settings.NOTEBOOK_SITE + '/video_cards/'
+
+    return HttpResponsePermanentRedirect(redirect_url)
+
     video_card_lines = NotebookVideoCardLine.objects.all()
     video_cards = NotebookVideoCard.objects.order_by('-speed_score')
     return append_notebook_ptype_to_response(request, 'cotizador/notebook_all_video_card_lines.html', {
