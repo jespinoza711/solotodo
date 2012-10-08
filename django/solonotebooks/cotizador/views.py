@@ -326,7 +326,11 @@ def sponsored_product_redirect(request, shp_id):
         sponsored_visit = SponsoredVisit()
         sponsored_visit.shp = shp
         sponsored_visit.save()
-    return HttpResponseRedirect(shp.shpe.url)
+
+    try:
+        return HttpResponseRedirect(shp.shpe.url)
+    except AttributeError:
+        return HttpResponseRedirect('/')
     
 # View that gets called when a user clicks an ad
 def ad_visited(request, advertisement_id):
