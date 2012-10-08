@@ -373,7 +373,10 @@ def product_details(request, product_url):
 
     product = get_object_or_404(Product, pk = product_id).get_polymorphic_instance()
 
-    url = product.determine_site() + '/products/' + str(product.id)
+    try:
+        url = product.determine_site() + '/products/' + str(product.id)
+    except KeyError:
+        return HttpResponsePermanentRedirect('/')
 
     return HttpResponsePermanentRedirect(url)
     
