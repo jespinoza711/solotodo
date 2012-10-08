@@ -1,5 +1,6 @@
 #-*- coding: UTF-8 -*-
 import operator
+from django.utils.datastructures import MultiValueDictKeyError
 import re
 from datetime import date
 from time import time
@@ -346,7 +347,11 @@ def ad_visited(request, advertisement_id):
 
 @csrf_exempt
 def ad_impressed(request):
-    ad_id = request.POST['ad_id']
+    try:
+        ad_id = request.POST['ad_id']
+    except MultiValueDictKeyError:
+        return HttpResponse()
+
     ad = get_object_or_404(Advertisement, pk=ad_id)
 
     try:

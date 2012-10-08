@@ -5,7 +5,10 @@ from django.template.context import RequestContext
 from solonotebooks.cotizador.models.product import Product
 
 def inline_forum_post(request, product_id):
-    product = Product.objects.get(pk=product_id).get_polymorphic_instance()
+    try:
+        product = Product.objects.get(pk=product_id).get_polymorphic_instance()
+    except Product.DoesNotExist:
+        return HttpResponsePermanentRedirect('/')
 
     url = product.determine_site() + '/products/' + str(product_id) + '/mini/'
 
