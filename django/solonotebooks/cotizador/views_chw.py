@@ -10,7 +10,10 @@ def inline_forum_post(request, product_id):
     except Product.DoesNotExist:
         return HttpResponsePermanentRedirect('/')
 
-    url = product.determine_site() + '/products/' + str(product_id) + '/mini/'
+    try:
+        url = product.determine_site() + '/products/' + str(product_id) + '/mini/'
+    except KeyError:
+        return HttpResponsePermanentRedirect('/')
 
     return HttpResponsePermanentRedirect(url)
 
